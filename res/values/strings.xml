@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, SkylightActivity</string>
+    <string name="welcome">Welcome!!!\n\nPress any button to move to the Skill Test page.</string>
     <string name="app_name">Skylight</string>
+<string name="skilltest">Skill Test!!!! \n\nCheck logcat and you will see that these activities are writing log messages that show their dependencies have been injected.\n\nPress any button to move back to the Welcome page.</string>
 </resources>
