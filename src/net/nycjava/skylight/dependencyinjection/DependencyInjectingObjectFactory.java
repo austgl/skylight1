@@ -2,157 +2,78 @@ package net.nycjava.skylight.dependencyinjection;
 
 import static java.lang.String.format;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Factory that creates objects with their dependencies injected. Object dependencies are required to be coded as fields
+ * (static or instance) annotated with the Dependency annotation. Supports object graph cycles through a proxy-based
+ * lazy-dependency-injection of interface types; class types require eager-dependency-injection.
+ * 
+ * Example usage: <code>
+ // register implementations
+ DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+ dependencyInjectingObjectFactory.registerImplementationClass(Y.class, YImpl.class);
+ dependencyInjectingObjectFactory.registerImplementationClass(X.class, XImpl.class);
+
+ // obtain an instance of Y with its dependency on X pre-populated
+ Y y1 = dependencyInjectingObjectFactory.getObject(Y.class);
+ * </code>
+ */
 public class DependencyInjectingObjectFactory {
-	private interface ObjectSource<T> {
-		T getObject();
-	}
-
-	private class ImplementationClassObjectSource<T, S extends T> implements ObjectSource<T> {
-		private Class<S> clazz;
-
-		ImplementationClassObjectSource(Class<S> anInterface) {
-			clazz = anInterface;
-		}
-
-		@Override
-		public T getObject() {
-			final T object;
-			try {
-				object = clazz.newInstance();
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException(e);
-			} catch (InstantiationException e) {
-				throw new RuntimeException(e);
-			}
-			injectDependencies(object);
-			return object;
-		}
-	}
-
-	private class ImplementationClassSingletonObjectSource<T, S extends T> implements ObjectSource<T> {
-		private Class<S> clazz;
-
-		private S singleObject;
-
-		ImplementationClassSingletonObjectSource(Class<S> anInterface) {
-			clazz = anInterface;
-		}
-
-		@Override
-		public T getObject() {
-			if (singleObject == null) {
-				try {
-					singleObject = clazz.newInstance();
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				} catch (InstantiationException e) {
-					throw new RuntimeException(e);
-				}
-				injectDependencies(singleObject);
-			}
-			return singleObject;
-		}
-	}
-
-	private class SingletonObjectSource<T> implements ObjectSource<T> {
-		private T singleObject;
-
-		private boolean dependenciesInjected;
-
-		SingletonObjectSource(T aSingleObject) {
-			singleObject = aSingleObject;
-		}
-
-		@Override
-		public T getObject() {
-			if (!dependenciesInjected) {
-				injectDependencies(singleObject);
-				dependenciesInjected = true;
-			}
-			return singleObject;
-		}
-	}
-
 	private Map<Class<?>, ObjectSource<?>> implementationSources = new HashMap<Class<?>, ObjectSource<?>>();
 
+	/**
+	 * Registers a class as the implementor of the type. A <b>new</b> instance of the class will be injected into every
+	 * matching dependency.
+	 */
 	public <T, S extends T> void registerImplementationClass(Class<T> anInterface, Class<S> anImplementationClass) {
-		checkInterfaceNotAlreadyRegistered(anInterface);
-		implementationSources.put(anInterface, new ImplementationClassObjectSource<T, S>(anImplementationClass));
+		checkClassNotAlreadyRegistered(anInterface);
+		implementationSources.put(anInterface, new ImplementationClassObjectSource<T, S>(this, anImplementationClass));
 	}
 
+	/**
+	 * Registers a class as the implementor of the type. A <b>single</b> instance of the class will be injected into
+	 * every matching dependency.
+	 */
 	public <T, S extends T> void registerSingletonImplementationClass(Class<T> anInterface,
 			Class<S> anImplementationClass) {
-		checkInterfaceNotAlreadyRegistered(anInterface);
-		implementationSources.put(anInterface,
-				new ImplementationClassSingletonObjectSource<T, S>(anImplementationClass));
+		checkClassNotAlreadyRegistered(anInterface);
+		implementationSources.put(anInterface, new ImplementationClassSingletonObjectSource<T, S>(this, this,
+				anImplementationClass));
 	}
 
+	/**
+	 * Registers a single object as the implementor of the type. The object will be injected into every matching
+	 * dependency.
+	 */
 	public <T, S extends T> void registerImplementationObject(Class<T> anInterface, S anImplementationObject) {
-		checkInterfaceNotAlreadyRegistered(anInterface);
-		implementationSources.put(anInterface, new SingletonObjectSource<T>(anImplementationObject));
+		checkClassNotAlreadyRegistered(anInterface);
+		implementationSources.put(anInterface, new SingletonObjectSource<T>(this, this, anImplementationObject));
 	}
 
-	public <T> T getObject(Class<T> anInteface) {
-		if (implementationSources.containsKey(anInteface)) {
-			return createProxy(anInteface);
+	/**
+	 * If the passed class was not previously registered, throws an IllegalArgumentException. Otherwise, based on the
+	 * prior registrations, returns an object that is assignable to the passed type, and which has had all of its
+	 * dependencies injected.
+	 */
+	public <T> T getObject(Class<T> aClass) {
+		if (implementationSources.containsKey(aClass)) {
+			return (T) implementationSources.get(aClass).getObject();
 		}
 
-		throw new RuntimeException(format("No source was registered for interface %s.", anInteface.getCanonicalName()));
+		throw new IllegalArgumentException(format("No object source was registered for class %s.", aClass
+				.getCanonicalName()));
 	}
 
-	private void checkInterfaceNotAlreadyRegistered(Class<?> anInterface) {
-		if (implementationSources.containsKey(anInterface)) {
-			throw new RuntimeException(format(
-					"Unable to register for the interface %s as it is already registered: %s.", anInterface
-							.getCanonicalName(), implementationSources.get(anInterface).toString()));
+	<T, S extends T> ObjectSource<S> getObjectSource(Class<T> aClass) {
+		return (ObjectSource<S>) implementationSources.get(aClass);
+	}
+
+	private void checkClassNotAlreadyRegistered(Class<?> aClass) {
+		if (implementationSources.containsKey(aClass)) {
+			throw new RuntimeException(format("Unable to register for the class %s as it is already registered: %s.",
+					aClass.getCanonicalName(), implementationSources.get(aClass).toString()));
 		}
-	}
-
-	private <T> void injectDependencies(T anObject) {
-		Class<?> interfaceOfObject = anObject.getClass();
-		while (interfaceOfObject != null) {
-			injectDependencies(anObject, (Class<T>) interfaceOfObject);
-			interfaceOfObject = interfaceOfObject.getSuperclass();
-		}
-	}
-
-	private <T, S extends T> void injectDependencies(S anObject, Class<T> aClass) {
-		for (Field field : aClass.getDeclaredFields()) {
-			if (field.isAnnotationPresent(Dependency.class)) {
-				field.setAccessible(true);
-				try {
-					if (field.get(anObject) == null) {
-						Class classOfDependency = field.getType();
-						field.set(anObject, getObject(classOfDependency));
-					}
-				} catch (IllegalArgumentException e) {
-					throw new RuntimeException(e);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(format("Unable to access field %s.", field.getName()), e);
-				}
-			}
-		}
-	}
-
-	private <T> T createProxy(final Class<T> anInterface) {
-		return (T) Proxy.newProxyInstance(DependencyInjectingObjectFactory.class.getClassLoader(),
-				new Class[] { anInterface }, new InvocationHandler() {
-					private T object;
-
-					@Override
-					public Object invoke(Object aProxy, Method aMethod, Object[] anArrayOfArguments) throws Throwable {
-						if (object == null) {
-							object = (T) implementationSources.get(anInterface).getObject();
-						}
-						return aMethod.invoke(object, anArrayOfArguments);
-					}
-				});
 	}
 }
