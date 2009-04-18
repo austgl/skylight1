@@ -72,8 +72,9 @@ public class DependencyInjectingObjectFactory {
 
 	private void checkClassNotAlreadyRegistered(Class<?> aClass) {
 		if (implementationSources.containsKey(aClass)) {
-			throw new RuntimeException(format("Unable to register for the class %s as it is already registered: %s.",
-					aClass.getCanonicalName(), implementationSources.get(aClass).toString()));
+			throw new IllegalArgumentException(format(
+					"Unable to register for the class %s as it is already registered: %s.", aClass.getCanonicalName(),
+					implementationSources.get(aClass).toString()));
 		}
 	}
 }

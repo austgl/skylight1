@@ -181,4 +181,29 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 		assertNotNull(y1.getX1().getY1().getX1().getY1());
 	}
 
+	public void testMissingRegistration() {
+		// don't register implementation
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+
+		try {
+			// obtain an instance
+			Y y1 = dependencyInjectingObjectFactory.getObject(Y.class);
+			fail();
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
+
+	public void testDuplicateRegistration() {
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+
+		try {
+			// register implementation twice
+			dependencyInjectingObjectFactory.registerImplementationClass(Y.class, YImpl.class);
+			dependencyInjectingObjectFactory.registerImplementationObject(Y.class, new YImpl());
+			fail();
+		} catch (IllegalArgumentException e) {
+			// expected
+		}
+	}
 }
