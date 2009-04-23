@@ -12,11 +12,14 @@ public abstract class SkylightActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// create a dependency injecting object factory
-		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new SkylightActivityDependencyInjectingObjectFactory(
-				this);
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+
+		addDependencies(dependencyInjectingObjectFactory);
 
 		// since activities are instantiated by the framework, use the dependency injector directly to inject any
 		// dependencies this activity may have
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(this);
 	}
+
+	abstract protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory);
 }

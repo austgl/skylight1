@@ -2,6 +2,7 @@ package net.nycjava.skylight;
 
 import static java.lang.String.format;
 import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,11 @@ import android.widget.LinearLayout;
 public class WelcomeActivity extends SkylightActivity {
 	@Dependency
 	private LinearLayout contentView;
+
+	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
+		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
+				(LinearLayout) getLayoutInflater().inflate(R.layout.welcome, null));
+	}
 
 	/** Called when the activity is first created. */
 	@Override
