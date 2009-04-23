@@ -1,0 +1,9 @@
+<resources>
+	<string-array name="delays">
+		<item>None</item>
+		<item>Normal</item>
+		<item>UI</item>
+		<item>Game</item>
+		<item>Fastest</item>
+	</string-array>
+</resources>

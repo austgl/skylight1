@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, SkylightTDC</string>
+    
     <string name="app_name">Skylight TDC</string>
+<string name="accelerometer_label">Accelerometer</string>
+<string name="record_button_label">Record</string>
+<string name="stop_button_label">Stop</string>
+<string name="magnetometer_label">Magnetometer</string>
 </resources>
