@@ -65,7 +65,6 @@ public class DependencyInjector {
 				new Class[] { aClass }, new InvocationHandler() {
 					private T object;
 
-					@Override
 					public Object invoke(Object aProxy, Method aMethod, Object[] anArrayOfArguments) throws Throwable {
 						if (object == null) {
 							object = (T) dependencyInjectingObjectFactory.getObjectSource(aClass).getObject();

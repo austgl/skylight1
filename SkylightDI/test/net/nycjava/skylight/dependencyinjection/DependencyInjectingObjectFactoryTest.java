@@ -29,12 +29,10 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 			return value;
 		}
 
-		@Override
 		public X getX1() {
 			return x1;
 		}
 
-		@Override
 		public X getX2() {
 			return x2;
 		}
@@ -53,12 +51,10 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 
 		private Y y2;
 
-		@Override
 		public Y getY1() {
 			return y1;
 		}
 
-		@Override
 		public Y getY2() {
 			return y2;
 		}
@@ -76,12 +72,10 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 
 		private YImpl y2;
 
-		@Override
 		public Y getY1() {
 			return y1;
 		}
 
-		@Override
 		public Y getY2() {
 			return y2;
 		}
