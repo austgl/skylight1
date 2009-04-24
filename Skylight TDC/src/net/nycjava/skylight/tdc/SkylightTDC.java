@@ -33,12 +33,10 @@ public class SkylightTDC extends Activity {
 			startTime = System.currentTimeMillis();
 		}
 
-		@Override
 		public void onAccuracyChanged(int aSensorId, int anAccuracy) {
 			// TODO write these to the file too - create super type for sensor event - use polymorphism
 		}
 
-		@Override
 		public void onSensorChanged(int aSensorId, float[] anArrayOfValues) {
 			sensorEventStreamWriter.writeSensorEvent(new SensorValuesEvent(System.currentTimeMillis() - startTime,
 					aSensorId, anArrayOfValues));
@@ -85,12 +83,10 @@ public class SkylightTDC extends Activity {
 
 		final AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
 
-			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				updateRecordButton();
 			}
 
-			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				updateRecordButton();
 			}
@@ -104,7 +100,6 @@ public class SkylightTDC extends Activity {
 		magnetometerSpinner.setOnItemSelectedListener(onItemSelectedListener);
 
 		recordButton.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View arg0) {
 				try {
 					outputStream = new FileOutputStream("/sdcard/testData" + System.currentTimeMillis() + ".tdc");
@@ -138,7 +133,6 @@ public class SkylightTDC extends Activity {
 		});
 
 		stopButton.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View arg0) {
 				sensorManager.unregisterListener(sensorListener);
 				try {
