@@ -2,10 +2,13 @@ package net.nycjava.skylight;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.service.AndroidPositionPublicationService;
+import net.nycjava.skylight.service.CameraObscurementPublicationService;
+import net.nycjava.skylight.service.CameraObscurementPublicationServiceAndroidImp;
 import net.nycjava.skylight.service.CountdownObserver;
+import net.nycjava.skylight.service.CountdownPublicationService;
 import net.nycjava.skylight.service.DestinationPublicationService;
-import net.nycjava.skylight.service.PositionPublicationService;
+import net.nycjava.skylight.service.DestinationPublicationServiceImpl;
+import net.nycjava.skylight.service.SteadinessPublicationService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -31,10 +34,14 @@ public class SkillTestActivity extends SkylightActivity {
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
-		aDependencyInjectingObjectFactory.registerImplementationClass(PositionPublicationService.class,
-				AndroidPositionPublicationService.class);
-		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
+		aDependencyInjectingObjectFactory.registerImplementationClass(DestinationPublicationService.class,
+				DestinationPublicationServiceImpl.class);
+		// aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
+		// SteadinessPublicationServiceAndroidImpl.class);
+		// aDependencyInjectingObjectFactory.registerImplementationObject(CountdownPublicationService.class,
+		// CountdownPublicationServiceImpl.class);
+		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
+				CameraObscurementPublicationServiceAndroidImp.class);
 	}
 
 	/** Called when the activity is first created. */
