@@ -5,6 +5,7 @@ import static java.lang.String.format;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 
 /**
@@ -43,7 +44,8 @@ public class DependencyInjector {
 					if (field.get(anObject) == null) {
 						Class<?> classOfDependency = field.getType();
 						final Object injectedValue;
-						if (classOfDependency.isInterface()) {
+						final int modifiers = classOfDependency.getModifiers();
+						if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers)) {
 							injectedValue = createProxy(classOfDependency);
 						} else {
 							injectedValue = dependencyInjectingObjectFactory.getObject(classOfDependency);
