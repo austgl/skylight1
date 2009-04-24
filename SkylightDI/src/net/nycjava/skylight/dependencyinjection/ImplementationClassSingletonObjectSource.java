@@ -1,5 +1,7 @@
 package net.nycjava.skylight.dependencyinjection;
 
+import static java.lang.String.format;
+
 //TODO javadoc
 class ImplementationClassSingletonObjectSource<T, S extends T> extends ObjectSource<T> {
 	private final DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
@@ -11,6 +13,10 @@ class ImplementationClassSingletonObjectSource<T, S extends T> extends ObjectSou
 	ImplementationClassSingletonObjectSource(DependencyInjectingObjectFactory dependencyInjectingObjectFactory,
 			DependencyInjectingObjectFactory aDependencyInjectingObjectFactory, Class<S> aClass) {
 		super(aDependencyInjectingObjectFactory);
+		if (aClass.isInterface()) {
+			throw new IllegalArgumentException(format(
+					"Provided class must be a concrete type, however %s is an interface.", aClass.getName()));
+		}
 		this.dependencyInjectingObjectFactory = dependencyInjectingObjectFactory;
 		clazz = aClass;
 	}

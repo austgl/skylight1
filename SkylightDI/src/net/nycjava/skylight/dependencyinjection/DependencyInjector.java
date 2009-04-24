@@ -67,7 +67,13 @@ public class DependencyInjector {
 
 					public Object invoke(Object aProxy, Method aMethod, Object[] anArrayOfArguments) throws Throwable {
 						if (object == null) {
-							object = (T) dependencyInjectingObjectFactory.getObjectSource(aClass).getObject();
+							final ObjectSource<T> objectSource = dependencyInjectingObjectFactory
+									.getObjectSource(aClass);
+							if (objectSource == null) {
+								throw new RuntimeException(format(
+										"No source was registered for the dependecy of type %s.", aClass.getName()));
+							}
+							object = (T) objectSource.getObject();
 						}
 						return aMethod.invoke(object, anArrayOfArguments);
 					}

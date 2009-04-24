@@ -62,8 +62,7 @@ public class DependencyInjectingObjectFactory {
 			return (T) implementationSources.get(aClass).getObject();
 		}
 
-		throw new IllegalArgumentException(format("No object source was registered for class %s.", aClass
-				.getCanonicalName()));
+		throw new RuntimeException(format("No object source was registered for class %s.", aClass.getCanonicalName()));
 	}
 
 	<T, S extends T> ObjectSource<S> getObjectSource(Class<T> aClass) {

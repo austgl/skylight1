@@ -183,6 +183,48 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 			// obtain an instance
 			Y y1 = dependencyInjectingObjectFactory.getObject(Y.class);
 			fail();
+		} catch (RuntimeException e) {
+			// expected
+		}
+	}
+
+	public void testMissingInterfaceDependencyRegistration() {
+		// don't register all implementations
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+		dependencyInjectingObjectFactory.registerImplementationClass(Y.class, YImpl.class);
+
+		// obtain an instance
+		Y y1 = dependencyInjectingObjectFactory.getObject(Y.class);
+		X x1 = y1.getX1();
+		try {
+			x1.getY1();
+			fail();
+		} catch (RuntimeException e) {
+			// expected
+		}
+	}
+
+	public void testMissingConcreteDependencyRegistration() {
+		// don't register all implementations
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+		dependencyInjectingObjectFactory.registerImplementationClass(Z.class, ZImpl.class);
+
+		try {
+			// obtain an instance
+			Z z1 = dependencyInjectingObjectFactory.getObject(Z.class);
+			fail();
+		} catch (RuntimeException e) {
+			// expected
+		}
+	}
+
+	public void testImplementationClassMustBeConcrete() {
+		// register interface as implementation
+		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
+
+		try {
+			dependencyInjectingObjectFactory.registerImplementationClass(Y.class, Y.class);
+			fail();
 		} catch (IllegalArgumentException e) {
 			// expected
 		}
@@ -191,9 +233,9 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 	public void testDuplicateRegistration() {
 		DependencyInjectingObjectFactory dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
 
+		// register implementation twice
+		dependencyInjectingObjectFactory.registerImplementationClass(Y.class, YImpl.class);
 		try {
-			// register implementation twice
-			dependencyInjectingObjectFactory.registerImplementationClass(Y.class, YImpl.class);
 			dependencyInjectingObjectFactory.registerImplementationObject(Y.class, new YImpl());
 			fail();
 		} catch (IllegalArgumentException e) {
