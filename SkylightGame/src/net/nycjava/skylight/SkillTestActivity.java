@@ -6,6 +6,7 @@ import net.nycjava.skylight.service.CameraObscurementPublicationService;
 import net.nycjava.skylight.service.CameraObscurementPublicationServiceAndroidImp;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
+import net.nycjava.skylight.service.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import net.nycjava.skylight.service.DestinationPublicationServiceImpl;
 import net.nycjava.skylight.service.SteadinessPublicationService;
@@ -38,10 +39,12 @@ public class SkillTestActivity extends SkylightActivity {
 				DestinationPublicationServiceImpl.class);
 		// aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
 		// SteadinessPublicationServiceAndroidImpl.class);
-		// aDependencyInjectingObjectFactory.registerImplementationObject(CountdownPublicationService.class,
-		// CountdownPublicationServiceImpl.class);
+		aDependencyInjectingObjectFactory.registerImplementationClass(CountdownPublicationService.class,
+				CountdownPublicationServiceImpl.class);
 		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
 				CameraObscurementPublicationServiceAndroidImp.class);
+		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
+				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
 	}
 
 	/** Called when the activity is first created. */
