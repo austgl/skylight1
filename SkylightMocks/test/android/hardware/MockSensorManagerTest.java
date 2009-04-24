@@ -43,12 +43,10 @@ public class MockSensorManagerTest extends TestCase {
 
 		mockSensorManager.registerListener(new SensorListener() {
 
-			@Override
 			public void onAccuracyChanged(int arg0, int arg1) {
 				// TODO put real tests here
 			}
 
-			@Override
 			public void onSensorChanged(int arg0, float[] arg1) {
 				// TODO put real tests here
 			}

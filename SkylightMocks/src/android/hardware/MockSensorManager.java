@@ -33,7 +33,6 @@ public class MockSensorManager extends SensorManager {
 		}
 
 		new Thread(new Runnable() {
-			@Override
 			public void run() {
 				long startTime = System.currentTimeMillis();
 				SensorEventStreamReader sensorEventStreamReader = new SensorEventStreamReader(inputStream);
