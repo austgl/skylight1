@@ -1,22 +1,33 @@
 package net.nycjava.skylight;
 
-import static java.lang.String.format;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.service.AndroidPositionPublicationService;
+import net.nycjava.skylight.service.CountdownObserver;
+import net.nycjava.skylight.service.DestinationPublicationService;
 import net.nycjava.skylight.service.PositionPublicationService;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
 public class SkillTestActivity extends SkylightActivity {
 	@Dependency
-	private PositionPublicationService positionPublicationService;
+	private DestinationPublicationService destinationPublicationService;
+
+	@Dependency
+	private SteadinessPublicationService steadinessPublicationService;
+
+	@Dependency
+	private CountdownPublicationService countdownPublicationService;
+
+	@Dependency
+	private CameraObscurementPublicationService cameraObscurementPublicationService;
 
 	@Dependency
 	private LinearLayout contentView;
+
+	private CountdownObserver countdownObserver;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
@@ -35,9 +46,29 @@ public class SkillTestActivity extends SkylightActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		Log.i(this.getClass().getName(), format("my PositionPublicationService was %s", positionPublicationService));
 		final Intent intent = new Intent(SkillTestActivity.this, WelcomeActivity.class);
 		startActivity(intent);
 		return true;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		countdownObserver = new CountdownObserver() {
+			@Override
+			public void countdownNotification(int remainingTime) {
+				if (remainingTime == 0) {
+					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					startActivity(intent);
+				}
+			}
+		};
+		countdownPublicationService.addObserver(countdownObserver);
+	}
+
+	@Override
+	protected void onPause() {
+		countdownPublicationService.removeObserver(countdownObserver);
+		super.onPause();
 	}
 }
