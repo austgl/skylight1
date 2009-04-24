@@ -65,7 +65,6 @@ public class SkillTestActivity extends SkylightActivity {
 	protected void onResume() {
 		super.onResume();
 		countdownObserver = new CountdownObserver() {
-			@Override
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
 					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);

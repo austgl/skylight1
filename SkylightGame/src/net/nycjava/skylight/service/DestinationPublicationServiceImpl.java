@@ -19,13 +19,11 @@ public class DestinationPublicationServiceImpl implements DestinationPublication
 		destinationPosition = aDestinationPosition;
 	}
 
-	@Override
 	public void addObserver(DestinationObserver anObserver) {
 		destinationObservers.add(anObserver);
 		if (destinationObservers.size() == 1) {
 			positionObserver = new PositionObserver() {
 
-				@Override
 				public void positionNotification(Position aPosition) {
 					notifyObservers(aPosition);
 				}
@@ -34,7 +32,6 @@ public class DestinationPublicationServiceImpl implements DestinationPublication
 		}
 	}
 
-	@Override
 	public boolean removeObserver(DestinationObserver anObserver) {
 		final boolean existed = destinationObservers.remove(anObserver);
 		if (destinationObservers.isEmpty()) {
