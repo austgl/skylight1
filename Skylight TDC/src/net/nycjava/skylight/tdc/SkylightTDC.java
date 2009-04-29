@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
@@ -102,7 +103,9 @@ public class SkylightTDC extends Activity {
 		recordButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				try {
-					outputStream = new FileOutputStream("/sdcard/testData" + System.currentTimeMillis() + ".tdc");
+					Date dt = new Date();
+					String s = String.format("%1$tY%1$tm%1$td_%1$tH%1$tM%1$tS", dt);
+					outputStream = new FileOutputStream("/sdcard/testData_" + s + ".tdc");
 					sensorListener = new FileWritingSensorListener(outputStream);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
