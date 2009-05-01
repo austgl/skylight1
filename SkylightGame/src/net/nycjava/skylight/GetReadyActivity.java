@@ -15,8 +15,6 @@ public class GetReadyActivity extends SkylightActivity {
 	@Dependency
 	private View view;
 
-	// private Preview mPreview;
-
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
