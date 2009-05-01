@@ -23,5 +23,33 @@
 
 			</intent-filter>
 		</activity>
+		<activity android:name=".GetReadyActivity">
+			<intent-filter>
+
+				<category
+					android:name="android.intent.category.DEFAULT">
+				</category>
+
+			</intent-filter>
+		</activity>
+		<activity android:name=".SuccessActivity">
+			<intent-filter>
+
+				<category
+					android:name="android.intent.category.DEFAULT">
+				</category>
+
+			</intent-filter>
+		</activity>
+		<activity android:name=".FailActivity">
+			<intent-filter>
+
+				<category
+					android:name="android.intent.category.DEFAULT">
+				</category>
+
+			</intent-filter>
+		</activity>
 	</application>
+	<uses-permission android:name="android.permission.CAMERA" />
 </manifest>

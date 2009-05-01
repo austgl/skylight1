@@ -29,7 +29,7 @@ public class WelcomeActivity extends SkylightActivity {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
+		final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
 		startActivity(intent);
 		return true;
 	}

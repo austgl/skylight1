@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SkylightDI"/>
 	<classpathentry kind="var" path="ANDROID_LIB"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SkylightMocks"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
