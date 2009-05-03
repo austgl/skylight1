@@ -57,6 +57,7 @@ public class DependencyInjectingObjectFactory {
 	 * prior registrations, returns an object that is assignable to the passed type, and which has had all of its
 	 * dependencies injected.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> T getObject(Class<T> aClass) {
 		if (implementationSources.containsKey(aClass)) {
 			return (T) implementationSources.get(aClass).getObject();
@@ -65,6 +66,7 @@ public class DependencyInjectingObjectFactory {
 		throw new RuntimeException(format("No object source was registered for class %s.", aClass.getCanonicalName()));
 	}
 
+	@SuppressWarnings("unchecked")
 	<T, S extends T> ObjectSource<S> getObjectSource(Class<T> aClass) {
 		return (ObjectSource<S>) implementationSources.get(aClass);
 	}

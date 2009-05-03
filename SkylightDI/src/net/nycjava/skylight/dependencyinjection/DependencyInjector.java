@@ -18,6 +18,7 @@ public class DependencyInjector {
 		dependencyInjectingObjectFactory = aDependencyInjectingObjectFactory;
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T> void injectDependenciesForClassHierarchy(T anObject) {
 		// the reflection API requires that each class in the hierarchy be considered
 		// start with the lowest class in the hierarchy
@@ -61,6 +62,7 @@ public class DependencyInjector {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> T createProxy(final Class<T> aClass) {
 		// TODO optimize this to replace the proxy once the object is lazily created
 		return (T) Proxy.newProxyInstance(DependencyInjectingObjectFactory.class.getClassLoader(),
