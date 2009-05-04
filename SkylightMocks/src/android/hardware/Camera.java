@@ -1,6 +1,5 @@
 package android.hardware;
 
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class Camera {
@@ -14,71 +13,82 @@ public class Camera {
 	}
 
 	public static class Parameters {
-		String flatten() {
+		int pictureFormat;
+
+		Size pictureSize;
+
+		int previewFormat;
+
+		int previewFrameRate;
+		
+		Size previewSize;
+
+		public String flatten() {
+			return String.format("pictureFormat=%d, pictureSize=%s, previewFormat=%d, previewFrameRate=%d",
+					pictureFormat, pictureSize, previewFormat, previewFrameRate);
+		};
+
+		public String get(String key) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		String get(String key) {
+		public int getInt(String key) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		int getInt(String key) {
+		public int getPictureFormat() {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		int getPictureFormat() {
+		public Size getPictureSize() {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		Camera.Size getPictureSize() {
+		public int getPreviewFormat() {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		int getPreviewFormat() {
+		public int getPreviewFrameRate() {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		int getPreviewFrameRate() {
+		public Size getPreviewSize() {
+			return previewSize;
+		};
+
+		public void remove(String key) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		Size getPreviewSize() {
+		public void set(String key, int value) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		void remove(String key) {
+		public void set(String key, String value) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		void set(String key, int value) {
+		public void setPictureFormat(int pixel_format) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		void set(String key, String value) {
+		public void setPictureSize(int width, int height) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 
-		void setPictureFormat(int pixel_format) {
-			throw new RuntimeException("Not implemented yet.");
+		public void setPreviewFormat(int pixel_format) {
+			previewFormat = pixel_format;
 		};
 
-		void setPictureSize(int width, int height) {
-			throw new RuntimeException("Not implemented yet.");
+		public void setPreviewFrameRate(int fps) {
+			previewFrameRate = fps;
 		};
 
-		void setPreviewFormat(int pixel_format) {
-			throw new RuntimeException("Not implemented yet.");
+		public void setPreviewSize(int width, int height) {
+			previewSize = new Size(width, height);
 		};
 
-		void setPreviewFrameRate(int fps) {
-			throw new RuntimeException("Not implemented yet.");
-		};
-
-		void setPreviewSize(int width, int height) {
-			throw new RuntimeException("Not implemented yet.");
-		};
-
-		void unflatten(String flattened) {
+		public void unflatten(String flattened) {
 			throw new RuntimeException("Not implemented yet.");
 		};
 	}
@@ -118,12 +128,14 @@ public class Camera {
 
 	AutoFocusCallback autoFocusCallback;
 
+	Parameters parameters = new Parameters();
+
 	private byte[] rawPictureData;
 
 	private byte[] jPEGPictureData;
 
 	Camera() {
-//		Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
+		// Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
 	}
 
 	void setRawPictureData(byte[] aRawPictureData) {
@@ -134,7 +146,7 @@ public class Camera {
 		jPEGPictureData = aJPEGPictureData;
 	}
 
-	public final void autoFocus(Camera.AutoFocusCallback cb) {
+	public final void autoFocus(AutoFocusCallback cb) {
 		autoFocusCallback = cb;
 	}
 
@@ -145,14 +157,19 @@ public class Camera {
 	public final void release() {
 	}
 
-	public final void setErrorCallback(Camera.ErrorCallback cb) {
+	public final void setErrorCallback(ErrorCallback cb) {
 		errorCallback = cb;
 	}
 
-	public void setParameters(Camera.Parameters params) {
+	public Parameters getParameters() {
+		return parameters;
 	}
 
-	public final void setPreviewCallback(Camera.PreviewCallback cb) {
+	public void setParameters(Parameters aParameters) {
+		parameters = aParameters;
+	}
+
+	public final void setPreviewCallback(PreviewCallback cb) {
 		previewCallback = cb;
 	}
 
@@ -165,8 +182,7 @@ public class Camera {
 	public final void stopPreview() {
 	}
 
-	public final void takePicture(Camera.ShutterCallback shutter, Camera.PictureCallback raw,
-			Camera.PictureCallback jpeg) {
+	public final void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg) {
 		if (shutter != null) {
 			shutter.onShutter();
 		}
