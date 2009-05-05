@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
-import net.nycjava.skylight.service.counter_status;
+import net.nycjava.skylight.service.CounterStatus;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -30,14 +30,17 @@ public class CountdownServicePublicationServiceImplTest extends TestCase
 			}
 		});
 		service.startCountdown();
-		try{
-			service.joinThread();
-		}
-		catch(InterruptedException e)
+		while (service.getStatus() != CounterStatus.finished)
 		{
-			System.err.println("interruptions " + e);
-					
+			try{
+				Thread.sleep(2);
+			}
+			catch(InterruptedException e)
+			{
+				System.err.println("test thread is interrupted");
+			}
 		}
+		
 		System.out.println("notifications " + notifications.size());
 		assertEquals("all notifications: "+notifications.toString(), 10, notifications.size());
 	}
@@ -55,9 +58,9 @@ public class CountdownServicePublicationServiceImplTest extends TestCase
 			service.startCountdown();
 			Thread.sleep(5000);
 			service.stopCountdown();
-			service.joinThread();
-			counter_status current_status=service.getStatus();
-			assertEquals(counter_status.stopped, current_status);
+			
+			CounterStatus current_status=service.getStatus();
+			assertEquals(CounterStatus.stopped, current_status);
 			
 		}
 		catch(InterruptedException e)
@@ -79,8 +82,8 @@ public class CountdownServicePublicationServiceImplTest extends TestCase
 				currentCount = aRemainingTime;
 			}
 		});
-		counter_status current_status=service.getStatus();
-		assertEquals(counter_status.uninitialized, current_status);
+		CounterStatus current_status=service.getStatus();
+		assertEquals(CounterStatus.uninitialized, current_status);
 				
 	}
 
@@ -90,7 +93,6 @@ public class CountdownServicePublicationServiceImplTest extends TestCase
 		factory.registerImplementationClass(CountdownPublicationService.class,
 				CountdownPublicationServiceImpl.class);
 
-		try{
 		CountdownPublicationService service = factory.getObject(CountdownPublicationService.class);
 		service.setDuration(10);
 		service.startCountdown();
@@ -99,14 +101,18 @@ public class CountdownServicePublicationServiceImplTest extends TestCase
 				currentCount = aRemainingTime;
 			}
 		});
-		service.joinThread();
-		counter_status current_status=service.getStatus();
-		assertEquals(counter_status.finished, current_status);
-		}
-		catch(InterruptedException e)
+		CounterStatus current_status=service.getStatus();
+		while (service.getStatus() != CounterStatus.finished)
 		{
-			System.err.println("Exception occured:" +e);
+			try{
+				Thread.sleep(2);
+			}
+			catch(InterruptedException e)
+			{
+				System.err.println("test thread is interrupted");
+			}
 		}
+		assertEquals(CounterStatus.finished, service.getStatus());
 		
 	}
 }
