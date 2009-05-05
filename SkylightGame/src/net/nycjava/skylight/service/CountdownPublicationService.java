@@ -6,10 +6,9 @@ public interface CountdownPublicationService extends Observable<CountdownObserve
 	public void startCountdown();
 	public void setDuration(int time); //in seconds	
 	public void stopCountdown();
-	public counter_status getStatus();
+	public CounterStatus getStatus();
 	
 	public void addObserver(CountdownObserver anObserver);
 	public boolean removeObserver(CountdownObserver anObserver);
 	
-	public void joinThread() throws InterruptedException; //for testing purpose
 }
