@@ -5,7 +5,9 @@ package net.nycjava.skylight.view;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import android.content.Context;
+import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -45,6 +47,7 @@ public class Preview extends SurfaceView {
 				// Now that the size is known, set up the camera parameters and begin
 				// the preview.
 				Camera.Parameters parameters = mCamera.getParameters();
+				Log.i(Preview.class.getName(), String.format("params are %s", parameters.flatten()));
 				parameters.setPreviewSize(w, h);
 				mCamera.setParameters(parameters);
 				mCamera.startPreview();
