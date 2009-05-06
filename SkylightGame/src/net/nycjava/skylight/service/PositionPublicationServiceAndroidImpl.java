@@ -10,8 +10,6 @@ import android.hardware.SensorManager;
 public class PositionPublicationServiceAndroidImpl     
   implements PositionPublicationService {
   
-  final static float THRESHOLD = 0.1F;  //guess
-  
   private Set<PositionObserver> positionObservers = new HashSet<PositionObserver>();
   
   @Dependency
@@ -33,22 +31,26 @@ public class PositionPublicationServiceAndroidImpl
         }
     };
     
-   public void init() {
+   private void open() {
      int mask = 0;
      mask |= SensorManager.SENSOR_ACCELEROMETER; 
      mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
    }
    
-   public void close() {
+   private void close() {
      mSensorManager.unregisterListener(mListener);
    }
    
    public void addObserver(PositionObserver anObserver) {
 	 positionObservers.add(anObserver);
+     if (positionObservers.size() == 1)
+	     open();
    }
    
    public boolean removeObserver(PositionObserver anObserver) {
      final boolean existed = positionObservers.remove(anObserver);
+     if (positionObservers.isEmpty()) 
+    	 close();
 	 return existed;
    }
    
