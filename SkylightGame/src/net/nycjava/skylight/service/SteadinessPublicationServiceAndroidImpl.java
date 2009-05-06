@@ -21,10 +21,10 @@ public class SteadinessPublicationServiceAndroidImpl
   private final SensorListener mListener = new SensorListener() {
             
         public void onSensorChanged(int sensor, float[] values) {
-            for (int i = 0; i < 3; i++) 
-            	  // only notify if unsteady
-                if (Math.abs(values[i]) > THRESHOLD) 
-                	notifyObservers(values[i]);
+            float force = 0;
+        	for (int i = 0; i < 3; i++) 
+                force += Math.abs(values[i]); 
+            notifyObservers(force);
                 
         }
         public void onAccuracyChanged(int sensor, int accuracy) {
@@ -32,30 +32,37 @@ public class SteadinessPublicationServiceAndroidImpl
         }
     };
     
-   public void init() {
+   private void open() {
      int mask = 0;
      mask |= SensorManager.SENSOR_ACCELEROMETER; 
      mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
    }
    
-   public void close() {
+   private void close() {
      mSensorManager.unregisterListener(mListener);
    }
    
    public void addObserver(SteadinessObserver anObserver) {
 	 steadinessObservers.add(anObserver);
+		if (steadinessObservers.size() == 1)
+			open();
    }
    
    public boolean removeObserver(SteadinessObserver anObserver) {
      final boolean existed = steadinessObservers.remove(anObserver);
-	 return existed;
+     if (steadinessObservers.isEmpty()) 
+    	 close();
+     return existed;
    }
    
-   private void notifyObservers(float steady) {
+   private void notifyObservers(float force) {
 		for (SteadinessObserver steadinessObserver : steadinessObservers) {
-			steadinessObserver.steadinessNotification(steady);
+			steadinessObserver.steadinessNotification(force);
+			if (force > THRESHOLD)
+				steadinessObserver.unsteadinessNotification();
 		}
 	}
    
 }
+
 
