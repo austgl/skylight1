@@ -20,8 +20,8 @@ public class Camera {
 		int previewFormat;
 
 		int previewFrameRate;
-		
-		Size previewSize;
+
+		Size previewSize = new Size(0, 0);
 
 		public String flatten() {
 			return String.format("pictureFormat=%d, pictureSize=%s, previewFormat=%d, previewFrameRate=%d",
