@@ -2,15 +2,23 @@ package net.nycjava.skylight;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.service.CameraObscurementObserver;
 import net.nycjava.skylight.service.CameraObscurementPublicationService;
 import net.nycjava.skylight.service.CameraObscurementPublicationServiceAndroidImpl;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
 import net.nycjava.skylight.service.CountdownPublicationServiceImpl;
+import net.nycjava.skylight.service.DestinationObserver;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import net.nycjava.skylight.service.DestinationPublicationServiceImpl;
+import net.nycjava.skylight.service.PositionPublicationService;
+import net.nycjava.skylight.service.PositionPublicationServiceAndroidImpl;
+import net.nycjava.skylight.service.SteadinessObserver;
 import net.nycjava.skylight.service.SteadinessPublicationService;
+import net.nycjava.skylight.service.SteadinessPublicationServiceAndroidImpl;
 import android.content.Intent;
+import android.hardware.Camera;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
@@ -33,18 +41,38 @@ public class SkillTestActivity extends SkylightActivity {
 
 	private CountdownObserver countdownObserver;
 
+	private CameraObscurementObserver cameraObscurementObserver;
+
+	private DestinationObserver destinationObserver;
+
+	private SteadinessObserver steadinessObserver;
+
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
+		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
+				(SensorManager) getSystemService(SENSOR_SERVICE));
+
+		aDependencyInjectingObjectFactory.registerImplementationClass (PositionPublicationService.class,
+				PositionPublicationServiceAndroidImpl.class);
+
 		aDependencyInjectingObjectFactory.registerImplementationClass(DestinationPublicationService.class,
 				DestinationPublicationServiceImpl.class);
-		// aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
-		// SteadinessPublicationServiceAndroidImpl.class);
+
+		aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
+				SteadinessPublicationServiceAndroidImpl.class);
+
 		aDependencyInjectingObjectFactory.registerImplementationClass(CountdownPublicationService.class,
 				CountdownPublicationServiceImpl.class);
+
+		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
+
 		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
 				CameraObscurementPublicationServiceAndroidImpl.class);
+
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
+
+
 	}
 
 	/** Called when the activity is first created. */
@@ -60,12 +88,15 @@ public class SkillTestActivity extends SkylightActivity {
 		startActivity(intent);
 		return true;
 	}
-
+	
+	private int rTime;
+	public final int REMAINING_TIME = 10;
 	@Override
 	protected void onResume() {
 		super.onResume();
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
+				rTime = remainingTime;
 				if (remainingTime == 0) {
 					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 					startActivity(intent);
@@ -73,6 +104,55 @@ public class SkillTestActivity extends SkylightActivity {
 			}
 		};
 		countdownPublicationService.addObserver(countdownObserver);
+		countdownPublicationService.setDuration(REMAINING_TIME);
+		countdownPublicationService.startCountdown();
+		
+		cameraObscurementObserver = new CameraObscurementObserver() {
+
+			public void cameraObscurementNotification(CameraObscurementState cameraObscuredState) {
+				
+				if(cameraObscuredState == cameraObscuredState.unobscured )
+				{
+					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					startActivity(intent);
+				}					
+			}						
+		};
+		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
+		
+		final float MAX_DISTANCE = 40;
+		final float MAX_ANGLE = 180;
+
+		destinationObserver = new DestinationObserver() {
+			float aDistance;
+			
+			public void destinationNotification(float anAngle, float distance) {
+				aDistance=distance;
+				
+				if(distance > MAX_DISTANCE || anAngle > MAX_ANGLE )
+				{
+					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					startActivity(intent);
+				}	
+				if(distance == MAX_DISTANCE)
+				{
+					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					startActivity(intent);
+				}
+			}
+		};
+		destinationPublicationService.addObserver(destinationObserver);
+		destinationPublicationService.setDestinationPosition(MAX_DISTANCE);
+		
+		steadinessObserver = new SteadinessObserver() {
+			public void steadinessNotification(float paremetersThatICantThinkOfRightNow) 
+			{				
+				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+				startActivity(intent);
+			}						
+		};
+
+		steadinessPublicationService.addObserver(steadinessObserver);
 	}
 
 	@Override
