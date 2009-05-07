@@ -143,10 +143,17 @@ public class SkillTestActivity extends SkylightActivity {
 		destinationPublicationService.addObserver(destinationObserver);
 		
 		steadinessObserver = new SteadinessObserver() {
+			
 			public void steadinessNotification(float paremetersThatICantThinkOfRightNow) 
 			{				
+				final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+				startActivity(intent);
+			}
+			
+			public void unsteadinessNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 				startActivity(intent);
+				
 			}						
 		};
 
