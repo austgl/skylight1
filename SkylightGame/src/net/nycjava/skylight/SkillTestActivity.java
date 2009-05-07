@@ -91,6 +91,9 @@ public class SkillTestActivity extends SkylightActivity {
 	
 	private int rTime;
 	public final int REMAINING_TIME = 10;
+	private float aDistance;
+	public final float MAX_DISTANCE = 40;
+	public final float MAX_ANGLE = 180;
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -120,12 +123,8 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
 		
-		final float MAX_DISTANCE = 40;
-		final float MAX_ANGLE = 180;
-
 		destinationObserver = new DestinationObserver() {
-			float aDistance;
-			
+						
 			public void destinationNotification(float anAngle, float distance) {
 				aDistance=distance;
 				
@@ -142,7 +141,6 @@ public class SkillTestActivity extends SkylightActivity {
 			}
 		};
 		destinationPublicationService.addObserver(destinationObserver);
-		destinationPublicationService.setDestinationPosition(MAX_DISTANCE);
 		
 		steadinessObserver = new SteadinessObserver() {
 			public void steadinessNotification(float paremetersThatICantThinkOfRightNow) 
