@@ -22,6 +22,31 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class SkillTestActivity extends SkylightActivity {
 	@Dependency
@@ -88,12 +113,13 @@ public class SkillTestActivity extends SkylightActivity {
 		startActivity(intent);
 		return true;
 	}
-	
+
 	private int rTime;
 	public final int REMAINING_TIME = 10;
 	private float aDistance;
-	public final float MAX_DISTANCE = 40;
+	public final float MIN_DISTANCE = 20;
 	public final float MAX_ANGLE = 180;
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -109,11 +135,11 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.addObserver(countdownObserver);
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
-		
+
 		cameraObscurementObserver = new CameraObscurementObserver() {
 
 			public void cameraObscurementNotification(CameraObscurementState cameraObscuredState) {
-				
+
 				if(cameraObscuredState == cameraObscuredState.unobscured )
 				{
 					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
@@ -122,47 +148,141 @@ public class SkillTestActivity extends SkylightActivity {
 			}						
 		};
 		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
-		
+
 		destinationObserver = new DestinationObserver() {
-						
+
 			public void destinationNotification(float anAngle, float distance) {
 				aDistance=distance;
-				
-				if(distance > MAX_DISTANCE || anAngle > MAX_ANGLE )
+				/*
+				if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE )
 				{
 					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 					startActivity(intent);
 				}	
-				if(distance == MAX_DISTANCE)
+				*/
+				if(distance >= MIN_DISTANCE)
 				{
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					startActivity(intent);
 				}
 			}
 		};
-		destinationPublicationService.addObserver(destinationObserver);
 		
+		destinationPublicationService.addObserver(destinationObserver);
+
 		steadinessObserver = new SteadinessObserver() {
-			
+
 			public void steadinessNotification(float paremetersThatICantThinkOfRightNow) 
 			{				
 				final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 				startActivity(intent);
 			}
-			
+
 			public void unsteadinessNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 				startActivity(intent);
-				
+
 			}						
 		};
 
 		steadinessPublicationService.addObserver(steadinessObserver);
+		
+		TextView title = new TextView(this);
+		title.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 
+									LayoutParams.WRAP_CONTENT));
+		contentView.addView(title);
+		CustomView cview = new CustomView(getApplicationContext(),1,0,0);
+		contentView.addView(cview);							
+		setContentView(contentView);
+
 	}
 
 	@Override
 	protected void onPause() {
 		countdownPublicationService.removeObserver(countdownObserver);
+		cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
+		destinationPublicationService.removeObserver(destinationObserver);
+		steadinessPublicationService.removeObserver(steadinessObserver);
 		super.onPause();
 	}
+
+	CustomView vw = null;
+	boolean running = true;
+	boolean playSound = true;
+	Bitmap ball = null;
+
+	protected class CustomView extends View
+	{
+		Context ctx;
+		Paint lPaint = new Paint();
+		int x_1=0,y_1=0, z_1=0;
+		float xf_1=0,yf_1=0, zf_1=0;
+
+		CustomView(Context c, int x, int y , int z) 
+		{
+			super(c);
+			this.x_1 = x;
+			this.y_1 = y;
+			this.z_1 = z;
+
+			ctx = c;
+		}
+
+		protected void drawSprint(int x, int y, Canvas canvas)
+		{
+			canvas.drawLine(50,0, x, y, lPaint);
+		}
+
+		public void onDraw(Canvas canvas)
+		{ 
+
+			Path path = new Path ();
+			path.moveTo (0, 0);
+			path.lineTo (200, 0);
+			path.moveTo (0, 50);
+			path.lineTo (200, 50);
+			Paint paint = new Paint ();
+			paint.setColor (0xFFFF0000);
+			paint.setStrokeWidth(1.0f);
+			paint.setTextSize(24);
+			Typeface typeface = Typeface.defaultFromStyle (Typeface.NORMAL);
+			paint.setTypeface (typeface);
+			paint.setTextAlign(Paint.Align.LEFT);
+			canvas.drawTextOnPath(aDistance+"---"+rTime, path, 0, 50, paint);
+
+			Rect rct = new Rect();
+			rct.set(0, 0, canvas.getWidth(), canvas.getHeight());
+
+			Paint pnt = new Paint();
+			pnt.setStyle(Paint.Style.FILL);
+			pnt.setColor(Color.WHITE);
+
+			xf_1=x_1;
+			yf_1 =y_1;
+	
+			canvas.drawText("x:"+x_1+" y:"+y_1 +" z:"+z_1, x_1, y_1, pnt);
+
+			x_1+=1;
+			y_1+=1;
+
+
+			drawSprint(x_1, y_1, canvas);			
+	
+			if(running)
+			{
+
+				invalidate();
+			}
+
+
+			if(x_1 ==200 )
+			{
+				running= false;
+				invalidate();
+
+			}
+
+		}
+	}
+
 }
