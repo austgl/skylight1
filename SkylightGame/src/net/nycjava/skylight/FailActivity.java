@@ -18,7 +18,7 @@ public class FailActivity extends SkylightActivity {
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
 		dependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
 		dependencyInjectingObjectFactory.registerImplementationObject(View.class, getLayoutInflater().inflate(
-				R.layout.failMsg, null));
+				R.layout.failmsg, null));
 		dependencyInjectingObjectFactory.registerImplementationObject(Preview.class, new Preview(this));
 
 	}
