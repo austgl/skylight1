@@ -191,7 +191,7 @@ public class SkillTestActivity extends SkylightActivity {
 		title.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 
 									LayoutParams.WRAP_CONTENT));
 		contentView.addView(title);
-		CustomView cview = new CustomView(getApplicationContext(),1,0,0);
+		CustomView cview = new CustomView(getApplicationContext());
 		contentView.addView(cview);							
 		setContentView(contentView);
 
@@ -215,23 +215,13 @@ public class SkillTestActivity extends SkylightActivity {
 	{
 		Context ctx;
 		Paint lPaint = new Paint();
-		int x_1=0,y_1=0, z_1=0;
-		float xf_1=0,yf_1=0, zf_1=0;
 
-		CustomView(Context c, int x, int y , int z) 
+		CustomView(Context c) 
 		{
 			super(c);
-			this.x_1 = x;
-			this.y_1 = y;
-			this.z_1 = z;
-
 			ctx = c;
 		}
 
-		protected void drawSprint(int x, int y, Canvas canvas)
-		{
-			canvas.drawLine(50,0, x, y, lPaint);
-		}
 
 		public void onDraw(Canvas canvas)
 		{ 
@@ -248,39 +238,13 @@ public class SkillTestActivity extends SkylightActivity {
 			Typeface typeface = Typeface.defaultFromStyle (Typeface.NORMAL);
 			paint.setTypeface (typeface);
 			paint.setTextAlign(Paint.Align.LEFT);
-			canvas.drawTextOnPath(aDistance+"---"+rTime, path, 0, 50, paint);
+			canvas.drawTextOnPath("distance:"+aDistance+"time:"+rTime, path, 0, 100, paint);
 
-			Rect rct = new Rect();
-			rct.set(0, 0, canvas.getWidth(), canvas.getHeight());
-
-			Paint pnt = new Paint();
-			pnt.setStyle(Paint.Style.FILL);
-			pnt.setColor(Color.WHITE);
-
-			xf_1=x_1;
-			yf_1 =y_1;
-	
-			canvas.drawText("x:"+x_1+" y:"+y_1 +" z:"+z_1, x_1, y_1, pnt);
-
-			x_1+=1;
-			y_1+=1;
-
-
-			drawSprint(x_1, y_1, canvas);			
-	
 			if(running)
 			{
-
 				invalidate();
 			}
 
-
-			if(x_1 ==200 )
-			{
-				running= false;
-				invalidate();
-
-			}
 
 		}
 	}
