@@ -17,14 +17,38 @@ public class PositionPublicationServiceAndroidImpl
 	  //mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 	
   private final SensorListener mListener = new SensorListener() {
-            
+      	
+	    long old_tick;
+	    long tick;
+	    long delta_t;
+	    float x;
+	    float y;
+	    float z;
+	    float x_pos; // x-position in meters
+	    float y_pos; // y-position in meters
+	    float z_pos; // z-position in meters
+	    double y_dist = 0.0f; // y-distance traveled in meters
+	    double y_vel =  0.0f;  // y-velocity in meters/sec
+	    double y_accel = 0.0f; // y-acceleration in meter/sec^2
+	    double y_fudge = 0.005;
+	    
         public void onSensorChanged(int sensor, float[] values) {
-        	if(SensorManager.SENSOR_ACCELEROMETER==sensor) //todo: is this check needed?
-        		notifyObservers(new Position(
-         			values[SensorManager.DATA_X],
-         			values[SensorManager.DATA_Y],
-         			values[SensorManager.DATA_Z])
-         	);                
+        	tick = System.currentTimeMillis();
+//        	if(SensorManager.SENSOR_ACCELEROMETER==sensor) //todo: is this check needed?
+        		// do math for creating position
+        		x = values[SensorManager.DATA_X];
+        		y = values[SensorManager.DATA_Y];
+        		z = values[SensorManager.DATA_Z];
+        		
+        		if(Math.abs(y - y_fudge) >= 0.5) {
+        			delta_t = tick - old_tick;
+					y_dist += y_vel * ((delta_t)/1000.0);
+					y_vel += y_accel * ((delta_t)/1000.0);
+					y_accel = (float)(y - y_fudge);
+        		}
+        		old_tick = tick;
+        		notifyObservers(new Position (0.0f,(float)y_dist,0.0f));
+        		
         }
         public void onAccuracyChanged(int sensor, int accuracy) {
             // todo: ???    
@@ -34,7 +58,7 @@ public class PositionPublicationServiceAndroidImpl
    private void open() {
      int mask = 0;
      mask |= SensorManager.SENSOR_ACCELEROMETER; 
-     mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
+     mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_GAME);
    }
    
    private void close() {
