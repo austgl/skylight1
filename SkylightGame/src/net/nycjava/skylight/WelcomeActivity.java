@@ -16,8 +16,8 @@ public class WelcomeActivity extends SkylightActivity {
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.welcome, null));
 		// TODO remove the following example
-		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
-				(SensorManager) getSystemService(SENSOR_SERVICE));
+//		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
+//				(SensorManager) getSystemService(SENSOR_SERVICE));
 	}
 
 	/** Called when the activity is first created. */

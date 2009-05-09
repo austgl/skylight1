@@ -75,26 +75,25 @@ public class SkillTestActivity extends SkylightActivity {
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
-		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
-				(SensorManager) getSystemService(SENSOR_SERVICE));
-
-		aDependencyInjectingObjectFactory.registerImplementationClass (PositionPublicationService.class,
-				PositionPublicationServiceAndroidImpl.class);
+		
+//		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
+//				(SensorManager) getSystemService(SENSOR_SERVICE));
+//		aDependencyInjectingObjectFactory.registerImplementationClass (PositionPublicationService.class,
+//				PositionPublicationServiceAndroidImpl.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationClass(DestinationPublicationService.class,
 				DestinationPublicationServiceImpl.class);
 
-		aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
-				SteadinessPublicationServiceAndroidImpl.class);
+//		aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
+//				SteadinessPublicationServiceAndroidImpl.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationClass(CountdownPublicationService.class,
 				CountdownPublicationServiceImpl.class);
-
+/*
 		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
-
 		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
 				CameraObscurementPublicationServiceAndroidImpl.class);
-
+*/
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
 
@@ -105,12 +104,11 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(contentView);
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		final Intent intent = new Intent(SkillTestActivity.this, WelcomeActivity.class);
+	public boolean onKeyUp(int keyCode, KeyEvent event) { //TODO: remove this! this is for cheating only
+		final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 		startActivity(intent);
 		return true;
 	}
@@ -121,6 +119,7 @@ public class SkillTestActivity extends SkylightActivity {
 	public final float MIN_DISTANCE = 20;
 	public final float MAX_ANGLE = 180;
 
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -137,6 +136,8 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.addObserver(countdownObserver);
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
+
+
 /*
 		cameraObscurementObserver = new CameraObscurementObserver() {
 
@@ -151,9 +152,11 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
 */
-		((DestinationPublicationServiceImpl) destinationPublicationService).setDestinationPosition(new Position(1f,1f,1f));
+
 		
-		destinationObserver = new DestinationObserver() {
+//		((DestinationPublicationServiceImpl) destinationPublicationService).setDestinationPosition(new Position(1f,1f,1f));
+		
+ 		destinationObserver = new DestinationObserver() {
 
 			public void destinationNotification(float anAngle, float distance) {
 				aDistance=distance;
@@ -166,13 +169,16 @@ public class SkillTestActivity extends SkylightActivity {
 				
 				if(distance >= MIN_DISTANCE)
 				{
+					Log.d("SkillTestActivity", "distance="+distance);
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					startActivity(intent);
 				}
 			}
 		};
 		
-		destinationPublicationService.addObserver(destinationObserver);
+//		destinationPublicationService.addObserver(destinationObserver);
+	
+		
 /*
 		steadinessObserver = new SteadinessObserver() {
 
@@ -191,16 +197,17 @@ public class SkillTestActivity extends SkylightActivity {
 
 		steadinessPublicationService.addObserver(steadinessObserver);
 */		
+		
 		TextView title = new TextView(this);
 		title.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 
 									LayoutParams.WRAP_CONTENT));
 		contentView.addView(title);
 		CustomView cview = new CustomView(getApplicationContext());
-		contentView.addView(cview);							
+		contentView.addView(cview);
+											
 		setContentView(contentView);
-		
-
 	}
+	
 
 	@Override
 	protected void onPause() {
@@ -211,6 +218,7 @@ public class SkillTestActivity extends SkylightActivity {
 		super.onPause();
 	}
 
+	
 	CustomView vw = null;
 	boolean running = true;
 	boolean playSound = true;
