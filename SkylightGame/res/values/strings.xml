@@ -2,7 +2,8 @@
 <resources>
     <string name="welcome">Welcome!!!\n\nPress any button to move to the Skill Test page.</string>
     <string name="app_name">Skylight</string>
-    <string name="successMsg">skylight game succeeded</string>
-    <string name="failMsg">Skylight game failed</string>
+    <string name="successmsg">The Skylight game succeeded</string>
+    <string name="failmsg">The Skylight game failed</string>
+    <string name="go">Play Again</string>    
 <string name="skilltest">Skill Test!!!! \n\nCheck logcat and you will see that these activities are writing log messages that show their dependencies have been injected.\n\nPress any button to move back to the Welcome page.</string>
 </resources>

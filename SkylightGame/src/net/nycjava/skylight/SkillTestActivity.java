@@ -11,6 +11,7 @@ import net.nycjava.skylight.service.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.DestinationObserver;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import net.nycjava.skylight.service.DestinationPublicationServiceImpl;
+import net.nycjava.skylight.service.Position;
 import net.nycjava.skylight.service.PositionPublicationService;
 import net.nycjava.skylight.service.PositionPublicationServiceAndroidImpl;
 import net.nycjava.skylight.service.SteadinessObserver;
@@ -123,6 +124,7 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
 				rTime = remainingTime;
@@ -135,31 +137,33 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.addObserver(countdownObserver);
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
-
+/*
 		cameraObscurementObserver = new CameraObscurementObserver() {
 
 			public void cameraObscurementNotification(CameraObscurementState cameraObscuredState) {
 
 				if(cameraObscuredState == cameraObscuredState.unobscured )
 				{
-					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-					startActivity(intent);
+//					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+//					startActivity(intent);
 				}					
 			}						
 		};
 		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
-
+*/
+		((DestinationPublicationServiceImpl) destinationPublicationService).setDestinationPosition(new Position(1f,1f,1f));
+		
 		destinationObserver = new DestinationObserver() {
 
 			public void destinationNotification(float anAngle, float distance) {
 				aDistance=distance;
-				/*
-				if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE )
-				{
-					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-					startActivity(intent);
-				}	
-				*/
+				
+				//if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE )
+				//{
+				//	final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+				//	startActivity(intent);
+				//}	
+				
 				if(distance >= MIN_DISTANCE)
 				{
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
@@ -169,24 +173,24 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 		
 		destinationPublicationService.addObserver(destinationObserver);
-
+/*
 		steadinessObserver = new SteadinessObserver() {
 
 			public void steadinessNotification(float paremetersThatICantThinkOfRightNow) 
 			{				
-				final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-				startActivity(intent);
+//				final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+//				startActivity(intent);
 			}
 
 			public void unsteadinessNotification() {
-				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-				startActivity(intent);
+//				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+//				startActivity(intent);
 
 			}						
 		};
 
 		steadinessPublicationService.addObserver(steadinessObserver);
-		
+*/		
 		TextView title = new TextView(this);
 		title.setLayoutParams( new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 
 									LayoutParams.WRAP_CONTENT));
@@ -194,6 +198,7 @@ public class SkillTestActivity extends SkylightActivity {
 		CustomView cview = new CustomView(getApplicationContext());
 		contentView.addView(cview);							
 		setContentView(contentView);
+		
 
 	}
 
