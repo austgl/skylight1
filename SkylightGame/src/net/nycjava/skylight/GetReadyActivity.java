@@ -3,8 +3,10 @@ package net.nycjava.skylight;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.view.Preview;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 
@@ -35,5 +37,12 @@ public class GetReadyActivity extends SkylightActivity {
 		// Create our Preview view and set it as the content of our activity.
 		// mPreview = new Preview(this);
 		// setContentView(mPreview);
+	}
+	
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
+		startActivity(intent);
+		return true;
 	}
 }
