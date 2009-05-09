@@ -4,6 +4,7 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.view.Preview;
 
@@ -12,14 +13,13 @@ import net.nycjava.skylight.view.Preview;
  */
 public class SuccessActivity extends SkylightActivity {
 
-	private View view;
+	private LinearLayout view;
 	
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
 		dependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
-		dependencyInjectingObjectFactory.registerImplementationObject(View.class, getLayoutInflater().inflate(
-				R.layout.successmsg, null));
-		dependencyInjectingObjectFactory.registerImplementationObject(Preview.class, new Preview(this));
+		dependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
+				(LinearLayout) getLayoutInflater().inflate(R.layout.successmsg, null));
 
 	}
 
