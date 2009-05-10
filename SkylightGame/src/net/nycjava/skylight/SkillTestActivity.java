@@ -12,6 +12,7 @@ import net.nycjava.skylight.service.DestinationObserver;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import net.nycjava.skylight.service.DestinationPublicationServiceImpl;
 import net.nycjava.skylight.service.Position;
+import net.nycjava.skylight.service.PositionObserver;
 import net.nycjava.skylight.service.PositionPublicationService;
 import net.nycjava.skylight.service.PositionPublicationServiceAndroidImpl;
 import net.nycjava.skylight.service.SteadinessObserver;
@@ -51,53 +52,49 @@ import android.widget.Toast;
 
 public class SkillTestActivity extends SkylightActivity {
 	@Dependency
-	private DestinationPublicationService destinationPublicationService;
-
-	@Dependency
-	private SteadinessPublicationService steadinessPublicationService;
-
+	private PositionPublicationService positionPublicationService;
+//	@Dependency
+//	private DestinationPublicationService destinationPublicationService;
+//	@Dependency
+//	private SteadinessPublicationService steadinessPublicationService;
 	@Dependency
 	private CountdownPublicationService countdownPublicationService;
-
-	@Dependency
-	private CameraObscurementPublicationService cameraObscurementPublicationService;
-
+//	@Dependency
+//	private CameraObscurementPublicationService cameraObscurementPublicationService;
 	@Dependency
 	private LinearLayout contentView;
-
 	private CountdownObserver countdownObserver;
-
-	private CameraObscurementObserver cameraObscurementObserver;
-
-	private DestinationObserver destinationObserver;
-
-	private SteadinessObserver steadinessObserver;
+//	private CameraObscurementObserver cameraObscurementObserver;
+	private PositionObserver positionObserver;
+//	private DestinationObserver destinationObserver;
+//	private SteadinessObserver steadinessObserver;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 		
-//		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
-//				(SensorManager) getSystemService(SENSOR_SERVICE));
-//		aDependencyInjectingObjectFactory.registerImplementationClass (PositionPublicationService.class,
-//				PositionPublicationServiceAndroidImpl.class);
-
-		aDependencyInjectingObjectFactory.registerImplementationClass(DestinationPublicationService.class,
-				DestinationPublicationServiceImpl.class);
-
-//		aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
+		SensorManager aSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		
+		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
+				aSensorManager);
+		
+		aDependencyInjectingObjectFactory.registerImplementationClass (PositionPublicationService.class,
+				PositionPublicationServiceAndroidImpl.class);
+		
+//		aDependencyInjectingObjectFactory.registerImplementationClass(DestinationPublicationService.class,
+//				DestinationPublicationServiceImpl.class);
+		
+//		destinationPublicationService.setSensorManager(aSensorManager);
+		
+		//		aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
 //				SteadinessPublicationServiceAndroidImpl.class);
-
 		aDependencyInjectingObjectFactory.registerImplementationClass(CountdownPublicationService.class,
 				CountdownPublicationServiceImpl.class);
-/*
-		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
-		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
-				CameraObscurementPublicationServiceAndroidImpl.class);
-*/
+//		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
+//		aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
+//				CameraObscurementPublicationServiceAndroidImpl.class);
+		
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
-
-
 	}
 
 	/** Called when the activity is first created. */
@@ -116,9 +113,9 @@ public class SkillTestActivity extends SkylightActivity {
 	private int rTime;
 	public final int REMAINING_TIME = 10;
 	private float aDistance;
-	public final float MIN_DISTANCE = 20;
+	public final float MIN_DISTANCE = 20000;
 	public final float MAX_ANGLE = 180;
-
+	private Position destinationPosition = new Position(1f,20000f,1f);
 	
 	@Override
 	protected void onResume() {
@@ -128,8 +125,10 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				rTime = remainingTime;
 				if (remainingTime == 0) {
-					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-					startActivity(intent);
+//					countdownPublicationService.stopCountdown();
+//					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+//					startActivity(intent);
+//					finish();
 				}
 			}
 		};
@@ -153,9 +152,9 @@ public class SkillTestActivity extends SkylightActivity {
 		//cameraObscurementPublicationService.addObserver(cameraObscurementObserver);	
 */
 
-		
 //		((DestinationPublicationServiceImpl) destinationPublicationService).setDestinationPosition(new Position(1f,1f,1f));
 		
+/*		
  		destinationObserver = new DestinationObserver() {
 
 			public void destinationNotification(float anAngle, float distance) {
@@ -167,17 +166,55 @@ public class SkillTestActivity extends SkylightActivity {
 				//	startActivity(intent);
 				//}	
 				
-				if(distance >= MIN_DISTANCE)
+//				if(distance >= 0)
+//					Log.d("SkillTestActivity", "distance="+distance);
+				
+				if(aDistance >= MIN_DISTANCE)
 				{
-					Log.d("SkillTestActivity", "distance="+distance);
-					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					countdownPublicationService.stopCountdown();
+					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 					startActivity(intent);
+				    finish();
 				}
 			}
 		};
 		
-//		destinationPublicationService.addObserver(destinationObserver);
-	
+		destinationPublicationService.addObserver(destinationObserver);
+*/	
+
+ 		positionObserver = new PositionObserver() {
+
+			public void positionNotification(Position aPosition) {
+
+				aDistance = (float) Math.sqrt(
+						//Math.pow((double) aPosition.getX() - (double) destinationPosition.getX(), 2) +
+						Math.pow((double) aPosition.getY() - (double) destinationPosition.getY(), 2)
+						//+ Math.pow((double) aPosition.getZ() - (double) destinationPosition.getZ(), 2)
+						);
+
+				
+				//if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE )
+				//{
+				//	final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+				//	startActivity(intent);
+				//}	
+				
+//				if(distance >= 0)
+//					Log.d("SkillTestActivity", "distance="+distance);
+				
+				if(aDistance > MIN_DISTANCE*2)
+				{
+					positionPublicationService.removeObserver(positionObserver);
+					countdownPublicationService.stopCountdown();
+					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					startActivity(intent);
+				    finish();
+				}
+			}
+		};
+		
+		positionPublicationService.addObserver(positionObserver);
+
 		
 /*
 		steadinessObserver = new SteadinessObserver() {
@@ -209,14 +246,14 @@ public class SkillTestActivity extends SkylightActivity {
 	}
 	
 
-	@Override
-	protected void onPause() {
-		countdownPublicationService.removeObserver(countdownObserver);
-		cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
-		destinationPublicationService.removeObserver(destinationObserver);
-		steadinessPublicationService.removeObserver(steadinessObserver);
-		super.onPause();
-	}
+//	@Override //TODO: not working
+//	protected void onPause() {
+//		countdownPublicationService.removeObserver(countdownObserver);
+////		cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
+//		destinationPublicationService.removeObserver(destinationObserver);
+////		steadinessPublicationService.removeObserver(steadinessObserver);
+//		super.onPause();
+//	}
 
 	
 	CustomView vw = null;
@@ -251,7 +288,7 @@ public class SkillTestActivity extends SkylightActivity {
 			Typeface typeface = Typeface.defaultFromStyle (Typeface.NORMAL);
 			paint.setTypeface (typeface);
 			paint.setTextAlign(Paint.Align.LEFT);
-			canvas.drawTextOnPath("distance:"+aDistance+"time:"+rTime, path, 0, 100, paint);
+			canvas.drawTextOnPath("distance:"+aDistance+" time:"+rTime, path, 0, 100, paint);
 
 			if(running)
 			{
