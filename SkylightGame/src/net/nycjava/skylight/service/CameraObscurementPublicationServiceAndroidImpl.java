@@ -15,8 +15,6 @@ import android.hardware.Camera.Parameters;
 import android.util.Log;
 
 // TODO javadoc
-// TODO write test class 
-// TODO write a camera mock object
 public class CameraObscurementPublicationServiceAndroidImpl implements CameraObscurementPublicationService {
 	@Dependency
 	private Camera camera;
