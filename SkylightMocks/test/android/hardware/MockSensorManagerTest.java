@@ -39,7 +39,7 @@ public class MockSensorManagerTest extends TestCase {
 
 		final ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 
-		MockSensorManager mockSensorManager = new MockSensorManager(bais);
+		SensorManager mockSensorManager = new SensorManager(bais);
 
 		mockSensorManager.registerListener(new SensorListener() {
 
@@ -50,6 +50,6 @@ public class MockSensorManagerTest extends TestCase {
 			public void onSensorChanged(int arg0, float[] arg1) {
 				// TODO put real tests here
 			}
-		}, MockSensorManager.SENSOR_ACCELEROMETER);
+		}, SensorManager.SENSOR_ALL);
 	}
 }

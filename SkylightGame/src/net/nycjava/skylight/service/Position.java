@@ -24,4 +24,9 @@ public class Position {
 	public float getZ() {
 		return z;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%5.3f, %5.3f, %5.3f", x, y, z);
+	}
 }
