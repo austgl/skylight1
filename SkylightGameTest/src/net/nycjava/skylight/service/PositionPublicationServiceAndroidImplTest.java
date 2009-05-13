@@ -1,13 +1,15 @@
 package net.nycjava.skylight.service;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.service.PositionObserver;
 import android.hardware.SensorManager;
-import android.hardware.MockSensorManager;
+import android.hardware.SensorManagerProxy;
 
 public class PositionPublicationServiceAndroidImplTest extends TestCase {
 	
@@ -22,8 +24,13 @@ public class PositionPublicationServiceAndroidImplTest extends TestCase {
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationClass(PositionPublicationService.class,
 				PositionPublicationServiceAndroidImpl.class);
-		MockSensorManager  sensorManager = new MockSensorManager(data);
-		factory.registerImplementationObject(SensorManager.class, sensorManager);
+		try {
+			SensorManager mockSensorManager = new SensorManagerProxy().getSensorManager(new FileInputStream("testData_20090507_221542.tdc"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		factory.registerImplementationObject(SensorManager.class, sensorManager);
 
 		PositionPublicationService positionService = factory.getObject(PositionPublicationService.class);
 		positionService.addObserver(new PositionObserver() {

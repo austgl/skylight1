@@ -1,13 +1,15 @@
 package net.nycjava.skylight.service;
 
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.service.SteadinessObserver;
 import android.hardware.SensorManager;
-import android.hardware.MockSensorManager;
+import android.hardware.SensorManagerProxy;
 
 public class SteadinessPublicationServiceAndroidImplTest extends TestCase {
 	
@@ -22,8 +24,14 @@ public class SteadinessPublicationServiceAndroidImplTest extends TestCase {
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationClass(SteadinessPublicationService.class,
 				SteadinessPublicationServiceAndroidImpl.class);
-		MockSensorManager  sensorManager = new MockSensorManager(data);
-		factory.registerImplementationObject(SensorManager.class, sensorManager);
+		SensorManager sensorManager;
+		try {
+			sensorManager = new SensorManagerProxy().getSensorManager(new FileInputStream("testData_20090507_221542.tdc"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		factory.registerImplementationObject(SensorManager.class, sensorManager);
 
 		SteadinessPublicationService SteadyService = factory.getObject(SteadinessPublicationService.class);
 		SteadyService.addObserver(new SteadinessObserver() {
