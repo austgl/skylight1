@@ -140,7 +140,7 @@ public class SkillTestActivity extends SkylightActivity {
 
 				 if(distance > MIN_DISTANCE) //|| anAngle > MAX_ANGLE )
 				 {
-					 final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					 final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					 startActivity(intent);
 					 finish();
 				 }
@@ -170,13 +170,13 @@ public class SkillTestActivity extends SkylightActivity {
 	}
 
 	// @Override //TODO: not working
-	// protected void onPause() {
-	// countdownPublicationService.removeObserver(countdownObserver);
-	// // cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
-	// destinationPublicationService.removeObserver(destinationObserver);
-	// // steadinessPublicationService.removeObserver(steadinessObserver);
-	// super.onPause();
-	// }
+	 protected void onPause() {
+	 countdownPublicationService.removeObserver(countdownObserver);
+	 // cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
+	 destinationPublicationService.removeObserver(destinationObserver);
+	 // steadinessPublicationService.removeObserver(steadinessObserver);
+	 super.onPause();
+	 }
 
 	CustomView vw = null;
 
