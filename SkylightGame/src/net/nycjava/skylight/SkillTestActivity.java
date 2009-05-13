@@ -92,15 +92,15 @@ public class SkillTestActivity extends SkylightActivity {
 
 	private int rTime;
 
-	public final int REMAINING_TIME = 10;
+	public final int REMAINING_TIME = 30; // todo: make configurable?
 
 	private float aDistance;
 
-	public final float MIN_DISTANCE = 20000;
+	public final float MIN_DISTANCE = 100; // todo: make configurable?
 
-	public final float MAX_ANGLE = 180;
+//	public final float MAX_ANGLE = 180;
 
-	private Position destinationPosition = new Position(1f, 20000f, 1f);
+	private Position destinationPosition = new Position(1f, 1f, 1f); // todo: make configurable?
 
 	@Override
 	protected void onResume() {
@@ -110,10 +110,10 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				rTime = remainingTime;
 				if (remainingTime == 0) {
-					// countdownPublicationService.stopCountdown();
-					// final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-					// startActivity(intent);
-					// finish();
+					 countdownPublicationService.stopCountdown();
+					 final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					 startActivity(intent);
+					 finish();
 				}
 			}
 		};
@@ -131,19 +131,19 @@ public class SkillTestActivity extends SkylightActivity {
 		 * //cameraObscurementPublicationService.addObserver(cameraObscurementObserver);
 		 */
 
-		destinationPublicationService.setDestinationPosition(new Position(0f,
-				MIN_DISTANCE, 0f));
+		destinationPublicationService.setDestinationPosition(destinationPosition);
 
 		destinationObserver = new DestinationObserver() {
 
 			public void destinationNotification(float anAngle, float distance) {
 				aDistance = distance;
 
-				// if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE )
-				// {
-				// final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-				// startActivity(intent);
-				// }
+				 if(distance > MIN_DISTANCE) //|| anAngle > MAX_ANGLE )
+				 {
+					 final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					 startActivity(intent);
+					 finish();
+				 }
 
 				// if(distance >= 0)
 				// Log.d("SkillTestActivity", "distance="+distance);
@@ -158,41 +158,7 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 
 		destinationPublicationService.addObserver(destinationObserver);
-		/*
-		 * 
-		 * positionObserver = new PositionObserver() {
-		 * 
-		 * public void positionNotification(Position aPosition) {
-		 * 
-		 * aDistance = (float) Math.sqrt( //Math.pow((double) aPosition.getX() - (double) destinationPosition.getX(), 2) +
-		 * Math.pow((double) aPosition.getY() - (double) destinationPosition.getY(), 2) //+ Math.pow((double)
-		 * aPosition.getZ() - (double) destinationPosition.getZ(), 2) );
-		 * 
-		 * 
-		 * //if(distance > MIN_DISTANCE || anAngle > MAX_ANGLE ) //{ // final Intent intent = new
-		 * Intent(SkillTestActivity.this, FailActivity.class); // startActivity(intent); //}
-		 *  // if(distance >= 0) // Log.d("SkillTestActivity", "distance="+distance);
-		 * 
-		 * if(aDistance > MIN_DISTANCE*2) { positionPublicationService.removeObserver(positionObserver);
-		 * countdownPublicationService.stopCountdown(); final Intent intent = new Intent(SkillTestActivity.this,
-		 * FailActivity.class); startActivity(intent); finish(); } } };
-		 * 
-		 * positionPublicationService.addObserver(positionObserver);
-		 * 
-		 * 
-		 * 
-		 * steadinessObserver = new SteadinessObserver() {
-		 * 
-		 * public void steadinessNotification(float paremetersThatICantThinkOfRightNow) { // final Intent intent = new
-		 * Intent(SkillTestActivity.this, SuccessActivity.class); // startActivity(intent); }
-		 * 
-		 * public void unsteadinessNotification() { // final Intent intent = new Intent(SkillTestActivity.this,
-		 * FailActivity.class); // startActivity(intent);
-		 *  } };
-		 * 
-		 * steadinessPublicationService.addObserver(steadinessObserver);
-		 */
-
+		
 		TextView title = new TextView(this);
 		title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
@@ -234,9 +200,9 @@ public class SkillTestActivity extends SkylightActivity {
 
 			Path path = new Path();
 			path.moveTo(0, 0);
-			path.lineTo(200, 0);
+			path.lineTo(250, 0);
 			path.moveTo(0, 50);
-			path.lineTo(200, 50);
+			path.lineTo(250, 50);
 			Paint paint = new Paint();
 			paint.setColor(0xFFFF0000);
 			paint.setStrokeWidth(1.0f);
@@ -244,7 +210,7 @@ public class SkillTestActivity extends SkylightActivity {
 			Typeface typeface = Typeface.defaultFromStyle(Typeface.NORMAL);
 			paint.setTypeface(typeface);
 			paint.setTextAlign(Paint.Align.LEFT);
-			canvas.drawTextOnPath("distance:" + aDistance + " time:" + rTime, path, 0, 100, paint);
+			canvas.drawTextOnPath("Dist " + aDistance + "  Time " + rTime, path, 0, 250, paint);
 
 			if (running) {
 				invalidate();
