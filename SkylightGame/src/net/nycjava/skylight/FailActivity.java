@@ -1,9 +1,14 @@
 package net.nycjava.skylight;
 
+import android.content.Intent;
 import android.hardware.Camera;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
@@ -20,7 +25,6 @@ public class FailActivity extends SkylightActivity {
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) 
 	{
-//		dependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
 
 		dependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.failmsg, null));
@@ -34,11 +38,22 @@ public class FailActivity extends SkylightActivity {
 
 		// Hide the window title.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN ,
+        		             WindowManager.LayoutParams.FLAG_FULLSCREEN );
 		setContentView(view);
 
-		// Create our Preview view and set it as the content of our activity.
-		 //mPreview = new Preview(this);
-		//setContentView(mPreview);
+		Button goButton = (Button)findViewById(R.id.go);
+		goButton.setOnClickListener(new OnClickListener() {
+	        public void onClick(View v) {
+			    Intent intent = new Intent();
+			    intent.setClass(FailActivity.this, GetReadyActivity.class);
+			    startActivity(intent);
+			    finish();
+	        }
+		});
+		
+	   	MediaPlayer.create(getBaseContext(), R.raw.uhoh).start();
 	}
+		
+	
 }
