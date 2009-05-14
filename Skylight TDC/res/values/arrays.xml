@@ -6,4 +6,8 @@
 		<item>Game</item>
 		<item>Fastest</item>
 	</string-array>
+<string-array name="preview_formats"><item>YCbCr_420_SP</item>
+<item>RGB_565</item>
+<item>JPEG</item>
+</string-array>
 </resources>
