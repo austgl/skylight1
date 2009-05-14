@@ -171,6 +171,13 @@ public class SkylightCameraTDC extends Activity {
 		});
 	}
 
+	@Override
+	protected void onDestroy() {
+		camera.release();
+
+		super.onDestroy();
+	}
+
 	private static int getPreviewFormatAsInteger(Spinner aSpinner) {
 		return previewFormats[(int) aSpinner.getSelectedItemId()];
 	}
