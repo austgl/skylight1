@@ -173,6 +173,8 @@ public class SkylightCameraTDC extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		camera.stopPreview();
+
 		camera.release();
 
 		super.onDestroy();
