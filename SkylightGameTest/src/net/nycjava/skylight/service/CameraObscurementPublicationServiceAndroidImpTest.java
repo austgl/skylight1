@@ -62,6 +62,31 @@ public class CameraObscurementPublicationServiceAndroidImpTest extends TestCase 
 		assertEquals(CameraObscurementState.unobscured, observedCameraObscuredState);
 	}
 
+	public void testTDCFile() {
+		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
+		factory.registerImplementationClass(CameraObscurementPublicationService.class,
+				CameraObscurementPublicationServiceAndroidImpl.class);
+		final MockCameraProxy mockCameraProxy = new MockCameraProxy();
+		factory.registerImplementationObject(Camera.class, mockCameraProxy.getCamera());
+
+		setCameraParameters(mockCameraProxy);
+
+		CameraObscurementPublicationService service = factory.getObject(CameraObscurementPublicationService.class);
+		service.addObserver(new CameraObscurementObserver() {
+			public void cameraObscurementNotification(CameraObscurementState aCameraObscuredState) {
+				// Log.i(CameraObscurementPublicationServiceAndroidImpTest.class.getName(), format("wow, my obscurement
+				// state was %s!",aCameraObscuredState));
+				observedCameraObscuredState = aCameraObscuredState;
+			}
+		});
+
+		Arrays.fill(previewData, (byte) 0xff);
+
+		mockCameraProxy.sendPreviewFrame(previewData);
+
+		assertEquals(CameraObscurementState.unobscured, observedCameraObscuredState);
+	}
+
 	private void setCameraParameters(final MockCameraProxy mockCameraProxy) {
 		mockCameraProxy.getCamera().getParameters().getPreviewSize().height = 455;
 		mockCameraProxy.getCamera().getParameters().getPreviewSize().width = 320;
