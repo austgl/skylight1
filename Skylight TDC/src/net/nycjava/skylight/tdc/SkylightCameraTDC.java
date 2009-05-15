@@ -54,7 +54,7 @@ public class SkylightCameraTDC extends Activity {
 		}
 	}
 
-	private final static int previewFormats[] = { PixelFormat.YCbCr_420_SP, PixelFormat.RGB_565, PixelFormat.JPEG };
+	private final static int previewFormats[] = { PixelFormat.JPEG, PixelFormat.YCbCr_420_SP, PixelFormat.RGB_565  };
 
 	@Dependency
 	private Camera camera;
