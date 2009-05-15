@@ -17,6 +17,9 @@ public class GetReadyActivity extends SkylightActivity {
 	@Dependency
 	private View view;
 
+	@Dependency
+	private Camera camera;
+
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 		aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
@@ -38,7 +41,14 @@ public class GetReadyActivity extends SkylightActivity {
 		// mPreview = new Preview(this);
 		// setContentView(mPreview);
 	}
-	
+
+	@Override
+	protected void onDestroy() {
+		camera.release();
+
+		super.onDestroy();
+	}
+
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);

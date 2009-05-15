@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 
 public class PositionPublicationServiceAndroidImpl implements PositionPublicationService {
 
+	// TODO *if* optimization is necessary, then change this to an array
 	private Set<PositionObserver> positionObservers = new HashSet<PositionObserver>();
 
 	@Dependency
@@ -59,12 +60,12 @@ public class PositionPublicationServiceAndroidImpl implements PositionPublicatio
 				y_accel = y;
 			}
 			old_tick = tick;
+			// TODO *if* optimization is necessary, then change this to use 3 x floats, rather than an object
 			notifyObservers(new Position(0.0f, (float) y_dist, 0.0f));
 
 		}
 
 		public void onAccuracyChanged(int sensor, int accuracy) {
-			// todo: ???
 		}
 	};
 
