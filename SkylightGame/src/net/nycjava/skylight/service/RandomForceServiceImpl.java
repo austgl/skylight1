@@ -6,21 +6,12 @@ import java.util.TimerTask;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 
 public class RandomForceServiceImpl implements RandomForceService {
-	private static final double MAXIMUM_SECONDS_BETWEEN_FORCES = 1.0d;
+	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 1000;
 
 	protected static final double MAXIMUM_FORCE = 1.0d;
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
-
-	private TimerTask randomForceCreationTask = new TimerTask() {
-		@Override
-		public void run() {
-			balancedObjectPublicationService.applyForce((float) (Math.random() * Math.PI * 2),
-					(float) (Math.random() * MAXIMUM_FORCE));
-			applyForceAtRandomTime();
-		}
-	};
 
 	private Timer timer = new Timer();
 
@@ -31,7 +22,14 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	private void applyForceAtRandomTime() {
 		// TODO stop potential race condition between this method and stop()
-		timer.schedule(randomForceCreationTask, (long) (Math.random() * MAXIMUM_SECONDS_BETWEEN_FORCES));
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				balancedObjectPublicationService.applyForce((float) (Math.random() * Math.PI * 2), (float) (Math
+						.random() * MAXIMUM_FORCE));
+				applyForceAtRandomTime();
+			}
+		}, (long) (Math.random() * MAXIMUM_MILLISECONDS_BETWEEN_FORCES));
 	}
 
 	@Override
