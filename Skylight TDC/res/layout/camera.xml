@@ -72,6 +72,10 @@
 				android:id="@+id/previewHeight">
 			</EditText>
 		</TableRow>
+	<TextView android:text="Text" android:id="@+id/cameraFilename"
+        android:layout_width="fill_parent" 
+        android:textColor="#ffffffff" android:textSize="16sp">
+    </TextView>	
 	</TableLayout>
 
 
@@ -87,6 +91,7 @@
 			android:text="@string/back_button_label"
 			android:id="@+id/backButton">
 		</Button>
+	
 	</LinearLayout>
 
 	<net.nycjava.skylight.tdc.Preview android:id="@+id/previewSurfaceView"

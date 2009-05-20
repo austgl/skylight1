@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class SkylightCameraTDC extends Activity {
 	private static final class FileWritingCameraListener implements Camera.PreviewCallback {
@@ -99,6 +100,8 @@ public class SkylightCameraTDC extends Activity {
 
 		final Button recordButton = (Button) findViewById(R.id.recordButton);
 		final Button backButton = (Button) findViewById(R.id.backButton);
+		
+		final TextView text = (TextView) findViewById(R.id.cameraFilename);
 
 		final AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
 
@@ -133,7 +136,8 @@ public class SkylightCameraTDC extends Activity {
 						Date dt = new Date();
 						String s = format("%1$tY%1$tm%1$td_%1$tH%1$tM%1$tS", dt);
 						outputStream = new FileOutputStream("/sdcard/testData_camera_" + s + ".tdc");
-
+						text.setText(s);
+						
 						camera.setPreviewCallback(new FileWritingCameraListener(outputStream));
 					} catch (FileNotFoundException e) {
 						Log.e("tdc", null, e);

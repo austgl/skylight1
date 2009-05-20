@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class SkylightSensorsTDC extends Activity {
 	private static final class FileWritingSensorListener implements SensorListener {
@@ -84,8 +85,16 @@ public class SkylightSensorsTDC extends Activity {
 		magnetometerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		magnetometerSpinner.setAdapter(magnetometerAdapter);
 
+		final Spinner orientationSpinner = (Spinner) findViewById(R.id.Spinner03);
+		ArrayAdapter<CharSequence> orientationAdapter = ArrayAdapter.createFromResource(this, R.array.delays,
+				android.R.layout.simple_spinner_item);
+		orientationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		orientationSpinner.setAdapter(magnetometerAdapter);		
+		
 		final Button recordButton = (Button) findViewById(R.id.recordButton);
 		final Button backButton = (Button) findViewById(R.id.backButton);
+		
+		final TextView text = (TextView) findViewById(R.id.sensorFilename);
 
 		final AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
 
@@ -100,11 +109,13 @@ public class SkylightSensorsTDC extends Activity {
 			private void updateRecordButton() {
 				// only possible to record if at least one of the sensors has a rate selected
 				recordButton.setEnabled(accelerometerSpinner.getSelectedItemId() != 0
-						|| magnetometerSpinner.getSelectedItemId() != 0);
+						|| magnetometerSpinner.getSelectedItemId() != 0
+						|| orientationSpinner.getSelectedItemId() != 0);
 			}
 		};
 		accelerometerSpinner.setOnItemSelectedListener(onItemSelectedListener);
 		magnetometerSpinner.setOnItemSelectedListener(onItemSelectedListener);
+		orientationSpinner.setOnItemSelectedListener(onItemSelectedListener);
 
 		recordButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
@@ -114,6 +125,7 @@ public class SkylightSensorsTDC extends Activity {
 						String s = format("%1$tY%1$tm%1$td_%1$tH%1$tM%1$tS", dt);
 						outputStream = new FileOutputStream("/sdcard/testData_" + s + ".tdc");
 						sensorListener = new FileWritingSensorListener(outputStream);
+						text.setText(s);
 					} catch (FileNotFoundException e) {
 						Log.e("tdc", null, e);
 					}
@@ -128,10 +140,15 @@ public class SkylightSensorsTDC extends Activity {
 								getRate(magnetometerSpinner));
 					}
 
+					if (orientationSpinner.getSelectedItemId() != 0) {
+						sensorManager.registerListener(sensorListener, SensorManager.SENSOR_ORIENTATION,
+								getRate(orientationSpinner));
+					}
 					// TODO add other sensors
 
 					accelerometerSpinner.setEnabled(false);
 					magnetometerSpinner.setEnabled(false);
+					orientationSpinner.setEnabled(false);
 					recordButton.setText(R.string.stop_button_label);
 					backButton.setEnabled(false);
 
