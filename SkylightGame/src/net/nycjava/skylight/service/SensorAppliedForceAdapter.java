@@ -5,5 +5,7 @@ package net.nycjava.skylight.service;
  * BalancedObjectPublicationService.
  */
 public interface SensorAppliedForceAdapter {
-
+	void start();
+	
+	void stop();
 }
