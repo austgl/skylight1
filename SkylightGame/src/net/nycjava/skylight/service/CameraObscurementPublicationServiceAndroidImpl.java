@@ -1,6 +1,5 @@
 package net.nycjava.skylight.service;
 
-import static java.lang.String.format;
 import static net.nycjava.skylight.service.CameraObscurementObserver.CameraObscurementState.obscured;
 import static net.nycjava.skylight.service.CameraObscurementObserver.CameraObscurementState.unobscured;
 
@@ -12,7 +11,6 @@ import net.nycjava.skylight.service.CameraObscurementObserver.CameraObscurementS
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
-import android.util.Log;
 
 // TODO javadoc
 public class CameraObscurementPublicationServiceAndroidImpl implements CameraObscurementPublicationService {
@@ -30,8 +28,6 @@ public class CameraObscurementPublicationServiceAndroidImpl implements CameraObs
 			final int bytesOfGreyScale = parameters.getPreviewSize().width * parameters.getPreviewSize().height;
 			previewCallback = new Camera.PreviewCallback() {
 				public void onPreviewFrame(byte[] data, Camera camera) {
-					Log.i(CameraObscurementPublicationServiceAndroidImpl.class.getName(), format("data length = %d",
-							data.length));
 					int totalLuminosity = 0;
 					for (int i = bytesOfGreyScale; i >= 0; i--) {
 						if (data[i] < 0) {
@@ -45,7 +41,6 @@ public class CameraObscurementPublicationServiceAndroidImpl implements CameraObs
 					notifyObservers(obscurementState);
 				}
 			};
-			Log.i(CameraObscurementPublicationServiceAndroidImpl.class.getName(), parameters.flatten());
 			parameters.setPreviewFormat(PixelFormat.YCbCr_422_SP);
 			camera.setParameters(parameters);
 			camera.setPreviewCallback(previewCallback);

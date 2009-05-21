@@ -42,8 +42,29 @@ public class Camera {
 		Size previewSize = new Size(0, 0);
 
 		public String flatten() {
-			return String.format("pictureFormat=%d, pictureSize=%s, previewFormat=%d, previewFrameRate=%d",
-					pictureFormat, pictureSize, previewFormat, previewFrameRate);
+			return String
+					.format(
+							"jpeg-thumbnail-width=512;"
+									+ "luma-adaptation=0;"
+									+ "antibanding-values=off,50hz,60hz,auto;"
+									+ "preview-frame-rate=%d;"
+									+ "preview-size=%dx%d;"
+									+ "picture-format=jpeg;"
+									+ "antibanding=auto;"
+									+ "jpeg-thumbnail-height=384;"
+									+ "picture-size=2048x1536;"
+									+ "whitebalance=auto;"
+									+ "jpeg-thumbnail-quality=90;"
+									+ "jpeg-quality=100;"
+									+ "whitebalance-values=auto,custom,incandescent,fluorescent,daylight,cloudy,twilight,shade;"
+									+ "preview-format=yuv420sp;"
+									+ "rotation=0;"
+									+ "effect-values=mono,negative,solarize,pastel,mosaic,resize,sepia,posterize,whiteboard,blackboard,aqua;"
+									+ "nightshot-mode=0", previewFrameRate, previewSize.width, previewSize.height /*
+																													 * TODO ,
+																													 * pictureFormat ,
+																													 * previewFormat
+																													 */);
 		};
 
 		public String get(String key) {
@@ -179,11 +200,9 @@ public class Camera {
 	private CameraEventStreamReader cameraEventStreamReader;
 
 	Camera() {
-		Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
 	}
 
 	Camera(InputStream aTDCInputStream) {
-		Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
 		cameraEventStreamReader = new CameraEventStreamReader(aTDCInputStream);
 		parameters = ((CameraParametersEvent) cameraEventStreamReader.readCameraEvent()).getParameters();
 	}
