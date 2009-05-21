@@ -179,11 +179,11 @@ public class Camera {
 	private CameraEventStreamReader cameraEventStreamReader;
 
 	Camera() {
-		// Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
+		Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
 	}
 
 	Camera(InputStream aTDCInputStream) {
-		// Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
+		Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
 		cameraEventStreamReader = new CameraEventStreamReader(aTDCInputStream);
 		parameters = ((CameraParametersEvent) cameraEventStreamReader.readCameraEvent()).getParameters();
 	}
