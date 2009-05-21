@@ -47,6 +47,7 @@ BalancedObjectPublicationService {
 		currentMagnitudeInNewton= (float) Math.hypot(xPos, yPos);
 		currentAngleInRadians = (float) Math.atan2(yPos, xPos);
 		currentLeanInRadians = (float) Math.atan(currentMagnitudeInNewton);
+		notifyObservers(this.currentAngleInRadians, this.currentLeanInRadians);
 	}
 
 
