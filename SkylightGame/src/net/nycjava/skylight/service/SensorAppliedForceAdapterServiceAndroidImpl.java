@@ -19,6 +19,13 @@ public class SensorAppliedForceAdapterServiceAndroidImpl
             float anAngleInRadians = 0;
             float aForceInNewtons = 0;
         	 // calc angle & force ...
+             // Not sure if I want to this here as it will be calculated quite frequently
+            float x = values[0];
+            float z = values[2];
+            double mag = Math.sqrt(x * x + z * z);            
+            double theta = Math.atan2(x,z);
+            anAngleInRadians = (float) theta;
+            aForceInNewtons = (float) mag;
             balancedPublicationService.applyForce(anAngleInRadians, aForceInNewtons);      
         }
         
