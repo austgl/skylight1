@@ -43,8 +43,18 @@ public class SkillTestActivity extends SkylightActivity {
 	// private PositionObserver positionObserver;
 	private DestinationObserver destinationObserver;
 
-	// private SteadinessObserver steadinessObserver;
-
+	/* TODO - adjust this code when BalanceObjObserver,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
+	@Dependency 
+	private RandomForceService randomForceService;	
+	
+	@Dependency
+	private BalancedObjectPublicationService balanceObjPublicationService;
+	
+	private BalanceObjObserver balanceObjObserver;
+	
+	private TouchAppliedForceAdaptor touchAppliedForceAdaptor;
+	private SensorAppliedForceAdaptor sensorAppliedForceAdaptor;
+  */
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 
@@ -68,9 +78,18 @@ public class SkillTestActivity extends SkylightActivity {
 		// aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
 		// aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
 		// CameraObscurementPublicationServiceAndroidImpl.class);
+		
+		/*  TODO - adjust this code adjust this code when BalanceObjService,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
+		
+		aDependencyInjectingObjectFactory.registerImplementationObject(RandomForceService.class, RandomForceServiceImpl.class);
+		
+		aDependencyInjectingObjectFactory.registerImplementationObject(BalancedObjectPublicationService.class,
+																				BalancedObjectPublicationServiceImpl.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
+		
+		 */
 	}
 
 	/** Called when the activity is first created. */
@@ -97,7 +116,27 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		/*- TODO - adjust this code when BalanceObjService,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
+		  
+		touchAppliedForceAdaptor = new TouchAppliedForceAdaptor();
+		sensorAppliedForceAdaptor = new SensorAppliedForceAdaptor();
+		touchAppliedForceAdaptor.start();
+		sensorAppliedForceAdaptor.start();
+		
+		balanceObjObserver = new BalanceObjObserver(){
+			public void  balanceObjNotification() { // TODO - add params
+	
+					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					startActivity(intent);
 
+			}
+			
+		};
+		balancedObjPublicationService.addObserver(countdownObserver);
+		balancedObjPublicationService.start();
+		*/
+		
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
@@ -165,6 +204,12 @@ public class SkillTestActivity extends SkylightActivity {
 		// cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
 		destinationPublicationService.removeObserver(destinationObserver);
 		// steadinessPublicationService.removeObserver(steadinessObserver);
+		
+		/* TODO adjust when TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implementedd
+		touchAppliedForceAdaptor.stop();
+		sensorAppliedForceAdaptor.stop();
+		
+		*/
 		super.onPause();
 	}
 }
