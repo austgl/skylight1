@@ -1,5 +1,17 @@
 package android.hardware;
 
+import static java.lang.String.format;
+
+import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.nycjava.skylight.mocks.camera.CameraEvent;
+import net.nycjava.skylight.mocks.camera.CameraParametersEvent;
+import net.nycjava.skylight.mocks.camera.CameraPreviewEvent;
+import net.nycjava.skylight.mocks.file.CameraEventStreamReader;
+import android.graphics.PixelFormat;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class Camera {
@@ -13,6 +25,12 @@ public class Camera {
 	}
 
 	public static class Parameters {
+		private static final Pattern previewSizePattern = Pattern.compile("preview-size=(\\d+)x(\\d+);");
+
+		private static final Pattern previewFrameRatePattern = Pattern.compile("preview-frame-rate=(\\d+);");
+
+		private static final Pattern previewFormatPattern = Pattern.compile("preview-format=([^;]+);");
+
 		int pictureFormat;
 
 		Size pictureSize;
@@ -45,11 +63,11 @@ public class Camera {
 		};
 
 		public int getPreviewFormat() {
-			throw new RuntimeException("Not implemented yet.");
+			return previewFormat;
 		};
 
 		public int getPreviewFrameRate() {
-			throw new RuntimeException("Not implemented yet.");
+			return previewFrameRate;
 		};
 
 		public Size getPreviewSize() {
@@ -89,7 +107,31 @@ public class Camera {
 		};
 
 		public void unflatten(String flattened) {
-			throw new RuntimeException("Not implemented yet.");
+			Matcher previewSizeMatcher = previewSizePattern.matcher(flattened);
+			if (!previewSizeMatcher.find()) {
+				throw new RuntimeException(format("could not find preview size in %s", flattened));
+			}
+			previewSize.width = Integer.parseInt(previewSizeMatcher.group(1));
+			previewSize.height = Integer.parseInt(previewSizeMatcher.group(2));
+
+			Matcher previewFrameRateMatcher = previewFrameRatePattern.matcher(flattened);
+			if (!previewFrameRateMatcher.find()) {
+				throw new RuntimeException(format("could not find preview frame rate in %s", flattened));
+			}
+			previewFrameRate = Integer.parseInt(previewFrameRateMatcher.group(1));
+
+			Matcher previewFormatMatcher = previewFormatPattern.matcher(flattened);
+			if (!previewFormatMatcher.find()) {
+				throw new RuntimeException(format("could not find preview format in %s", flattened));
+			}
+			String previewFormatString = previewFormatMatcher.group(1);
+			if (previewFormatString.contains("420")) {
+				previewFormat = PixelFormat.YCbCr_420_SP;
+			} else if (previewFormatString.toUpperCase().contains("RGB")) {
+				previewFormat = PixelFormat.RGB_565;
+			} else if (previewFormatString.toUpperCase().contains("JPEG")) {
+				previewFormat = PixelFormat.JPEG;
+			}
 		};
 	}
 
@@ -134,8 +176,16 @@ public class Camera {
 
 	private byte[] jPEGPictureData;
 
+	private CameraEventStreamReader cameraEventStreamReader;
+
 	Camera() {
 		// Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
+	}
+
+	Camera(InputStream aTDCInputStream) {
+		// Log.w(Camera.class.getName(), "THIS IS THE MOCK OBJECT - DO NOT ALLOW IN APK");
+		cameraEventStreamReader = new CameraEventStreamReader(aTDCInputStream);
+		parameters = ((CameraParametersEvent) cameraEventStreamReader.readCameraEvent()).getParameters();
 	}
 
 	void setRawPictureData(byte[] aRawPictureData) {
@@ -177,6 +227,31 @@ public class Camera {
 	}
 
 	public final void startPreview() {
+		if (cameraEventStreamReader != null) {
+			new Thread(new Runnable() {
+				public void run() {
+					long startTime = System.currentTimeMillis();
+					CameraEvent cameraEvent;
+					while ((cameraEvent = cameraEventStreamReader.readCameraEvent()) != null) {
+						long delay = cameraEvent.getTime() + startTime - System.currentTimeMillis();
+						if (delay > 0L) {
+							try {
+								Thread.sleep(delay);
+							} catch (InterruptedException e) {
+								Log.e("mocks", null, e);
+							}
+						}
+
+						if (cameraEvent instanceof CameraPreviewEvent) {
+							CameraPreviewEvent cameraPreviewEvent = (CameraPreviewEvent) cameraEvent;
+							previewCallback.onPreviewFrame(cameraPreviewEvent.getData(), Camera.this);
+						} else {
+							throw new RuntimeException("should not be any other type of event");
+						}
+					}
+				}
+			}).start();
+		}
 	}
 
 	public final void stopPreview() {

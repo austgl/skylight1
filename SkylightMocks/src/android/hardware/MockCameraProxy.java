@@ -1,9 +1,16 @@
 package android.hardware;
 
+import java.io.InputStream;
+
 public class MockCameraProxy {
-	private Camera camera = new Camera();
+	final private Camera camera;
 
 	public MockCameraProxy() {
+		camera = new Camera();
+	}
+
+	public MockCameraProxy(InputStream aTDCInputStream) {
+		camera = new Camera(aTDCInputStream);
 	}
 
 	public void setPicture(byte[] aRawPictureData, byte[] aJPEGPictureData) {

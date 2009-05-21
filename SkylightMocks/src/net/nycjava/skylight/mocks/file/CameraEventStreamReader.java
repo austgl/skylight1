@@ -20,7 +20,7 @@ public class CameraEventStreamReader {
 		dataInputStream = new DataInputStream(anInputStream);
 	}
 
-	public CameraEvent readSensorEvent() {
+	public CameraEvent readCameraEvent() {
 		try {
 			if (dataInputStream.available() == 0) {
 				return null;
