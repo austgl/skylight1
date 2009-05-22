@@ -2,7 +2,9 @@ package net.nycjava.skylight;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.nycjava.skylight.service.BalancedObjectPublicationServiceImplTest;
 import net.nycjava.skylight.service.CameraObscurementPublicationServiceAndroidImpTest;
+import net.nycjava.skylight.service.CountdownServicePublicationServiceImplTest;
 import net.nycjava.skylight.service.RandomForceServiceImplTest;
 
 public class SkylightTestSuite extends TestSuite {
@@ -11,9 +13,10 @@ public class SkylightTestSuite extends TestSuite {
 		TestSuite suite = new TestSuite();
 
 		suite.addTestSuite(CameraObscurementPublicationServiceAndroidImpTest.class);
-
 		suite.addTestSuite(RandomForceServiceImplTest.class);
-//		 suite.addTestSuite(CountdownServicePublicationServiceImplTest.class);
+		suite.addTestSuite(BalancedObjectPublicationServiceImplTest.class);
+		suite.addTestSuite(CountdownServicePublicationServiceImplTest.class);
+
 		return suite;
 	}
 

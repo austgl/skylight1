@@ -1,34 +1,38 @@
 package net.nycjava.skylight.service;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-enum CounterStatus {uninitialized, running, stopped,finished};
+enum CounterStatus {
+	uninitialized, running, stopped, finished
+};
 
+public class CountdownPublicationServiceImpl implements CountdownPublicationService {
 
-public class CountdownPublicationServiceImpl implements CountdownPublicationService
-{
+	private int duration = 0;
 
-	private int duration=0;
-	private int currentCount=0;
-	private boolean stopRequested =  false;
-	
+	private int currentCount = 0;
+
+	private boolean stopRequested = false;
+
 	private Set<CountdownObserver> countdownObservers = new HashSet<CountdownObserver>();
 
-	private boolean TIME_IS_UP=false;
-	private CounterStatus currentStatus=CounterStatus.uninitialized;
-	private Timer countdownTimer; 
-	
-	public CounterStatus getStatus()
-	{
+	private boolean TIME_IS_UP = false;
+
+	private CounterStatus currentStatus = CounterStatus.uninitialized;
+
+	private Timer countdownTimer;
+
+	public CounterStatus getStatus() {
 		return currentStatus;
 	}
+
 	public void addObserver(CountdownObserver anObserver) {
 		countdownObservers.add(anObserver);
-		if (this.currentStatus==CounterStatus.running)
-		{
-			int remain=getRemainingTime();
+		if (this.currentStatus == CounterStatus.running) {
+			int remain = getRemainingTime();
 			notifyObservers(remain);
 		}
 	}
@@ -38,74 +42,61 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 		return existed;
 	}
 
-	public void setDuration(int seconds)
-	{
-		duration=seconds;
+	public void setDuration(int seconds) {
+		duration = seconds;
 	}
 
-	private int getRemainingTime()
-	{
-		int aRemainingTime= this.duration - currentCount;
+	private int getRemainingTime() {
+		int aRemainingTime = this.duration - currentCount;
 		return aRemainingTime;
 	}
 
-	class CountdownTask extends TimerTask
-	{
-		public void run()
-		{
+	class CountdownTask extends TimerTask {
+		public void run() {
 			if (duration == 0)
 				return;
-			currentStatus=CounterStatus.running;
-			if (currentCount < duration && stopRequested==false)
-			{
-				currentCount=currentCount+1;
+			currentStatus = CounterStatus.running;
+			if (currentCount < duration && stopRequested == false) {
+				currentCount = currentCount + 1;
 				notifyObservers(getRemainingTime());
 				System.out.println("start counting: " + currentCount);
-		
+
 			}
-			if (currentCount==duration )
-			{
-				TIME_IS_UP=true;
-				currentStatus=CounterStatus.finished;
+			if (currentCount == duration) {
+				TIME_IS_UP = true;
+				currentStatus = CounterStatus.finished;
 			}
 
-			if (stopRequested)
-			{
-				TIME_IS_UP=false;
-				currentStatus=CounterStatus.stopped;
+			if (stopRequested) {
+				TIME_IS_UP = false;
+				currentStatus = CounterStatus.stopped;
 			}
 		}
 	}
 
-	public void startCountdown()
-	{
-		if (this.duration==0 )
-	    {
-		//should be an assertion here
+	public void startCountdown() {
+		if (this.duration == 0) {
+			// should be an assertion here
 			return;
-	    }
-		
-		else if (this.getStatus()== CounterStatus.running)
-		{
-			//should assert here as well 
+		}
+
+		else if (this.getStatus() == CounterStatus.running) {
+			// should assert here as well
 			return;
 		}
 		countdownTimer = new Timer();
 		CountdownTask countdownTask = new CountdownTask();
-		long zeroDelay= 0;
+		long zeroDelay = 0;
 		countdownTimer.scheduleAtFixedRate(countdownTask, zeroDelay, 1000);
 	}
-	
-	public void stopCountdown()
-	{
+
+	public void stopCountdown() {
 		stopRequested = true;
-		if(countdownTimer != null)
-		{
+		if (countdownTimer != null) {
 			countdownTimer.cancel();
 		}
-		currentStatus=CounterStatus.stopped;
+		currentStatus = CounterStatus.stopped;
 	}
-	
 
 	private void notifyObservers(int aRemainingTime) {
 
