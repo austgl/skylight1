@@ -1,12 +1,20 @@
 package net.nycjava.skylight.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.service.BalancedObjectObserver;
-import net.nycjava.skylight.service.BalancedObjectPublicationService;
+
 public class BalancedObjectPublicationServiceImplTest extends TestCase {
 
 	private BalancedObjectPublicationService service = null;
+
+	private BalancedObjectObserver balancedObjectObserver;
+
+	private List<Float> listOfX = new ArrayList<Float>();
+
+	private List<Float> listOfY = new ArrayList<Float>();
 
 	@Override
 	protected void setUp() throws Exception {
@@ -16,61 +24,116 @@ public class BalancedObjectPublicationServiceImplTest extends TestCase {
 				BalancedObjectPublicationServiceImpl.class);
 
 		service = factory.getObject(BalancedObjectPublicationService.class);
-		service.addObserver(new BalancedObjectObserver() {		
-			public void balancedObjectNotification(
-					float directionOfFallingInRadians,
-					float anAngleOfLeanInRadians) {
 
-				//System.out.println("getting directionOfFallingInRadiance:" + directionOfFallingInRadians);
-				//System.out.println("getting anAngleOfLeanInRadians:" + anAngleOfLeanInRadians);
+		balancedObjectObserver = new BalancedObjectObserver() {
+			public void balancedObjectNotification(float anXPosition, float aYPosition) {
+				listOfX.add(anXPosition);
+				listOfY.add(aYPosition);
 			}
 
-			public void fallenOverNotification() 
-			{
-				//don't know 
+			public void fallenOverNotification() {
+				// don't know
 			}
-
-		});
-
-		
+		};
 	}
 
-	public void testAddObserverAndInitialCondition()
-	{					
-		assertEquals("initial angle should be pi over 2 ", (float)Math.PI/2, service.getCurrentAngle() );
-	}
-	public void testResetCondition()
-	{
-		service.resetCurrentCondition((float)Math.PI, (float)10);
-		assertEquals("now we should have pi raidiance ", (float)Math.PI, service.getCurrentAngle() ); 
-		assertEquals("now we should have 10 newtons ", (float)10, service.getCurrentMagnitude()); 		
+	public void testAddingAndRemovingObserver() {
+		service.addObserver(balancedObjectObserver);
+
+		assertTrue(service.removeObserver(balancedObjectObserver));
 	}
 
-	public void testAddingForce1()
-	{
-		service.resetCurrentCondition((float) 0, (float)8);
-		service.applyForce((float)Math.toRadians(30), 6);
-		assertEquals("now we should have 12.8 degree ", Math.round(12.8),  Math.round(Math.toDegrees(service.getCurrentAngle()))); 
-		assertEquals("now we should have 13.5 newtons ", Math.round(13.5),  Math.round(service.getCurrentMagnitude())); 		
+	public void testNoForces() throws InterruptedException {
+		service.addObserver(balancedObjectObserver);
 
-	}
-	
-	public void testAddingForce2()
-	{
-		service.resetCurrentCondition((float) 0, (float)8);
-		service.applyForce((float)Math.toRadians(60), 6);
-		assertEquals("now we should have 25.3 degree ", Math.round(25.3),  Math.round(Math.toDegrees(service.getCurrentAngle()))); 
-		assertEquals("now we should have 12.2 newtons ", Math.round(12.2),  Math.round(service.getCurrentMagnitude())); 		
+		Thread.sleep(1000);
 
+		assertTrue(listOfX.size() > 0);
+		for (float f : listOfX) {
+			assertEquals(0.0f, f);
+		}
+		for (float f : listOfY) {
+			assertEquals(0.0f, f);
+		}
+
+		assertTrue(service.removeObserver(balancedObjectObserver));
 	}
 
-	public void testAddingForce3()
-	{
-		service.resetCurrentCondition((float) 0, (float)8);
-		service.applyForce((float)Math.toRadians(90), 6);
-		assertEquals("now we should have 36.9 degree ", Math.round(36.9),  Math.round(Math.toDegrees(service.getCurrentAngle()))); 
-		assertEquals("now we should have 10.0 newtons ", Math.round(10.0),  Math.round(service.getCurrentMagnitude())); 		
+	public void testZeroForce() throws InterruptedException {
+		service.addObserver(balancedObjectObserver);
 
+		service.applyForce(0f, 0f);
+
+		Thread.sleep(1000);
+
+		assertTrue(listOfX.size() > 0);
+		for (float f : listOfX) {
+			assertEquals(0.0f, f);
+		}
+		for (float f : listOfY) {
+			assertEquals(0.0f, f);
+		}
+
+		assertTrue(service.removeObserver(balancedObjectObserver));
 	}
 
+	public void testOneForce() throws InterruptedException {
+		service.addObserver(balancedObjectObserver);
+
+		service.applyForce(-0.1f, 0f);
+
+		Thread.sleep(1000);
+
+		assertTrue(listOfX.size() > 0);
+		float lastX = 0f;
+		for (float x : listOfX) {
+			assertTrue(x < lastX);
+			lastX = x;
+		}
+		for (float y : listOfY) {
+			assertEquals(0.0f, y);
+		}
+
+		assertTrue(service.removeObserver(balancedObjectObserver));
+	}
+
+	public void testTwoForces() throws InterruptedException {
+		service.addObserver(balancedObjectObserver);
+
+		service.applyForce(-0.1f, 0.1f);
+
+		Thread.sleep(1000);
+
+		assertTrue(listOfX.size() > 0);
+		float lastX = 0f;
+		for (float x : listOfX) {
+			assertTrue(x < lastX);
+			lastX = x;
+		}
+		float lastY = 0f;
+		for (float y : listOfY) {
+			assertTrue(y > lastY);
+			lastY = y;
+		}
+
+		assertTrue(service.removeObserver(balancedObjectObserver));
+	}
+
+	public void testTwoSeparateForces() throws InterruptedException {
+		service.addObserver(balancedObjectObserver);
+
+		service.applyForce(-0.1f, 0.1f);
+
+		Thread.sleep(500);
+
+		service.applyForce(0.1f, -0.1f);
+
+		Thread.sleep(500);
+
+		assertTrue(listOfX.size() > 0);
+		final int indexOfLast = listOfX.size() - 1;
+		assertEquals(listOfX.get(indexOfLast), listOfX.get(indexOfLast - 1));
+		assertEquals(listOfY.get(indexOfLast), listOfY.get(indexOfLast - 1));
+		assertTrue(service.removeObserver(balancedObjectObserver));
+	}
 }

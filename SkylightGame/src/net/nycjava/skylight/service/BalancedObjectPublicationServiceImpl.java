@@ -16,7 +16,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
-	private final static Timer timer = new Timer();
+	private final Timer timer = new Timer();
 
 	private static final long PERIOD_IN_MILLISECONDS = 50;
 

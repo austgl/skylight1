@@ -13,7 +13,7 @@ public class SkylightTestSuite extends TestSuite {
 		suite.addTestSuite(CameraObscurementPublicationServiceAndroidImpTest.class);
 
 		suite.addTestSuite(RandomForceServiceImplTest.class);
-		// suite.addTestSuite(CountdownServicePublicationServiceImplTest.class);
+//		 suite.addTestSuite(CountdownServicePublicationServiceImplTest.class);
 		return suite;
 	}
 
