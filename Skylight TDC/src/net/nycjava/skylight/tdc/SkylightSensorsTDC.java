@@ -28,10 +28,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 public class SkylightSensorsTDC extends Activity {
+	private static TextView balance;
 	private static final class FileWritingSensorListener implements SensorListener {
 		private SensorEventStreamWriter sensorEventStreamWriter;
 
 		private long startTime;
+		// physics state
+		long old_tick;
+
+		long tick;
+
+		long delta_t;
+		
+		double y_dist = 0.0f; // y-distance traveled in meters
+
+		double y_vel = 0.0f; // y-velocity in meters/sec
+
+		double y_accel = 0.0f; // y-acceleration in meter/sec^2
+
 
 		public FileWritingSensorListener(OutputStream anOutputStream) {
 			sensorEventStreamWriter = new SensorEventStreamWriter(anOutputStream);
@@ -43,7 +57,21 @@ public class SkylightSensorsTDC extends Activity {
 		}
 
 		public void onSensorChanged(int aSensorId, float[] anArrayOfValues) {
-			sensorEventStreamWriter.writeSensorEvent(new SensorValuesEvent(System.currentTimeMillis() - startTime,
+			// do physics here
+			tick = System.currentTimeMillis();
+			float x = anArrayOfValues[0];
+			float y = anArrayOfValues[1];
+			float z = anArrayOfValues[2];
+			if (Math.abs(x) >= 1.0) {
+				delta_t = tick - old_tick;
+				y_dist += y_vel * ((delta_t) / 1000.0);
+				y_vel += y_accel * ((delta_t) / 1000.0);
+				y_accel = x;
+			}
+			old_tick = tick;
+			balance.setText(String.format("%f", y_vel));
+			balance.invalidate();
+			sensorEventStreamWriter.writeSensorEvent(new SensorValuesEvent(tick - startTime,
 					aSensorId, anArrayOfValues));
 		}
 	}
@@ -95,6 +123,7 @@ public class SkylightSensorsTDC extends Activity {
 		final Button backButton = (Button) findViewById(R.id.backButton);
 		
 		final TextView text = (TextView) findViewById(R.id.sensorFilename);
+		balance = (TextView) findViewById(R.id.balance);
 
 		final AdapterView.OnItemSelectedListener onItemSelectedListener = new AdapterView.OnItemSelectedListener() {
 

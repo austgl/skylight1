@@ -36,7 +36,12 @@
 		<Button android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight=".5" android:id="@+id/backButton" android:text="@string/back_button_label">
 		</Button>
 	</LinearLayout>
+
 	<TextView android:text="Text" android:id="@+id/sensorFilename"
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        android:textColor="#ffffffff" android:textSize="36sp">
+    </TextView>
+    	<TextView android:text="Text" android:id="@+id/balance"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
         android:textColor="#ffffffff" android:textSize="36sp">
     </TextView>
