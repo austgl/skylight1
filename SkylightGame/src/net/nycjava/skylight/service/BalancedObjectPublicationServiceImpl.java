@@ -2,85 +2,62 @@ package net.nycjava.skylight.service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
+public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
+	private float positionX;
 
-public class BalancedObjectPublicationServiceImpl implements
-BalancedObjectPublicationService {
+	private float positionY;
 
-	float currentAngleInRadians = 0;
-	float currentMagnitudeInNewton = 0;
-	float currentLeanInRadians = 0; // don't know if 0 makes sense
-	
-	final static float startAngle= (float) Math.PI/2; //starting upright
-	final static float startMag = 0; //  seems to be good enough
+	private float velocityX;
+
+	private float velocityY;
 
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
+	private final static Timer timer = new Timer();
 
-	public void resetCurrentCondition(float anAngle, float aMag)
-	{
-		currentAngleInRadians=anAngle;
-		currentMagnitudeInNewton=aMag;
-	}
-
-	public float getCurrentAngle()
-	{
-		return currentAngleInRadians;
-	}
-	
-	public float getCurrentMagnitude()
-	{
-		return currentMagnitudeInNewton;
-	}
-	
-	public float getCurrentLeanInRadians()
-	{
-		return currentLeanInRadians;
-	}
-
-	private void addForceCartisian(float anAngleInRadians, float aMagnitudeInNewtons)
-	{
-		float xPos = (float) (currentMagnitudeInNewton * Math.cos( this.currentAngleInRadians) + aMagnitudeInNewtons * Math.cos(anAngleInRadians));
-		float yPos = (float) (currentMagnitudeInNewton * Math.sin( this.currentAngleInRadians)+  aMagnitudeInNewtons * Math.sin(anAngleInRadians));
-
-
-		currentMagnitudeInNewton= (float) Math.hypot(xPos, yPos);
-		currentAngleInRadians = (float) Math.atan2(yPos, xPos);
-		currentLeanInRadians = (float) Math.atan(currentMagnitudeInNewton);
-		notifyObservers(this.currentAngleInRadians, this.currentLeanInRadians);
-	}
-
+	private static final long PERIOD_IN_MILLISECONDS = 50;
 
 	@Override
-	public void applyForce(float anAngleInRadians, float aMagnitudeInNewtons) {
-		this.addForceCartisian(anAngleInRadians, aMagnitudeInNewtons);
-		// in case we ever add force using other methods
+	public void applyForce(float anXForce, float aYForce) {
+		velocityX += anXForce;
+		velocityY += aYForce;
 	}
 
 	@Override
-	public void addObserver(BalancedObjectObserver anObserver) 
-	{
-		if (this.balancedObjectObservers.isEmpty())
-		{
-			resetCurrentCondition(startAngle, startMag);
+	public void addObserver(BalancedObjectObserver anObserver) {
+		balancedObjectObservers.add(anObserver);
+		if (balancedObjectObservers.size() == 1) {
+			TimerTask timerTask = new TimerTask() {
+				@Override
+				public void run() {
+					// update the position by the velocity
+					positionX += velocityX / (1000 / PERIOD_IN_MILLISECONDS);
+					positionY += velocityY / (1000 / PERIOD_IN_MILLISECONDS);
+
+					notifyObservers();
+				}
+			};
+
+			timer.scheduleAtFixedRate(timerTask, 0, PERIOD_IN_MILLISECONDS);
+
 		}
-		this.balancedObjectObservers.add(anObserver);
-		notifyObservers(this.currentAngleInRadians, this.currentLeanInRadians);
-
 	}
 
 	@Override
 	public boolean removeObserver(BalancedObjectObserver anObserver) {
-
-		final boolean existed = this.balancedObjectObservers.remove(anObserver);
+		final boolean existed = balancedObjectObservers.remove(anObserver);
+		if (balancedObjectObservers.isEmpty()) {
+			timer.cancel();
+		}
 		return existed;
 	}
 
-	private void notifyObservers(float anAngleInRadians, float anAngleOfLeanInRadians) 
-	{
-		for (BalancedObjectObserver observer : this.balancedObjectObservers)
-		{
-			observer.balancedObjectNotification((float)anAngleInRadians, (float)anAngleOfLeanInRadians );
+	private void notifyObservers() {
+		for (BalancedObjectObserver observer : balancedObjectObservers) {
+			observer.balancedObjectNotification(positionX, positionY);
 		}
 	}
 }

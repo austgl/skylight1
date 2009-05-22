@@ -1,27 +1,23 @@
 package net.nycjava.skylight.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 
 public class RandomForceServiceImplTest extends TestCase {
-	public void test() throws InterruptedException {
-		final List<Float> angles = new ArrayList<Float>();
-		final List<Float> forces = new ArrayList<Float>();
+	volatile private int count;
 
+	public void test() throws InterruptedException {
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationObject(BalancedObjectPublicationService.class,
 				new BalancedObjectPublicationService() {
 					@Override
-					public void applyForce(float anAngleInRadians, float aForceInNewtons) {
-						assertTrue(anAngleInRadians >= 0);
-						assertTrue(anAngleInRadians <= Math.PI * 2f);
-						assertTrue(aForceInNewtons >= 0);
+					public void applyForce(float anXForce, float aYForce) {
+						assertTrue(anXForce >= -1f);
+						assertTrue(anXForce <= 1f);
+						assertTrue(aYForce >= -1f);
+						assertTrue(aYForce <= 1f);
 
-						angles.add(anAngleInRadians);
-						forces.add(aForceInNewtons);
+						count++;
 					}
 
 					@Override
@@ -41,8 +37,7 @@ public class RandomForceServiceImplTest extends TestCase {
 
 		Thread.sleep(1500);
 
-		assertEquals("no forces should be applied until after start", 0, angles.size());
-		assertEquals("no forces should be applied until after start", 0, forces.size());
+		assertEquals("no forces should be applied until after start", 0, count);
 
 		service.start();
 
@@ -50,14 +45,12 @@ public class RandomForceServiceImplTest extends TestCase {
 
 		service.stop();
 
-		final int anglesSize = angles.size();
-		final int forcesSize = forces.size();
-		assertTrue("expect at least one force per second", anglesSize > 10);
-		assertTrue("expect at least one force per second", forcesSize > 10);
+		final int finalCount = count;
+
+		assertTrue("expect at least one force per second, but got " + count, count >= 5);
 
 		Thread.sleep(10000);
 
-		assertEquals("no additional forces should be applied after stop", anglesSize, angles.size());
-		assertEquals("no additional forces should be applied after stop", forcesSize, forces.size());
+		assertEquals("no additional forces should be applied after stop", finalCount, count);
 	}
 }

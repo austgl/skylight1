@@ -6,7 +6,9 @@ import java.util.TimerTask;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 
 public class RandomForceServiceImpl implements RandomForceService {
-	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 1000;
+	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 2000;
+
+	private static final double MINIMUM_MILLISECONDS_BETWEEN_FORCES = 1000;
 
 	protected static final double MAXIMUM_FORCE = 1.0d;
 
@@ -25,11 +27,12 @@ public class RandomForceServiceImpl implements RandomForceService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				balancedObjectPublicationService.applyForce((float) (Math.random() * Math.PI * 2), (float) (Math
-						.random() * MAXIMUM_FORCE));
+				balancedObjectPublicationService.applyForce(2f - 2f * (float) Math.random(), 2f - 2f * (float) Math
+						.random());
 				applyForceAtRandomTime();
 			}
-		}, (long) (Math.random() * MAXIMUM_MILLISECONDS_BETWEEN_FORCES));
+		}, (long) (MINIMUM_MILLISECONDS_BETWEEN_FORCES + Math.random()
+				* (MAXIMUM_MILLISECONDS_BETWEEN_FORCES - MINIMUM_MILLISECONDS_BETWEEN_FORCES)));
 	}
 
 	@Override

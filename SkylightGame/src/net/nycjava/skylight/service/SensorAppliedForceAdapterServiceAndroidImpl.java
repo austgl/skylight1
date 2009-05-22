@@ -26,7 +26,7 @@ public class SensorAppliedForceAdapterServiceAndroidImpl
             double theta = Math.atan2(x,z);
             anAngleInRadians = (float) theta;
             aForceInNewtons = (float) mag;
-            balancedPublicationService.applyForce(anAngleInRadians, aForceInNewtons);      
+            balancedPublicationService.applyForce(0, 0);      
         }
         
         public void onAccuracyChanged(int sensor, int accuracy) {
