@@ -37,11 +37,11 @@
 		</Button>
 	</LinearLayout>
 
-	<TextView android:text="Text" android:id="@+id/sensorFilename"
+	<TextView android:text="filename" android:id="@+id/sensorFilename"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
         android:textColor="#ffffffff" android:textSize="36sp">
     </TextView>
-    	<TextView android:text="Text" android:id="@+id/balance"
+    	<TextView android:text="balance value" android:id="@+id/balance"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
         android:textColor="#ffffffff" android:textSize="36sp">
     </TextView>
