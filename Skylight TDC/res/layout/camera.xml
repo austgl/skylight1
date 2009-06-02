@@ -17,7 +17,7 @@
 			</TextView>
 
 			<Spinner android:layout_height="wrap_content"
-				android:prompt="@string/accelerometer_label"
+				android:prompt="@string/preview_format_label"
 				android:layout_width="fill_parent" android:layout_weight="1"
 				android:id="@+id/previewFormatSpinner">
 			</Spinner>
