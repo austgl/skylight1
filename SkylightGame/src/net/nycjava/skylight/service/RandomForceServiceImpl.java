@@ -27,7 +27,7 @@ public class RandomForceServiceImpl implements RandomForceService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				balancedObjectPublicationService.applyForce(2f - 2f * (float) Math.random(), 2f - 2f * (float) Math
+				balancedObjectPublicationService.applyForce(1f - 2f * (float) Math.random(), 1f - 2f * (float) Math
 						.random());
 				applyForceAtRandomTime();
 			}
