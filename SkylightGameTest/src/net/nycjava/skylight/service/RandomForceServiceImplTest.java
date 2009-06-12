@@ -1,23 +1,21 @@
 package net.nycjava.skylight.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 
 public class RandomForceServiceImplTest extends TestCase {
-	volatile private int count;
 
 	public void test() throws InterruptedException {
+		List<Float> forces = new ArrayList<Float>();
+
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationObject(BalancedObjectPublicationService.class,
 				new BalancedObjectPublicationService() {
 					@Override
 					public void applyForce(float anXForce, float aYForce) {
-						assertTrue(anXForce >= -1f);
-						assertTrue(anXForce <= 1f);
-						assertTrue(aYForce >= -1f);
-						assertTrue(aYForce <= 1f);
-
-						count++;
 					}
 
 					@Override
@@ -37,7 +35,7 @@ public class RandomForceServiceImplTest extends TestCase {
 
 		Thread.sleep(1500);
 
-		assertEquals("no forces should be applied until after start", 0, count);
+		assertEquals("no forces should be applied until after start", 0, forces.size());
 
 		service.start();
 
@@ -45,12 +43,17 @@ public class RandomForceServiceImplTest extends TestCase {
 
 		service.stop();
 
-		final int finalCount = count;
+		final int finalCount = forces.size();
 
-		assertTrue("expect at least one force per second, but got " + count, count >= 5);
+		for (float force : forces) {
+			assertTrue("" + force, force >= -1f);
+			assertTrue("" + force, force <= 1f);
+		}
+		
+		assertTrue("expect at least one force per second, but got " + forces.size(), forces.size() >= 5);
 
 		Thread.sleep(10000);
 
-		assertEquals("no additional forces should be applied after stop", finalCount, count);
+		assertEquals("no additional forces should be applied after stop", finalCount, forces.size());
 	}
 }
