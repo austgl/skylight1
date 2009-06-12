@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<net.nycjava.skylight.view.GetReadyView
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-</net.nycjava.skylight.view.GetReadyView>
+	
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+<TextView android:layout_width="264px" 
+	android:layout_height="wrap_content" 
+	android:text="@string/getreadymsg"
+/>
+
+
+<VideoView android:id="@+id/getready"
+	android:layout_width="264px"
+	android:layout_height="288px"
+	android:orientation="vertical"
+    android:layout_gravity="center"
+/>
+	
+</LinearLayout>
+	

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome">Welcome!!!\n\nPress any button to move to the Skill Test page.</string>
-    <string name="app_name">Skylight</string>
+    <string name="welcome">\n\n Welcome!\n\n Tap the screen to move to the Skill Test Game:\n\n \"Pass the Drink\'\n\n</string>
+    <string name="app_name">Pass Drink</string>
     <string name="successmsg">The Skylight game succeeded</string>
     <string name="failmsg">The Skylight game failed</string>
-    <string name="go">Play Again</string>    
-<string name="skilltest">Skill Test!!!! \n\nCheck logcat and you will see that these activities are writing log messages that show their dependencies have been injected.\n\nPress any button to move back to the Welcome page.</string>
+    <string name="go">Play Again</string>
+    <string name="getreadymsg"> Get Ready!!\n\n  Hold flat as if drink is on a wet tray\n\n Keep Steady...\n\n</string>
+    <string name="skilltest">Skill Test Game: 'Pass the Drink'</string>
 </resources>

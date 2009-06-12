@@ -20,13 +20,11 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private static final long PERIOD_IN_MILLISECONDS = 50;
 
-	@Override
 	public void applyForce(float anXForce, float aYForce) {
 		velocityX += anXForce;
 		velocityY += aYForce;
 	}
 
-	@Override
 	public void addObserver(BalancedObjectObserver anObserver) {
 		balancedObjectObservers.add(anObserver);
 		if (balancedObjectObservers.size() == 1) {
@@ -46,7 +44,6 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		}
 	}
 
-	@Override
 	public boolean removeObserver(BalancedObjectObserver anObserver) {
 		final boolean existed = balancedObjectObservers.remove(anObserver);
 		if (balancedObjectObservers.isEmpty()) {

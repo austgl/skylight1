@@ -40,7 +40,6 @@ public class SkillTestView extends View {
 		super.onAttachedToWindow();
 
 		destinationObserver = new DestinationObserver() {
-			@Override
 			public void destinationNotification(float anAngle, float aDistance) {
 				distance = aDistance;
 
@@ -51,7 +50,6 @@ public class SkillTestView extends View {
 
 		countdownObserver = new CountdownObserver() {
 
-			@Override
 			public void countdownNotification(int aRemainingTime) {
 				remainingTime = aRemainingTime;
 
