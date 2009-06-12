@@ -85,11 +85,11 @@ public class SkillTestActivity extends SkylightActivity {
 		
 		aDependencyInjectingObjectFactory.registerImplementationObject(BalancedObjectPublicationService.class,
 																				BalancedObjectPublicationServiceImpl.class);
+		
+		 */
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
-		
-		 */
 	}
 
 	/** Called when the activity is first created. */
