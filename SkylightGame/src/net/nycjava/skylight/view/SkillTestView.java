@@ -1,11 +1,14 @@
 package net.nycjava.skylight.view;
 
+import net.nycjava.skylight.R;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
 import net.nycjava.skylight.service.DestinationObserver;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -31,8 +34,15 @@ public class SkillTestView extends View {
 
 	private int remainingTime;
 
+	private Bitmap theGlass;
+	private int glassXOffset;
+	private int glassYOffset;
+	
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
+		  theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		  glassXOffset = theGlass.getWidth() / 2;
+		  glassYOffset = theGlass.getHeight() / 2;
 	}
 
 	@Override
@@ -40,6 +50,7 @@ public class SkillTestView extends View {
 		super.onAttachedToWindow();
 
 		destinationObserver = new DestinationObserver() {
+			@Override
 			public void destinationNotification(float anAngle, float aDistance) {
 				distance = aDistance;
 
@@ -50,6 +61,7 @@ public class SkillTestView extends View {
 
 		countdownObserver = new CountdownObserver() {
 
+			@Override
 			public void countdownNotification(int aRemainingTime) {
 				remainingTime = aRemainingTime;
 
@@ -68,7 +80,11 @@ public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
+		
+        int centerX = canvas.getWidth() / 2;
+        int centerY = canvas.getHeight() / 2;
 
+/*
 		Path path = new Path();
 		path.moveTo(0, 0);
 		path.lineTo(250, 0);
@@ -82,5 +98,7 @@ public class SkillTestView extends View {
 		paint.setTypeface(typeface);
 		paint.setTextAlign(Paint.Align.LEFT);
 		canvas.drawTextOnPath("Dist " + distance + "  Time " + remainingTime, path, 0, 250, paint);
+*/
+		canvas.drawBitmap(theGlass, centerX - glassXOffset, centerY - glassYOffset, null);
 	}
 }

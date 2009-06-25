@@ -1,33 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-        
+	<TextView android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:text="@string/skilltest" />
+
+
 	<net.nycjava.skylight.view.SkillTestView
 		android:id="@+id/skillTestView"
+		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"/>
+		android:layout_height="fill_parent">
+	</net.nycjava.skylight.view.SkillTestView>
 
-	<ImageView
-		android:id="@+id/skillTestBackgroundView"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"/>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
-        
-        <TextView
-          android:id="@+id/text"
-		  android:text="@string/skilltest"
-		  android:visibility="visible"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
-          android:gravity="center_horizontal"
-          android:textColor="#88ffffff"
-          android:textSize="24sp"/>
-     </RelativeLayout>
-
-</FrameLayout>
+</LinearLayout>

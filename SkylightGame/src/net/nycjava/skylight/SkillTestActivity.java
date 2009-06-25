@@ -62,6 +62,7 @@ public class SkillTestActivity extends SkylightActivity {
 	// private PositionObserver positionObserver;
 	private DestinationObserver destinationObserver;
 
+	/* TODO - adjust this code when BalanceObjObserver,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
 	@Dependency 
 	private RandomForceService randomForceService;	
 	
@@ -69,22 +70,22 @@ public class SkillTestActivity extends SkylightActivity {
 	private BalancedObjectPublicationService balanceObjPublicationService;
 	
 	private BalancedObjectObserver balanceObjObserver;
-	
+
+	private TouchAppliedForceAdapter touchAppliedForceAdaptor;
+	private SensorAppliedForceAdapter sensorAppliedForceAdaptor;
+  */
 	private boolean isEmulator=true;
 	private int width, height;
 	
-	private TouchAppliedForceAdapter touchAppliedForceAdaptor;
-	private SensorAppliedForceAdapter sensorAppliedForceAdaptor;
-  
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 
-//		SensorManager aSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		SensorManager aSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
-//		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class, aSensorManager);
+		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class, aSensorManager);
 
-//		aDependencyInjectingObjectFactory.registerImplementationClass(PositionPublicationService.class,
-//				PositionPublicationServiceAndroidImpl.class);
+		aDependencyInjectingObjectFactory.registerImplementationClass(PositionPublicationService.class,
+				PositionPublicationServiceAndroidImpl.class);
 
 		aDependencyInjectingObjectFactory.registerSingletonImplementationClass(DestinationPublicationService.class,
 		// DestinationPublicationServiceImpl.class);
@@ -100,8 +101,14 @@ public class SkillTestActivity extends SkylightActivity {
 		// aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
 		// CameraObscurementPublicationServiceAndroidImpl.class);
 		
-	
-		aDependencyInjectingObjectFactory.registerImplementationClass(RandomForceService.class, RandomForceServiceImpl.class);
+		/*  TODO - adjust this code adjust this code when BalanceObjService,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
+		
+		aDependencyInjectingObjectFactory.registerImplementationObject(RandomForceService.class, RandomForceServiceImpl.class);
+		
+		aDependencyInjectingObjectFactory.registerImplementationObject(BalancedObjectPublicationService.class,
+																				BalancedObjectPublicationServiceImpl.class);
+		
+//		aDependencyInjectingObjectFactory.registerImplementationClass(RandomForceService.class, RandomForceServiceImpl.class);
 		
 		aDependencyInjectingObjectFactory.registerImplementationClass(BalancedObjectPublicationService.class,
 																				BalancedObjectPublicationServiceImpl.class);
@@ -109,6 +116,7 @@ public class SkillTestActivity extends SkylightActivity {
 																			TouchAppliedForceAdapterServiceAndroidImpl.class);
 		aDependencyInjectingObjectFactory.registerImplementationClass(SensorAppliedForceAdapter.class,
 																			SensorAppliedForceAdapterServiceAndroidImpl.class);
+       */
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
@@ -121,10 +129,11 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if( ((SensorManager)getSystemService(Context.SENSOR_SERVICE)).getSensors()>0 )
-			isEmulator = false;
+//attempt to determine if in emulator...
+//		if( ((SensorManager)getSystemService(Context.SENSOR_SERVICE)).getSensors()>0 )
+//			isEmulator = false;
 //		out.println("STA: isEmulator="+isEmulator);
-		Log.i(SkillTestActivity.class.getName(), String.format("isEmulator=%b",isEmulator));		
+//		Log.i(SkillTestActivity.class.getName(), String.format("isEmulator=%b",isEmulator));		
 	}
 
 //	@Override
@@ -144,7 +153,6 @@ public class SkillTestActivity extends SkylightActivity {
 	// public final float MAX_ANGLE = 180;
 
 	private Position destinationPosition = new Position(1f, 1f, 1f); // todo: make configurable?
-
 
 	@Override
 	protected void onResume() {
@@ -177,9 +185,8 @@ public class SkillTestActivity extends SkylightActivity {
 			
 		};
 		balanceObjPublicationService.addObserver(balanceObjObserver);
+	    */
 	
-		
-		
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
@@ -194,7 +201,6 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
 
-		
 		 // cameraObscurementObserver = new CameraObscurementObserver() {
 		 //
 		 // public void cameraObscurementNotification(CameraObscurementState cameraObscuredState) {
@@ -209,12 +215,12 @@ public class SkillTestActivity extends SkylightActivity {
 		destinationObserver = new DestinationObserver() {
 
 			public void destinationNotification(float anAngle, float distance) {
-//				if (distance < MIN_DISTANCE) // || anAngle > MAX_ANGLE )
-//				{
-//					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-//					startActivity(intent);
-//					finish();
-//				}
+				if (distance < MIN_DISTANCE) // || anAngle > MAX_ANGLE )
+				{
+					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					startActivity(intent);
+					finish();
+				}
 
 				// if(distance >= 0)
 				// Log.d("SkillTestActivity", "distance="+distance);
@@ -229,14 +235,14 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 
 		destinationPublicationService.addObserver(destinationObserver);
-*/
+
 		TextView title = new TextView(this);
 		title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT));
 		contentView.addView(title);
 
-//		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
-//		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
+		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
+		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
 
 //		ImageView imageView = (ImageView)findViewById(R.id.skillTestBackgroundView);
 //		imageView.setBackgroundResource(R.drawable.background_table);
@@ -257,13 +263,13 @@ public class SkillTestActivity extends SkylightActivity {
 	protected void onPause() {
 		countdownPublicationService.removeObserver(countdownObserver);
 		// cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
-//		destinationPublicationService.removeObserver(destinationObserver);
+		destinationPublicationService.removeObserver(destinationObserver);
 //		 steadinessPublicationService.removeObserver(steadinessObserver);
 		
 		//touchAppliedForceAdaptor.stop();
 //		sensorAppliedForceAdaptor.stop();
-		
-		
+
+
 		super.onPause();
 	}
 }
