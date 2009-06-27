@@ -255,6 +255,8 @@ public class SkillTestActivity extends SkylightActivity {
 //		skillTestAnimationView.setFrameAnimation(frameAnimation);		
 //		contentView.addView(skillTestAnimationView);
 		
+		contentView.setBackgroundResource(R.drawable.background_table);
+		
 		setContentView(contentView);
 
 	}
