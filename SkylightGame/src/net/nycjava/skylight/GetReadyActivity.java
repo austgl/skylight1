@@ -1,10 +1,13 @@
 package net.nycjava.skylight;
 
+import java.io.IOException;
+
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.view.GetReadyView;
 import net.nycjava.skylight.view.Preview;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -12,10 +15,11 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.MediaController;
+import android.view.SurfaceHolder.Callback;
 import android.widget.VideoView;
 
 /**
@@ -37,8 +41,11 @@ public class GetReadyActivity extends SkylightActivity {
 	}
 
 	private VideoView mVideoView;
-//	private MediaController mc;
-
+	
+	private MediaPlayer mp;  
+	private SurfaceView mPreview;  
+	private SurfaceHolder holder;  
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,40 +55,45 @@ public class GetReadyActivity extends SkylightActivity {
 
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.getready);
+
 		mVideoView=(VideoView)findViewById(R.id.getready);
+//		mVideoView.setVideoPath("/data/data/net.nycjava.skylight/res/raw/passthedrink.mp4");
 		mVideoView.setVideoPath("/sdcard/passthedrink.mp4");
-//		mc=new MediaController(this);
-//		mc.setMediaPlayer(mVideoView);
-//		mVideoView.setMediaController(mc);
-		mVideoView.requestFocus();	
-		mVideoView.start();		
-		mVideoView.setOnCompletionListener(new OnCompletionListener() {
+/*		
+		mPreview=(SurfaceView)findViewById(R.id.getready);
+		holder = mPreview.getHolder();
+		holder.addCallback((Callback)this);
+		holder.setFixedSize(352, 288);  //		holder.setSizeFromLayout();  
+	
+		mp = new MediaPlayer();
+		mp.setDisplay((SurfaceHolder) mPreview.getHolder().getSurface());
+*/
+		mVideoView.setOnCompletionListener(
+//		mp.setOnCompletionListener(
+			new OnCompletionListener() {
 			public void onCompletion(MediaPlayer arg0) {
 				final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
 				startActivity(intent);
 				finish();								
 			} 
 		});
-		
-//		introVideo=(VideoView) findViewById(R.layout.getready); //((GetReadyView)view).getVideoView();//findViewById(R.layout.getready);
-//		introVideo.setVideoPath("/sdcard/passthedrink.mp4");
-//		introVideo.start();
-/*
-		 mVideoView = (VideoView) findViewById(R.id.getready); 
-		 setContentView(mVideoView);//R.layout.videoview); 
-		 MediaController nc = new MediaController(this); 
-		 mVideoView.setMediaController(nc); 
-		 mVideoView.requestFocus(); 
+/*		
+		AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.passthedrink);
+		try {
+			mp.setDataSource(afd.getFileDescriptor());
+			mp.prepare();
+			mp.seekTo(0);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mp.start();
+*/		
+		mVideoView.start();
 
-		 mVideoView.pause(); 
-		 mVideoView.stopPlayback();
-		 mVideoView.setVideoPath("/sdcard/passthedrink.mp4"); 
-*/
-		 
-		 
-		// Create our Preview view and set it as the content of our activity.
-		// mPreview = new Preview(this);
-		// setContentView(mPreview);
 	}
 
 	@Override

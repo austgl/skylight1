@@ -1,12 +1,17 @@
 package net.nycjava.skylight.view;
 
+import java.util.Random;
+
+import net.nycjava.skylight.FailActivity;
 import net.nycjava.skylight.R;
+import net.nycjava.skylight.SkillTestActivity;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
 import net.nycjava.skylight.service.DestinationObserver;
 import net.nycjava.skylight.service.DestinationPublicationService;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,12 +42,19 @@ public class SkillTestView extends View {
 	private Bitmap theGlass;
 	private int glassXOffset;
 	private int glassYOffset;
+	private int xIncr, yIncr;
+	private int width, height;	
+	private boolean firstDraw=true;
+	private int xpos, ypos;
+	private Context context;
+	private Random rand = new Random(987654321);
 	
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
-		  theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
-		  glassXOffset = theGlass.getWidth() / 2;
-		  glassYOffset = theGlass.getHeight() / 2;
+		context = c;
+		theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		glassXOffset = theGlass.getWidth() / 2;
+		glassYOffset = theGlass.getHeight() / 2;
 	}
 
 	@Override
@@ -81,24 +93,61 @@ public class SkillTestView extends View {
 
 	public void onDraw(Canvas canvas) {
 		
-        int centerX = canvas.getWidth() / 2;
-        int centerY = canvas.getHeight() / 2;
+		if(firstDraw) {
+			firstDraw=false;
+			width = canvas.getWidth();
+			height = canvas.getHeight();
+			xpos  = width / 2 - glassXOffset;
+			ypos  = height / 2 - glassYOffset;
+			xIncr = rand.nextInt(3)-1; 
+			yIncr = rand.nextInt(3)-1;
+			if(xIncr==0 && yIncr==0) {
+				xIncr=-11; yIncr = rand.nextInt(3)-1;
+			}
+		} else {
+			xpos +=xIncr;
+			ypos +=yIncr;
+			if(xpos+glassXOffset<0 || xpos+glassXOffset>width) {
+				final Intent intent = new Intent(context, FailActivity.class);
+				context.sendBroadcast(intent);
+				//todo finish this activity and cleanup
+			}
+			else if(ypos+glassYOffset<0 || ypos+glassYOffset>height) {
+				final Intent intent = new Intent(context, FailActivity.class);
+				context.sendBroadcast(intent);
+				//todo finish this activity and cleanup
+			}
+			postInvalidate();
+		}
 
-/*
 		Path path = new Path();
 		path.moveTo(0, 0);
-		path.lineTo(250, 0);
-		path.moveTo(0, 50);
-		path.lineTo(250, 50);
+		path.lineTo(400, 0);
 		Paint paint = new Paint();
-		paint.setColor(0xFFFF0000);
-		paint.setStrokeWidth(1.0f);
+		paint.setColor(0xFF005500);
+		paint.setStrokeWidth(2.0f);
 		paint.setTextSize(24);
 		Typeface typeface = Typeface.defaultFromStyle(Typeface.NORMAL);
 		paint.setTypeface(typeface);
 		paint.setTextAlign(Paint.Align.LEFT);
-		canvas.drawTextOnPath("Dist " + distance + "  Time " + remainingTime, path, 0, 250, paint);
-*/
-		canvas.drawBitmap(theGlass, centerX - glassXOffset, centerY - glassYOffset, null);
+		canvas.drawTextOnPath("  Time " + remainingTime, path, 0, 400, paint);
+
+		canvas.drawBitmap(theGlass, xpos, ypos, null);
+	}
+
+	public void setXIncr(int xIncr) {
+		this.xIncr = xIncr;
+	}
+
+	public int getXIncr() {
+		return xIncr;
+	}
+
+	public void setYIncr(int yIncr) {
+		this.yIncr = yIncr;
+	}
+
+	public int getYIncr() {
+		return yIncr;
 	}
 }

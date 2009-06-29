@@ -146,7 +146,7 @@ public class SkillTestActivity extends SkylightActivity {
 	
 	
 
-	public final int REMAINING_TIME = 30; // todo: make configurable?
+	public final int REMAINING_TIME = 15; // todo: make configurable?
 
 	public final float MIN_DISTANCE = 0.1f; // todo: make configurable?
 
@@ -160,7 +160,7 @@ public class SkillTestActivity extends SkylightActivity {
 
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		height = getWindowManager().getDefaultDisplay().getHeight();
-		out.println("width="+width+" height="+height);
+		Log.i(SkillTestActivity.class.getName(), String.format("width=%d height=%d",width,height) );
 	 
 		//touchAppliedForceAdaptor = new TouchAppliedForceAdaptor();
 		//sensorAppliedForceAdaptor = new SensorAppliedForceAdaptor();
@@ -217,9 +217,10 @@ public class SkillTestActivity extends SkylightActivity {
 			public void destinationNotification(float anAngle, float distance) {
 				if (distance < MIN_DISTANCE) // || anAngle > MAX_ANGLE )
 				{
-					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-					startActivity(intent);
-					finish();
+				//this is getting called	
+//					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+//					startActivity(intent);
+//					finish();
 				}
 
 				// if(distance >= 0)
