@@ -9,6 +9,8 @@ import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
+	private static final int NUMBER_OF_MILLISECONDS_IN_A_SECOND = 1000;
+
 	private float positionX;
 
 	private float positionY;
@@ -20,6 +22,10 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
 	private final Timer timer = new Timer();
+
+	public BalancedObjectPublicationServiceImpl() {
+		super();
+	}
 
 	private static final long PERIOD_IN_MILLISECONDS = 50;
 
@@ -35,15 +41,14 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 				@Override
 				public void run() {
 					// update the position by the velocity
-					positionX += velocityX / (1000 / PERIOD_IN_MILLISECONDS);
-					positionY += velocityY / (1000 / PERIOD_IN_MILLISECONDS);
+					positionX += velocityX / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
+					positionY += velocityY / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
 
 					notifyObservers();
 				}
 			};
 
 			timer.scheduleAtFixedRate(timerTask, 0, PERIOD_IN_MILLISECONDS);
-
 		}
 	}
 
@@ -58,6 +63,11 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	private void notifyObservers() {
 		for (BalancedObjectObserver observer : balancedObjectObservers) {
 			observer.balancedObjectNotification(positionX, positionY);
+		}
+		if (Math.abs(positionX) > 1f || Math.abs(positionY) > 1f) {
+			for (BalancedObjectObserver observer : balancedObjectObservers) {
+				observer.fallenOverNotification();
+			}
 		}
 	}
 }

@@ -5,12 +5,14 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import net.nycjava.skylight.dependencyinjection.DependencyInjector;
 import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
-import net.nycjava.skylight.service.BalancedObjectPublicationServiceImpl;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
-import net.nycjava.skylight.service.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.RandomForceService;
-import net.nycjava.skylight.service.RandomForceServiceImpl;
+import net.nycjava.skylight.service.SensorAppliedForceAdapter;
+import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
+import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
+import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
+import net.nycjava.skylight.service.impl.SensorAppliedForceAdapterServiceAndroidImpl;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -52,6 +54,9 @@ public class SkillTestActivity extends SkylightActivity {
 
 		aDependencyInjectingObjectFactory.registerImplementationClass(RandomForceService.class,
 				RandomForceServiceImpl.class);
+
+		aDependencyInjectingObjectFactory.registerImplementationClass(SensorAppliedForceAdapter.class,
+				SensorAppliedForceAdapterServiceAndroidImpl.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
@@ -110,25 +115,8 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
 
-		// TextView title = new TextView(this);
-		// title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-		// LayoutParams.WRAP_CONTENT));
-		// contentView.addView(title);
-
 		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
-
-		// ImageView imageView = (ImageView)findViewById(R.id.skillTestBackgroundView);
-		// imageView.setBackgroundResource(R.drawable.background_table);
-		// Get the background, which has been compiled to an AnimationDrawable object.
-		// AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
-
-		// SkillTestAnimationView skillTestAnimationView = (SkillTestAnimationView)
-		// contentView.findViewById(R.id.skillTestAnimationView);
-		// new DependencyInjector(dependencyInjectingObjectFactory)
-		// .injectDependenciesForClassHierarchy(skillTestAnimationView);
-		// skillTestAnimationView.setFrameAnimation(frameAnimation);
-		// contentView.addView(skillTestAnimationView);
 
 		contentView.setBackgroundResource(R.drawable.background_table);
 
