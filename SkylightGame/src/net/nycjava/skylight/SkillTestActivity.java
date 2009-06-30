@@ -5,78 +5,38 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import net.nycjava.skylight.dependencyinjection.DependencyInjector;
 import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
+import net.nycjava.skylight.service.BalancedObjectPublicationServiceImpl;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
+import net.nycjava.skylight.service.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.RandomForceService;
-import net.nycjava.skylight.service.SensorAppliedForceAdapter;
-import net.nycjava.skylight.service.TouchAppliedForceAdapter;
-import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
-import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
-import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
-import net.nycjava.skylight.service.impl.SensorAppliedForceAdapterServiceAndroidImpl;
-import net.nycjava.skylight.service.impl.TouchAppliedForceAdapterServiceAndroidImpl;
-import net.nycjava.skylight.service.old.DestinationObserver;
-import net.nycjava.skylight.service.old.DestinationPublicationService;
-import net.nycjava.skylight.service.old.DestinationPublicationServiceMockImpl;
-import net.nycjava.skylight.service.old.Position;
-import net.nycjava.skylight.service.old.PositionPublicationService;
-import net.nycjava.skylight.service.old.PositionPublicationServiceAndroidImpl;
-import net.nycjava.skylight.view.Preview;
-import net.nycjava.skylight.view.SkillTestAnimationView;
-import android.content.Context;
+import net.nycjava.skylight.service.RandomForceServiceImpl;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-import static java.lang.System.out;
 
 public class SkillTestActivity extends SkylightActivity {
-	// @Dependency
-	// private PositionPublicationService positionPublicationService;
-	@Dependency
-	private DestinationPublicationService destinationPublicationService;
-
-	// @Dependency
-	// private SteadinessPublicationService steadinessPublicationService;
 	@Dependency
 	private CountdownPublicationService countdownPublicationService;
 
-	// @Dependency
-	// private CameraObscurementPublicationService cameraObscurementPublicationService;
 	@Dependency
 	private LinearLayout contentView;
 
 	private CountdownObserver countdownObserver;
 
-	// private CameraObscurementObserver cameraObscurementObserver;
-	// private PositionObserver positionObserver;
-	private DestinationObserver destinationObserver;
+	@Dependency
+	private RandomForceService randomForceService;
 
-	/* TODO - adjust this code when BalanceObjObserver,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
-	@Dependency 
-	private RandomForceService randomForceService;	
-	
 	@Dependency
 	private BalancedObjectPublicationService balanceObjPublicationService;
-	
+
 	private BalancedObjectObserver balanceObjObserver;
 
-	private TouchAppliedForceAdapter touchAppliedForceAdaptor;
-	private SensorAppliedForceAdapter sensorAppliedForceAdaptor;
-  */
-	private boolean isEmulator=true;
 	private int width, height;
-	
+
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 
@@ -84,75 +44,35 @@ public class SkillTestActivity extends SkylightActivity {
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class, aSensorManager);
 
-		aDependencyInjectingObjectFactory.registerImplementationClass(PositionPublicationService.class,
-				PositionPublicationServiceAndroidImpl.class);
+		aDependencyInjectingObjectFactory.registerSingletonImplementationClass(BalancedObjectPublicationService.class,
+				BalancedObjectPublicationServiceImpl.class);
 
-		aDependencyInjectingObjectFactory.registerSingletonImplementationClass(DestinationPublicationService.class,
-		// DestinationPublicationServiceImpl.class);
-				DestinationPublicationServiceMockImpl.class);
-
-		// destinationPublicationService.setSensorManager(aSensorManager);
-
-		// aDependencyInjectingObjectFactory.registerImplementationClass(SteadinessPublicationService.class,
-		// SteadinessPublicationServiceAndroidImpl.class);
 		aDependencyInjectingObjectFactory.registerSingletonImplementationClass(CountdownPublicationService.class,
 				CountdownPublicationServiceImpl.class);
-		// aDependencyInjectingObjectFactory.registerImplementationObject(Camera.class, Camera.open());
-		// aDependencyInjectingObjectFactory.registerImplementationClass(CameraObscurementPublicationService.class,
-		// CameraObscurementPublicationServiceAndroidImpl.class);
-		
-		/*  TODO - adjust this code adjust this code when BalanceObjService,TouchAppliedForceAdaptor,SensorAppliedForceAdaptor are  implemented
-		
-		aDependencyInjectingObjectFactory.registerImplementationObject(RandomForceService.class, RandomForceServiceImpl.class);
-		
-		aDependencyInjectingObjectFactory.registerImplementationObject(BalancedObjectPublicationService.class,
-																				BalancedObjectPublicationServiceImpl.class);
-		
-//		aDependencyInjectingObjectFactory.registerImplementationClass(RandomForceService.class, RandomForceServiceImpl.class);
-		
-		aDependencyInjectingObjectFactory.registerImplementationClass(BalancedObjectPublicationService.class,
-																				BalancedObjectPublicationServiceImpl.class);
-		aDependencyInjectingObjectFactory.registerImplementationClass(TouchAppliedForceAdapter.class,
-																			TouchAppliedForceAdapterServiceAndroidImpl.class);
-		aDependencyInjectingObjectFactory.registerImplementationClass(SensorAppliedForceAdapter.class,
-																			SensorAppliedForceAdapterServiceAndroidImpl.class);
-       */
+
+		aDependencyInjectingObjectFactory.registerImplementationClass(RandomForceService.class,
+				RandomForceServiceImpl.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
 				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
-//		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-//				(LinearLayout) getLayoutInflater().inflate(R.drawable.spill_animation, null));
-		
 	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//attempt to determine if in emulator...
-//		if( ((SensorManager)getSystemService(Context.SENSOR_SERVICE)).getSensors()>0 )
-//			isEmulator = false;
-//		out.println("STA: isEmulator="+isEmulator);
-//		Log.i(SkillTestActivity.class.getName(), String.format("isEmulator=%b",isEmulator));		
 	}
 
-//	@Override
-//	public boolean onKeyUp(int keyCode, KeyEvent event) { // TODO: remove this! this is for cheating only
-//		final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-//		startActivity(intent);
-//		return true;
-//	}
-	
-	
-	
+	// @Override
+	// public boolean onKeyUp(int keyCode, KeyEvent event) { // TODO: remove this! this is for cheating only
+	// final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+	// startActivity(intent);
+	// return true;
+	// }
 
 	public final int REMAINING_TIME = 15; // todo: make configurable?
 
 	public final float MIN_DISTANCE = 0.1f; // todo: make configurable?
-
-	// public final float MAX_ANGLE = 180;
-
-	private Position destinationPosition = new Position(1f, 1f, 1f); // todo: make configurable?
 
 	@Override
 	protected void onResume() {
@@ -160,33 +80,22 @@ public class SkillTestActivity extends SkylightActivity {
 
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		height = getWindowManager().getDefaultDisplay().getHeight();
-		Log.i(SkillTestActivity.class.getName(), String.format("width=%d height=%d",width,height) );
-	 
-		//touchAppliedForceAdaptor = new TouchAppliedForceAdaptor();
-		//sensorAppliedForceAdaptor = new SensorAppliedForceAdaptor();
-		//touchAppliedForceAdaptor.start();
-		
-//		sensorAppliedForceAdaptor.start();
-	
-/*		
-		balanceObjObserver = new BalancedObjectObserver(){
+		Log.i(SkillTestActivity.class.getName(), String.format("width=%d height=%d", width, height));
 
-			public void balancedObjectNotification(
-					float directionOfFallingInRadians,
-					float anAngleOfLeanInRadians) {
-				
+		balanceObjObserver = new BalancedObjectObserver() {
+
+			public void balancedObjectNotification(float directionOfFallingInRadians, float anAngleOfLeanInRadians) {
 			}
 
 			public void fallenOverNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 				startActivity(intent);
-				
+				finish();
 			}
-			
+
 		};
 		balanceObjPublicationService.addObserver(balanceObjObserver);
-	    */
-	
+
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
@@ -201,77 +110,39 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.setDuration(REMAINING_TIME);
 		countdownPublicationService.startCountdown();
 
-		 // cameraObscurementObserver = new CameraObscurementObserver() {
-		 //
-		 // public void cameraObscurementNotification(CameraObscurementState cameraObscuredState) {
-		 // 
-		 // if(cameraObscuredState == cameraObscuredState.unobscured ) { // final Intent intent = new
-		 // Intent(SkillTestActivity.this, FailActivity.class); // startActivity(intent); } } };
-		 // //cameraObscurementPublicationService.addObserver(cameraObscurementObserver);
-		 //
-
-		destinationPublicationService.setDestinationPosition(destinationPosition);
-
-		destinationObserver = new DestinationObserver() {
-
-			public void destinationNotification(float anAngle, float distance) {
-				if (distance < MIN_DISTANCE) // || anAngle > MAX_ANGLE )
-				{
-				//this is getting called	
-//					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-//					startActivity(intent);
-//					finish();
-				}
-
-				// if(distance >= 0)
-				// Log.d("SkillTestActivity", "distance="+distance);
-
-				// if (aDistance >= MIN_DISTANCE) {
-				// countdownPublicationService.stopCountdown();
-				// final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-				// startActivity(intent);
-				// finish();
-				// }
-			}
-		};
-
-		destinationPublicationService.addObserver(destinationObserver);
-
-		TextView title = new TextView(this);
-		title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT));
-		contentView.addView(title);
+		// TextView title = new TextView(this);
+		// title.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+		// LayoutParams.WRAP_CONTENT));
+		// contentView.addView(title);
 
 		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
 
-//		ImageView imageView = (ImageView)findViewById(R.id.skillTestBackgroundView);
-//		imageView.setBackgroundResource(R.drawable.background_table);
-		 // Get the background, which has been compiled to an AnimationDrawable object.
-//		AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
-		
-//		SkillTestAnimationView skillTestAnimationView = (SkillTestAnimationView) contentView.findViewById(R.id.skillTestAnimationView);
-//		new DependencyInjector(dependencyInjectingObjectFactory)
-//				.injectDependenciesForClassHierarchy(skillTestAnimationView);
-//		skillTestAnimationView.setFrameAnimation(frameAnimation);		
-//		contentView.addView(skillTestAnimationView);
-		
+		// ImageView imageView = (ImageView)findViewById(R.id.skillTestBackgroundView);
+		// imageView.setBackgroundResource(R.drawable.background_table);
+		// Get the background, which has been compiled to an AnimationDrawable object.
+		// AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
+
+		// SkillTestAnimationView skillTestAnimationView = (SkillTestAnimationView)
+		// contentView.findViewById(R.id.skillTestAnimationView);
+		// new DependencyInjector(dependencyInjectingObjectFactory)
+		// .injectDependenciesForClassHierarchy(skillTestAnimationView);
+		// skillTestAnimationView.setFrameAnimation(frameAnimation);
+		// contentView.addView(skillTestAnimationView);
+
 		contentView.setBackgroundResource(R.drawable.background_table);
-		
+
 		setContentView(contentView);
 
+		randomForceService.start();
 	}
 
 	// @Override //TODO: not working
 	protected void onPause() {
+		countdownPublicationService.stopCountdown();
 		countdownPublicationService.removeObserver(countdownObserver);
-		// cameraObscurementPublicationService.removeObserver(cameraObscurementObserver);
-		destinationPublicationService.removeObserver(destinationObserver);
-//		 steadinessPublicationService.removeObserver(steadinessObserver);
-		
-		//touchAppliedForceAdaptor.stop();
-//		sensorAppliedForceAdaptor.stop();
-
+		balanceObjPublicationService.removeObserver(balanceObjObserver);
+		randomForceService.stop();
 
 		super.onPause();
 	}

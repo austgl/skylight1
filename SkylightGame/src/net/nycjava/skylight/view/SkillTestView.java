@@ -1,57 +1,52 @@
 package net.nycjava.skylight.view;
 
-import java.util.Random;
-
-import net.nycjava.skylight.FailActivity;
 import net.nycjava.skylight.R;
-import net.nycjava.skylight.SkillTestActivity;
 import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight.service.BalancedObjectObserver;
+import net.nycjava.skylight.service.BalancedObjectPublicationService;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
-import net.nycjava.skylight.service.old.DestinationObserver;
-import net.nycjava.skylight.service.old.DestinationPublicationService;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Typeface;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 
 public class SkillTestView extends View {
 	@Dependency
-	private DestinationPublicationService destinationPublicationService;
+	private BalancedObjectPublicationService balancedObjectPublicationService;
 
 	@Dependency
 	private CountdownPublicationService countdownPublicationService;
 
 	Paint lPaint = new Paint();
 
-	private DestinationObserver destinationObserver;
+	private BalancedObjectObserver balancedObjectObserver;
 
 	private CountdownObserver countdownObserver;
-
-	private float distance;
 
 	private int remainingTime;
 
 	private Bitmap theGlass;
+
 	private int glassXOffset;
+
 	private int glassYOffset;
+
 	private int xIncr, yIncr;
-	private int width, height;	
-	private boolean firstDraw=true;
+
+	private int width, height;
+
+	private boolean firstDraw = true;
+
 	private int xpos, ypos;
-	private Context context;
-	private Random rand = new Random(987654321);
-	
+
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
-		context = c;
 		theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
 		glassXOffset = theGlass.getWidth() / 2;
 		glassYOffset = theGlass.getHeight() / 2;
@@ -61,15 +56,21 @@ public class SkillTestView extends View {
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		destinationObserver = new DestinationObserver() {
-			@Override
-			public void destinationNotification(float anAngle, float aDistance) {
-				distance = aDistance;
+		balancedObjectObserver = new BalancedObjectObserver() {
 
-				postInvalidate();
+			@Override
+			public void balancedObjectNotification(float anX, float aY) {
+				glassXOffset = (int) (Math.min(width / 2, height / 2) * anX);
+				glassYOffset = (int) (Math.min(width / 2, height / 2) * aY);
+				SkillTestView.this.postInvalidate();
+			}
+
+			@Override
+			public void fallenOverNotification() {
 			}
 		};
-		destinationPublicationService.addObserver(destinationObserver);
+
+		balancedObjectPublicationService.addObserver(balancedObjectObserver);
 
 		countdownObserver = new CountdownObserver() {
 
@@ -85,40 +86,23 @@ public class SkillTestView extends View {
 
 	@Override
 	protected void onDetachedFromWindow() {
-		destinationPublicationService.removeObserver(destinationObserver);
+		balancedObjectPublicationService.removeObserver(balancedObjectObserver);
 		countdownPublicationService.removeObserver(countdownObserver);
 
 		super.onDetachedFromWindow();
 	}
 
 	public void onDraw(Canvas canvas) {
-		
-		if(firstDraw) {
-			firstDraw=false;
+
+		if (firstDraw) {
+			firstDraw = false;
 			width = canvas.getWidth();
 			height = canvas.getHeight();
-			xpos  = width / 2 - glassXOffset;
-			ypos  = height / 2 - glassYOffset;
-			xIncr = rand.nextInt(3)-1; 
-			yIncr = rand.nextInt(3)-1;
-			if(xIncr==0 && yIncr==0) {
-				xIncr=-11; yIncr = rand.nextInt(3)-1;
-			}
-		} else {
-			xpos +=xIncr;
-			ypos +=yIncr;
-			if(xpos+glassXOffset<0 || xpos+glassXOffset>width) {
-				final Intent intent = new Intent(context, FailActivity.class);
-				context.sendBroadcast(intent);
-				//todo finish this activity and cleanup
-			}
-			else if(ypos+glassYOffset<0 || ypos+glassYOffset>height) {
-				final Intent intent = new Intent(context, FailActivity.class);
-				context.sendBroadcast(intent);
-				//todo finish this activity and cleanup
-			}
-			postInvalidate();
 		}
+
+		xpos = width / 2 - theGlass.getWidth() / 2 + glassXOffset;
+		ypos = height / 2 - theGlass.getHeight() / 2 + glassYOffset;
+		canvas.drawBitmap(theGlass, xpos, ypos, null);
 
 		Path path = new Path();
 		path.moveTo(0, 0);
@@ -131,8 +115,6 @@ public class SkillTestView extends View {
 		paint.setTypeface(typeface);
 		paint.setTextAlign(Paint.Align.LEFT);
 		canvas.drawTextOnPath("  Time " + remainingTime, path, 0, 400, paint);
-
-		canvas.drawBitmap(theGlass, xpos, ypos, null);
 	}
 
 	public void setXIncr(int xIncr) {
