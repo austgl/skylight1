@@ -14,6 +14,8 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	protected static final double MAXIMUM_FORCE = 1.0d;
 
+	protected static final float FORCE_FACTOR = 0.3f;
+
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
 
@@ -26,20 +28,19 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	private void applyForceAtRandomTime() {
 		// TODO stop potential race condition between this method and stop()
-//		timer.schedule(new TimerTask() {
-//			@Override
-//			public void run() {
-//				balancedObjectPublicationService.applyForce(1f - 2f * (float) Math.random(), 1f - 2f * (float) Math
-//						.random());
-//				applyForceAtRandomTime();
-//			}
-//		}, (long) (MINIMUM_MILLISECONDS_BETWEEN_FORCES + Math.random()
-//				* (MAXIMUM_MILLISECONDS_BETWEEN_FORCES - MINIMUM_MILLISECONDS_BETWEEN_FORCES)));
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				balancedObjectPublicationService.applyForce((1f - 2f * (float) Math.random()) * FORCE_FACTOR,
+						(1f - 2f * (float) Math.random()) * FORCE_FACTOR);
+				applyForceAtRandomTime();
+			}
+		}, (long) (MINIMUM_MILLISECONDS_BETWEEN_FORCES + Math.random()
+				* (MAXIMUM_MILLISECONDS_BETWEEN_FORCES - MINIMUM_MILLISECONDS_BETWEEN_FORCES)));
 	}
 
 	@Override
 	public void stop() {
 		timer.cancel();
 	}
-
 }

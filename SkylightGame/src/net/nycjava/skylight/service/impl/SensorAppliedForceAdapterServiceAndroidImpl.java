@@ -8,6 +8,14 @@ import android.hardware.SensorManager;
 
 public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorAppliedForceAdapter {
 
+	private static final int Y_AXIS = 1;
+
+	private static final int X_AXIS = 0;
+
+	private static final float MILLISECONDS_IN_A_SECOND = 1000f;
+
+	private static final float FORCE_FACTOR = 0.2f;
+
 	@Dependency
 	BalancedObjectPublicationService balancedPublicationService;
 
@@ -18,17 +26,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 
 	private final SensorListener mListener = new SensorListener() {
 		public void onSensorChanged(int sensor, float[] values) {
-			long thisTime = System.currentTimeMillis();
-			// calc angle & force ...
-			// Not sure if I want to this here as it will be calculated quite frequently
-			float x = (float) values[0] * ((float) thisTime - (float) lastTime) / 1000f;
-			float y = (float) values[1] * ((float) thisTime - (float) lastTime) / 1000f;
-			balancedPublicationService.applyForce(x, y);
+			final long thisTime = System.currentTimeMillis();
+			final float scaledForceFactor = (float) (thisTime - lastTime) / MILLISECONDS_IN_A_SECOND * FORCE_FACTOR;
+			final float x = values[X_AXIS] * scaledForceFactor;
+			final float y = values[Y_AXIS] * scaledForceFactor;
+			balancedPublicationService.applyForce(x, -y);
 			lastTime = thisTime;
 		}
 
 		public void onAccuracyChanged(int sensor, int accuracy) {
-			// ???
 		}
 	};
 
@@ -42,5 +48,4 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	public void stop() {
 		mSensorManager.unregisterListener(mListener);
 	}
-
 }

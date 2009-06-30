@@ -21,6 +21,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 public class SkillTestActivity extends SkylightActivity {
+	public final static int REMAINING_TIME = 15; // TODO make configurable?
+
+	public final static float MIN_DISTANCE = 0.1f; // TODO make configurable?
+
 	@Dependency
 	private CountdownPublicationService countdownPublicationService;
 
@@ -71,17 +75,6 @@ public class SkillTestActivity extends SkylightActivity {
 		super.onCreate(savedInstanceState);
 	}
 
-	// @Override
-	// public boolean onKeyUp(int keyCode, KeyEvent event) { // TODO: remove this! this is for cheating only
-	// final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-	// startActivity(intent);
-	// return true;
-	// }
-
-	public final int REMAINING_TIME = 15; // todo: make configurable?
-
-	public final float MIN_DISTANCE = 0.1f; // todo: make configurable?
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -91,7 +84,6 @@ public class SkillTestActivity extends SkylightActivity {
 		Log.i(SkillTestActivity.class.getName(), String.format("width=%d height=%d", width, height));
 
 		balanceObjObserver = new BalancedObjectObserver() {
-
 			public void balancedObjectNotification(float directionOfFallingInRadians, float anAngleOfLeanInRadians) {
 			}
 
@@ -100,7 +92,6 @@ public class SkillTestActivity extends SkylightActivity {
 				startActivity(intent);
 				finish();
 			}
-
 		};
 		balanceObjPublicationService.addObserver(balanceObjObserver);
 
@@ -108,7 +99,7 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
 					countdownPublicationService.stopCountdown();
-					final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					startActivity(intent);
 					finish();
 				}
@@ -116,27 +107,25 @@ public class SkillTestActivity extends SkylightActivity {
 		};
 		countdownPublicationService.addObserver(countdownObserver);
 		countdownPublicationService.setDuration(REMAINING_TIME);
-		countdownPublicationService.startCountdown();
 
 		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
-
 		contentView.setBackgroundResource(R.drawable.background_table);
-
 		setContentView(contentView);
 
 		sensorAppliedForceAdapter.start();
 		randomForceService.start();
+		countdownPublicationService.startCountdown();
 	}
 
-	// @Override //TODO: not working
+	@Override
 	protected void onPause() {
+		super.onPause();
+
 		countdownPublicationService.stopCountdown();
 		countdownPublicationService.removeObserver(countdownObserver);
 		balanceObjPublicationService.removeObserver(balanceObjObserver);
 		randomForceService.stop();
 		sensorAppliedForceAdapter.stop();
-
-		super.onPause();
 	}
 }
