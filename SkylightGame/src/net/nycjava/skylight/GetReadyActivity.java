@@ -55,45 +55,58 @@ public class GetReadyActivity extends SkylightActivity {
 
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		setContentView(R.layout.getready);
-
+/*
 		mVideoView=(VideoView)findViewById(R.id.getready);
-//		mVideoView.setVideoPath("/data/data/net.nycjava.skylight/res/raw/passthedrink.mp4");
 		mVideoView.setVideoPath("/sdcard/passthedrink.mp4");
-/*		
+*/		
 		mPreview=(SurfaceView)findViewById(R.id.getready);
 		holder = mPreview.getHolder();
-		holder.addCallback((Callback)this);
-		holder.setFixedSize(352, 288);  //		holder.setSizeFromLayout();  
-	
-		mp = new MediaPlayer();
-		mp.setDisplay((SurfaceHolder) mPreview.getHolder().getSurface());
-*/
-		mVideoView.setOnCompletionListener(
-//		mp.setOnCompletionListener(
-			new OnCompletionListener() {
-			public void onCompletion(MediaPlayer arg0) {
-				final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
-				startActivity(intent);
-				finish();								
-			} 
-		});
-/*		
-		AssetFileDescriptor afd = getResources().openRawResourceFd(R.raw.passthedrink);
-		try {
-			mp.setDataSource(afd.getFileDescriptor());
-			mp.prepare();
-			mp.seekTo(0);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mp.start();
-*/		
-		mVideoView.start();
+		holder.addCallback(new Callback() {
 
+			@Override
+			public void surfaceChanged(SurfaceHolder holder, int format,
+					int width, int height) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void surfaceCreated(SurfaceHolder holder) {
+				// TODO Auto-generated method stub
+				mp = new MediaPlayer();
+				mp.setDisplay( mPreview.getHolder());
+
+//				mVideoView.setOnCompletionListener(
+				mp.setOnCompletionListener(
+					new OnCompletionListener() {
+					public void onCompletion(MediaPlayer arg0) {
+						final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
+						startActivity(intent);
+						finish();								
+					} 
+				});
+				
+				try {
+					AssetFileDescriptor afd = getAssets().openFd("passthedrink.mp4");//getResources().openRawResourceFd();
+					mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+					mp.prepare();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				mp.start();
+				
+			}
+
+			@Override
+			public void surfaceDestroyed(SurfaceHolder holder) {
+				// TODO Auto-generated method stub
+				
+			} });
+		
 	}
 
 	@Override

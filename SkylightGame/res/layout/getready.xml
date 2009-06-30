@@ -6,15 +6,15 @@
     android:layout_height="fill_parent"
     >
     
-<TextView android:layout_width="264px" 
+<TextView android:layout_width="fill_parent" 
 	android:layout_height="wrap_content" 
 	android:text="@string/getreadymsg"
 />
 
 
 <VideoView android:id="@+id/getready"
-	android:layout_width="264px"
-	android:layout_height="288px"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
 	android:orientation="vertical"
     android:layout_gravity="center"
 />
