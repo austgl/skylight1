@@ -1,9 +1,11 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.impl;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight.service.BalancedObjectPublicationService;
+import net.nycjava.skylight.service.RandomForceService;
 
 public class RandomForceServiceImpl implements RandomForceService {
 	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 2000;

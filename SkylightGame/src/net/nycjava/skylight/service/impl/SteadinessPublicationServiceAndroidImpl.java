@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.service.SteadinessObserver;
-import net.nycjava.skylight.service.SteadinessPublicationService;
+import net.nycjava.skylight.service.old.SteadinessObserver;
+import net.nycjava.skylight.service.old.SteadinessPublicationService;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 
