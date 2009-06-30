@@ -33,6 +33,9 @@ public class SkillTestActivity extends SkylightActivity {
 	private RandomForceService randomForceService;
 
 	@Dependency
+	private SensorAppliedForceAdapter sensorAppliedForceAdapter;
+
+	@Dependency
 	private BalancedObjectPublicationService balanceObjPublicationService;
 
 	private BalancedObjectObserver balanceObjObserver;
@@ -122,6 +125,7 @@ public class SkillTestActivity extends SkylightActivity {
 
 		setContentView(contentView);
 
+		sensorAppliedForceAdapter.start();
 		randomForceService.start();
 	}
 
@@ -131,6 +135,7 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownPublicationService.removeObserver(countdownObserver);
 		balanceObjPublicationService.removeObserver(balanceObjObserver);
 		randomForceService.stop();
+		sensorAppliedForceAdapter.stop();
 
 		super.onPause();
 	}

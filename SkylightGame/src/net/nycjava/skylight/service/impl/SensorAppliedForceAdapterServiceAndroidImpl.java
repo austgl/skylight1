@@ -14,15 +14,17 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	@Dependency
 	private SensorManager mSensorManager;
 
-	// mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+	private long lastTime;
 
 	private final SensorListener mListener = new SensorListener() {
 		public void onSensorChanged(int sensor, float[] values) {
+			long thisTime = System.currentTimeMillis();
 			// calc angle & force ...
 			// Not sure if I want to this here as it will be calculated quite frequently
-			float x = values[0];
-			float z = values[2];
-			balancedPublicationService.applyForce(x, z);
+			float x = (float) values[0] * ((float) thisTime - (float) lastTime) / 1000f;
+			float y = (float) values[1] * ((float) thisTime - (float) lastTime) / 1000f;
+			balancedPublicationService.applyForce(x, y);
+			lastTime = thisTime;
 		}
 
 		public void onAccuracyChanged(int sensor, int accuracy) {
@@ -33,6 +35,7 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	public void start() {
 		int mask = 0;
 		mask |= SensorManager.SENSOR_ACCELEROMETER;
+		lastTime = System.currentTimeMillis();
 		mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
 	}
 
