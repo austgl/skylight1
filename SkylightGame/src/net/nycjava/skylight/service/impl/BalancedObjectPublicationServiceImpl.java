@@ -1,9 +1,12 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import net.nycjava.skylight.service.BalancedObjectObserver;
+import net.nycjava.skylight.service.BalancedObjectPublicationService;
 
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
 	private float positionX;
