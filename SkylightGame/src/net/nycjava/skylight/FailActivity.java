@@ -52,7 +52,7 @@ public class FailActivity extends SkylightActivity {
 	        }
 		});
 		
-	   	MediaPlayer.create(getBaseContext(), R.raw.uhoh).start();
+	   	MediaPlayer.create(getBaseContext(), R.raw.glassbreaking).start();
 	}
 		
 	

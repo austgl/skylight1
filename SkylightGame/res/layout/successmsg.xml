@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
-    android:padding="24dip"
-    android:gravity="center_vertical|center_horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="0"
-        android:paddingBottom="24dip"
-		android:text="@string/successmsg"/>
-    
-    <Button android:id="@+id/go"
-        android:layout_width="wrap_content" android:layout_height="wrap_content" 
-        android:text="@string/go"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="0">
-        <requestFocus/>
-    </Button>
+	android:orientation="vertical" android:padding="24dip"
+	android:gravity="center_vertical|center_horizontal"  android:background="@drawable/background_table">
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+	<TextView android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+		android:layout_weight="0" android:paddingBottom="24dip" android:text="@string/successmsg"
+		android:textSize="20px" android:shadowDx="2" android:shadowDy="2"
+		android:shadowRadius="2" android:shadowColor="#404040"
+		android:textColor="#0000ff" />
+
+	<Button android:id="@+id/go" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:text="@string/go"
+		android:layout_centerHorizontal="true" android:layout_weight="0">
+		<requestFocus />
+	</Button>
 
 
 </LinearLayout>

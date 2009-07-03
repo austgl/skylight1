@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-	
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    
-<TextView android:layout_width="fill_parent" 
-	android:layout_height="wrap_content" 
-	android:text="@string/getreadymsg"
-/>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/background_table">
+
+	<TextView android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:text="@string/getreadymsg"
+		android:textSize="20px" android:shadowDx="2" android:shadowDy="2"
+		android:shadowRadius="2" android:shadowColor="#404040"
+		android:textColor="#0000ff" />
 
 
-<VideoView android:id="@+id/getready"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-    android:layout_gravity="center"
-/>
-	
+	<VideoView android:id="@+id/getready" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:orientation="vertical"
+		android:layout_gravity="center" />
+
 </LinearLayout>
 	

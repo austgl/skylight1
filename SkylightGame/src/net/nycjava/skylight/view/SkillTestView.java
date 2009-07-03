@@ -10,10 +10,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class SkillTestView extends View {
@@ -37,19 +38,18 @@ public class SkillTestView extends View {
 
 	private int glassYOffset;
 
-	private int xIncr, yIncr;
-
 	private int width, height;
 
 	private boolean firstDraw = true;
 
 	private int xpos, ypos;
 
+	private final Typeface face;
+
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
 		theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
-		glassXOffset = theGlass.getWidth() / 2;
-		glassYOffset = theGlass.getHeight() / 2;
+		face = Typeface.createFromAsset(getContext().getAssets(), "Agent Orange.ttf");
 	}
 
 	@Override
@@ -60,8 +60,8 @@ public class SkillTestView extends View {
 
 			@Override
 			public void balancedObjectNotification(float anX, float aY) {
-				glassXOffset = (int) (Math.min(width / 2, height / 2) * anX);
-				glassYOffset = (int) (Math.min(width / 2, height / 2) * aY);
+				glassXOffset = (int) (width / 2 * anX);
+				glassYOffset = (int) (height / 2 * aY);
 				SkillTestView.this.postInvalidate();
 			}
 
@@ -96,40 +96,22 @@ public class SkillTestView extends View {
 
 		if (firstDraw) {
 			firstDraw = false;
-			width = canvas.getWidth();
-			height = canvas.getHeight();
+			width = getWidth();
+			height = getHeight();
 		}
 
 		xpos = width / 2 - theGlass.getWidth() / 2 + glassXOffset;
 		ypos = height / 2 - theGlass.getHeight() / 2 + glassYOffset;
+//		Log.i(SkillTestView.class.getName(), String.format("view=%dx%d; glassImage=%dx%d; renderPox=%dx%d; ", width,
+//				height, theGlass.getWidth(), theGlass.getHeight(), xpos, ypos));
 		canvas.drawBitmap(theGlass, xpos, ypos, null);
 
-		Path path = new Path();
-		path.moveTo(0, 0);
-		path.lineTo(400, 0);
 		Paint paint = new Paint();
-		paint.setColor(0xFF005500);
-		paint.setStrokeWidth(2.0f);
-		paint.setTextSize(24);
-		Typeface typeface = Typeface.defaultFromStyle(Typeface.NORMAL);
-		paint.setTypeface(typeface);
+		paint.setColor(Color.BLUE);
+		paint.setTextSize(48);
+		paint.setTypeface(face);
+		paint.setAntiAlias(true);
 		paint.setTextAlign(Paint.Align.LEFT);
-		canvas.drawTextOnPath("  Time " + remainingTime, path, 0, 400, paint);
-	}
-
-	public void setXIncr(int xIncr) {
-		this.xIncr = xIncr;
-	}
-
-	public int getXIncr() {
-		return xIncr;
-	}
-
-	public void setYIncr(int yIncr) {
-		this.yIncr = yIncr;
-	}
-
-	public int getYIncr() {
-		return yIncr;
+		canvas.drawText("Time " + remainingTime, 10, 60, paint);
 	}
 }

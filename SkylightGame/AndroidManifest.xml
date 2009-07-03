@@ -13,7 +13,7 @@
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SkillTestActivity">
+		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
