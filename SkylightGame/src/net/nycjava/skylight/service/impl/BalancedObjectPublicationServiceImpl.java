@@ -27,11 +27,19 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		super();
 	}
 
+	private static final float FRICTION_COEFF = 0.05f;
 	private static final long PERIOD_IN_MILLISECONDS = 50;
-
-	public void applyForce(float anXForce, float aYForce) {
-		velocityX += anXForce;
-		velocityY += aYForce;
+	private static final float SO_SLOW_IT_SHOULD_STOP = 0.005f;
+	
+	public void applyForce(float anXForce, float aYForce,long duration) {
+		
+		// not used but here for reference
+		//float frictionX = (Math.abs(velocityX)<SO_SLOW_IT_SHOULD_STOP)?-velocityX:-velocityX*FRICTION_COEFF;
+		//float frictionY = (Math.abs(velocityY)<SO_SLOW_IT_SHOULD_STOP)?-velocityY:-velocityY*FRICTION_COEFF;
+		//velocityX += frictionX;
+		//velocityY += frictionY;
+		velocityX += anXForce*duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
+		velocityY += aYForce *duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
 	}
 
 	public void addObserver(BalancedObjectObserver anObserver) {

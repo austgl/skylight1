@@ -46,6 +46,8 @@ public class SkillTestActivity extends SkylightActivity {
 
 	private int width, height;
 
+	private int difficultyLevel;
+	
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 

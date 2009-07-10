@@ -15,11 +15,21 @@ public class RandomForceServiceImpl implements RandomForceService {
 	protected static final double MAXIMUM_FORCE = 1.0d;
 
 	protected static final float FORCE_FACTOR = 0.3f;
+	
+	static final float forceAdj[] = { 
+		1.5f,
+		1.8f,
+		2.0f,
+		2.5f,
+		3.0f
+	};
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
 
 	private Timer timer = new Timer();
+	
+	private int difficultyLevel;
 
 	@Override
 	public void start() {
@@ -31,8 +41,9 @@ public class RandomForceServiceImpl implements RandomForceService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				balancedObjectPublicationService.applyForce((1f - 2f * (float) Math.random()) * FORCE_FACTOR,
-						(1f - 2f * (float) Math.random()) * FORCE_FACTOR);
+				balancedObjectPublicationService.applyForce(adjRandom(),adjRandom(),50);
+//				balancedObjectPublicationService.applyForce((1f - 2f * (float) Math.random()) * FORCE_FACTOR,
+//						(1f - 2f * (float) Math.random()) * FORCE_FACTOR);
 				applyForceAtRandomTime();
 			}
 		}, (long) (MINIMUM_MILLISECONDS_BETWEEN_FORCES + Math.random()
@@ -42,5 +53,39 @@ public class RandomForceServiceImpl implements RandomForceService {
 	@Override
 	public void stop() {
 		timer.cancel();
+	}
+	
+	/**
+	 * Try to distribute the forces differently so that weak forces are more common
+	 * than strong forces.
+	 * @return random force
+	 */
+	private float adjRandom() {
+		float answer;
+		float value;
+		double sign;
+		sign = Math.random();
+		
+		value = (float)Math.random();
+		if(value < 0.2) {
+			answer = forceAdj[0];
+		} else if (value < 0.4) {
+			answer = forceAdj[1];
+		} else if (value < 0.6) {
+			answer = forceAdj[2];	
+		} else if (value < 0.8) {
+			answer = forceAdj[3];
+		} else {
+			answer = forceAdj[4];
+		}
+		
+		if(sign < 0.5) {
+			answer = -answer;
+		}
+		return answer;
+	}
+	
+	public void setDifficultyLevel(int aLevel) {
+		difficultyLevel = aLevel;
 	}
 }
