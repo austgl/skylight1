@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class SkillTestView extends View {
@@ -45,6 +44,9 @@ public class SkillTestView extends View {
 	private int xpos, ypos;
 
 	private final Typeface face;
+
+	@Dependency
+	private Integer difficultyLevel;
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
@@ -102,16 +104,16 @@ public class SkillTestView extends View {
 
 		xpos = width / 2 - theGlass.getWidth() / 2 + glassXOffset;
 		ypos = height / 2 - theGlass.getHeight() / 2 + glassYOffset;
-//		Log.i(SkillTestView.class.getName(), String.format("view=%dx%d; glassImage=%dx%d; renderPox=%dx%d; ", width,
-//				height, theGlass.getWidth(), theGlass.getHeight(), xpos, ypos));
+		// Log.i(SkillTestView.class.getName(), String.format("view=%dx%d; glassImage=%dx%d; renderPox=%dx%d; ", width,
+		// height, theGlass.getWidth(), theGlass.getHeight(), xpos, ypos));
 		canvas.drawBitmap(theGlass, xpos, ypos, null);
 
 		Paint paint = new Paint();
 		paint.setColor(Color.BLUE);
-		paint.setTextSize(48);
+		paint.setTextSize(20);
 		paint.setTypeface(face);
 		paint.setAntiAlias(true);
 		paint.setTextAlign(Paint.Align.LEFT);
-		canvas.drawText("Time " + remainingTime, 10, 60, paint);
+		canvas.drawText("Time " + remainingTime + " level=" + difficultyLevel, 10, 60, paint);
 	}
 }

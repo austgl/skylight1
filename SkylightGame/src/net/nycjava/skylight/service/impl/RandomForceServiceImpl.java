@@ -8,6 +8,8 @@ import net.nycjava.skylight.service.BalancedObjectPublicationService;
 import net.nycjava.skylight.service.RandomForceService;
 
 public class RandomForceServiceImpl implements RandomForceService {
+	private static final int NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL = 25;
+
 	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 2000;
 
 	private static final double MINIMUM_MILLISECONDS_BETWEEN_FORCES = 1000;
@@ -29,8 +31,8 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	private Timer timer = new Timer();
 	
-	private int difficultyLevel;
-
+	public int difficultyLevel;
+	
 	@Override
 	public void start() {
 		applyForceAtRandomTime();
@@ -38,16 +40,16 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	private void applyForceAtRandomTime() {
 		// TODO stop potential race condition between this method and stop()
+		final double minimumMillisecondsBetweenForcesGivenDifficulty = MINIMUM_MILLISECONDS_BETWEEN_FORCES - difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL;
+		final double maximumMillisecondsBetweenForcesGivenDifficulty = MAXIMUM_MILLISECONDS_BETWEEN_FORCES - difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL;
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				balancedObjectPublicationService.applyForce(adjRandom(),adjRandom(),50);
-//				balancedObjectPublicationService.applyForce((1f - 2f * (float) Math.random()) * FORCE_FACTOR,
-//						(1f - 2f * (float) Math.random()) * FORCE_FACTOR);
 				applyForceAtRandomTime();
 			}
-		}, (long) (MINIMUM_MILLISECONDS_BETWEEN_FORCES + Math.random()
-				* (MAXIMUM_MILLISECONDS_BETWEEN_FORCES - MINIMUM_MILLISECONDS_BETWEEN_FORCES)));
+		}, (long) (minimumMillisecondsBetweenForcesGivenDifficulty + Math.random()
+				* (maximumMillisecondsBetweenForcesGivenDifficulty - minimumMillisecondsBetweenForcesGivenDifficulty)));
 	}
 
 	@Override

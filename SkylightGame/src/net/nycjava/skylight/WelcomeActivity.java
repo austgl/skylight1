@@ -1,20 +1,33 @@
 package net.nycjava.skylight;
 
-import static java.lang.System.out;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class WelcomeActivity extends SkylightActivity {
+	private final class DifficultyClickListener implements OnClickListener {
+		final private int difficulty;
+
+		public DifficultyClickListener(int aDifficulty) {
+			super();
+			difficulty = aDifficulty;
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
+			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
+			startActivity(intent);
+			finish();
+		}
+	}
+
 	@Dependency
 	private LinearLayout contentView;
 
@@ -30,34 +43,11 @@ public class WelcomeActivity extends SkylightActivity {
 		ImageView imageView = new ImageView(this);
 		imageView.setImageResource(R.drawable.icon);
 		contentView.addView(imageView);
+
+		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(0));
+		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(10));
+		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(20));
+
 		setContentView(contentView);
-		
 	}
-
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
-		startActivity(intent);
-		return true;
-	}
-
-	@Override
-    public boolean onTouchEvent(MotionEvent event) {
-//        float x = event.getX() - CENTER_X;
-//        float y = event.getY() - CENTER_Y;
-//        boolean inCenter = java.lang.Math.sqrt(x*x + y*y) <= CENTER_RADIUS;
-        
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            	break;
-            case MotionEvent.ACTION_MOVE:
-                break;
-            case MotionEvent.ACTION_UP:
-        		final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
-        		startActivity(intent);
-        		finish();
-                break;
-        }
-        return true;
-    }
 }

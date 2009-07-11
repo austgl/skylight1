@@ -14,7 +14,19 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
 	</ImageView>
 
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/easy" android:text="Sober (Easy)" android:height="30px" android:background="@drawable/bottletop"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/normal" android:text="Buzzed (Normal)"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/hard" android:text="Smashed (Hard)"></Button>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/easy"
+			android:height="30px" android:background="@drawable/bottletop"
+			android:text="Sober(Easy)"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/normal"
+			android:background="@drawable/bottletop" android:text="Buzzed (Normal)"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/hard"
+			android:background="@drawable/bottletop" android:text="Smashed (Hard)"></Button>
+	</LinearLayout>
 </LinearLayout>

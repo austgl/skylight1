@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.os.Bundle;
 
 public abstract class SkylightActivity extends Activity {
+	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
+
 	protected DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
 
 	/** Called when the activity is first created. */

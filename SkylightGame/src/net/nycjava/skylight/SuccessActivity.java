@@ -17,38 +17,40 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
  */
 public class SuccessActivity extends SkylightActivity {
 
+	protected static final int DIFFICULTY_LEVEL_INCREMENT = 1;
+
 	@Dependency
 	private LinearLayout contentView;
-	
+
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
 		dependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout)getLayoutInflater().inflate(R.layout.successmsg, null));
+				(LinearLayout) getLayoutInflater().inflate(R.layout.successmsg, null));
 	}
 
-	
-	 /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Hide the window title.
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN ,
-        		             WindowManager.LayoutParams.FLAG_FULLSCREEN );
-		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
 		setContentView(contentView);
-		
-		Button goButton = (Button)findViewById(R.id.go);
+
+		Button goButton = (Button) findViewById(R.id.go);
 		goButton.setOnClickListener(new OnClickListener() {
-	        public void onClick(View v) {
-			    Intent intent = new Intent();
-			    intent.setClass(SuccessActivity.this, GetReadyActivity.class);
-			    startActivity(intent);
-			    finish();
-	        }
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(SuccessActivity.this, GetReadyActivity.class);
+				intent.putExtra(DIFFICULTY_LEVEL, getIntent().getIntExtra(DIFFICULTY_LEVEL, 0)
+						+ DIFFICULTY_LEVEL_INCREMENT);
+				startActivity(intent);
+				finish();
+			}
 		});
-		
-	   	MediaPlayer.create(getBaseContext(), R.raw.tada).start();
+
+		MediaPlayer.create(getBaseContext(), R.raw.tada).start();
 	}
 }

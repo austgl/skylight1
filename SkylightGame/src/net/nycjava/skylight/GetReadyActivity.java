@@ -39,7 +39,7 @@ public class GetReadyActivity extends SkylightActivity {
 	private SurfaceHolder holder;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Hide the window title.
@@ -63,9 +63,7 @@ public class GetReadyActivity extends SkylightActivity {
 				mp.setOnCompletionListener(new OnCompletionListener() {
 					public void onCompletion(MediaPlayer arg0) {
 						Log.i(GetReadyActivity.class.getName(), "complete");
-						final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
-						startActivity(intent);
-						finish();
+						startSkillTestActivity();
 					}
 				});
 
@@ -99,31 +97,19 @@ public class GetReadyActivity extends SkylightActivity {
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
-		startActivity(intent);
-		finish();
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_UP:
+			startSkillTestActivity();
+		}
 		return true;
 	}
 
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
-		// float x = event.getX() - CENTER_X;
-		// float y = event.getY() - CENTER_Y;
-		// boolean inCenter = java.lang.Math.sqrt(x*x + y*y) <= CENTER_RADIUS;
-
-		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			break;
-		case MotionEvent.ACTION_MOVE:
-			break;
-		case MotionEvent.ACTION_UP:
-			final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
-			startActivity(intent);
-			finish();
-			break;
-		}
-		return true;
+	private void startSkillTestActivity() {
+		final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
+		intent.putExtra(DIFFICULTY_LEVEL, GetReadyActivity.this.getIntent().getIntExtra(DIFFICULTY_LEVEL, 0));
+		startActivity(intent);
+		finish();
 	}
 
 }

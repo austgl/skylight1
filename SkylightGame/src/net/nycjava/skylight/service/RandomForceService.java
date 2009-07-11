@@ -7,4 +7,6 @@ public interface RandomForceService {
 	void start();
 	
 	void stop();
+
+	public void setDifficultyLevel(int aLevel);
 }

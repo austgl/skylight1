@@ -29,7 +29,7 @@ public class SkillTestActivity extends SkylightActivity {
 	private CountdownPublicationService countdownPublicationService;
 
 	@Dependency
-	private LinearLayout contentView;
+	private View contentView;
 
 	private CountdownObserver countdownObserver;
 
@@ -47,7 +47,7 @@ public class SkillTestActivity extends SkylightActivity {
 	private int width, height;
 
 	private int difficultyLevel;
-	
+
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 
@@ -67,14 +67,20 @@ public class SkillTestActivity extends SkylightActivity {
 		aDependencyInjectingObjectFactory.registerImplementationClass(SensorAppliedForceAdapter.class,
 				SensorAppliedForceAdapterServiceAndroidImpl.class);
 
-		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout) getLayoutInflater().inflate(R.layout.skilltest, null));
+		aDependencyInjectingObjectFactory.registerImplementationObject(View.class, (LinearLayout) getLayoutInflater()
+				.inflate(R.layout.skilltest, null));
+
+		aDependencyInjectingObjectFactory.registerImplementationObject(Integer.class, difficultyLevel);
 	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		difficultyLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL, 0);
+
 		super.onCreate(savedInstanceState);
+
+		randomForceService.setDifficultyLevel(difficultyLevel);
 	}
 
 	@Override
@@ -91,6 +97,7 @@ public class SkillTestActivity extends SkylightActivity {
 
 			public void fallenOverNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+				intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 				startActivity(intent);
 				finish();
 			}
@@ -102,6 +109,7 @@ public class SkillTestActivity extends SkylightActivity {
 				if (remainingTime == 0) {
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 					startActivity(intent);
 					finish();
 				}
