@@ -12,15 +12,19 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private static final int Y_AXIS = 1;
 
 	private static final int X_AXIS = 0;
+	
+	private static final int Z_AXIS = 2;
 
 	private static final float MILLISECONDS_IN_A_SECOND = 1000f;
 
-	private static final float FORCE_FACTOR = 0.3f;
+	private static final float FORCE_FACTOR = 1.0f;
 	
 	private static final int MILLISEC_WAIT_FOR_CALIBRATE = 300;
 	
 	private static final int CALIBRATE_MAX_COUNT = 10;
 
+	private static final String TAG = "SensorAppliedForceAdapterServiceAndroidImpl";
+	
 	@Dependency
 	BalancedObjectPublicationService balancedPublicationService;
 
@@ -47,33 +51,51 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 			final float scaledForceFactor = (float) (thisTime - lastTime) / MILLISECONDS_IN_A_SECOND;
 			float x = values[X_AXIS] ;
 			float y = values[Y_AXIS] ;			
+			float z = values[Z_AXIS] ;
 			StringBuffer valuesOut = new StringBuffer();
 			if(calibrateDone == false) {
-				if (calibrateCount < CALIBRATE_MAX_COUNT ) {
-					//TODO: replace accl calibration with time weighted average
-					// do calibration of x,y
-					setXRange(x);
-					setYRange(y);
-					sumX += x;
-					sumY += y;
-					countXY++;
-					calibrateCount++;
-					valuesOut.append("calibrate Entry ");
-					valuesOut.append(x);
-					valuesOut.append(" ");
-					valuesOut.append(y);
-					Log.d("SensorListener",valuesOut.toString());
+				if(Math.abs(x) > 5.0 || Math.abs(y) > 5.0 ) {
+					//User is holding the phone vertically (or at least > 30 deg) 
+					//so put some 'good' defaults into range and let glass drop
+					lowX = -0.005f;
+					highX = 0.005f;
+					lowY = -0.005f;
+					highY = 0.005f;
+					calibrateDone = true;					
 				} else {
-					baseX = (float) (sumX / countXY);
-					baseY = (float) (sumY / countXY);
-					calibrateDone = true;
-					valuesOut.append("calibrate ");
-					valuesOut.append(baseX);
-					valuesOut.append(" ");
-					valuesOut.append(baseY);
-					Log.d("SensorListener",valuesOut.toString());
-				}				
+					// user is holding holding the phone facing the sky (more or less)
+					if (calibrateCount < CALIBRATE_MAX_COUNT ) {
+						//TODO: replace accl calibration with time weighted average
+						// do calibration of x,y
+						setXRange(x);
+						setYRange(y);
+						sumX += x;
+						sumY += y;
+						countXY++;
+						calibrateCount++;
+						valuesOut.append("calibrate Entry ");
+						valuesOut.append(x);
+						valuesOut.append(" ");
+						valuesOut.append(y);
+						Log.d("SensorListener",valuesOut.toString());
+					} else {
+						//baseX = (float) (sumX / countXY);
+						//baseY = (float) (sumY / countXY);
+						calibrateDone = true;
+						valuesOut.append("calibrate done");
+						valuesOut.append(lowX);
+						valuesOut.append(" ");
+						valuesOut.append(highX);
+						valuesOut.append(" ");
+						valuesOut.append(lowY);
+						valuesOut.append(" ");
+						valuesOut.append(highY);
+
+						Log.d("SensorListener",valuesOut.toString());
+					}
+				}
 			} else {
+				// calibration done so use it.
 				//x = x - baseX;
 				//y = y - baseY;
 				if(true) {
@@ -97,6 +119,8 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 				valuesOut.append(x);
 				valuesOut.append(" ");
 				valuesOut.append(y);
+				valuesOut.append(" ");
+				valuesOut.append(z);
 				Log.d("SensorListener ",valuesOut.toString());
 				balancedPublicationService.applyForce(x, -y,(thisTime - lastTime));
 			}
@@ -122,26 +146,28 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		calibrateCount = 0;
 		calibrateDone = false;
 		mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_GAME);
+		Log.d(TAG,"start");
 	}
 
 	public void stop() {
 		mSensorManager.unregisterListener(mListener);
+		Log.d(TAG,"stop");
 	}
 	
 	private void setXRange(float x) {
-		if(x < lowX) {
+		if((x < lowX) || (lowX == 999)) {
 			lowX = x;
 		}
-		if(x > highX) {
+		if((x > highX) || (highX == -999)) {
 			highX = x;			
 		}
 	}
 
 	private void setYRange(float y) {
-		if(y < lowY) {
+		if((y < lowY) || (lowY == 999)) {
 			lowY = y;
 		}
-		if(y > highY) {
+		if((y > highY) || (highY == -999)) {
 			highY = y;			
 		}
 	}
