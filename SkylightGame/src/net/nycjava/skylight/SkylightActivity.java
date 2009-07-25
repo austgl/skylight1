@@ -5,6 +5,8 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjector;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,7 +40,13 @@ public abstract class SkylightActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 0:
-                return true;
+             	Intent intent=getIntent();
+               	String action=intent.getAction();
+                	Intent intent1=new Intent(action,Uri.parse("http://nycjava.net"));
+                
+                	startActivity(intent1);
+                    return true;
+                
             case 1:
                 finish();            	
             	return true;
