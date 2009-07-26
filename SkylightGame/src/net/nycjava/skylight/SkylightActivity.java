@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 public abstract class SkylightActivity extends Activity {
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
@@ -23,6 +25,11 @@ public abstract class SkylightActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// remove Title bar and Status bar from screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        		WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
 		dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
 		addDependencies(dependencyInjectingObjectFactory);
 
