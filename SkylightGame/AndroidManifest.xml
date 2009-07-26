@@ -6,50 +6,45 @@
 		android:label="@string/app_name">
 
 
-		<activity android:name=".WelcomeActivity">
+		<activity android:name=".WelcomeActivity" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"></action>
-				<action android:name="android.intent.action.WEB_SEARCH"/>
 				<category android:name="android.intent.category.LAUNCHER"></category>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.WEB_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".GetReadyActivity">
+		<activity android:name=".GetReadyActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.WEB_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SuccessActivity">
+		<activity android:name=".SuccessActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.WEB_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".FailActivity">
+		<activity android:name=".FailActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.WEB_SEARCH"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 	
 	</application>
 	
-	<uses-permission android:name="android.permission.CAMERA" />
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.INTERNET">
+	</uses-permission>
 	
 	<uses-sdk android:minSdkVersion="2" />	
 

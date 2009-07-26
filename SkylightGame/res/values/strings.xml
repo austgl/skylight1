@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="welcome">\n\n Welcome!\n\n Tap the screen to move to the Skill Test Game:\n\n \"Pass the Drink\'\n\n</string>
-    <string name="app_name">Pass Drink</string>
+    <string name="app_name">Pass the Drink</string>
     <string name="successmsg">The Skylight game succeeded</string>
     <string name="failmsg">The Skylight game failed</string>
     <string name="go">Play Again</string>
