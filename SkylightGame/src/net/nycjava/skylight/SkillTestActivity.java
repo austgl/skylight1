@@ -81,8 +81,9 @@ public class SkillTestActivity extends SkylightActivity {
 		super.onCreate(savedInstanceState);
 
 		randomForceService.setDifficultyLevel(difficultyLevel);
+		balanceObjPublicationService.setDifficultyLevel(difficultyLevel);
 	}
-
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

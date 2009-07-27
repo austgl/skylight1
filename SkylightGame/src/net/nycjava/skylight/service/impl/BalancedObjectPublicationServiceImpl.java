@@ -21,6 +21,8 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	private float velocityX;
 
 	private float velocityY;
+	
+	private int  difficultyLevel;
 
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
@@ -30,17 +32,23 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		super();
 	}
 
-	private static final float FRICTION_COEFF = 0.05f;
+	private static final float FRICTION_COEFF = 0.3f;
 	private static final long PERIOD_IN_MILLISECONDS = 50;
 	private static final float SO_SLOW_IT_SHOULD_STOP = 0.005f;
 	
 	public void applyForce(float anXForce, float aYForce,long duration) {
 		
 		// not used but here for reference
-		//float frictionX = (Math.abs(velocityX)<SO_SLOW_IT_SHOULD_STOP)?-velocityX:-velocityX*FRICTION_COEFF;
-		//float frictionY = (Math.abs(velocityY)<SO_SLOW_IT_SHOULD_STOP)?-velocityY:-velocityY*FRICTION_COEFF;
-		//velocityX += frictionX;
-		//velocityY += frictionY;
+//		float frictionX = (Math.abs(velocityX)<SO_SLOW_IT_SHOULD_STOP)?-velocityX:-velocityX*FRICTION_COEFF;
+//		float frictionY = (Math.abs(velocityY)<SO_SLOW_IT_SHOULD_STOP)?-velocityY:-velocityY*FRICTION_COEFF;
+//		velocityX += frictionX;
+//		velocityY += frictionY;
+		// as long as X Y forces imply less than 45 deg angle
+		if(difficultyLevel < 5 && (anXForce < 6.8) && (aYForce < 6.8)) {
+			// scale FRICTION_COEFF based on difficulty level
+			anXForce = anXForce * (FRICTION_COEFF + (difficultyLevel * 0.1f));
+			aYForce = aYForce * (FRICTION_COEFF + (difficultyLevel * 0.1f));
+		}
 		velocityX += anXForce*duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
 		velocityY += aYForce *duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
 		//Log.d(TAG,Float.toString(velocityX) + " " + Float.toString(velocityY));
@@ -82,4 +90,9 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 			}
 		}
 	}
+	
+	public void setDifficultyLevel(int aDifficulty) {
+		difficultyLevel = aDifficulty;
+	}
+	
 }
