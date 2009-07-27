@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
@@ -45,6 +46,7 @@ public class SkillTestView extends View {
 
 	private final Typeface face;
 
+	private long lastColorChange ;
 	@Dependency
 	private Integer difficultyLevel;
 
@@ -115,5 +117,37 @@ public class SkillTestView extends View {
 		paint.setAntiAlias(true);
 		paint.setTextAlign(Paint.Align.LEFT);
 		canvas.drawText("Time " + remainingTime + " level=" + difficultyLevel, 10, 60, paint);
+//		Long now = System.currentTimeMillis();
+		
+		if (difficultyLevel >= 10) //turn on coloring
+		{	
+			switch (difficultyLevel)
+			{
+			case 10: 
+				canvas.drawColor(Color.MAGENTA, PorterDuff.Mode.DARKEN);				
+				break;
+
+			case 11:
+				canvas.drawColor(Color.RED, PorterDuff.Mode.DARKEN);
+				break;
+
+			case 12: 
+				canvas.drawColor(Color.CYAN, PorterDuff.Mode.DARKEN);
+					break;
+
+			case 13: 
+				canvas.drawColor(  Color.rgb(128, 64, 64), PorterDuff.Mode.DARKEN);				
+				break;
+
+			case 14: 
+				canvas.drawColor(Color.BLUE, PorterDuff.Mode.DARKEN);
+				break;
+	
+			default:
+				canvas.drawColor(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
+			}
+					 
+		}
+		
 	}
 }
