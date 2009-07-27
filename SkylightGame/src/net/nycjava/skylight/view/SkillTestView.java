@@ -51,7 +51,7 @@ public class SkillTestView extends View {
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
 		theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
-		face = Typeface.createFromAsset(getContext().getAssets(), "Agent Orange.ttf");
+		face = Typeface.createFromAsset(getContext().getAssets(), "passthedrink.ttf");
 	}
 
 	@Override
