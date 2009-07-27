@@ -5,11 +5,14 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+
 import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
 	private static final int NUMBER_OF_MILLISECONDS_IN_A_SECOND = 1000;
+	private final String TAG = "BalancedObjectPublicationService";
 
 	private float positionX;
 
@@ -40,6 +43,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		//velocityY += frictionY;
 		velocityX += anXForce*duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
 		velocityY += aYForce *duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
+		//Log.d(TAG,Float.toString(velocityX) + " " + Float.toString(velocityY));
 	}
 
 	public void addObserver(BalancedObjectObserver anObserver) {

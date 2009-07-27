@@ -45,8 +45,8 @@ public class WelcomeActivity extends SkylightActivity {
 		contentView.addView(imageView);
 
 		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(0));
-		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(10));
-		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(20));
+		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(5));
+		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(10));
 
 		setContentView(contentView);
 	}

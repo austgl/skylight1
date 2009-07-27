@@ -73,25 +73,25 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 						sumY += y;
 						countXY++;
 						calibrateCount++;
-						valuesOut.append("calibrate Entry ");
-						valuesOut.append(x);
-						valuesOut.append(" ");
-						valuesOut.append(y);
-						Log.d("SensorListener",valuesOut.toString());
+//						valuesOut.append("calibrate Entry ");
+//						valuesOut.append(x);
+//						valuesOut.append(" ");
+//						valuesOut.append(y);
+						//Log.d("SensorListener",valuesOut.toString());
 					} else {
 						//baseX = (float) (sumX / countXY);
 						//baseY = (float) (sumY / countXY);
 						calibrateDone = true;
-						valuesOut.append("calibrate done");
-						valuesOut.append(lowX);
-						valuesOut.append(" ");
-						valuesOut.append(highX);
-						valuesOut.append(" ");
-						valuesOut.append(lowY);
-						valuesOut.append(" ");
-						valuesOut.append(highY);
+//						valuesOut.append("calibrate done");
+//						valuesOut.append(lowX);
+//						valuesOut.append(" ");
+//						valuesOut.append(highX);
+//						valuesOut.append(" ");
+//						valuesOut.append(lowY);
+//						valuesOut.append(" ");
+//						valuesOut.append(highY);
 
-						Log.d("SensorListener",valuesOut.toString());
+						//Log.d("SensorListener",valuesOut.toString());
 					}
 				}
 			} else {
@@ -116,12 +116,12 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 					x = x * FORCE_FACTOR;
 					y = y * FORCE_FACTOR;
 				}
-				valuesOut.append(x);
-				valuesOut.append(" ");
-				valuesOut.append(y);
-				valuesOut.append(" ");
-				valuesOut.append(z);
-				Log.d("SensorListener ",valuesOut.toString());
+//				valuesOut.append(x);
+//				valuesOut.append(" ");
+//				valuesOut.append(y);
+//				valuesOut.append(" ");
+//				valuesOut.append(z);
+				//Log.d("SensorListener ",valuesOut.toString());
 				balancedPublicationService.applyForce(x, -y,(thisTime - lastTime));
 			}
 			lastTime = thisTime;

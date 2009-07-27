@@ -3,11 +3,16 @@ package net.nycjava.skylight.service.impl;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.util.Log;
+
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 import net.nycjava.skylight.service.RandomForceService;
 
 public class RandomForceServiceImpl implements RandomForceService {
+	private static final String TAG = "RandomForceServiceImpl";
+	private static final String DIFFICULTY_LEVEL_MSG = "Difficulty Level ";
+	
 	private static final int NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL = 25;
 
 	private static final double MAXIMUM_MILLISECONDS_BETWEEN_FORCES = 2000;
@@ -19,11 +24,30 @@ public class RandomForceServiceImpl implements RandomForceService {
 	protected static final float FORCE_FACTOR = 0.3f;
 	
 	static final float forceAdj[] = { 
-		1.5f,
+		1.0f,
+		1.0f,
+		1.2f,
+		1.4f,
+		1.6f
+	};
+	
+	static final float DifficultyLevels[] = {
+		1.0f, // easy (sober) 0
+		1.1f,
+		1.2f,
+		1.3f,
+		1.4f,
+		1.5f, // medium (buzzed) 5
+		1.6f,
+		1.7f,
 		1.8f,
-		2.0f,
-		2.5f,
-		3.0f
+		1.9f,
+		2.0f, // hard (smashed) 10
+		2.2f,
+		2.4f,
+		2.6f,
+		2.8f,
+		3.0f  // insane (blackout) 15+
 	};
 
 	@Dependency
@@ -59,7 +83,7 @@ public class RandomForceServiceImpl implements RandomForceService {
 	
 	/**
 	 * Try to distribute the forces differently so that weak forces are more common
-	 * than strong forces.
+	 * than strong forces. Use difficulty level as a multiplier for the force used.
 	 * @return random force
 	 */
 	private float adjRandom() {
@@ -81,6 +105,11 @@ public class RandomForceServiceImpl implements RandomForceService {
 			answer = forceAdj[4];
 		}
 		
+		if(difficultyLevel >= DifficultyLevels.length) {
+			answer = answer * DifficultyLevels[DifficultyLevels.length];
+		} else {
+			answer = answer * DifficultyLevels[difficultyLevel];
+		}
 		if(sign < 0.5) {
 			answer = -answer;
 		}
@@ -89,5 +118,6 @@ public class RandomForceServiceImpl implements RandomForceService {
 	
 	public void setDifficultyLevel(int aLevel) {
 		difficultyLevel = aLevel;
+		//Log.d(TAG,DIFFICULTY_LEVEL_MSG+Integer.toString(difficultyLevel));
 	}
 }
