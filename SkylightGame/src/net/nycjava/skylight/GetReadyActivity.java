@@ -9,9 +9,9 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.PixelFormat;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -60,6 +60,13 @@ public class GetReadyActivity extends SkylightActivity {
 				mp = new MediaPlayer();
 				mp.setDisplay(mPreview.getHolder());
 
+				mp.setOnPreparedListener(new OnPreparedListener() {
+					@Override
+					public void onPrepared(MediaPlayer mp) {
+						Log.i(GetReadyActivity.class.getName(), "mp is prepared");
+						mp.start();
+					}});
+				
 				mp.setOnCompletionListener(new OnCompletionListener() {
 					public void onCompletion(MediaPlayer arg0) {
 						Log.i(GetReadyActivity.class.getName(), "complete");
@@ -70,7 +77,7 @@ public class GetReadyActivity extends SkylightActivity {
 				try {
 					AssetFileDescriptor afd = getAssets().openFd("passthedrink.mp4");
 					mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-					mp.prepare();
+					mp.prepareAsync();
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalStateException e) {
@@ -78,7 +85,6 @@ public class GetReadyActivity extends SkylightActivity {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				mp.start();
 			}
 
 			@Override

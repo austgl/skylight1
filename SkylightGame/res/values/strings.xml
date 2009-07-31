@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome">\n  Welcome to Pass the Drink !\n\n  The goal :\n  Balance the glass without it sliding off the screen\n\n  Pick a Level :\n</string>
+    <string name="welcome">\nWelcome to Pass the Drink\n\nBalance the glass without it sliding off the screen\n\nPick a Level\n</string>
     <string name="app_name">Pass the Drink</string>
-    <string name="successmsg">  Congratulations !\n\n You Won !!\n\nto the next level\n\n</string>
-    <string name="failmsg">   Oops !!\n You Lost !!\n\nPass the Drink\nto the next player</string>
+    <string name="successmsg">Congratulations!\n\nNext player tap the screen to begin</string>
+    <string name="failmsg">Oops!!\nYou Lose!!\n\nTap the screen to restart the game</string>
     <string name="go">Play Again</string>
     <string name="getreadymsg">  Get Ready to Play !\n\n  Hold the phone Flat as if the glass is on a wet tray\n\n Keep Steady...\n\n</string>
     <string name="skilltest">Skylight1 Game: 'Pass the Drink'</string>
