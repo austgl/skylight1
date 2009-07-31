@@ -8,7 +8,8 @@
 
 		<activity android:name=".WelcomeActivity" android:screenOrientation="portrait">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN"></action>
+				<action android:name="android.intent.action.MAIN"/>
+				  <action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.LAUNCHER"></category>
 			</intent-filter>
 		</activity>
@@ -16,6 +17,7 @@
 		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -23,6 +25,7 @@
 		<activity android:name=".GetReadyActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -30,6 +33,7 @@
 		<activity android:name=".SuccessActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
@@ -37,6 +41,7 @@
 		<activity android:name=".FailActivity" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>

@@ -3,13 +3,9 @@ package net.nycjava.skylight;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.dependencyinjection.DependencyInjector;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -17,7 +13,7 @@ import android.view.WindowManager;
 
 public abstract class SkylightActivity extends Activity {
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
-
+    public static final Uri URI_SKY=Uri.parse("http://nycjava.net");
 	protected DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
 
 	/** Called when the activity is first created. */
@@ -47,11 +43,9 @@ public abstract class SkylightActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 0:
-             	Intent intent=getIntent();
-               	String action=intent.getAction();
-                	Intent intent1=new Intent(action,Uri.parse("http://nycjava.net"));
-                
-                	startActivity(intent1);
+             	
+                	Intent intent=new Intent(Intent.ACTION_VIEW,URI_SKY);
+                	startActivity(intent);
                     return true;
                 
             case 1:
