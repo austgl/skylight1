@@ -22,7 +22,7 @@ public abstract class SkylightActivity extends Activity {
 
 	public static final int SMASHED_DIFFICULTY_LEVEL = 10;
 
-	public static final Uri URI_SKY = Uri.parse("http://nycjava.net");
+	public static final Uri URI_SKY = Uri.parse("http://passthedrink.net");
 
 	protected static final String PASS_THE_DRINK_PREFS_FILE = "PassTheDrinkPrefsFile";
 
