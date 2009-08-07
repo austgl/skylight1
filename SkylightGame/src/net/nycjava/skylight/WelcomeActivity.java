@@ -26,7 +26,7 @@ public class WelcomeActivity extends SkylightActivity {
 			final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);
-			finish();
+//			finish();
 		}
 	}
 

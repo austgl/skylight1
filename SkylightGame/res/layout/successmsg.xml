@@ -12,11 +12,4 @@
         android:shadowColor="#404040" android:textColor="#ffffff" typeface="passthedrink.ttf" 
     />
 
-	<Button android:id="@+id/go" android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="@string/go"
-		android:layout_centerHorizontal="true" android:layout_weight="0">
-		<requestFocus />
-	</Button>
-
-
 </LinearLayout>

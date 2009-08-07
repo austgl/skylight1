@@ -5,6 +5,7 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -37,17 +38,19 @@ public class FailActivity extends SkylightActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(view);
 
-		Button goButton = (Button) findViewById(R.id.go);
-		goButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(FailActivity.this, WelcomeActivity.class);
-				startActivity(intent);
-				finish();
-			}
-		});
-
 		MediaPlayer.create(getBaseContext(), R.raw.glassbreaking).start();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_UP:
+			Intent intent = new Intent();
+			intent.setClass(FailActivity.this, GetReadyActivity.class);
+			finish();
+			startActivity(intent);
+		}
+		return true;
 	}
 
 }

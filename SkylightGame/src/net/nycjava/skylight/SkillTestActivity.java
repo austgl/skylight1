@@ -101,8 +101,8 @@ public class SkillTestActivity extends SkylightActivity {
 			public void fallenOverNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 				intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
-				startActivity(intent);
 				finish();
+				startActivity(intent);
 			}
 		};
 		balanceObjPublicationService.addObserver(balanceObjObserver);
@@ -121,8 +121,8 @@ public class SkillTestActivity extends SkylightActivity {
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
-					startActivity(intent);
 					finish();
+					startActivity(intent);
 				}
 			}
 		};

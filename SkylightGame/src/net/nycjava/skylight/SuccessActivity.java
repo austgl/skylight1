@@ -3,6 +3,7 @@ package net.nycjava.skylight;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,18 +40,22 @@ public class SuccessActivity extends SkylightActivity {
 
 		setContentView(contentView);
 
-		Button goButton = (Button) findViewById(R.id.go);
-		goButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(SuccessActivity.this, GetReadyActivity.class);
-				intent.putExtra(DIFFICULTY_LEVEL, getIntent().getIntExtra(DIFFICULTY_LEVEL, 0)
-						+ DIFFICULTY_LEVEL_INCREMENT);
-				startActivity(intent);
-				finish();
-			}
-		});
-
 		MediaPlayer.create(getBaseContext(), R.raw.glassbinging).start();
 	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_UP:
+			Intent intent = new Intent();
+			intent.setClass(SuccessActivity.this, GetReadyActivity.class);
+			intent.putExtra(DIFFICULTY_LEVEL, getIntent().getIntExtra(DIFFICULTY_LEVEL, 0)
+					+ DIFFICULTY_LEVEL_INCREMENT);
+			startActivity(intent);
+			finish();
+		}
+		return true;
+	}
+	
+
 }
