@@ -131,7 +131,6 @@ public class SkillTestActivity extends SkylightActivity {
 
 		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
-		contentView.setBackgroundResource(R.drawable.background_table);
 		setContentView(contentView);
 
 		sensorAppliedForceAdapter.start();

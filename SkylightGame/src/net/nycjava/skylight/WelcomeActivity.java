@@ -46,16 +46,19 @@ public class WelcomeActivity extends SkylightActivity {
 		imageView.setImageResource(R.drawable.icon);
 		contentView.addView(imageView);
 
-		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(0));
-		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(5));
-		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(10));
+		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(
+				SOBER_DIFFICULTY_LEVEL));
+		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(
+				BUZZED_DIFFICULTY_LEVEL));
+		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(
+				SMASHED_DIFFICULTY_LEVEL));
 
 		// show the high score
-	    SharedPreferences sharedPreferences = getSharedPreferences(PASS_THE_DRINK_PREFS_FILE, MODE_PRIVATE);
-	    int highScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
-	    TypeFaceTextView highScoreTextView = (TypeFaceTextView) contentView.findViewById(R.id.highScore);
-	    highScoreTextView.setText(String.format("%s: %d", getResources().getString(R.string.high_score), highScore));
-		
+		SharedPreferences sharedPreferences = getSharedPreferences(PASS_THE_DRINK_PREFS_FILE, MODE_PRIVATE);
+		int highScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
+		TypeFaceTextView highScoreTextView = (TypeFaceTextView) contentView.findViewById(R.id.highScore);
+		highScoreTextView.setText(String.format("%s: %d", getResources().getString(R.string.high_score), highScore));
+
 		setContentView(contentView);
 	}
 }
