@@ -13,7 +13,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -118,6 +120,14 @@ public class SkillTestView extends View {
 		// height, theGlass.getWidth(), theGlass.getHeight(), xpos, ypos));
 		canvas.drawBitmap(theGlass, xpos, ypos, null);
 
+		Paint arcPaint = new Paint();
+		int remainingTimeColor = Color.rgb(255 * (15 - remainingTime) / 15, 255 * remainingTime / 15, 0);
+		arcPaint.setColor(remainingTimeColor);
+		canvas.drawArc(new RectF(5, 5, 55, 55), -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true, arcPaint);
+		arcPaint.setColor(Color.BLACK);
+		arcPaint.setStyle(Style.STROKE);
+		canvas.drawArc(new RectF(5, 5, 55, 55), -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true, arcPaint);
+		
 		Paint paint = new Paint();
 		paint.setColor(Color.BLUE);
 		paint.setTextSize(20);
