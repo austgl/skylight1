@@ -2,7 +2,9 @@ package net.nycjava.skylight;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +50,12 @@ public class WelcomeActivity extends SkylightActivity {
 		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(5));
 		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(10));
 
+		// show the high score
+	    SharedPreferences sharedPreferences = getSharedPreferences(PASS_THE_DRINK_PREFS_FILE, MODE_PRIVATE);
+	    int highScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
+	    TypeFaceTextView highScoreTextView = (TypeFaceTextView) contentView.findViewById(R.id.highScore);
+	    highScoreTextView.setText(String.format("%s: %d", getResources().getString(R.string.high_score), highScore));
+		
 		setContentView(contentView);
 	}
 }

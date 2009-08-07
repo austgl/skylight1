@@ -13,7 +13,9 @@ import android.view.WindowManager;
 
 public abstract class SkylightActivity extends Activity {
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
+	public static final String HIGH_SCORE_PREFERENCE_NAME = "highScore";
     public static final Uri URI_SKY=Uri.parse("http://nycjava.net");
+	protected static final String PASS_THE_DRINK_PREFS_FILE = "PassTheDrinkPrefsFile";
 	protected DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
 
 	/** Called when the activity is first created. */

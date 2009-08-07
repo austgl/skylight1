@@ -13,7 +13,9 @@ import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
 import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
 import net.nycjava.skylight.service.impl.SensorAppliedForceAdapterServiceAndroidImpl;
+import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,6 +110,14 @@ public class SkillTestActivity extends SkylightActivity {
 		countdownObserver = new CountdownObserver() {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
+					// record the new high score
+				    SharedPreferences sharedPreferences = getSharedPreferences(PASS_THE_DRINK_PREFS_FILE, MODE_PRIVATE);
+				    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
+				    SharedPreferences.Editor editor = sharedPreferences.edit();
+				    editor.putInt(HIGH_SCORE_PREFERENCE_NAME, Math.max(oldHighScore, difficultyLevel));
+				    editor.commit();
+					
+					// pass control to the success activity
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
