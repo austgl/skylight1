@@ -51,6 +51,6 @@ public class SuccessActivity extends SkylightActivity {
 			}
 		});
 
-		MediaPlayer.create(getBaseContext(), R.raw.tada).start();
+		MediaPlayer.create(getBaseContext(), R.raw.glassbinging).start();
 	}
 }
