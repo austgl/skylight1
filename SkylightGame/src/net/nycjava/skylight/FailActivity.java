@@ -46,7 +46,7 @@ public class FailActivity extends SkylightActivity {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_UP:
 			Intent intent = new Intent();
-			intent.setClass(FailActivity.this, GetReadyActivity.class);
+			intent.setClass(FailActivity.this, WelcomeActivity.class);
 			finish();
 			startActivity(intent);
 		}

@@ -48,7 +48,7 @@ public class SuccessActivity extends SkylightActivity {
 		switch (event.getAction()) {
 		case MotionEvent.ACTION_UP:
 			Intent intent = new Intent();
-			intent.setClass(SuccessActivity.this, GetReadyActivity.class);
+			intent.setClass(SuccessActivity.this, SkillTestActivity.class);
 			intent.putExtra(DIFFICULTY_LEVEL, getIntent().getIntExtra(DIFFICULTY_LEVEL, 0)
 					+ DIFFICULTY_LEVEL_INCREMENT);
 			startActivity(intent);

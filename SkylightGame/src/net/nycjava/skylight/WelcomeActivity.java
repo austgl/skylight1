@@ -23,7 +23,7 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void onClick(View arg0) {
-			final Intent intent = new Intent(WelcomeActivity.this, GetReadyActivity.class);
+			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);
 //			finish();

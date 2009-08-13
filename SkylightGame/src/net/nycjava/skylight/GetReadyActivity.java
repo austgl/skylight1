@@ -112,8 +112,8 @@ public class GetReadyActivity extends SkylightActivity {
 	}
 
 	private void startSkillTestActivity() {
-		final Intent intent = new Intent(GetReadyActivity.this, SkillTestActivity.class);
-		intent.putExtra(DIFFICULTY_LEVEL, GetReadyActivity.this.getIntent().getIntExtra(DIFFICULTY_LEVEL, 0));
+		final Intent intent = new Intent(GetReadyActivity.this, WelcomeActivity.class);
+//		intent.putExtra(DIFFICULTY_LEVEL, GetReadyActivity.this.getIntent().getIntExtra(DIFFICULTY_LEVEL, 0));
 		finish();
 		startActivity(intent);
 	}
