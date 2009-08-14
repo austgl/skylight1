@@ -62,6 +62,7 @@ public abstract class SkylightActivity extends Activity {
 
 		case 1:
 			finish();
+			moveTaskToBack(true);
 			return true;
 		default:
 			return false;
