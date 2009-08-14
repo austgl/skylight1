@@ -31,7 +31,7 @@ public class RandomForceServiceImpl implements RandomForceService {
 		1.6f
 	};
 	
-	static final float DifficultyLevels[] = {
+	static final float difficultyLevels[] = {
 		1.0f, // easy (sober) 0
 		1.1f,
 		1.2f,
@@ -64,8 +64,8 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	private void applyForceAtRandomTime() {
 		// TODO stop potential race condition between this method and stop()
-		final double minimumMillisecondsBetweenForcesGivenDifficulty = MINIMUM_MILLISECONDS_BETWEEN_FORCES - difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL;
-		final double maximumMillisecondsBetweenForcesGivenDifficulty = MAXIMUM_MILLISECONDS_BETWEEN_FORCES - difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL;
+		final double minimumMillisecondsBetweenForcesGivenDifficulty = MINIMUM_MILLISECONDS_BETWEEN_FORCES - Math.min(MINIMUM_MILLISECONDS_BETWEEN_FORCES, difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL);
+		final double maximumMillisecondsBetweenForcesGivenDifficulty = MAXIMUM_MILLISECONDS_BETWEEN_FORCES - Math.min(MAXIMUM_MILLISECONDS_BETWEEN_FORCES, difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL);
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -105,10 +105,10 @@ public class RandomForceServiceImpl implements RandomForceService {
 			answer = forceAdj[4];
 		}
 		
-		if(difficultyLevel >= DifficultyLevels.length) {
-			answer = answer * DifficultyLevels[DifficultyLevels.length];
+		if(difficultyLevel >= difficultyLevels.length) {
+			answer = answer * difficultyLevels[difficultyLevels.length - 1];
 		} else {
-			answer = answer * DifficultyLevels[difficultyLevel];
+			answer = answer * difficultyLevels[difficultyLevel];
 		}
 		if(sign < 0.5) {
 			answer = -answer;

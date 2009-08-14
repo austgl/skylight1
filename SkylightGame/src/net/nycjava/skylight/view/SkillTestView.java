@@ -13,13 +13,17 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class SkillTestView extends View {
+	private static final int SCREEN_MARGIN = 10;
+
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
 
@@ -34,7 +38,7 @@ public class SkillTestView extends View {
 
 	private int remainingTime;
 
-	private Bitmap theGlass;
+	private Bitmap glassBitmap;
 
 	private int glassXOffset;
 
@@ -51,9 +55,15 @@ public class SkillTestView extends View {
 	@Dependency
 	private Integer difficultyLevel;
 
+	private Bitmap levelGlassFullBitmap;
+
+	private Bitmap levelGlassEmptyBitmap;
+
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
-		theGlass = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		levelGlassFullBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass);
+		levelGlassEmptyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass_empty);
 		face = Typeface.createFromAsset(getContext().getAssets(), "passthedrink.ttf");
 	}
 
@@ -92,6 +102,8 @@ public class SkillTestView extends View {
 		final int backgroundResourceId;
 		if (difficultyLevel >= SkylightActivity.SMASHED_DIFFICULTY_LEVEL) {
 			backgroundResourceId = R.drawable.marble;
+		} else if (difficultyLevel >= SkylightActivity.BUZZED_DIFFICULTY_LEVEL) {
+			backgroundResourceId = R.drawable.wood;
 		} else {
 			backgroundResourceId = R.drawable.background_table;
 		}
@@ -107,33 +119,76 @@ public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
+		if (difficultyLevel < 17) {
+			drawView(canvas);
+		} else {
+			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
+			canvas.translate(-10, 0);
+			drawView(canvas);
+			canvas.restore();
 
+			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
+			canvas.translate(10, 0);
+			drawView(canvas);
+			canvas.restore();
+		}
+	}
+
+	private void drawView(Canvas canvas) {
 		if (firstDraw) {
 			firstDraw = false;
 			width = getWidth();
 			height = getHeight();
 		}
 
-		xpos = width / 2 - theGlass.getWidth() / 2 + glassXOffset;
-		ypos = height / 2 - theGlass.getHeight() / 2 + glassYOffset;
+		xpos = width / 2 - glassBitmap.getWidth() / 2 + glassXOffset;
+		ypos = height / 2 - glassBitmap.getHeight() / 2 + glassYOffset;
 		// Log.i(SkillTestView.class.getName(), String.format("view=%dx%d; glassImage=%dx%d; renderPox=%dx%d; ", width,
 		// height, theGlass.getWidth(), theGlass.getHeight(), xpos, ypos));
-		canvas.drawBitmap(theGlass, xpos, ypos, null);
+		// Paint glassPaint = new Paint();
+		// glassPaint.setColor(Color.argb(100, 255, 255, 255));
+
+		int glassNumber = 0;
+		for (int previousLevels = 0; previousLevels < difficultyLevel; previousLevels++) {
+			canvas.drawBitmap(levelGlassEmptyBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN - glassNumber*4, SCREEN_MARGIN, null);
+			glassNumber++;
+		}
+		canvas.drawBitmap(levelGlassFullBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN - glassNumber*4, SCREEN_MARGIN, null);
+
+		canvas.drawBitmap(glassBitmap, xpos, ypos, null);
 
 		Paint arcPaint = new Paint();
+		arcPaint.setAntiAlias(true);
+		arcPaint.setStrokeWidth(2);
 		int remainingTimeColor = Color.rgb(255 * (15 - remainingTime) / 15, 255 * remainingTime / 15, 0);
 		arcPaint.setColor(remainingTimeColor);
-		canvas.drawArc(new RectF(5, 5, 55, 55), -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true, arcPaint);
+		final RectF timeRemainingRect = new RectF(SCREEN_MARGIN, SCREEN_MARGIN, SCREEN_MARGIN + levelGlassFullBitmap.getHeight(), SCREEN_MARGIN +  + levelGlassFullBitmap.getHeight());
+		canvas.drawArc(timeRemainingRect, -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true,
+				arcPaint);
 		arcPaint.setColor(Color.BLACK);
 		arcPaint.setStyle(Style.STROKE);
-		canvas.drawArc(new RectF(5, 5, 55, 55), -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true, arcPaint);
-		
+		canvas.drawArc(timeRemainingRect, -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true,
+				arcPaint);
+
 		Paint paint = new Paint();
-		paint.setColor(Color.BLUE);
-		paint.setTextSize(20);
+		paint.setColor(Color.WHITE);
+		paint.setTextSize(30);
 		paint.setTypeface(face);
 		paint.setAntiAlias(true);
-		paint.setTextAlign(Paint.Align.LEFT);
-		canvas.drawText("Time " + remainingTime + " level=" + difficultyLevel, 10, 60, paint);
+		paint.setTextAlign(Paint.Align.CENTER);
+		Rect timeRemainingTextBounds = new Rect();
+		String timeRemainingString = String.valueOf(remainingTime);
+		paint.getTextBounds(timeRemainingString, 0, timeRemainingString.length(), timeRemainingTextBounds);
+//		Log.d(SkillTestView.class.getName(), String.format("rect = %s", timeRemainingRect));
+//		canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - timeRemainingRect.width() / 2, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - timeRemainingRect.height() / 2 - paint.ascent(), paint);
+		canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4, paint);
+		
+//		Paint paint = new Paint();
+//		paint.setColor(Color.BLUE);
+//		paint.setTextSize(20);
+//		paint.setTypeface(face);
+//		paint.setAntiAlias(true);
+//		paint.setTextAlign(Paint.Align.LEFT);
+//		canvas.drawText("Time " + remainingTime + " level=" + difficultyLevel, SCREEN_MARGIN, 60, paint);
 	}
 }
