@@ -18,7 +18,6 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 public class SkillTestView extends View {
@@ -45,8 +44,6 @@ public class SkillTestView extends View {
 	private int glassYOffset;
 
 	private int width, height;
-
-	private boolean firstDraw = true;
 
 	private int xpos, ypos;
 
@@ -111,6 +108,14 @@ public class SkillTestView extends View {
 	}
 
 	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		super.onLayout(changed, left, top, right, bottom);
+
+		width = getWidth();
+		height = getHeight();
+	}
+
+	@Override
 	protected void onDetachedFromWindow() {
 		balancedObjectPublicationService.removeObserver(balancedObjectObserver);
 		countdownPublicationService.removeObserver(countdownObserver);
@@ -135,12 +140,6 @@ public class SkillTestView extends View {
 	}
 
 	private void drawView(Canvas canvas) {
-		if (firstDraw) {
-			firstDraw = false;
-			width = getWidth();
-			height = getHeight();
-		}
-
 		xpos = width / 2 - glassBitmap.getWidth() / 2 + glassXOffset;
 		ypos = height / 2 - glassBitmap.getHeight() / 2 + glassYOffset;
 		// Log.i(SkillTestView.class.getName(), String.format("view=%dx%d; glassImage=%dx%d; renderPox=%dx%d; ", width,
@@ -150,10 +149,12 @@ public class SkillTestView extends View {
 
 		int glassNumber = 0;
 		for (int previousLevels = 0; previousLevels < difficultyLevel; previousLevels++) {
-			canvas.drawBitmap(levelGlassEmptyBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN - glassNumber*4, SCREEN_MARGIN, null);
+			canvas.drawBitmap(levelGlassEmptyBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN
+					- glassNumber * 4, SCREEN_MARGIN, null);
 			glassNumber++;
 		}
-		canvas.drawBitmap(levelGlassFullBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN - glassNumber*4, SCREEN_MARGIN, null);
+		canvas.drawBitmap(levelGlassFullBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN
+				- glassNumber * 4, SCREEN_MARGIN, null);
 
 		canvas.drawBitmap(glassBitmap, xpos, ypos, null);
 
@@ -162,7 +163,8 @@ public class SkillTestView extends View {
 		arcPaint.setStrokeWidth(2);
 		int remainingTimeColor = Color.rgb(255 * (15 - remainingTime) / 15, 255 * remainingTime / 15, 0);
 		arcPaint.setColor(remainingTimeColor);
-		final RectF timeRemainingRect = new RectF(SCREEN_MARGIN, SCREEN_MARGIN, SCREEN_MARGIN + levelGlassFullBitmap.getHeight(), SCREEN_MARGIN +  + levelGlassFullBitmap.getHeight());
+		final RectF timeRemainingRect = new RectF(SCREEN_MARGIN, SCREEN_MARGIN, SCREEN_MARGIN
+				+ levelGlassFullBitmap.getHeight(), SCREEN_MARGIN + +levelGlassFullBitmap.getHeight());
 		canvas.drawArc(timeRemainingRect, -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true,
 				arcPaint);
 		arcPaint.setColor(Color.BLACK);
@@ -179,16 +181,11 @@ public class SkillTestView extends View {
 		Rect timeRemainingTextBounds = new Rect();
 		String timeRemainingString = String.valueOf(remainingTime);
 		paint.getTextBounds(timeRemainingString, 0, timeRemainingString.length(), timeRemainingTextBounds);
-//		Log.d(SkillTestView.class.getName(), String.format("rect = %s", timeRemainingRect));
-//		canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - timeRemainingRect.width() / 2, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - timeRemainingRect.height() / 2 - paint.ascent(), paint);
-		canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4, paint);
-		
-//		Paint paint = new Paint();
-//		paint.setColor(Color.BLUE);
-//		paint.setTextSize(20);
-//		paint.setTypeface(face);
-//		paint.setAntiAlias(true);
-//		paint.setTextAlign(Paint.Align.LEFT);
-//		canvas.drawText("Time " + remainingTime + " level=" + difficultyLevel, SCREEN_MARGIN, 60, paint);
+		// Log.d(SkillTestView.class.getName(), String.format("rect = %s", timeRemainingRect));
+		// canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 -
+		// timeRemainingRect.width() / 2, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 -
+		// timeRemainingRect.height() / 2 - paint.ascent(), paint);
+		canvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2, SCREEN_MARGIN
+				+ levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4, paint);
 	}
 }
