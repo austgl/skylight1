@@ -192,8 +192,28 @@ public class SkillTestView extends View {
 					- glassNumber * 4, SCREEN_MARGIN, null);
 			glassNumber++;
 		}
-		aCanvas.drawBitmap(levelGlassFullBitmap, getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN
-				- glassNumber * 4, SCREEN_MARGIN, null);
+		final int currentDifficultLevelGlassImageX = getWidth() - levelGlassFullBitmap.getWidth() - SCREEN_MARGIN
+				- glassNumber * 4;
+		aCanvas.drawBitmap(levelGlassFullBitmap, currentDifficultLevelGlassImageX, SCREEN_MARGIN, null);
+
+		// draw the number
+		Paint paint = new Paint();
+		paint.setTextSize(30);
+		paint.setTypeface(face);
+		paint.setAntiAlias(true);
+		paint.setTextAlign(Paint.Align.CENTER);
+		Rect timeRemainingTextBounds = new Rect();
+		String levelString = String.valueOf(difficultyLevel + 1);
+		paint.getTextBounds(levelString, 0, levelString.length(), timeRemainingTextBounds);
+		final int x = currentDifficultLevelGlassImageX + levelGlassFullBitmap.getWidth() / 2;
+		final int y = (int) (SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4);
+		paint.setColor(Color.BLACK);
+		aCanvas.drawText(levelString, x - 1, y -1, paint);
+		aCanvas.drawText(levelString, x - 1, y +1, paint);
+		aCanvas.drawText(levelString, x + 1, y -1, paint);
+		aCanvas.drawText(levelString, x + 1, y +1, paint);
+		paint.setColor(Color.WHITE);
+		aCanvas.drawText(levelString, x, y, paint);
 	}
 
 	private void drawGlass(Canvas aCanvas) {
