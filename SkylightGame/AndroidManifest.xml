@@ -12,22 +12,22 @@
             </intent-filter>
         </activity>
         
-		<activity android:name=".WelcomeActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".WelcomeActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SuccessActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".SuccessActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".FailActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".FailActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>
