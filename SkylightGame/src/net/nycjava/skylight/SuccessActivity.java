@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
@@ -38,6 +39,10 @@ public class SuccessActivity extends SkylightActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+		ImageView imageView = new ImageView(this);
+		imageView.setImageResource(R.drawable.icon);
+		contentView.addView(imageView);
+		
 		setContentView(contentView);
 
 		MediaPlayer.create(getBaseContext(), R.raw.glassbinging).start();

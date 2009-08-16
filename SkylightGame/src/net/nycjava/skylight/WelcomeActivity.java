@@ -42,9 +42,6 @@ public class WelcomeActivity extends SkylightActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ImageView imageView = new ImageView(this);
-		imageView.setImageResource(R.drawable.icon);
-		contentView.addView(imageView);
 
 		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(
 				SOBER_DIFFICULTY_LEVEL));
