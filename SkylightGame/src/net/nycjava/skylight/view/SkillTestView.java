@@ -45,8 +45,6 @@ public class SkillTestView extends View {
 
 	private int width, height;
 
-	private int xpos, ypos;
-
 	private final Typeface face;
 
 	@Dependency
@@ -140,24 +138,22 @@ public class SkillTestView extends View {
 	}
 
 	private void drawView(Canvas canvas) {
-		xpos = width / 2 - glassBitmap.getWidth() / 2 + glassXOffset;
-		ypos = height / 2 - glassBitmap.getHeight() / 2 + glassYOffset;
+		// draw the glass
+		drawGlass(canvas);
 
 		// draw the level indicator
 		drawCurrentLevel(canvas);
 
 		// draw the timer 
 		drawTimeRemaining(canvas);
-		
-		// draw the glass
-		drawGlass(canvas);
 	}
 
 	private void drawTimeRemaining(Canvas aCanvas) {
+		// draw the "pie"
 		Paint arcPaint = new Paint();
 		arcPaint.setAntiAlias(true);
 		arcPaint.setStrokeWidth(2);
-		int remainingTimeColor = Color.rgb(255 * (15 - remainingTime) / 15, 255 * remainingTime / 15, 0);
+		int remainingTimeColor = Color.YELLOW;
 		arcPaint.setColor(remainingTimeColor);
 		final RectF timeRemainingRect = new RectF(SCREEN_MARGIN, SCREEN_MARGIN, SCREEN_MARGIN
 				+ levelGlassFullBitmap.getHeight(), SCREEN_MARGIN + +levelGlassFullBitmap.getHeight());
@@ -168,8 +164,8 @@ public class SkillTestView extends View {
 		aCanvas.drawArc(timeRemainingRect, -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true,
 				arcPaint);
 
+		// draw the number
 		Paint paint = new Paint();
-		paint.setColor(Color.WHITE);
 		paint.setTextSize(30);
 		paint.setTypeface(face);
 		paint.setAntiAlias(true);
@@ -178,8 +174,15 @@ public class SkillTestView extends View {
 		String timeRemainingString = String.valueOf(remainingTime);
 		paint.getTextBounds(timeRemainingString, 0, timeRemainingString.length(), timeRemainingTextBounds);
 		// Log.d(SkillTestView.class.getName(), String.format("rect = %s", timeRemainingRect));
-		aCanvas.drawText(timeRemainingString, SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2, SCREEN_MARGIN
-				+ levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4, paint);
+		final int x = SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2;
+		final int y = (int) (SCREEN_MARGIN + levelGlassFullBitmap.getHeight() / 2 - paint.ascent() / 4);
+		paint.setColor(Color.BLACK);
+		aCanvas.drawText(timeRemainingString, x - 1, y -1, paint);
+		aCanvas.drawText(timeRemainingString, x - 1, y +1, paint);
+		aCanvas.drawText(timeRemainingString, x + 1, y -1, paint);
+		aCanvas.drawText(timeRemainingString, x + 1, y +1, paint);
+		paint.setColor(Color.WHITE);
+		aCanvas.drawText(timeRemainingString, x, y, paint);
 	}
 
 	private void drawCurrentLevel(Canvas aCanvas) {
@@ -194,6 +197,9 @@ public class SkillTestView extends View {
 	}
 
 	private void drawGlass(Canvas aCanvas) {
+		int xpos = width / 2 - glassBitmap.getWidth() / 2 + glassXOffset;
+		int ypos = height / 2 - glassBitmap.getHeight() / 2 + glassYOffset;
+		
 		aCanvas.drawBitmap(glassBitmap, xpos, ypos, null);
 	}
 }
