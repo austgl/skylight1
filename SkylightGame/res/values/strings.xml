@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome">\nWelcome to Pass the Drink\n\nBalance the glass without it sliding off the screen\n\nPick a Level\n</string>
+    <string name="welcome">Balance the glass on the screen\n</string>
     <string name="app_name">Pass the Drink</string>
     <string name="successmsg">Well done!\n\nPass to the next player. Tap the screen to begin</string>
     <string name="failmsg">Oops!!\nYou Lose!!\n\nYou're out of this round so pass to the next player, tap the screen to continue</string>
