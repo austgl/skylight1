@@ -122,7 +122,7 @@ public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
-		if (difficultyLevel < 17) {
+		if (difficultyLevel < 10) {
 			drawView(canvas);
 		} else {
 			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
