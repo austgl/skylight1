@@ -38,6 +38,10 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void onClick(View arg0) {
+			// encourage a garbage collection, to minimize the change that the skill 
+			// test activity stutters from GCs
+			System.gc();
+			
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);
