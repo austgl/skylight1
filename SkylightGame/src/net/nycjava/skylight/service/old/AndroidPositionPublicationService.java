@@ -1,4 +1,5 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.old;
+
 
 public class AndroidPositionPublicationService implements PositionPublicationService {
 

@@ -1,4 +1,4 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.old;
 
 /**
  * Allows for notification of changes in position.

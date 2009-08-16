@@ -4,7 +4,7 @@ public interface BalancedObjectObserver {
 	/**
 	 * ???
 	 */
-	void balancedObjectNotification(float aDirectionOfFallingInRadians, float anAngleOfLeanInRadians);
+	void balancedObjectNotification(float anX, float aY);
 
 	/**
 	 * ???

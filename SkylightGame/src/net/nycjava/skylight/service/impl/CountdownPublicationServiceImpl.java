@@ -1,9 +1,12 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import net.nycjava.skylight.service.CountdownObserver;
+import net.nycjava.skylight.service.CountdownPublicationService;
 
 enum CounterStatus {
 	uninitialized, running, stopped, finished
@@ -24,10 +27,6 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 	private CounterStatus currentStatus = CounterStatus.uninitialized;
 
 	private Timer countdownTimer;
-
-	public CounterStatus getStatus() {
-		return currentStatus;
-	}
 
 	public void addObserver(CountdownObserver anObserver) {
 		countdownObservers.add(anObserver);
@@ -80,7 +79,7 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 			return;
 		}
 
-		else if (this.getStatus() == CounterStatus.running) {
+		else if (this.currentStatus == CounterStatus.running) {
 			// should assert here as well
 			return;
 		}

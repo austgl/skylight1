@@ -1,9 +1,11 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight.service.old.SteadinessObserver;
+import net.nycjava.skylight.service.old.SteadinessPublicationService;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 

@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" android:text="@string/welcome"/>
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/background_table">
+	>
+
+	<net.nycjava.skylight.view.TypeFaceTextView
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/welcome" android:padding="10px"
+		android:textSize="24px" android:shadowDx="5" android:shadowDy="5" android:shadowRadius="5"
+		android:shadowColor="#404040" android:textColor="#ffffff" typeface="passthedrink.ttf" 
+	/>
+
+	<ImageView android:id="@+id/ImageView01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content">
+	</ImageView>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/easy"
+			android:height="30px" android:background="@drawable/bottletop"
+			android:text="Sober(Easy)"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/normal"
+			android:background="@drawable/bottletop" android:text="Buzzed (Normal)"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/hard"
+			android:background="@drawable/bottletop" android:text="Smashed (Hard)"></Button>
+	</LinearLayout>
+
+	<net.nycjava.skylight.view.TypeFaceTextView
+		android:id="@+id/highScore"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/high_score" android:padding="10px"
+		android:textSize="24px" android:shadowDx="5" android:shadowDy="5" android:shadowRadius="5"
+		android:shadowColor="#404040" android:textColor="#ffffff" typeface="passthedrink.ttf" 
+	/>
 </LinearLayout>

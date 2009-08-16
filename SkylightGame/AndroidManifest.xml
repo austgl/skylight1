@@ -5,45 +5,37 @@
 	<application android:icon="@drawable/icon"
 		android:label="@string/app_name">
 
-
-		<activity android:name=".WelcomeActivity">
+        <activity android:name=".GetReadyActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:finishOnTaskLaunch="true" android:clearTaskOnLaunch="true" android:allowTaskReparenting="true" android:launchMode="standard">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />             
+            </intent-filter>
+        </activity>
+        
+		<activity android:name=".WelcomeActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN"></action>
-				<category android:name="android.intent.category.LAUNCHER"></category>
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SkillTestActivity">
+		<activity android:name=".SkillTestActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".GetReadyActivity">
+		<activity android:name=".SuccessActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 		
-		<activity android:name=".SuccessActivity">
+		<activity android:name=".FailActivity" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		
-		<activity android:name=".FailActivity">
-			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
 	
 	</application>
 	
-	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.INTERNET">
+	</uses-permission>
 	
 	<uses-sdk android:minSdkVersion="2" />	
 

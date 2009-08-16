@@ -1,16 +1,20 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.impl;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight.service.BalancedObjectPublicationService;
+import net.nycjava.skylight.service.TouchAppliedForceAdapter;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 
-public class SensorAppliedForceAdapterServiceAndroidImpl     
-  implements  SensorAppliedForceAdapter{
+public class TouchAppliedForceAdapterServiceAndroidImpl     
+  implements  TouchAppliedForceAdapter{
   
   @Dependency
   BalancedObjectPublicationService balancedPublicationService;
 
+/*
   @Dependency
+ 
   private SensorManager mSensorManager;
 	  //mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 	
@@ -33,15 +37,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl
             // ???    
         }
     };
-
+*/
 public void start() {
-    int mask = 0;
-    mask |= SensorManager.SENSOR_ACCELEROMETER; 
-    mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
+//    int mask = 0;
+//    mask |= SensorManager.SENSOR_ACCELEROMETER; 
+//    mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_FASTEST);
 }
 
 public void stop() {
-	mSensorManager.unregisterListener(mListener);
+//	mSensorManager.unregisterListener(mListener);
 }
    
 }

@@ -1,4 +1,6 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight.service.old;
+
+import net.nycjava.skylight.service.Observable;
 
 /**
  * A service to allow observers to subscribe to position events. The first position notification for each observer
