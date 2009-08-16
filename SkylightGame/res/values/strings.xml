@@ -2,8 +2,8 @@
 <resources>
     <string name="welcome">Balance the glass on the screen\n</string>
     <string name="app_name">Pass the Drink</string>
-    <string name="successmsg">Well done!\n\nPass to the next player. Tap the screen to begin</string>
-    <string name="failmsg">Oops!!\nYou Lose!!\n\nYou're out of this round so pass to the next player, tap the screen to continue</string>
+    <string name="successmsg">Well done!\n\nPass to next player\nTap to begin</string>
+    <string name="failmsg">Oops!!\nYou Lose!!\n\nNow buy the drinks\nTap to restart</string>
     <string name="go">Play Again</string>
     <string name="getreadymsg">  Get Ready to Play !\n\n  Hold the phone Flat as if the glass is on a wet tray\n\n Keep Steady...\n\n</string>
     <string name="skilltest">Skylight1 Game: 'Pass the Drink'</string>
