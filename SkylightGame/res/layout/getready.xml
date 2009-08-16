@@ -6,7 +6,7 @@
 
 	<net.nycjava.skylight.view.TypeFaceTextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/getreadymsg" android:textSize="32px"
+		android:text="dummy" android:textSize="32px"
 		android:textColor="#ffffff" typeface="passthedrink.ttf" />
 
 	<VideoView android:id="@+id/getready" android:layout_width="fill_parent"

@@ -4,6 +4,9 @@
 	android:layout_height="fill_parent" android:background="@drawable/background_table">
 	>
 
+	<VideoView android:id="@+id/videoview" android:orientation="vertical" android:layout_marginTop="-50px"
+		android:layout_height="287px" android:layout_width="wrap_content" android:layout_gravity="top|center"/>
+
 	<net.nycjava.skylight.view.TypeFaceTextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:text="@string/welcome" android:padding="10px"
@@ -29,11 +32,4 @@
 			android:layout_height="wrap_content" android:id="@+id/hard"
 			android:background="@drawable/bottletop" android:text="Smashed"></Button>
 	</LinearLayout>
-
-	<net.nycjava.skylight.view.TypeFaceTextView
-		android:id="@+id/highScore"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/high_score" android:padding="10px"
-		android:textSize="32px" android:textColor="#ffffff" typeface="passthedrink.ttf" 
-	/>
 </LinearLayout>

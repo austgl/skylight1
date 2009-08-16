@@ -53,12 +53,13 @@ public class RandomForceServiceImpl implements RandomForceService {
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
 
-	private Timer timer = new Timer();
+	private Timer timer;
 	
 	public int difficultyLevel;
 	
 	@Override
 	public void start() {
+		timer = new Timer();
 		applyForceAtRandomTime();
 	}
 
@@ -79,6 +80,7 @@ public class RandomForceServiceImpl implements RandomForceService {
 	@Override
 	public void stop() {
 		timer.cancel();
+		timer = null;
 	}
 	
 	/**
