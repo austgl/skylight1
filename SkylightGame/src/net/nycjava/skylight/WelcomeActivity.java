@@ -82,6 +82,8 @@ public class WelcomeActivity extends SkylightActivity {
 					@Override
 					public void onPrepared(MediaPlayer mp) {
 						Log.i(GetReadyActivity.class.getName(), "mp is prepared");
+						
+						// start the video
 						mp.start();
 					}});
 
