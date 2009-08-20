@@ -53,6 +53,8 @@ public class SkillTestView extends View {
 	private Bitmap levelGlassFullBitmap;
 
 	private Bitmap levelGlassEmptyBitmap;
+	
+	long animationCycleStartTime = System.currentTimeMillis();
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
@@ -125,13 +127,20 @@ public class SkillTestView extends View {
 		if (difficultyLevel < 10) {
 			drawView(canvas);
 		} else {
+			double animationCycle = (double) (System.currentTimeMillis() - animationCycleStartTime);
+			double degreeOfDoubleVision = Math.cos(animationCycle / 8666d) * 10;
+			double angleOfDoubleVision = animationCycle / 2534d;
+			
+			int x = (int) (Math.cos(angleOfDoubleVision) * degreeOfDoubleVision);
+			int y = (int) (Math.sin(angleOfDoubleVision) * degreeOfDoubleVision);
+			
 			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
-			canvas.translate(-10, 0);
+			canvas.translate(-x, -y);
 			drawView(canvas);
 			canvas.restore();
 
 			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
-			canvas.translate(10, 0);
+			canvas.translate(x, y);
 			drawView(canvas);
 			canvas.restore();
 		}
