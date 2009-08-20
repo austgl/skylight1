@@ -81,7 +81,7 @@ public class WelcomeActivity extends SkylightActivity {
 				mp.setOnPreparedListener(new OnPreparedListener() {
 					@Override
 					public void onPrepared(MediaPlayer mp) {
-						Log.i(GetReadyActivity.class.getName(), "mp is prepared");
+						Log.i(WelcomeActivity.class.getName(), "mp is prepared");
 						
 						// start the video
 						mp.start();
@@ -108,7 +108,7 @@ public class WelcomeActivity extends SkylightActivity {
 			public void surfaceDestroyed(SurfaceHolder holder) {
 				mp.stop();
 				mp.release();
-				Log.i(GetReadyActivity.class.getName(), "surface destroyed");
+				Log.i(WelcomeActivity.class.getName(), "surface destroyed");
 			}
 		});
 		
