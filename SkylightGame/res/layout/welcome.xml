@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
+	android:orientation="vertical" android:layout_width="fill_parent" android:focusable="false" 
 	android:layout_height="fill_parent" android:background="@drawable/background_table">
-	>
 
 	<VideoView android:id="@+id/videoview" android:orientation="vertical"
-		android:layout_marginTop="-50px" android:layout_height="287px"
+		android:layout_marginTop="-50px" android:layout_height="287px" android:focusable="false"
 		android:layout_width="wrap_content" android:layout_gravity="top|center" />
 
 	<net.nycjava.skylight.view.TypeFaceTextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/welcome" android:padding="10px"
+		android:text="@string/welcome" android:padding="10px" android:focusable="false"
 		android:textSize="32px" android:textColor="#ffffff" typeface="passthedrink.ttf" />
 
-	<ImageView android:id="@+id/ImageView01"
-		android:layout_width="wrap_content" android:layout_height="wrap_content">
-	</ImageView>
-
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:orientation="horizontal" android:layout_width="fill_parent" android:focusable="false"
 		android:layout_height="wrap_content" android:gravity="center_horizontal">
 		>
 		<net.nycjava.skylight.view.TypeFaceTextView
