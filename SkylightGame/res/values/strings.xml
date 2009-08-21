@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="instructions">How to play</string>
     <string name="hard">Hard</string>
     <string name="smashed">Smashed</string>
     <string name="buzzed">Buzzed</string>

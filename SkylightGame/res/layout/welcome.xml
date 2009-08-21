@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent" android:focusable="false" 
-	android:layout_height="fill_parent" android:background="@drawable/background_table">
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:focusable="false" android:layout_height="fill_parent"
+	android:background="@drawable/background_table">
 
 	<VideoView android:id="@+id/videoview" android:orientation="vertical"
-		android:layout_marginTop="-50px" android:layout_height="287px" android:focusable="false"
-		android:layout_width="wrap_content" android:layout_gravity="top|center" />
+		android:layout_marginTop="-80px" android:layout_height="267px"
+		android:focusable="false" android:layout_width="wrap_content"
+		android:layout_gravity="top|center" />
 
 	<net.nycjava.skylight.view.TypeFaceTextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/welcome" android:padding="10px" android:focusable="false"
-		android:textSize="32px" android:textColor="#ffffff" typeface="passthedrink.ttf" />
+		android:text="@string/welcome" android:padding="10px"
+		android:focusable="false" android:textSize="32px" android:textColor="#ffffff"
+		typeface="passthedrink.ttf" />
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" android:layout_width="fill_parent" android:focusable="false"
-		android:layout_height="wrap_content" android:gravity="center_horizontal">
+		android:orientation="horizontal" android:layout_width="fill_parent"
+		android:focusable="false" android:layout_height="wrap_content"
+		android:gravity="center_horizontal">
 		>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content" android:id="@+id/easy"
-			android:background="@drawable/bottletop" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:clickable="true"
-			android:focusable="true" android:gravity="center" android:hint="@string/easy"
-			android:text="@string/sober" android:textSize="20px" android:textColor="@color/button_font_color"></net.nycjava.skylight.view.TypeFaceTextView>
+			typeface="passthedrink.ttf" android:layout_width="wrap_content"
+			android:id="@+id/easy" android:background="@drawable/bottletop"
+			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:clickable="true" android:focusable="true" android:gravity="center"
+			android:hint="@string/easy" android:text="@string/sober"
+			android:textSize="20px" android:textColor="@color/button_font_color"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content" android:id="@+id/normal"
-			android:background="@drawable/bottletop" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:clickable="true"
-			android:focusable="true" android:gravity="center" android:textColor="@color/button_font_color" android:hint="@string/normal" android:text="@string/buzzed" android:textSize="20px"></net.nycjava.skylight.view.TypeFaceTextView>
+			typeface="passthedrink.ttf" android:layout_width="wrap_content"
+			android:id="@+id/normal" android:background="@drawable/bottletop"
+			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:clickable="true" android:focusable="true" android:gravity="center"
+			android:textColor="@color/button_font_color" android:hint="@string/normal"
+			android:text="@string/buzzed" android:textSize="20px"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content" android:id="@+id/hard"
-			android:background="@drawable/bottletop" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:clickable="true"
-			android:focusable="true" android:gravity="center" android:textColor="@color/button_font_color" android:text="@string/smashed" android:textSize="20px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
+			typeface="passthedrink.ttf" android:layout_width="wrap_content"
+			android:id="@+id/hard" android:background="@drawable/bottletop"
+			android:layout_height="wrap_content" android:layout_gravity="center"
+			android:clickable="true" android:focusable="true" android:gravity="center"
+			android:textColor="@color/button_font_color" android:text="@string/smashed"
+			android:textSize="20px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
 	</LinearLayout>
+	<net.nycjava.skylight.view.TypeFaceTextView
+		typeface="passthedrink.ttf" android:layout_width="wrap_content"
+		android:id="@+id/instructions" 
+		android:layout_height="wrap_content" android:layout_gravity="center"
+		android:clickable="true" android:focusable="true" android:gravity="center"
+		android:textColor="@color/button_font_color" android:text="@string/smashed"
+		android:textSize="20px" android:hint="@string/instructions"></net.nycjava.skylight.view.TypeFaceTextView>
 </LinearLayout>
