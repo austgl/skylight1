@@ -6,10 +6,8 @@ import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,15 +16,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 public class WelcomeActivity extends SkylightActivity {
 	private SurfaceView preview;
-	
-	private SurfaceHolder holder;
 
+	private SurfaceHolder holder;
 
 	private final class DifficultyClickListener implements OnClickListener {
 		final private int difficulty;
@@ -38,10 +33,10 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void onClick(View arg0) {
-			// encourage a garbage collection, to minimize the change that the skill 
+			// encourage a garbage collection, to minimize the change that the skill
 			// test activity stutters from GCs
 			System.gc();
-			
+
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);
@@ -61,14 +56,15 @@ public class WelcomeActivity extends SkylightActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		((Button) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(
+		((TypeFaceTextView) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(
 				SOBER_DIFFICULTY_LEVEL));
-		((Button) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(
+		((TypeFaceTextView) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(
 				BUZZED_DIFFICULTY_LEVEL));
-		((Button) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(
+		((TypeFaceTextView) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(
 				SMASHED_DIFFICULTY_LEVEL));
-		
+
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
+		preview.setBackgroundResource(R.drawable.background_table);
 		holder = preview.getHolder();
 		holder.addCallback(new Callback() {
 			private MediaPlayer mp;
@@ -82,10 +78,13 @@ public class WelcomeActivity extends SkylightActivity {
 					@Override
 					public void onPrepared(MediaPlayer mp) {
 						Log.i(WelcomeActivity.class.getName(), "mp is prepared");
+
+						preview.setBackgroundResource(0);
 						
 						// start the video
 						mp.start();
-					}});
+					}
+				});
 
 				try {
 					AssetFileDescriptor afd = getAssets().openFd("passthedrink.mp4");
@@ -111,7 +110,7 @@ public class WelcomeActivity extends SkylightActivity {
 				Log.i(WelcomeActivity.class.getName(), "surface destroyed");
 			}
 		});
-		
+
 		setContentView(contentView);
 	}
 }

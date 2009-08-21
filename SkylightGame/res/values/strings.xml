@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="hard">Hard</string>
+    <string name="smashed">Smashed</string>
+    <string name="buzzed">Buzzed</string>
+    <string name="normal">Normal</string>
+    <string name="sober">Sober</string>
+    <string name="easy">Easy</string>
     <string name="app_name">Balance The Beer</string>
     <string name="welcome">Balance the beer on the screen</string>
     <string name="successmsg">Well done!\nNext player tap to begin</string>
