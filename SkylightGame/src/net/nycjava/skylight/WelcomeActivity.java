@@ -7,7 +7,6 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ public class WelcomeActivity extends SkylightActivity {
 		public void onFocusChange(View arg0, boolean arg1) {
 			int unfocusedColor = arg0.getContext().getResources().getColor(R.color.button_font_color);
 			int focusedColor = arg0.getContext().getResources().getColor(R.color.button_font_color_focused);
-			((TextView) arg0).setTextColor(arg1 ? Color.BLUE : unfocusedColor);
+			((TextView) arg0).setTextColor(arg1 ? focusedColor : unfocusedColor);
 		}
 	}
 
@@ -76,10 +75,15 @@ public class WelcomeActivity extends SkylightActivity {
 		((TypeFaceTextView) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(
 				SMASHED_DIFFICULTY_LEVEL));
 
-		((TypeFaceTextView) contentView.findViewById(R.id.easy)).setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		((TypeFaceTextView) contentView.findViewById(R.id.normal)).setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		((TypeFaceTextView) contentView.findViewById(R.id.hard)).setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		
+		((TypeFaceTextView) contentView.findViewById(R.id.easy))
+				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		((TypeFaceTextView) contentView.findViewById(R.id.normal))
+				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		((TypeFaceTextView) contentView.findViewById(R.id.hard))
+				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		((TypeFaceTextView) contentView.findViewById(R.id.instructions))
+				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		preview.setBackgroundResource(R.drawable.background_table);
 		holder = preview.getHolder();
@@ -97,7 +101,7 @@ public class WelcomeActivity extends SkylightActivity {
 						Log.i(WelcomeActivity.class.getName(), "mp is prepared");
 
 						preview.setBackgroundResource(0);
-						
+
 						// start the video
 						mp.start();
 					}

@@ -47,6 +47,5 @@
 		android:id="@+id/instructions" 
 		android:layout_height="wrap_content" android:layout_gravity="center"
 		android:clickable="true" android:focusable="true" android:gravity="center"
-		android:textColor="@color/button_font_color" android:text="@string/smashed"
-		android:textSize="20px" android:hint="@string/instructions"></net.nycjava.skylight.view.TypeFaceTextView>
+		android:textColor="@color/button_font_color" android:textSize="20px" android:hint="@string/instructions" android:text="@string/instructions"></net.nycjava.skylight.view.TypeFaceTextView>
 </LinearLayout>
