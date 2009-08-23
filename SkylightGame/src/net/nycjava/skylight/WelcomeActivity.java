@@ -81,8 +81,6 @@ public class WelcomeActivity extends SkylightActivity {
 				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 		((TypeFaceTextView) contentView.findViewById(R.id.hard))
 				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		((TypeFaceTextView) contentView.findViewById(R.id.instructions))
-				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		preview.setBackgroundResource(R.drawable.background_table);

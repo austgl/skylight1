@@ -21,31 +21,25 @@
 		android:gravity="center_horizontal">
 		>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content"
-			android:id="@+id/easy" android:background="@drawable/bottletop"
+			typeface="passthedrink.ttf" android:layout_width="100px"
+			android:id="@+id/easy" android:background="@drawable/easy"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:hint="@string/easy" android:text="@string/sober"
 			android:textSize="20px" android:textColor="@color/button_font_color"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content"
-			android:id="@+id/normal" android:background="@drawable/bottletop"
+			typeface="passthedrink.ttf" android:layout_width="100px"
+			android:id="@+id/normal" android:background="@drawable/normal"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:textColor="@color/button_font_color" android:hint="@string/normal"
 			android:text="@string/buzzed" android:textSize="20px"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="wrap_content"
-			android:id="@+id/hard" android:background="@drawable/bottletop"
+			typeface="passthedrink.ttf" android:layout_width="100px"
+			android:id="@+id/hard" android:background="@drawable/hard"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:textColor="@color/button_font_color" android:text="@string/smashed"
 			android:textSize="20px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
-	</LinearLayout>
-	<net.nycjava.skylight.view.TypeFaceTextView
-		typeface="passthedrink.ttf" android:layout_width="wrap_content"
-		android:id="@+id/instructions" 
-		android:layout_height="wrap_content" android:layout_gravity="center"
-		android:clickable="true" android:focusable="true" android:gravity="center"
-		android:textColor="@color/button_font_color" android:textSize="20px" android:hint="@string/instructions" android:text="@string/instructions"></net.nycjava.skylight.view.TypeFaceTextView>
+    </LinearLayout>
 </LinearLayout>
