@@ -7,16 +7,21 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,10 +49,8 @@ public class WelcomeActivity extends SkylightActivity {
 		}
 
 		@Override
-		public void onClick(View arg0) {
-			// encourage a garbage collection, to minimize the change that the skill
-			// test activity stutters from GCs
-			System.gc();
+		public void onClick(View aView) {
+			aView.performHapticFeedback(HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
@@ -131,5 +134,44 @@ public class WelcomeActivity extends SkylightActivity {
 		});
 
 		setContentView(contentView);
+
+		// encourage a garbage collection, to minimize the change that the skill
+		// test activity stutters from GCs
+		System.gc();
+	}
+
+	@Override
+	protected void onPostResume() {
+		super.onPostResume();
+
+		final TypeFaceTextView easyButton = (TypeFaceTextView) contentView.findViewById(R.id.easy);
+		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
+		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
+
+		Animation anim = new Animation() {
+			@Override
+			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				// TODO consider focus here
+				if (!easyButton.isFocused()) {
+					easyButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
+							(int) (255 * interpolatedTime)));
+				}
+				if (!normalButton.isFocused()) {
+					normalButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
+							(int) (255 * interpolatedTime)));
+				}
+				if (!hardButton.isFocused()) {
+					hardButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
+							(int) (255 * interpolatedTime)));
+				}
+			}
+		};
+		anim.setDuration(500);
+		anim.setRepeatMode(Animation.REVERSE);
+		anim.setRepeatCount(Animation.INFINITE);
+		anim.setInterpolator(new AccelerateDecelerateInterpolator());
+		easyButton.setAnimation(anim);
+
+		anim.start();
 	}
 }
