@@ -26,7 +26,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
-	private final Timer timer = new Timer();
+	private Timer timer;
 
 	public BalancedObjectPublicationServiceImpl() {
 		super();
@@ -68,6 +68,9 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 				}
 			};
 
+			if (timer == null) {
+				 timer = new Timer();
+			}
 			timer.scheduleAtFixedRate(timerTask, 0, PERIOD_IN_MILLISECONDS);
 		}
 	}
@@ -76,6 +79,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		final boolean existed = balancedObjectObservers.remove(anObserver);
 		if (balancedObjectObservers.isEmpty()) {
 			timer.cancel();
+			timer = null;
 		}
 		return existed;
 	}

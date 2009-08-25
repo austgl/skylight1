@@ -26,20 +26,20 @@
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:hint="@string/easy" android:text="@string/sober"
-			android:textSize="20px" android:textColor="@color/button_font_color"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:textColor="@color/button_font_color" android:textSize="25px"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
 			typeface="passthedrink.ttf" android:layout_width="100px"
 			android:id="@+id/normal" android:background="@drawable/normal"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:textColor="@color/button_font_color" android:hint="@string/normal"
-			android:text="@string/buzzed" android:textSize="20px"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:text="@string/buzzed" android:textSize="25px"></net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
 			typeface="passthedrink.ttf" android:layout_width="100px"
 			android:id="@+id/hard" android:background="@drawable/hard"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
 			android:textColor="@color/button_font_color" android:text="@string/smashed"
-			android:textSize="20px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:textSize="25px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
     </LinearLayout>
 </LinearLayout>

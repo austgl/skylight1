@@ -13,7 +13,6 @@ import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
 import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
 import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
 import net.nycjava.skylight.service.impl.SensorAppliedForceAdapterServiceAndroidImpl;
-import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorManager;
