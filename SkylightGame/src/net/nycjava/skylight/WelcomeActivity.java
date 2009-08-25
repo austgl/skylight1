@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
+import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -151,25 +152,23 @@ public class WelcomeActivity extends SkylightActivity {
 		Animation anim = new Animation() {
 			@Override
 			protected void applyTransformation(float interpolatedTime, Transformation t) {
-				// TODO consider focus here
+				final int colour = Color.rgb(255, (int) (255 * interpolatedTime),
+						(int) (255 * interpolatedTime));
 				if (!easyButton.isFocused()) {
-					easyButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
-							(int) (255 * interpolatedTime)));
+					easyButton.setTextColor(colour);
 				}
 				if (!normalButton.isFocused()) {
-					normalButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
-							(int) (255 * interpolatedTime)));
+					normalButton.setTextColor(colour);
 				}
 				if (!hardButton.isFocused()) {
-					hardButton.setTextColor(Color.rgb(255, (int) (255 * interpolatedTime),
-							(int) (255 * interpolatedTime)));
+					hardButton.setTextColor(colour);
 				}
 			}
 		};
-		anim.setDuration(500);
+		anim.setDuration(900);
 		anim.setRepeatMode(Animation.REVERSE);
 		anim.setRepeatCount(Animation.INFINITE);
-		anim.setInterpolator(new AccelerateDecelerateInterpolator());
+		anim.setInterpolator(new CycleInterpolator(0.5f));
 		easyButton.setAnimation(anim);
 
 		anim.start();
