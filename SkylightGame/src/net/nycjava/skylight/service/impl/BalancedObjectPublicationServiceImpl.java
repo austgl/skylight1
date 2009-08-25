@@ -23,6 +23,8 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	private float velocityY;
 	
 	private int  difficultyLevel;
+	
+	private boolean isServiceRunning;
 
 	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
 
@@ -85,12 +87,14 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	}
 
 	private void notifyObservers() {
-		for (BalancedObjectObserver observer : balancedObjectObservers) {
-			observer.balancedObjectNotification(positionX, positionY);
-		}
-		if (Math.abs(positionX) > 1f || Math.abs(positionY) > 1f) {
+		if(isServiceRunning) {
 			for (BalancedObjectObserver observer : balancedObjectObservers) {
-				observer.fallenOverNotification();
+				observer.balancedObjectNotification(positionX, positionY);
+			}
+			if (Math.abs(positionX) > 1f || Math.abs(positionY) > 1f) {
+				for (BalancedObjectObserver observer : balancedObjectObservers) {
+					observer.fallenOverNotification();
+				}
 			}
 		}
 	}
@@ -99,4 +103,11 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		difficultyLevel = aDifficulty;
 	}
 	
+	public void startService() {
+		isServiceRunning = true;
+	}
+	
+	public void stopService() {
+		isServiceRunning = false;
+	}
 }

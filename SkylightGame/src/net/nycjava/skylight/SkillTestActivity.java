@@ -100,6 +100,7 @@ public class SkillTestActivity extends SkylightActivity {
 			public void fallenOverNotification() {
 				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
 				intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
+				balanceObjPublicationService.stopService();
 				finish();
 				startActivity(intent);
 			}
@@ -135,6 +136,7 @@ public class SkillTestActivity extends SkylightActivity {
 		sensorAppliedForceAdapter.start();
 		randomForceService.start();
 		countdownPublicationService.startCountdown();
+		balanceObjPublicationService.startService();
 	}
 
 	@Override
