@@ -35,16 +35,10 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	}
 
 	private static final float FRICTION_COEFF = 0.3f;
-	private static final long PERIOD_IN_MILLISECONDS = 50;
-	private static final float SO_SLOW_IT_SHOULD_STOP = 0.005f;
+	private static final long PERIOD_IN_MILLISECONDS = 16;
 	
 	public void applyForce(float anXForce, float aYForce,long duration) {
 		
-		// not used but here for reference
-//		float frictionX = (Math.abs(velocityX)<SO_SLOW_IT_SHOULD_STOP)?-velocityX:-velocityX*FRICTION_COEFF;
-//		float frictionY = (Math.abs(velocityY)<SO_SLOW_IT_SHOULD_STOP)?-velocityY:-velocityY*FRICTION_COEFF;
-//		velocityX += frictionX;
-//		velocityY += frictionY;
 		// as long as X Y forces imply less than 45 deg angle
 		if(difficultyLevel < 5 && (anXForce < 6.8) && (aYForce < 6.8)) {
 			// scale FRICTION_COEFF based on difficulty level

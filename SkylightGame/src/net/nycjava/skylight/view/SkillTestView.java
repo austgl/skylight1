@@ -18,6 +18,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 public class SkillTestView extends View {
@@ -68,6 +69,9 @@ public class SkillTestView extends View {
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
+		frames=0;
+		timeStartedCountingFrames = 0;
+		
 		balancedObjectObserver = new BalancedObjectObserver() {
 
 			@Override
@@ -104,7 +108,7 @@ public class SkillTestView extends View {
 		} else {
 			backgroundResourceId = R.drawable.background_table;
 		}
-		setBackgroundResource(backgroundResourceId);
+//		setBackgroundResource(backgroundResourceId);
 	}
 
 	@Override
@@ -121,9 +125,26 @@ public class SkillTestView extends View {
 		countdownPublicationService.removeObserver(countdownObserver);
 
 		super.onDetachedFromWindow();
+		
+		logFrameRate();
 	}
 
+	private void logFrameRate() {
+		final long timeElapsedInMillliseconds = lastTimeFrameCounted - timeStartedCountingFrames;
+		final float timeElapsedInMillisecondsFloat = timeElapsedInMillliseconds;
+		final float timeElapsedInSecondsFloat = timeElapsedInMillisecondsFloat / 1000f;
+		final float frameRate = ((float)frames) / timeElapsedInSecondsFloat;
+		Log.d(SkillTestView.class.getName(), String.format("number of frames per seconds = %f", frameRate));
+	}
+
+	int frames;
+	long timeStartedCountingFrames;
+	long lastTimeFrameCounted;
+	
 	public void onDraw(Canvas canvas) {
+		if (timeStartedCountingFrames == 0) timeStartedCountingFrames = System.currentTimeMillis();
+		frames++;
+		lastTimeFrameCounted = System.currentTimeMillis();
 		if (difficultyLevel < 10) {
 			drawView(canvas);
 		} else {
@@ -149,11 +170,11 @@ public class SkillTestView extends View {
 	private void drawView(Canvas canvas) {
 		// draw the glass
 		drawGlass(canvas);
-
-		// draw the level indicator
+//
+//		// draw the level indicator
 		drawCurrentLevel(canvas);
-
-		// draw the timer 
+//
+//		// draw the timer 
 		drawTimeRemaining(canvas);
 	}
 
