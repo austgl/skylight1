@@ -13,10 +13,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas.EdgeType;
 import android.graphics.Paint.Style;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -175,12 +179,12 @@ final public class SkillTestView extends View {
 			public void countdownNotification(int aRemainingTime) {
 				// System.out.println("remaining time = " + aRemainingTime);
 
-				// if (aRemainingTime == 8)
-				// Debug.startMethodTracing("skylight");
-				// if (aRemainingTime == 3) {
-				// Debug.stopMethodTracing();
-				// System.out.println("stopping trace now");
-				// }
+//				 if (aRemainingTime == 8)
+//					Debug.startMethodTracing("skylight");
+//				if (aRemainingTime == 3) {
+//					Debug.stopMethodTracing();
+//					System.out.println("stopping trace now");
+//				}
 
 				remainingTime = aRemainingTime;
 
@@ -189,6 +193,16 @@ final public class SkillTestView extends View {
 			}
 		};
 		countdownPublicationService.addObserver(countdownObserver);
+	}
+
+	@Override
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		super.onLayout(changed, left, top, right, bottom);
+		
+		width = getWidth();
+		height = getHeight();
+
+		updateGlassRectangle(0, 0);
 
 		// set the background
 		final int backgroundResourceId;
@@ -199,17 +213,13 @@ final public class SkillTestView extends View {
 		} else {
 			backgroundResourceId = R.drawable.background_table;
 		}
-		setBackgroundResource(backgroundResourceId);
-	}
-
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		super.onLayout(changed, left, top, right, bottom);
-
-		width = getWidth();
-		height = getHeight();
-
-		updateGlassRectangle(0, 0);
+		Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
+		Bitmap scaledBackgroundBitmap = Bitmap.createBitmap(width, height, Config.RGB_565);
+		Canvas scaledBackgroundCanvas = new Canvas(scaledBackgroundBitmap);
+		scaledBackgroundCanvas.drawBitmap(backgroundBitmap, null, new Rect(0, 0, width, height), null);
+		BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap); 
+		setBackgroundDrawable(backgroundDrawable);
+//		setBackgroundResource(backgroundResourceId);
 	}
 
 	@Override
