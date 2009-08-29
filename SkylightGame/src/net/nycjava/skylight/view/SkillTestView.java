@@ -13,17 +13,15 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.Canvas.EdgeType;
 import android.graphics.Paint.Style;
-import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-public class SkillTestView extends View {
+final public class SkillTestView extends View {
 	private static final int DEGREE_OF_DOUBLE_VISION = 10;
 
 	private static final int SCREEN_MARGIN = 10;
@@ -33,6 +31,9 @@ public class SkillTestView extends View {
 
 	@Dependency
 	private CountdownPublicationService countdownPublicationService;
+
+	@Dependency
+	private Integer difficultyLevel;
 
 	private BalancedObjectObserver balancedObjectObserver;
 
@@ -46,12 +47,9 @@ public class SkillTestView extends View {
 
 	final private Typeface face;
 
-	@Dependency
-	private Integer difficultyLevel;
+	final private Bitmap levelGlassFullBitmap;
 
-	private Bitmap levelGlassFullBitmap;
-
-	private Bitmap levelGlassEmptyBitmap;
+	final private Bitmap levelGlassEmptyBitmap;
 
 	long animationCycleStartTime = System.currentTimeMillis();
 
@@ -79,7 +77,7 @@ public class SkillTestView extends View {
 
 	final private RectF timeRemainingRect;
 
-	protected boolean glassInvalidated;
+	private boolean glassInvalidated;
 
 	final private int glassBitmapWidth;
 
@@ -90,9 +88,9 @@ public class SkillTestView extends View {
 	final private int levelGlassHeight;
 
 	final private Paint levelPaint = new Paint();
-	
+
 	final private Paint arcPaint = new Paint();
-	
+
 	final private Paint timePaint = new Paint();
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
@@ -106,8 +104,6 @@ public class SkillTestView extends View {
 		levelGlassWidth = levelGlassFullBitmap.getWidth();
 		levelGlassHeight = levelGlassFullBitmap.getHeight();
 
-		face = Typeface.createFromAsset(getContext().getAssets(), "passthedrink.ttf");
-
 		timeRemainingRect = new RectF(SCREEN_MARGIN, SCREEN_MARGIN, SCREEN_MARGIN + levelGlassHeight, SCREEN_MARGIN
 				+ levelGlassHeight);
 
@@ -115,6 +111,23 @@ public class SkillTestView extends View {
 		timeRemainingRectangleTop = (int) timeRemainingRect.top - 1;
 		timeRemainingRectangleRight = (int) timeRemainingRect.right + 1;
 		timeRemainingRectangleBottom = (int) timeRemainingRect.bottom + 1;
+
+		// load the type face
+		face = Typeface.createFromAsset(getContext().getAssets(), "passthedrink.ttf");
+
+		// initialize the paint for level
+		levelPaint.setTextSize(30);
+		levelPaint.setTypeface(face);
+		levelPaint.setAntiAlias(true);
+		levelPaint.setTextAlign(Paint.Align.CENTER);
+
+		// initialize the two paints for time remaining
+		timePaint.setTextSize(30);
+		timePaint.setTypeface(face);
+		timePaint.setAntiAlias(true);
+		timePaint.setTextAlign(Paint.Align.CENTER);
+		arcPaint.setAntiAlias(true);
+		arcPaint.setStrokeWidth(2);
 	}
 
 	@Override
@@ -136,8 +149,8 @@ public class SkillTestView extends View {
 				// invalidate where the glass used to be, so that the background will get
 				// redrawn by the super class
 				int extra = doubleVision() ? DEGREE_OF_DOUBLE_VISION : 0;
-				SkillTestView.this.postInvalidate(glassRectangleLeft - extra, glassRectangleTop - extra, glassRectangleRight + extra,
-						glassRectangleBottom + extra);
+				SkillTestView.this.postInvalidate(glassRectangleLeft - extra, glassRectangleTop - extra,
+						glassRectangleRight + extra, glassRectangleBottom + extra);
 
 				// update the position of the glass
 				updateGlassRectangle(anX, aY);
@@ -160,14 +173,14 @@ public class SkillTestView extends View {
 		countdownObserver = new CountdownObserver() {
 			@Override
 			public void countdownNotification(int aRemainingTime) {
-//				System.out.println("remaining time = " + aRemainingTime);
-				
-//				if (aRemainingTime == 8)
-//					Debug.startMethodTracing("skylight");
-//				if (aRemainingTime == 3) {
-//					Debug.stopMethodTracing();
-//					System.out.println("stopping trace now");
-//				}
+				// System.out.println("remaining time = " + aRemainingTime);
+
+				// if (aRemainingTime == 8)
+				// Debug.startMethodTracing("skylight");
+				// if (aRemainingTime == 3) {
+				// Debug.stopMethodTracing();
+				// System.out.println("stopping trace now");
+				// }
 
 				remainingTime = aRemainingTime;
 
@@ -230,11 +243,12 @@ public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
-		
-		//avoid artifacts on success:
-		if(remainingTime==0)
+		// avoid artifacts on success:
+		if (remainingTime == 0) {
 			return;
-		
+		}
+
+		// FPS stuff
 		if (timeStartedCountingFrames == 0) {
 			timeStartedCountingFrames = System.currentTimeMillis();
 		}
@@ -284,11 +298,8 @@ public class SkillTestView extends View {
 				timeRemainingRectangleBottom, EdgeType.AA)) {
 			return;
 		}
-		// draw the "pie"
-		arcPaint.setAntiAlias(true);
-		arcPaint.setStrokeWidth(2);
-		int remainingTimeColor = Color.YELLOW;
-		arcPaint.setColor(remainingTimeColor);
+		arcPaint.setStyle(Style.FILL);
+		arcPaint.setColor(Color.YELLOW);
 		aCanvas.drawArc(timeRemainingRect, -90 + (15 - remainingTime) * 360 / 15, remainingTime * 360 / 15, true,
 				arcPaint);
 		arcPaint.setColor(Color.BLACK);
@@ -297,14 +308,7 @@ public class SkillTestView extends View {
 				arcPaint);
 
 		// draw the number
-		timePaint.setTextSize(30);
-		timePaint.setTypeface(face);
-		timePaint.setAntiAlias(true);
-		timePaint.setTextAlign(Paint.Align.CENTER);
-//		Rect timeRemainingTextBounds = new Rect();
 		final String timeRemainingString = String.valueOf(remainingTime);
-//		paint.getTextBounds(timeRemainingString, 0, timeRemainingString.length(), timeRemainingTextBounds);
-		// Log.d(SkillTestView.class.getName(), String.format("rect = %s", timeRemainingRect));
 		final int x = SCREEN_MARGIN + levelGlassHeight / 2;
 		final int y = (int) (SCREEN_MARGIN + levelGlassHeight / 2 - timePaint.ascent() / 4);
 		timePaint.setColor(Color.BLACK);
@@ -332,13 +336,7 @@ public class SkillTestView extends View {
 		aCanvas.drawBitmap(levelGlassFullBitmap, currentDifficultyLevelGlassImageX, SCREEN_MARGIN, null);
 
 		// draw the number
-		levelPaint.setTextSize(30);
-		levelPaint.setTypeface(face);
-		levelPaint.setAntiAlias(true);
-		levelPaint.setTextAlign(Paint.Align.CENTER);
-//		Rect timeRemainingTextBounds = new Rect();
-		String levelString = String.valueOf(difficultyLevel + 1);
-//		paint.getTextBounds(levelString, 0, levelString.length(), timeRemainingTextBounds);
+		final String levelString = String.valueOf(difficultyLevel + 1);
 		final int x = currentDifficultyLevelGlassImageX + levelGlassWidth / 2;
 		final int y = (int) (SCREEN_MARGIN + levelGlassHeight / 2 - levelPaint.ascent() / 4);
 		levelPaint.setColor(Color.BLACK);
