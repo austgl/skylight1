@@ -1,17 +1,15 @@
 package net.nycjava.skylight.service.impl;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import android.util.Log;
 
 import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
 	private static final int NUMBER_OF_MILLISECONDS_IN_A_SECOND = 1000;
+
 	private final String TAG = "BalancedObjectPublicationService";
 
 	private float positionX;
@@ -21,12 +19,12 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	private float velocityX;
 
 	private float velocityY;
-	
-	private int  difficultyLevel;
-	
+
+	private int difficultyLevel;
+
 	private boolean isServiceRunning;
 
-	private Set<BalancedObjectObserver> balancedObjectObservers = new HashSet<BalancedObjectObserver>();
+	final private ArrayList<BalancedObjectObserver> balancedObjectObservers = new ArrayList<BalancedObjectObserver>();
 
 	private Timer timer;
 
@@ -35,23 +33,26 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 	}
 
 	private static final float FRICTION_COEFF = 0.3f;
-	private static final long PERIOD_IN_MILLISECONDS = 16;
-	
-	public void applyForce(float anXForce, float aYForce,long duration) {
-		
+
+	private static final long PERIOD_IN_MILLISECONDS = 16; // seems to be a bug by a factor of 10??? only in emulator???
+
+	public void applyForce(float anXForce, float aYForce, long duration) {
+
 		// as long as X Y forces imply less than 45 deg angle
-		if(difficultyLevel < 5 && (anXForce < 6.8) && (aYForce < 6.8)) {
+		if (difficultyLevel < 5 && (anXForce < 6.8) && (aYForce < 6.8)) {
 			// scale FRICTION_COEFF based on difficulty level
 			anXForce = anXForce * (FRICTION_COEFF + (difficultyLevel * 0.1f));
 			aYForce = aYForce * (FRICTION_COEFF + (difficultyLevel * 0.1f));
 		}
-		velocityX += anXForce*duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
-		velocityY += aYForce *duration/NUMBER_OF_MILLISECONDS_IN_A_SECOND;
-		//Log.d(TAG,Float.toString(velocityX) + " " + Float.toString(velocityY));
+		velocityX += anXForce * duration / NUMBER_OF_MILLISECONDS_IN_A_SECOND;
+		velocityY += aYForce * duration / NUMBER_OF_MILLISECONDS_IN_A_SECOND;
+		// Log.d(TAG,Float.toString(velocityX) + " " + Float.toString(velocityY));
 	}
 
 	public void addObserver(BalancedObjectObserver anObserver) {
-		balancedObjectObservers.add(anObserver);
+		if (!balancedObjectObservers.contains(anObserver)) {
+			balancedObjectObservers.add(anObserver);
+		}
 		if (balancedObjectObservers.size() == 1) {
 			TimerTask timerTask = new TimerTask() {
 				@Override
@@ -65,7 +66,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 			};
 
 			if (timer == null) {
-				 timer = new Timer();
+				timer = new Timer();
 			}
 			timer.scheduleAtFixedRate(timerTask, 0, PERIOD_IN_MILLISECONDS);
 		}
@@ -82,25 +83,28 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private void notifyObservers() {
 		if(isServiceRunning) {
-			for (BalancedObjectObserver observer : balancedObjectObservers) {
+			final int balancedObjectObserversSize = balancedObjectObservers.size();
+			for (int i = 0; i < balancedObjectObserversSize; i++) {
+				final BalancedObjectObserver observer = balancedObjectObservers.get(i);
 				observer.balancedObjectNotification(positionX, positionY);
 			}
-			if (Math.abs(positionX) > 1f || Math.abs(positionY) > 1f) {
-				for (BalancedObjectObserver observer : balancedObjectObservers) {
+			if ( positionX < -1f || positionX > 1f || positionY < -1f || positionY > 1f) {
+				for (int i = 0; i < balancedObjectObserversSize; i++) {
+					final BalancedObjectObserver observer = balancedObjectObservers.get(i);
 					observer.fallenOverNotification();
 				}
 			}
 		}
 	}
-	
+
 	public void setDifficultyLevel(int aDifficulty) {
 		difficultyLevel = aDifficulty;
 	}
-	
+
 	public void startService() {
 		isServiceRunning = true;
 	}
-	
+
 	public void stopService() {
 		isServiceRunning = false;
 	}

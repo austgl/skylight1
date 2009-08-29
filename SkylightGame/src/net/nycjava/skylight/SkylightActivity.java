@@ -32,10 +32,6 @@ public abstract class SkylightActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//
-//		// remove Title bar and Status bar from screen
-//		requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
 		addDependencies(dependencyInjectingObjectFactory);
