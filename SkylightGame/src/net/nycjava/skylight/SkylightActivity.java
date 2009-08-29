@@ -45,6 +45,8 @@ public abstract class SkylightActivity extends Activity {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
 		menu.add(0, 0, Menu.NONE, "about");
 		menu.add(0, 1, Menu.NONE, "exit");
+		menu.getItem(0).setIcon(android.R.drawable.ic_menu_info_details);
+		menu.getItem(1).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return supRetVal;
 	}
 
