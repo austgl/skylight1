@@ -230,6 +230,11 @@ public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
+		
+		//avoid artifacts on success:
+		if(remainingTime==0)
+			return;
+		
 		if (timeStartedCountingFrames == 0) {
 			timeStartedCountingFrames = System.currentTimeMillis();
 		}
