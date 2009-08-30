@@ -23,6 +23,10 @@ import android.util.Log;
 import android.view.View;
 
 final public class SkillTestView extends View {
+	enum PartToBeInvalidated {
+		glassPart, timeRemainingPart;
+	}
+
 	private static final int DEGREE_OF_DOUBLE_VISION = 10;
 
 	private static final int SCREEN_MARGIN = 10;
@@ -46,13 +50,13 @@ final public class SkillTestView extends View {
 
 	private int width, height;
 
+	private int extraMarginToAccommodateDoubleVision;
+
 	final private Typeface face;
 
 	final private Bitmap levelGlassFullBitmap;
 
 	final private Bitmap levelGlassEmptyBitmap;
-
-	long animationCycleStartTime = System.currentTimeMillis();
 
 	final private int timeRemainingRectangleLeft;
 
@@ -139,6 +143,8 @@ final public class SkillTestView extends View {
 		frames = 0;
 		timeStartedCountingFrames = 0;
 
+		extraMarginToAccommodateDoubleVision = doubleVision() ? DEGREE_OF_DOUBLE_VISION : 0;
+
 		balancedObjectObserver = new BalancedObjectObserver() {
 			@Override
 			public void balancedObjectNotification(float anX, float aY) {
@@ -148,18 +154,23 @@ final public class SkillTestView extends View {
 					return;
 				}
 
-				// invalidate where the glass used to be, so that the background will get
-				// redrawn by the super class
-				int extra = doubleVision() ? DEGREE_OF_DOUBLE_VISION : 0;
-				SkillTestView.this.postInvalidate(glassRectangleLeft - extra, glassRectangleTop - extra,
-						glassRectangleRight + extra, glassRectangleBottom + extra);
+				final int oldGlassRectangleLeft = glassRectangleLeft;
+				final int oldGlassRectangleTop = glassRectangleTop;
+				final int oldGlassRectangleRight = glassRectangleRight;
+				final int oldGlassRectangleBottom = glassRectangleBottom;
 
 				// update the position of the glass
 				updateGlassRectangle(anX, aY);
 
+				// invalidate where the glass used to be, so that the background will get
+				// redrawn by the super class
+				SkillTestView.this.postInvalidate(oldGlassRectangleLeft - extraMarginToAccommodateDoubleVision,
+						oldGlassRectangleTop - extraMarginToAccommodateDoubleVision, oldGlassRectangleRight
+								+ extraMarginToAccommodateDoubleVision, oldGlassRectangleBottom
+								+ extraMarginToAccommodateDoubleVision);
+
 				// invalidate the new position so that the glass will be drawn there
-				SkillTestView.this.postInvalidate(glassRectangleLeft, glassRectangleTop, glassRectangleRight,
-						glassRectangleBottom);
+				postInvalidateAllChangeableParts(PartToBeInvalidated.glassPart);
 
 				// safe to repaint now
 				glassInvalidated = true;
@@ -190,11 +201,39 @@ final public class SkillTestView extends View {
 
 				remainingTime = aRemainingTime;
 
-				postInvalidate(timeRemainingRectangleLeft, timeRemainingRectangleTop, timeRemainingRectangleRight,
-						timeRemainingRectangleBottom);
+				postInvalidateAllChangeableParts(PartToBeInvalidated.timeRemainingPart);
 			}
 		};
 		countdownPublicationService.addObserver(countdownObserver);
+	}
+
+	/**
+	 * Unfortunately, due to the double vision, it is necessary to redraw all three parts of the screen to keep the
+	 * direction and degree of double vision remain constant!
+	 */
+	private void postInvalidateAllChangeableParts(PartToBeInvalidated aPartToBeInvalidated) {
+		if (aPartToBeInvalidated == PartToBeInvalidated.glassPart || doubleVision()) {
+			// invalidate where the glass is
+			postInvalidate(glassRectangleLeft - extraMarginToAccommodateDoubleVision, glassRectangleTop
+					- extraMarginToAccommodateDoubleVision, glassRectangleRight + extraMarginToAccommodateDoubleVision,
+					glassRectangleBottom + extraMarginToAccommodateDoubleVision);
+		}
+
+		if (aPartToBeInvalidated == PartToBeInvalidated.timeRemainingPart || doubleVision()) {
+			// invalidate where the time remaining is
+			postInvalidate(timeRemainingRectangleLeft - extraMarginToAccommodateDoubleVision, timeRemainingRectangleTop
+					- extraMarginToAccommodateDoubleVision, timeRemainingRectangleRight
+					+ extraMarginToAccommodateDoubleVision, timeRemainingRectangleBottom
+					+ extraMarginToAccommodateDoubleVision);
+		}
+
+		// invalidate where the level is
+		if (doubleVision()) {
+			postInvalidate(width - levelGlassWidth - SCREEN_MARGIN - difficultyLevel * 4
+					- extraMarginToAccommodateDoubleVision, SCREEN_MARGIN - extraMarginToAccommodateDoubleVision, width
+					- SCREEN_MARGIN + extraMarginToAccommodateDoubleVision, SCREEN_MARGIN + levelGlassHeight
+					+ extraMarginToAccommodateDoubleVision);
+		}
 	}
 
 	private void removeBalancedObjectObserver() {
@@ -269,12 +308,18 @@ final public class SkillTestView extends View {
 		if (!doubleVision()) {
 			drawView(canvas);
 		} else {
-			double animationCycle = (double) (System.currentTimeMillis() - animationCycleStartTime);
-			double degreeOfDoubleVision = Math.cos(animationCycle / 8666d) * DEGREE_OF_DOUBLE_VISION;
+			double animationCycle = (double) (System.currentTimeMillis());
+
+			// vary the distance of the double vision between half to a whole of DEGREE_OF_DOUBLE_VISION
+			final double normalisedDegreeOfDoubleVision = Math.cos(animationCycle / 1000d);
+			double degreeOfDoubleVisionInPixels = normalisedDegreeOfDoubleVision * DEGREE_OF_DOUBLE_VISION / 2
+					+ Math.signum(normalisedDegreeOfDoubleVision) * DEGREE_OF_DOUBLE_VISION / 2;
+
+			// rotate the double vision around
 			double angleOfDoubleVision = animationCycle / 2534d;
 
-			int x = (int) (Math.cos(angleOfDoubleVision) * degreeOfDoubleVision);
-			int y = (int) (Math.sin(angleOfDoubleVision) * degreeOfDoubleVision);
+			int x = (int) (Math.cos(angleOfDoubleVision) * degreeOfDoubleVisionInPixels);
+			int y = (int) (Math.sin(angleOfDoubleVision) * degreeOfDoubleVisionInPixels);
 
 			canvas.saveLayerAlpha(new RectF(canvas.getClipBounds()), 128, Canvas.ALL_SAVE_FLAG);
 			canvas.translate(-x, -y);
