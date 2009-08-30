@@ -22,23 +22,17 @@ import android.view.View.OnFocusChangeListener;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WelcomeActivity extends SkylightActivity {
 	public class HighlightTextFocusChangeListener implements OnFocusChangeListener {
-
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
-			int unfocusedColor = arg0.getContext().getResources().getColor(R.color.button_font_color);
-			int focusedColor = arg0.getContext().getResources().getColor(R.color.button_font_color_focused);
 			((TextView) arg0).setTextColor(arg1 ? focusedColor : unfocusedColor);
 		}
 	}
-
-	private SurfaceView preview;
-
-	private SurfaceHolder holder;
 
 	private final class DifficultyClickListener implements OnClickListener {
 		final private int difficulty;
@@ -63,7 +57,7 @@ public class WelcomeActivity extends SkylightActivity {
 			((TypeFaceTextView) contentView.findViewById(R.id.normal)).setTextColor(unfocusedColor);
 			((TypeFaceTextView) contentView.findViewById(R.id.hard)).setTextColor(unfocusedColor);
 			((TextView) aView).setTextColor(focusedColor);
-			
+
 			// stop the media player
 			if (mp != null) {
 				mp.pause();
@@ -78,9 +72,21 @@ public class WelcomeActivity extends SkylightActivity {
 	@Dependency
 	private LinearLayout contentView;
 
+	private SurfaceView preview;
+
+	private SurfaceHolder holder;
+
 	private Animation buttonsAnimation;
 
+	private TypeFaceTextView animatingButtons[];
+
+	private int animatingButtonIndex;
+
 	private MediaPlayer mp;
+
+	private int unfocusedColor;
+
+	private int focusedColor;
 
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
@@ -152,7 +158,16 @@ public class WelcomeActivity extends SkylightActivity {
 			}
 		});
 
+		unfocusedColor = getResources().getColor(R.color.button_font_color);
+		focusedColor = getResources().getColor(R.color.button_font_color_focused);
+
 		setContentView(contentView);
+
+		// create data structures to help with the button animation
+		final TypeFaceTextView easyButton = (TypeFaceTextView) contentView.findViewById(R.id.easy);
+		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
+		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
+		animatingButtons = new TypeFaceTextView[] { easyButton, normalButton, hardButton };
 
 		// encourage a garbage collection, to minimize the change that the skill
 		// test activity stutters from GCs
@@ -163,27 +178,41 @@ public class WelcomeActivity extends SkylightActivity {
 	protected void onPostResume() {
 		super.onPostResume();
 
-		final TypeFaceTextView easyButton = (TypeFaceTextView) contentView.findViewById(R.id.easy);
-		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
-		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
-
 		buttonsAnimation = new Animation() {
 			@Override
 			protected void applyTransformation(float interpolatedTime, Transformation t) {
+				final TypeFaceTextView animatingButton = animatingButtons[animatingButtonIndex];
 				final int colour = Color.rgb(255, (int) (255 * interpolatedTime), (int) (255 * interpolatedTime));
-				if (!easyButton.isFocused()) {
-					easyButton.setTextColor(colour);
-				}
-				if (!normalButton.isFocused()) {
-					normalButton.setTextColor(colour);
-				}
-				if (!hardButton.isFocused()) {
-					hardButton.setTextColor(colour);
+
+				for (final TypeFaceTextView button : animatingButtons) {
+					if (!button.isFocused()) {
+						if (button == animatingButton) {
+							button.setTextColor(colour);
+						} else {
+							button.setTextColor(unfocusedColor);
+						}
+					}
 				}
 			}
 		};
-		buttonsAnimation.setDuration(900);
-		buttonsAnimation.setRepeatMode(Animation.REVERSE);
+		buttonsAnimation.setAnimationListener(new AnimationListener() {
+			@Override
+			public void onAnimationEnd(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				do {
+					animatingButtonIndex++;
+					animatingButtonIndex = animatingButtonIndex % 3;
+				} while (animatingButtons[animatingButtonIndex].isFocused());
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+			}
+		});
+		buttonsAnimation.setDuration(700);
 		buttonsAnimation.setRepeatCount(Animation.INFINITE);
 		buttonsAnimation.setInterpolator(new CycleInterpolator(0.5f));
 		contentView.setAnimation(buttonsAnimation);
