@@ -99,6 +99,7 @@ final public class SkillTestView extends View {
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
+		
 		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
 		glassBitmapWidth = glassBitmap.getWidth();
 		glassBitmapHeight = glassBitmap.getHeight();
@@ -213,13 +214,10 @@ final public class SkillTestView extends View {
 		} else {
 			backgroundResourceId = R.drawable.background_table;
 		}
-		Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
-		Bitmap scaledBackgroundBitmap = Bitmap.createBitmap(width, height, Config.RGB_565);
-		Canvas scaledBackgroundCanvas = new Canvas(scaledBackgroundBitmap);
-		scaledBackgroundCanvas.drawBitmap(backgroundBitmap, null, new Rect(0, 0, width, height), null);
-		BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap); 
+		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
+		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
+		final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap); 
 		setBackgroundDrawable(backgroundDrawable);
-//		setBackgroundResource(backgroundResourceId);
 	}
 
 	@Override

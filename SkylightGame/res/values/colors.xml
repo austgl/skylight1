@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <color name="button_font_color">#FFA500</color>
-   <color name="button_font_color_focused">#8080ff</color>
+   <color name="button_font_color">#ffffff</color>
+   <color name="button_font_color_focused">#0000ff</color>
 </resources>

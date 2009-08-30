@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
@@ -53,6 +52,23 @@ public class WelcomeActivity extends SkylightActivity {
 		public void onClick(View aView) {
 			aView.performHapticFeedback(HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
 
+			// stop the animation immediately
+			contentView.setAnimation(null);
+			buttonsAnimation = null;
+
+			// mark the button as pressed
+			final int unfocusedColor = WelcomeActivity.this.getResources().getColor(R.color.button_font_color);
+			final int focusedColor = WelcomeActivity.this.getResources().getColor(R.color.button_font_color_focused);
+			((TypeFaceTextView) contentView.findViewById(R.id.easy)).setTextColor(unfocusedColor);
+			((TypeFaceTextView) contentView.findViewById(R.id.normal)).setTextColor(unfocusedColor);
+			((TypeFaceTextView) contentView.findViewById(R.id.hard)).setTextColor(unfocusedColor);
+			((TextView) aView).setTextColor(focusedColor);
+			
+			// stop the media player
+			if (mp != null) {
+				mp.pause();
+			}
+
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);
@@ -61,6 +77,10 @@ public class WelcomeActivity extends SkylightActivity {
 
 	@Dependency
 	private LinearLayout contentView;
+
+	private Animation buttonsAnimation;
+
+	private MediaPlayer mp;
 
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
 		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
@@ -90,8 +110,6 @@ public class WelcomeActivity extends SkylightActivity {
 		preview.setBackgroundResource(R.drawable.background_table);
 		holder = preview.getHolder();
 		holder.addCallback(new Callback() {
-			private MediaPlayer mp;
-
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
 				mp = new MediaPlayer();
@@ -149,11 +167,10 @@ public class WelcomeActivity extends SkylightActivity {
 		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
 		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
 
-		Animation anim = new Animation() {
+		buttonsAnimation = new Animation() {
 			@Override
 			protected void applyTransformation(float interpolatedTime, Transformation t) {
-				final int colour = Color.rgb(255, (int) (255 * interpolatedTime),
-						(int) (255 * interpolatedTime));
+				final int colour = Color.rgb(255, (int) (255 * interpolatedTime), (int) (255 * interpolatedTime));
 				if (!easyButton.isFocused()) {
 					easyButton.setTextColor(colour);
 				}
@@ -165,12 +182,12 @@ public class WelcomeActivity extends SkylightActivity {
 				}
 			}
 		};
-		anim.setDuration(900);
-		anim.setRepeatMode(Animation.REVERSE);
-		anim.setRepeatCount(Animation.INFINITE);
-		anim.setInterpolator(new CycleInterpolator(0.5f));
-		easyButton.setAnimation(anim);
+		buttonsAnimation.setDuration(900);
+		buttonsAnimation.setRepeatMode(Animation.REVERSE);
+		buttonsAnimation.setRepeatCount(Animation.INFINITE);
+		buttonsAnimation.setInterpolator(new CycleInterpolator(0.5f));
+		contentView.setAnimation(buttonsAnimation);
 
-		anim.start();
+		buttonsAnimation.start();
 	}
 }
