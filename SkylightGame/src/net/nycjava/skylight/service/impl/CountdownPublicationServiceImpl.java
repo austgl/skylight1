@@ -58,7 +58,7 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 			if (currentCount < duration && stopRequested == false) {
 				currentCount = currentCount + 1;
 				notifyObservers(getRemainingTime());
-				System.out.println("start counting: " + currentCount);
+//				System.out.println("start counting: " + currentCount);
 
 			}
 			if (currentCount == duration) {
