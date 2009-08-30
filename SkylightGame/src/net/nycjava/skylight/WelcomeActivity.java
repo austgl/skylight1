@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class WelcomeActivity extends SkylightActivity {
+	private static final int BUTTON_FLASH_PERIOD = 700;
+
 	public class HighlightTextFocusChangeListener implements OnFocusChangeListener {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
@@ -211,7 +213,7 @@ public class WelcomeActivity extends SkylightActivity {
 			public void onAnimationStart(Animation animation) {
 			}
 		});
-		buttonsAnimation.setDuration(700);
+		buttonsAnimation.setDuration(BUTTON_FLASH_PERIOD);
 		buttonsAnimation.setRepeatCount(Animation.INFINITE);
 		buttonsAnimation.setInterpolator(new CycleInterpolator(0.5f));
 		contentView.setAnimation(buttonsAnimation);

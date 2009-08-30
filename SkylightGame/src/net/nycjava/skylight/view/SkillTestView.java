@@ -13,14 +13,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas.EdgeType;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Debug;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -99,7 +96,7 @@ final public class SkillTestView extends View {
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
-		
+
 		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
 		glassBitmapWidth = glassBitmap.getWidth();
 		glassBitmapHeight = glassBitmap.getHeight();
@@ -180,12 +177,16 @@ final public class SkillTestView extends View {
 			public void countdownNotification(int aRemainingTime) {
 				// System.out.println("remaining time = " + aRemainingTime);
 
-//				 if (aRemainingTime == 8)
-//					Debug.startMethodTracing("skylight");
-//				if (aRemainingTime == 3) {
-//					Debug.stopMethodTracing();
-//					System.out.println("stopping trace now");
-//				}
+				// if (aRemainingTime == 8)
+				// Debug.startMethodTracing("skylight");
+				// if (aRemainingTime == 3) {
+				// Debug.stopMethodTracing();
+				// System.out.println("stopping trace now");
+				// }
+
+				if (aRemainingTime == 0) {
+					removeBalancedObjectObserver();
+				}
 
 				remainingTime = aRemainingTime;
 
@@ -196,10 +197,17 @@ final public class SkillTestView extends View {
 		countdownPublicationService.addObserver(countdownObserver);
 	}
 
+	private void removeBalancedObjectObserver() {
+		if (balancedObjectObserver != null) {
+			balancedObjectPublicationService.removeObserver(balancedObjectObserver);
+			balancedObjectObserver = null;
+		}
+	}
+
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
-		
+
 		width = getWidth();
 		height = getHeight();
 
@@ -216,13 +224,13 @@ final public class SkillTestView extends View {
 		}
 		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
 		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
-		final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap); 
+		final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap);
 		setBackgroundDrawable(backgroundDrawable);
 	}
 
 	@Override
 	protected void onDetachedFromWindow() {
-		balancedObjectPublicationService.removeObserver(balancedObjectObserver);
+		removeBalancedObjectObserver();
 		countdownPublicationService.removeObserver(countdownObserver);
 
 		super.onDetachedFromWindow();
@@ -251,11 +259,6 @@ final public class SkillTestView extends View {
 	}
 
 	public void onDraw(Canvas canvas) {
-		// avoid artifacts on success:
-		if (remainingTime == 0) {
-			return;
-		}
-
 		// FPS stuff
 		if (timeStartedCountingFrames == 0) {
 			timeStartedCountingFrames = System.currentTimeMillis();
