@@ -182,15 +182,16 @@ public class WelcomeActivity extends SkylightActivity {
 			@Override
 			protected void applyTransformation(float interpolatedTime, Transformation t) {
 				final TypeFaceTextView animatingButton = animatingButtons[animatingButtonIndex];
-				final int colour = Color.rgb(255, (int) (255 * interpolatedTime), (int) (255 * interpolatedTime));
+				final int unFocusedAnimatedColour = Color.rgb(255, (int) (255 * interpolatedTime),
+						(int) (255 * interpolatedTime));
+				final int focussedAnimatedColour = Color.rgb((int) (255 * interpolatedTime),
+						(int) (255 * interpolatedTime), 255);
 
 				for (final TypeFaceTextView button : animatingButtons) {
-					if (!button.isFocused()) {
-						if (button == animatingButton) {
-							button.setTextColor(colour);
-						} else {
-							button.setTextColor(unfocusedColor);
-						}
+					if (button == animatingButton) {
+						button.setTextColor(button.isFocused() ? focussedAnimatedColour : unFocusedAnimatedColour);
+					} else {
+						button.setTextColor(button.isFocused() ? focusedColor : unfocusedColor);
 					}
 				}
 			}
@@ -202,10 +203,8 @@ public class WelcomeActivity extends SkylightActivity {
 
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-				do {
-					animatingButtonIndex++;
-					animatingButtonIndex = animatingButtonIndex % 3;
-				} while (animatingButtons[animatingButtonIndex].isFocused());
+				animatingButtonIndex++;
+				animatingButtonIndex = animatingButtonIndex % 3;
 			}
 
 			@Override
