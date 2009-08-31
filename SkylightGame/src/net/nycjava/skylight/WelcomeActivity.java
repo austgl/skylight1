@@ -136,7 +136,7 @@ public class WelcomeActivity extends SkylightActivity {
 				});
 
 				try {
-					AssetFileDescriptor afd = getAssets().openFd("passthedrink.mp4");
+					AssetFileDescriptor afd = getAssets().openFd("demo.mp4");
 					mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 					mp.prepareAsync();
 				} catch (IllegalArgumentException e) {
