@@ -70,7 +70,6 @@ public class RandomForceServiceImpl implements RandomForceService {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				Log.i(RandomForceServiceImpl.class.getName(), "BANG!");
 				balancedObjectPublicationService.applyForce(adjRandom(),adjRandom(),50);
 				applyForceAtRandomTime();
 			}
