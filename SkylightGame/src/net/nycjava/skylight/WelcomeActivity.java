@@ -13,12 +13,14 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
@@ -46,8 +48,6 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void onClick(View aView) {
-			aView.performHapticFeedback(HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-
 			// stop the animation immediately
 			contentView.setAnimation(null);
 			buttonsAnimation = null;
@@ -100,19 +100,32 @@ public class WelcomeActivity extends SkylightActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		((TypeFaceTextView) contentView.findViewById(R.id.easy)).setOnClickListener(new DifficultyClickListener(
-				SOBER_DIFFICULTY_LEVEL));
-		((TypeFaceTextView) contentView.findViewById(R.id.normal)).setOnClickListener(new DifficultyClickListener(
-				BUZZED_DIFFICULTY_LEVEL));
-		((TypeFaceTextView) contentView.findViewById(R.id.hard)).setOnClickListener(new DifficultyClickListener(
-				SMASHED_DIFFICULTY_LEVEL));
+		final TypeFaceTextView easyButton = (TypeFaceTextView) contentView.findViewById(R.id.easy);
+		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
+		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
 
-		((TypeFaceTextView) contentView.findViewById(R.id.easy))
-				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		((TypeFaceTextView) contentView.findViewById(R.id.normal))
-				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
-		((TypeFaceTextView) contentView.findViewById(R.id.hard))
-				.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		easyButton.setOnClickListener(new DifficultyClickListener(SOBER_DIFFICULTY_LEVEL));
+		normalButton.setOnClickListener(new DifficultyClickListener(BUZZED_DIFFICULTY_LEVEL));
+		hardButton.setOnClickListener(new DifficultyClickListener(SMASHED_DIFFICULTY_LEVEL));
+
+		// create haptic feedback whenever a button is touched
+		final OnTouchListener onTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View aView, MotionEvent anEvent) {
+				if (anEvent.getAction() == MotionEvent.ACTION_DOWN) {
+					aView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+							HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+				}
+				return false;
+			}
+		};
+		easyButton.setOnTouchListener(onTouchListener);
+		normalButton.setOnTouchListener(onTouchListener);
+		hardButton.setOnTouchListener(onTouchListener);
+
+		easyButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		normalButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
+		hardButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		preview.setBackgroundResource(R.drawable.background_table);
@@ -154,7 +167,9 @@ public class WelcomeActivity extends SkylightActivity {
 
 			@Override
 			public void surfaceDestroyed(SurfaceHolder holder) {
-				mp.stop();
+				if (mp.isPlaying()) {
+					mp.stop();
+				}
 				mp.release();
 				Log.i(WelcomeActivity.class.getName(), "surface destroyed");
 			}
@@ -166,9 +181,6 @@ public class WelcomeActivity extends SkylightActivity {
 		setContentView(contentView);
 
 		// create data structures to help with the button animation
-		final TypeFaceTextView easyButton = (TypeFaceTextView) contentView.findViewById(R.id.easy);
-		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
-		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
 		animatingButtons = new TypeFaceTextView[] { easyButton, normalButton, hardButton };
 
 		// encourage a garbage collection, to minimize the change that the skill
