@@ -32,6 +32,9 @@ public abstract class SkylightActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+				WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
 		dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
 		addDependencies(dependencyInjectingObjectFactory);
