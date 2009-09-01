@@ -60,9 +60,9 @@ final public class SkillTestView extends View {
 
 	final private Typeface face;
 
-	final private Bitmap levelGlassFullBitmap;
+	private Bitmap levelGlassFullBitmap;
 
-	final private Bitmap levelGlassEmptyBitmap;
+	private Bitmap levelGlassEmptyBitmap;
 
 	final private int timeRemainingRectangleLeft;
 
@@ -365,6 +365,41 @@ final public class SkillTestView extends View {
 	protected void onDetachedFromWindow() {
 		removeBalancedObjectObserver();
 		countdownPublicationService.removeObserver(countdownObserver);
+
+		if (difficultyLevelBitmap != null) {
+			difficultyLevelBitmap.recycle();
+			difficultyLevelBitmap = null;
+		}
+
+		if (glassBitmap != null) {
+			glassBitmap.recycle();
+			glassBitmap = null;
+		}
+
+		if (levelGlassEmptyBitmap != null) {
+			levelGlassEmptyBitmap.recycle();
+			levelGlassEmptyBitmap = null;
+		}
+
+		if (levelGlassFullBitmap != null) {
+			levelGlassFullBitmap.recycle();
+			levelGlassFullBitmap = null;
+		}
+
+		if (levelGlassFullBitmap != null) {
+			levelGlassFullBitmap.recycle();
+			levelGlassFullBitmap = null;
+		}
+
+		if (spareTimeRemainingBitmap != null) {
+			spareTimeRemainingBitmap.recycle();
+			spareTimeRemainingBitmap = null;
+		}
+
+		if (timeRemainingBitmap != null) {
+			timeRemainingBitmap.recycle();
+			timeRemainingBitmap = null;
+		}
 
 		super.onDetachedFromWindow();
 
