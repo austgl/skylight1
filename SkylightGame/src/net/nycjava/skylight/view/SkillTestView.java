@@ -1,7 +1,6 @@
 package net.nycjava.skylight.view;
 
 import net.nycjava.skylight.R;
-import net.nycjava.skylight.SkylightActivity;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.BalancedObjectObserver;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
@@ -24,13 +23,18 @@ import android.util.Log;
 import android.view.View;
 
 final public class SkillTestView extends View {
-	enum PartToBeInvalidated {
+	static enum PartToBeInvalidated {
 		glassPart, timeRemainingPart;
 	}
+
+	private static final int BACKGROUND_CHANGE_LEVEL_FREQUENCY = 3;
 
 	private static final int DEGREE_OF_DOUBLE_VISION = 10;
 
 	private static final int SCREEN_MARGIN = 10;
+
+	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.marble, R.drawable.wood,
+			R.drawable.background_table, R.drawable.background_table, R.drawable.marble, R.drawable.wood };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
@@ -342,15 +346,14 @@ final public class SkillTestView extends View {
 
 		updateGlassRectangle(0, 0);
 
+		setBackground();
+	}
+
+	private void setBackground() {
 		// set the background
-		final int backgroundResourceId;
-		if (difficultyLevel >= SkylightActivity.SMASHED_DIFFICULTY_LEVEL) {
-			backgroundResourceId = R.drawable.marble;
-		} else if (difficultyLevel >= SkylightActivity.BUZZED_DIFFICULTY_LEVEL) {
-			backgroundResourceId = R.drawable.wood;
-		} else {
-			backgroundResourceId = R.drawable.background_table;
-		}
+		final int backgroundResourceId = backgrounds[Math.min(difficultyLevel / BACKGROUND_CHANGE_LEVEL_FREQUENCY,
+				backgrounds.length - 1)];
+
 		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
 		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
 		final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap);

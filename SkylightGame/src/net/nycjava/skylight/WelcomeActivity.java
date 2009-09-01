@@ -4,11 +4,13 @@ import java.io.IOException;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.view.MediaPlayerHelper;
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
@@ -128,37 +130,13 @@ public class WelcomeActivity extends SkylightActivity {
 		hardButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
-		preview.setBackgroundResource(R.drawable.background_table);
 		holder = preview.getHolder();
 		holder.addCallback(new Callback() {
 			@Override
 			public void surfaceCreated(SurfaceHolder holder) {
-				mp = new MediaPlayer();
-				mp.setDisplay(preview.getHolder());
-
-				mp.setOnPreparedListener(new OnPreparedListener() {
-					@Override
-					public void onPrepared(MediaPlayer mp) {
-						Log.i(WelcomeActivity.class.getName(), "mp is prepared");
-
-						preview.setBackgroundResource(0);
-
-						// start the video
-						mp.start();
-					}
-				});
-
-				try {
-					AssetFileDescriptor afd = getAssets().openFd("passthedrink.mp4");
-					mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-					mp.prepareAsync();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalStateException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview,
+						"passthedrink.mp4", "demo.mp4");
+				mp = mediaPlayerHelper.createMediaListPlayer();
 			}
 
 			@Override
