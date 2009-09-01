@@ -27,14 +27,17 @@ final public class SkillTestView extends View {
 		glassPart, timeRemainingPart;
 	}
 
-	private static final int BACKGROUND_CHANGE_LEVEL_FREQUENCY = 3;
+	private static final int BACKGROUND_CHANGE_LEVEL_FREQUENCY = 2;
 
 	private static final int DEGREE_OF_DOUBLE_VISION = 10;
 
 	private static final int SCREEN_MARGIN = 10;
 
-	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.marble, R.drawable.wood,
-			R.drawable.background_table, R.drawable.background_table, R.drawable.marble, R.drawable.wood };
+	private final static int backgrounds[] = { R.drawable.background_table, 
+		R.drawable.largewoodgrain, R.drawable.wood,
+			R.drawable.marble, R.drawable.seafoam, R.drawable.tiles, 
+			R.drawable.seafoam2, R.drawable.water,
+			R.drawable.space1 };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
