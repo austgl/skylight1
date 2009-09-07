@@ -5,6 +5,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
+import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
 
 public class RandomForceServiceImplTest extends TestCase {
 
@@ -13,8 +15,7 @@ public class RandomForceServiceImplTest extends TestCase {
 
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationObject(BalancedObjectPublicationService.class,
-				new BalancedObjectPublicationService() {
-					@Override
+				new BalancedObjectPublicationServiceImpl() {
 					public void applyForce(float anXForce, float aYForce) {
 					}
 
@@ -27,6 +28,31 @@ public class RandomForceServiceImplTest extends TestCase {
 					public boolean removeObserver(BalancedObjectObserver anObserver) {
 						fail("should not come here");
 						return false;
+					}
+
+					@Override
+					public void applyForce(float anXForce, float aYForce,
+							long aDuration) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void setDifficultyLevel(int aDifficulty) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void startService() {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void stopService() {
+						// TODO Auto-generated method stub
+						
 					}
 				});
 		factory.registerImplementationClass(RandomForceService.class, RandomForceServiceImpl.class);

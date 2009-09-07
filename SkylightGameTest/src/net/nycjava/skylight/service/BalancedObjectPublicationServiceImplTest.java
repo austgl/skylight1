@@ -5,6 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
 
 public class BalancedObjectPublicationServiceImplTest extends TestCase {
 
@@ -62,7 +63,7 @@ public class BalancedObjectPublicationServiceImplTest extends TestCase {
 	public void testZeroForce() throws InterruptedException {
 		service.addObserver(balancedObjectObserver);
 
-		service.applyForce(0f, 0f);
+		service.applyForce(0f, 0f, 0);
 
 		Thread.sleep(1000);
 
@@ -80,7 +81,7 @@ public class BalancedObjectPublicationServiceImplTest extends TestCase {
 	public void testOneForce() throws InterruptedException {
 		service.addObserver(balancedObjectObserver);
 
-		service.applyForce(-0.1f, 0f);
+		service.applyForce(-0.1f, 0f, 0);
 
 		Thread.sleep(1000);
 
@@ -100,7 +101,7 @@ public class BalancedObjectPublicationServiceImplTest extends TestCase {
 	public void testTwoForces() throws InterruptedException {
 		service.addObserver(balancedObjectObserver);
 
-		service.applyForce(-0.1f, 0.1f);
+		service.applyForce(-0.1f, 0.1f, 0);
 
 		Thread.sleep(1000);
 
@@ -122,11 +123,11 @@ public class BalancedObjectPublicationServiceImplTest extends TestCase {
 	public void testTwoSeparateForces() throws InterruptedException {
 		service.addObserver(balancedObjectObserver);
 
-		service.applyForce(-0.1f, 0.1f);
+		service.applyForce(-0.1f, 0.1f, 0);
 
 		Thread.sleep(500);
 
-		service.applyForce(0.1f, -0.1f);
+		service.applyForce(0.1f, -0.1f, 0);
 
 		Thread.sleep(500);
 

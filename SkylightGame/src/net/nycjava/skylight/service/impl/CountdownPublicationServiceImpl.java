@@ -8,10 +8,6 @@ import java.util.TimerTask;
 import net.nycjava.skylight.service.CountdownObserver;
 import net.nycjava.skylight.service.CountdownPublicationService;
 
-enum CounterStatus {
-	uninitialized, running, stopped, finished
-};
-
 public class CountdownPublicationServiceImpl implements CountdownPublicationService {
 
 	private int duration = 0;
@@ -102,6 +98,11 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 		for (CountdownObserver countdownObserver : countdownObservers) {
 			countdownObserver.countdownNotification(aRemainingTime);
 		}
+	}
+
+	@Override
+	public CounterStatus getStatus() {
+		return currentStatus;
 	}
 
 }

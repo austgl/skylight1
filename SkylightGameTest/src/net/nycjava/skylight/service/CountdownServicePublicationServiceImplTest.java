@@ -5,6 +5,8 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
+import static net.nycjava.skylight.service.CountdownPublicationService.CounterStatus;
 
 public class CountdownServicePublicationServiceImplTest extends TestCase {
 	private int currentCount = -1;
