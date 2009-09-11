@@ -1,17 +1,12 @@
 package net.nycjava.skylight;
 
-import java.io.IOException;
-
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.view.MediaPlayerHelper;
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
@@ -206,7 +201,7 @@ public class WelcomeActivity extends SkylightActivity {
 		buttonsAnimation.setDuration(BUTTON_FLASH_PERIOD);
 		buttonsAnimation.setRepeatCount(Animation.INFINITE);
 		buttonsAnimation.setInterpolator(new CycleInterpolator(0.5f));
-		contentView.setAnimation(buttonsAnimation);
+		animatingButtons[0].setAnimation(buttonsAnimation);
 
 		buttonsAnimation.start();
 	}

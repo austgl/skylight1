@@ -2,13 +2,22 @@ package net.nycjava.skylight.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Typeface;
+import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 public class TypeFaceTextView extends TextView {
+	private static final Paint BLACK_BORDER_PAINT = new Paint();
+
+	static {
+		BLACK_BORDER_PAINT.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
+	}
+
 	private static final int BORDER_WIDTH = 1;
+
 	private Typeface typeface;
 
 	public TypeFaceTextView(Context context) {
@@ -17,6 +26,8 @@ public class TypeFaceTextView extends TextView {
 
 	public TypeFaceTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		setDrawingCacheEnabled(false);
 
 		setTypeface(attrs);
 	}
@@ -35,23 +46,21 @@ public class TypeFaceTextView extends TextView {
 
 		setTypeface(attrs);
 	}
-	
+
 	@Override
-	public void draw(Canvas canvas) {
-		drawBackground(canvas, -BORDER_WIDTH, -BORDER_WIDTH);
-		drawBackground(canvas, BORDER_WIDTH, BORDER_WIDTH);
-		drawBackground(canvas, -BORDER_WIDTH, BORDER_WIDTH);
-		drawBackground(canvas, -BORDER_WIDTH, -BORDER_WIDTH);
-		super.draw(canvas);
+	public void draw(Canvas aCanvas) {
+		aCanvas.saveLayer(null, BLACK_BORDER_PAINT, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+				| Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.MATRIX_SAVE_FLAG);
+		drawBackground(aCanvas, -BORDER_WIDTH, -BORDER_WIDTH);
+		drawBackground(aCanvas, BORDER_WIDTH + BORDER_WIDTH, 0);
+		drawBackground(aCanvas, 0, BORDER_WIDTH + BORDER_WIDTH);
+		drawBackground(aCanvas, -BORDER_WIDTH - BORDER_WIDTH, 0);
+		aCanvas.restore();
+		super.draw(aCanvas);
 	}
 
 	private void drawBackground(Canvas aCanvas, int aDX, int aDY) {
-		aCanvas.save(Canvas.ALL_SAVE_FLAG);
-		int originalColour = getCurrentTextColor();
 		aCanvas.translate(aDX, aDY);
-		setTextColor(Color.BLACK);
 		super.draw(aCanvas);
-		setTextColor(originalColour);
-		aCanvas.restore();
 	}
 }

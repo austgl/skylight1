@@ -6,6 +6,7 @@ import com.admob.android.ads.AdView;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -52,7 +53,7 @@ public class FailActivity extends SkylightActivity {
 		AdView adView = new AdView(this);
 		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
 		adView.setLayoutParams(layoutParams);
-		adView.setKeywords("Android application");
+		adView.setKeywords("beer game bar pub drink");
 		adView.setGravity(Gravity.BOTTOM);
 		AdManager.setInTestMode(true);
 		view.addView(adView);

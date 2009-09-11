@@ -20,6 +20,7 @@
 		android:focusable="false" android:layout_height="wrap_content"
 		android:gravity="center_horizontal">
 		>
+		
 		<net.nycjava.skylight.view.TypeFaceTextView
 			typeface="passthedrink.ttf" android:layout_width="100px"
 			android:id="@+id/easy" android:background="@drawable/easy"
