@@ -138,7 +138,7 @@ final public class SkillTestView extends View {
 		timeRemainingCanvas = new Canvas();
 
 		// load the type face
-		face = Typeface.createFromAsset(getContext().getAssets(), "passthedrink.ttf");
+		face = Typeface.createFromAsset(getContext().getAssets(), "skylight.ttf");
 
 		// initialize the paint for level
 		levelPaint.setTextSize(30);

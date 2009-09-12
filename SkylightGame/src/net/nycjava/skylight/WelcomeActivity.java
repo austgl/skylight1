@@ -28,6 +28,34 @@ import android.widget.TextView;
 public class WelcomeActivity extends SkylightActivity {
 	private static final int BUTTON_FLASH_PERIOD = 700;
 
+	private final class HolderCallback implements Callback {
+		private boolean demoOnly;
+		public HolderCallback(boolean aDemoOnly) {
+			demoOnly = aDemoOnly;
+		}
+		@Override
+		public void surfaceCreated(SurfaceHolder holder) {
+			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview,
+					"intro.mp4", "demo.mp4");
+			if(demoOnly)
+				mediaPlayerHelper.getListOfMovies().remove(0);
+			mp = mediaPlayerHelper.createMediaListPlayer();
+		}
+
+		@Override
+		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		}
+
+		@Override
+		public void surfaceDestroyed(SurfaceHolder holder) {
+			if (mp.isPlaying()) {
+				mp.stop();
+			}
+			mp.release();
+			Log.i(WelcomeActivity.class.getName(), "surface destroyed");
+		}
+	}
+
 	public class HighlightTextFocusChangeListener implements OnFocusChangeListener {
 		@Override
 		public void onFocusChange(View arg0, boolean arg1) {
@@ -101,9 +129,9 @@ public class WelcomeActivity extends SkylightActivity {
 		final TypeFaceTextView normalButton = (TypeFaceTextView) contentView.findViewById(R.id.normal);
 		final TypeFaceTextView hardButton = (TypeFaceTextView) contentView.findViewById(R.id.hard);
 
-		easyButton.setOnClickListener(new DifficultyClickListener(SOBER_DIFFICULTY_LEVEL));
-		normalButton.setOnClickListener(new DifficultyClickListener(BUZZED_DIFFICULTY_LEVEL));
-		hardButton.setOnClickListener(new DifficultyClickListener(SMASHED_DIFFICULTY_LEVEL));
+		easyButton.setOnClickListener(new DifficultyClickListener(EASY_DIFFICULTY_LEVEL));
+		normalButton.setOnClickListener(new DifficultyClickListener(NORMAL_DIFFICULTY_LEVEL));
+		hardButton.setOnClickListener(new DifficultyClickListener(HARD_DIFFICULTY_LEVEL));
 
 		// create haptic feedback whenever a button is touched
 		final OnTouchListener onTouchListener = new OnTouchListener() {
@@ -124,29 +152,10 @@ public class WelcomeActivity extends SkylightActivity {
 		normalButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 		hardButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
+		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
-		holder.addCallback(new Callback() {
-			@Override
-			public void surfaceCreated(SurfaceHolder holder) {
-				MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview,
-						"passthedrink.mp4", "demo.mp4");
-				mp = mediaPlayerHelper.createMediaListPlayer();
-			}
-
-			@Override
-			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			}
-
-			@Override
-			public void surfaceDestroyed(SurfaceHolder holder) {
-				if (mp.isPlaying()) {
-					mp.stop();
-				}
-				mp.release();
-				Log.i(WelcomeActivity.class.getName(), "surface destroyed");
-			}
-		});
+		holder.addCallback(new HolderCallback(demoOnly));
 
 		unfocusedColor = getResources().getColor(R.color.button_font_color);
 		focusedColor = getResources().getColor(R.color.button_font_color_focused);

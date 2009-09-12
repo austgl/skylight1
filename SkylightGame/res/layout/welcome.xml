@@ -13,7 +13,7 @@
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:text="@string/welcome" android:padding="10px"
 		android:focusable="false" android:textSize="32px" android:textColor="#ffffff"
-		typeface="passthedrink.ttf" />
+		typeface="skylight.ttf" />
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="horizontal" android:layout_width="fill_parent"
@@ -22,25 +22,28 @@
 		>
 		
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="100px"
+			typeface="skylight.ttf" android:layout_width="100px"
 			android:id="@+id/easy" android:background="@drawable/easy"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
-			android:hint="@string/easy" android:text="@string/sober"
-			android:textColor="@color/button_font_color" android:textSize="25px"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:text="@string/easy"
+			android:textColor="@color/button_font_color" android:textSize="25px">
+		</net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="100px"
+			typeface="skylight.ttf" android:layout_width="100px"
 			android:id="@+id/normal" android:background="@drawable/normal"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
-			android:textColor="@color/button_font_color" android:hint="@string/normal"
-			android:text="@string/buzzed" android:textSize="25px"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:textColor="@color/button_font_color"
+			android:text="@string/normal" android:textSize="25px">
+		</net.nycjava.skylight.view.TypeFaceTextView>
 		<net.nycjava.skylight.view.TypeFaceTextView
-			typeface="passthedrink.ttf" android:layout_width="100px"
+			typeface="skylight.ttf" android:layout_width="100px"
 			android:id="@+id/hard" android:background="@drawable/hard"
 			android:layout_height="wrap_content" android:layout_gravity="center"
 			android:clickable="true" android:focusable="true" android:gravity="center"
-			android:textColor="@color/button_font_color" android:text="@string/smashed"
-			android:textSize="25px" android:hint="@string/hard"></net.nycjava.skylight.view.TypeFaceTextView>
+			android:textColor="@color/button_font_color" android:text="@string/hard"
+			android:textSize="25px">
+		</net.nycjava.skylight.view.TypeFaceTextView>
     </LinearLayout>
 </LinearLayout>

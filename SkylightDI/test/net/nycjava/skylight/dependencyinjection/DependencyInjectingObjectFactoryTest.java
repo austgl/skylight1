@@ -181,7 +181,7 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 
 		try {
 			// obtain an instance
-			Y y1 = dependencyInjectingObjectFactory.getObject(Y.class);
+			dependencyInjectingObjectFactory.getObject(Y.class);
 			fail();
 		} catch (RuntimeException e) {
 			// expected
@@ -211,7 +211,7 @@ public class DependencyInjectingObjectFactoryTest extends TestCase {
 
 		try {
 			// obtain an instance
-			Z z1 = dependencyInjectingObjectFactory.getObject(Z.class);
+			dependencyInjectingObjectFactory.getObject(Z.class);
 			fail();
 		} catch (RuntimeException e) {
 			// expected

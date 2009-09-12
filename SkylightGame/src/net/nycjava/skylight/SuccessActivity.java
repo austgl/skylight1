@@ -9,13 +9,9 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import net.nycjava.skylight.dependencyinjection.Dependency;
@@ -61,7 +57,7 @@ public class SuccessActivity extends SkylightActivity {
 		
 		setContentView(contentView);
 
-		MediaPlayer.create(getBaseContext(), R.raw.glassbinging).start();
+		MediaPlayer.create(getBaseContext(), R.raw.succeeded).start();
 	}
 
 	void nextLevel() {

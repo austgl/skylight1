@@ -11,7 +11,7 @@ import static net.nycjava.skylight.service.CountdownPublicationService.CounterSt
 public class CountdownServicePublicationServiceImplTest extends TestCase {
 	private int currentCount = -1;
 
-	private Set notifications = new HashSet<Integer>();
+	private Set<Integer> notifications = new HashSet<Integer>();
 
 	public void testAddObserverAndStart() {
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
@@ -87,7 +87,6 @@ public class CountdownServicePublicationServiceImplTest extends TestCase {
 				currentCount = aRemainingTime;
 			}
 		});
-		CounterStatus current_status = service.getStatus();
 		while (service.getStatus() != CounterStatus.finished) {
 			try {
 				Thread.sleep(2);

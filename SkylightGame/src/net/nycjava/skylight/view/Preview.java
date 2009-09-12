@@ -5,7 +5,6 @@ package net.nycjava.skylight.view;
 
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;

@@ -51,10 +51,17 @@ public class MediaPlayerHelper {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				Log.i(WelcomeActivity.class.getName(), "mp is completed");
+				if(listOfMovies.size()>1) {
+					//TODO: delay for 2 seconds
+					surfaceView.setBackgroundResource(R.drawable.welcome_background);
+					// draw text on surfaceview: "How to Play:"
+					//TODO: delay for another 2 seconds
+				}
 				loadNextMovie();
 			}
 		});
 
+		surfaceView.setBackgroundResource(R.drawable.welcome_background);
 		// load the first movie
 		loadNextMovie();
 
@@ -69,7 +76,6 @@ public class MediaPlayerHelper {
 		try {
 			final String fileName = listOfMovies.remove(0);
 			final AssetFileDescriptor afd = context.getAssets().openFd(fileName);
-			surfaceView.setBackgroundResource(R.drawable.welcome_background);
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			mediaPlayer.prepareAsync();
@@ -80,5 +86,13 @@ public class MediaPlayerHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setListOfMovies(List<String> listOfMovies) {
+		this.listOfMovies = listOfMovies;
+	}
+
+	public List<String> getListOfMovies() {
+		return listOfMovies;
 	}
 }

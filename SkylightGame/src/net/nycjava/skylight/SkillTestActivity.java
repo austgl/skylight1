@@ -111,7 +111,7 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
 					// record the new high score
-				    SharedPreferences sharedPreferences = getSharedPreferences(PASS_THE_DRINK_PREFS_FILE, MODE_PRIVATE);
+				    SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
 				    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
 				    SharedPreferences.Editor editor = sharedPreferences.edit();
 				    editor.putInt(HIGH_SCORE_PREFERENCE_NAME, Math.max(oldHighScore, difficultyLevel));

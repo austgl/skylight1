@@ -3,8 +3,6 @@ package net.nycjava.skylight.service.impl;
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 import net.nycjava.skylight.service.TouchAppliedForceAdapter;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 
 public class TouchAppliedForceAdapterServiceAndroidImpl     
   implements  TouchAppliedForceAdapter{

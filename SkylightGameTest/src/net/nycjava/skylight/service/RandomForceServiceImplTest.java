@@ -16,6 +16,7 @@ public class RandomForceServiceImplTest extends TestCase {
 		DependencyInjectingObjectFactory factory = new DependencyInjectingObjectFactory();
 		factory.registerImplementationObject(BalancedObjectPublicationService.class,
 				new BalancedObjectPublicationServiceImpl() {
+					@SuppressWarnings("unused")
 					public void applyForce(float anXForce, float aYForce) {
 					}
 

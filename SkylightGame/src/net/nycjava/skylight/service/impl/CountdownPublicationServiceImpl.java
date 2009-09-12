@@ -18,8 +18,6 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 
 	private Set<CountdownObserver> countdownObservers = new HashSet<CountdownObserver>();
 
-	private boolean TIME_IS_UP = false;
-
 	private CounterStatus currentStatus = CounterStatus.uninitialized;
 
 	private Timer countdownTimer;
@@ -58,12 +56,10 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 
 			}
 			if (currentCount == duration) {
-				TIME_IS_UP = true;
 				currentStatus = CounterStatus.finished;
 			}
 
 			if (stopRequested) {
-				TIME_IS_UP = false;
 				currentStatus = CounterStatus.stopped;
 			}
 		}

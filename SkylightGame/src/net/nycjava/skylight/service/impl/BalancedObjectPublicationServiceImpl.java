@@ -10,8 +10,6 @@ import net.nycjava.skylight.service.BalancedObjectPublicationService;
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
 	private static final int NUMBER_OF_MILLISECONDS_IN_A_SECOND = 1000;
 
-	private final String TAG = "BalancedObjectPublicationService";
-
 	private float positionX;
 
 	private float positionY;

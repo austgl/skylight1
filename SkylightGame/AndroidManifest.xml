@@ -36,6 +36,6 @@
 	<!-- AdMob SDK permissions -->
 	<!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
 	
-	<uses-sdk android:minSdkVersion="2" />	
+	<uses-sdk android:minSdkVersion="3" />	
 
 </manifest>

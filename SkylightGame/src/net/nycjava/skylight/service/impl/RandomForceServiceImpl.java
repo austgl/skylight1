@@ -3,15 +3,11 @@ package net.nycjava.skylight.service.impl;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.util.Log;
-
 import net.nycjava.skylight.dependencyinjection.Dependency;
 import net.nycjava.skylight.service.BalancedObjectPublicationService;
 import net.nycjava.skylight.service.RandomForceService;
 
 public class RandomForceServiceImpl implements RandomForceService {
-	private static final String TAG = "RandomForceServiceImpl";
-	private static final String DIFFICULTY_LEVEL_MSG = "Difficulty Level ";
 	
 	private static final int NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL = 25;
 
@@ -120,6 +116,5 @@ public class RandomForceServiceImpl implements RandomForceService {
 	
 	public void setDifficultyLevel(int aLevel) {
 		difficultyLevel = aLevel;
-		//Log.d(TAG,DIFFICULTY_LEVEL_MSG+Integer.toString(difficultyLevel));
 	}
 }

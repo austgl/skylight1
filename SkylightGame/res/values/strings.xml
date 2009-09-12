@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="instructions">How to play</string>
-    <string name="hard">Hard</string>
-    <string name="smashed">Smashed</string>
-    <string name="buzzed">Buzzed</string>
-    <string name="normal">Normal</string>
-    <string name="sober">Sober</string>
-    <string name="easy">Easy</string>
+    <string name="hard">Smashed</string>
+    <string name="normal">Buzzed</string>
+    <string name="easy">Sober</string>
     <string name="app_name">Balance The Beer</string>
     <string name="welcome">Balance the beer on the screen</string>
     <string name="successmsg">Well done!\nNext player tap to begin</string>
     <string name="failmsg">Oops!! You Lose!!\nDrinks on you\nTap to restart</string>
+	<string name="instructions">How to Play</string>
+	<string name="about">About</string>
+	<string name="exit">Exit</string>
+    <string name="ok">Ok</string>
+	<string name="website">Web Site</string>
+	<string name="websiteurl">http://balancethebeer.com</string>
+	<string name="levelreached">Level Reached</string>
+    <string name="levelmessage">\nThe highest level completed\nhere is so far is:</string>
+    <string name="aboutmessage">\nBalance the Beer\n Version 1.0\n by Skylight1\n\nhttp://balancethebeer.com\n</string>
+	<string name="keywords">beer game bar pub drink</string>
 </resources>
