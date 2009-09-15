@@ -62,9 +62,9 @@ public abstract class SkylightActivity extends Activity {
 		menu.add(0, 3, Menu.NONE, getString(R.string.website));
 		menu.add(0, 4, Menu.NONE, getString(R.string.exit));
 		menu.getItem(0).setIcon(android.R.drawable.ic_menu_help);
-		menu.getItem(1).setIcon(android.R.drawable.ic_menu_info_details);
+		menu.getItem(1).setIcon(android.R.drawable.ic_menu_view);
 		menu.getItem(2).setIcon(android.R.drawable.ic_menu_info_details);
-		menu.getItem(3).setIcon(android.R.drawable.ic_menu_agenda);
+		menu.getItem(3).setIcon(android.R.drawable.ic_menu_compass);
 		menu.getItem(4).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return supRetVal;
 	}
