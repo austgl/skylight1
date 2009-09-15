@@ -1,6 +1,5 @@
 package net.nycjava.skylight;
 
-import net.nycjava.skylight.R;
 import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight.dependencyinjection.DependencyInjector;
 import android.app.Activity;
@@ -11,12 +10,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public abstract class SkylightActivity extends Activity {
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
+
 	public static final String DISPLAY_DEMO = SkylightActivity.class.getPackage().getName() + ".displayDemo";
 
 	public static final String HIGH_SCORE_PREFERENCE_NAME = "highScore";
@@ -30,8 +34,9 @@ public abstract class SkylightActivity extends Activity {
 	public static Uri URI_SKY;
 
 	protected static final String SKYLIGHT_PREFS_FILE = "SkylightPrefsFile";
-	
+
 	private static final int DIALOG_SHOW_LEVEL_ID = 0;
+
 	private static final int DIALOG_ABOUT_ID = 1;
 
 	protected DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
@@ -40,7 +45,7 @@ public abstract class SkylightActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 				WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
@@ -50,12 +55,13 @@ public abstract class SkylightActivity extends Activity {
 		// since activities are instantiated by the framework, use the dependency injector directly to inject any
 		// dependencies this activity may have
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(this);
-		
-		 URI_SKY= Uri.parse(getString(R.string.instructions));
+
+		URI_SKY = Uri.parse(getString(R.string.instructions));
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
+
 		menu.add(0, 0, Menu.NONE, getString(R.string.instructions));
 		menu.add(0, 1, Menu.NONE, getString(R.string.levelreached));
 		menu.add(0, 2, Menu.NONE, getString(R.string.about));
@@ -72,12 +78,10 @@ public abstract class SkylightActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 0:
-			if(!(this instanceof SkillTestActivity)) {
-				final Intent intent = new Intent();
-				intent.putExtra(DISPLAY_DEMO, true);
-				intent.setClass(SkylightActivity.this, WelcomeActivity.class);
-				startActivity(intent);
-			}
+			final Intent welcomeActivityIntent = new Intent();
+			welcomeActivityIntent.putExtra(DISPLAY_DEMO, true);
+			welcomeActivityIntent.setClass(SkylightActivity.this, WelcomeActivity.class);
+			startActivity(welcomeActivityIntent);
 			return true;
 		case 1:
 			showDialog(DIALOG_SHOW_LEVEL_ID);
@@ -86,8 +90,8 @@ public abstract class SkylightActivity extends Activity {
 			showDialog(DIALOG_ABOUT_ID);
 			return true;
 		case 3:
-			final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.websiteurl)));
-			startActivity(intent);
+			final Intent visitWebSiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.websiteurl)));
+			startActivity(visitWebSiteIntent);
 			return true;
 		case 4:
 			finish();
@@ -98,52 +102,58 @@ public abstract class SkylightActivity extends Activity {
 		}
 	}
 
-    @Override
+	@Override
 	protected Dialog onCreateDialog(int id) {
-	    Dialog dialog = null;
-	    switch(id) {
-	    case DIALOG_SHOW_LEVEL_ID:
-	    	SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-		    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);	   
-	    	dialog = new AlertDialog.Builder(this)
-            .setIcon(R.drawable.icon_small)
-            .setTitle(R.string.levelreached)
-            .setMessage(String.format("%s   %d\n", getString(R.string.levelmessage),oldHighScore+1))
-            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                   removeDialog(DIALOG_SHOW_LEVEL_ID);
-                }
-            })
-            .create();
-	    	/* custom:
-			Context mContext = getApplicationContext();
-			dialog = new Dialog(mContext);
-			dialog.setContentView(R.layout.custom_dialog);
-			dialog.setTitle(R.string.levelreached);
-			TextView text = (TextView) dialog.findViewById(R.id.text);
-			text.setText(R.string.levelmessage);
-			ImageView image = (ImageView) dialog.findViewById(R.id.image);
-			image.setImageResource(R.drawable.icon_small);
-			...
-			*/
-	    	break;
-	    case DIALOG_ABOUT_ID:
-	    	dialog = new AlertDialog.Builder(this)
-            .setIcon(R.drawable.icon_small)
-            .setTitle(R.string.about)
-            .setMessage(R.string.aboutmessage)
-            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                   removeDialog(DIALOG_ABOUT_ID);
-                }
-            })
-            .create();
-	        break;
-	    default:
-	        dialog = null;
-	    }
-	    return dialog;
+		Dialog dialog = null;
+		switch (id) {
+		case DIALOG_SHOW_LEVEL_ID:
+			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+			int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
+
+			LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+			View layout = inflater.inflate(R.layout.custom_dialog, (ViewGroup) findViewById(R.id.layout_root));
+
+			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.levelreached)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							removeDialog(DIALOG_SHOW_LEVEL_ID);
+						}
+					}).setView(layout).create();
+
+			TextView text = (TextView) layout.findViewById(R.id.highest_level);
+			text.setText(String.format("%d", oldHighScore + 1));
+
+			// dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.levelreached)
+			// .setMessage(String.format("%s   %d\n", getString(R.string.levelmessage), oldHighScore + 1))
+			// .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			// public void onClick(DialogInterface dialog, int whichButton) {
+			// removeDialog(DIALOG_SHOW_LEVEL_ID);
+			// }
+			// }).create();
+			// TextView text = new TextView(this);
+			// text.setText("hello world");
+			// ((FrameLayout) dialog.findViewById(android.R.id.content)).addView(text, new LayoutParams(
+			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			/*
+			 * custom: Context mContext = getApplicationContext(); dialog = new Dialog(mContext);
+			 * dialog.setContentView(R.layout.custom_dialog); dialog.setTitle(R.string.levelreached); TextView text =
+			 * (TextView) dialog.findViewById(R.id.text); text.setText(R.string.levelmessage); ImageView image =
+			 * (ImageView) dialog.findViewById(R.id.image); image.setImageResource(R.drawable.icon_small); ...
+			 */
+			break;
+		case DIALOG_ABOUT_ID:
+			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.about).setMessage(
+					R.string.aboutmessage).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					removeDialog(DIALOG_ABOUT_ID);
+				}
+			}).create();
+			break;
+		default:
+			dialog = null;
+		}
+		return dialog;
 	}
-	
+
 	abstract protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory);
 }

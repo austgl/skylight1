@@ -4,10 +4,18 @@
 	android:focusable="false" android:layout_height="fill_parent"
 	android:background="@drawable/welcome_background">
 
-	<VideoView android:id="@+id/videoview" android:orientation="vertical"
-		android:layout_marginTop="0px" android:layout_height="288px" android:layout_width="352px"
-		android:focusable="false"
-		android:layout_gravity="top|center" />
+	<FrameLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<VideoView android:id="@+id/videoview" android:orientation="vertical"
+			android:layout_marginTop="0px" android:layout_height="288px" android:layout_width="352px"
+			android:focusable="false"
+			android:layout_gravity="top|center" />
+		<net.nycjava.skylight.view.TypeFaceTextView android:id="@+id/videoText" 
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="" android:padding="10px"
+			android:background="#00ff0000"
+			android:focusable="false" android:textSize="32px" android:textColor="#ffffff"
+			typeface="skylight.ttf" />
+	</FrameLayout>
 
 	<net.nycjava.skylight.view.TypeFaceTextView
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

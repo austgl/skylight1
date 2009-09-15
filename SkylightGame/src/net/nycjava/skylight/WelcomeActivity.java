@@ -19,6 +19,7 @@ import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
@@ -31,19 +32,21 @@ public class WelcomeActivity extends SkylightActivity {
 
 	private final class HolderCallback implements Callback {
 		private boolean demoOnly;
+
 		public HolderCallback(boolean aDemoOnly) {
 			demoOnly = aDemoOnly;
 		}
+
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview,
-					"intro.mp4", "demo.mp4");
-			if(demoOnly) {
+			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview, "intro.mp4",
+					"demo.mp4");
+			if (demoOnly) {
 				mediaPlayerHelper.getListOfMovies().remove(0);
 			} else {
-		    	SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			    if(sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0)>0)
-			    	mediaPlayerHelper.getListOfMovies().remove(1);
+				SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+				if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0) > 0)
+					mediaPlayerHelper.getListOfMovies().remove(1);
 			}
 			mp = mediaPlayerHelper.createMediaListPlayer();
 		}
@@ -159,6 +162,10 @@ public class WelcomeActivity extends SkylightActivity {
 		hardButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
 		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
+
+		TextView videoText = (TextView) contentView.findViewById(R.id.videoText);
+		videoText.setText(demoOnly ? getResources().getString(R.string.instructions) : null);
+
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
 		holder.addCallback(new HolderCallback(demoOnly));
@@ -219,5 +226,11 @@ public class WelcomeActivity extends SkylightActivity {
 		animatingButtons[0].setAnimation(buttonsAnimation);
 
 		buttonsAnimation.start();
+
+		Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
+		fadeOutAnimation.setStartTime(3000);
+		fadeOutAnimation.setDuration(4000);
+		fadeOutAnimation.setFillAfter(true);
+		contentView.findViewById(R.id.videoText).setAnimation(fadeOutAnimation);
 	}
 }
