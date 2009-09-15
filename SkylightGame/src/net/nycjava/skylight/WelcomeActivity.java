@@ -5,6 +5,7 @@ import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory
 import net.nycjava.skylight.view.MediaPlayerHelper;
 import net.nycjava.skylight.view.TypeFaceTextView;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -37,8 +38,13 @@ public class WelcomeActivity extends SkylightActivity {
 		public void surfaceCreated(SurfaceHolder holder) {
 			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview,
 					"intro.mp4", "demo.mp4");
-			if(demoOnly)
+			if(demoOnly) {
 				mediaPlayerHelper.getListOfMovies().remove(0);
+			} else {
+		    	SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+			    if(sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0)>0)
+			    	mediaPlayerHelper.getListOfMovies().remove(1);
+			}
 			mp = mediaPlayerHelper.createMediaListPlayer();
 		}
 
