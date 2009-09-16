@@ -1,4 +1,4 @@
-package net.nycjava.skylight.mocks.camera;
+package net.nycjava.skylight1.mocks.camera;
 
 import static java.lang.String.format;
 import android.hardware.Camera;

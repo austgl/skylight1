@@ -4,10 +4,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.nycjava.skylight.mocks.file.SensorEventStreamReader;
-import net.nycjava.skylight.mocks.sensor.SensorAccuracyEvent;
-import net.nycjava.skylight.mocks.sensor.SensorEvent;
-import net.nycjava.skylight.mocks.sensor.SensorValuesEvent;
+import net.nycjava.skylight1.mocks.file.SensorEventStreamReader;
+import net.nycjava.skylight1.mocks.sensor.SensorAccuracyEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorValuesEvent;
 import android.util.Log;
 
 public class SensorManager {

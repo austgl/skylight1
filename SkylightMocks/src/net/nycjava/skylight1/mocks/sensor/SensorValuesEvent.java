@@ -1,4 +1,4 @@
-package net.nycjava.skylight.mocks.sensor;
+package net.nycjava.skylight1.mocks.sensor;
 
 import static java.lang.String.format;
 

@@ -1,4 +1,4 @@
-package net.nycjava.skylight.mocks.file;
+package net.nycjava.skylight1.mocks.file;
 
 import static java.lang.String.format;
 
@@ -6,9 +6,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.nycjava.skylight.mocks.camera.CameraEvent;
-import net.nycjava.skylight.mocks.camera.CameraParametersEvent;
-import net.nycjava.skylight.mocks.camera.CameraPreviewEvent;
+import net.nycjava.skylight1.mocks.camera.CameraEvent;
+import net.nycjava.skylight1.mocks.camera.CameraParametersEvent;
+import net.nycjava.skylight1.mocks.camera.CameraPreviewEvent;
 
 // TODO change to use java.nio
 // TODO make more OO - use polymorphism

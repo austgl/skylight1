@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.nycjava.skylight.mocks.camera.CameraEvent;
-import net.nycjava.skylight.mocks.camera.CameraParametersEvent;
-import net.nycjava.skylight.mocks.camera.CameraPreviewEvent;
-import net.nycjava.skylight.mocks.file.CameraEventStreamReader;
+import net.nycjava.skylight1.mocks.camera.CameraEvent;
+import net.nycjava.skylight1.mocks.camera.CameraParametersEvent;
+import net.nycjava.skylight1.mocks.camera.CameraPreviewEvent;
+import net.nycjava.skylight1.mocks.file.CameraEventStreamReader;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.SurfaceHolder;

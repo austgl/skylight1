@@ -1,4 +1,4 @@
-package net.nycjava.skylight.mocks.file;
+package net.nycjava.skylight1.mocks.file;
 
 import static java.lang.String.format;
 
@@ -6,9 +6,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.nycjava.skylight.mocks.sensor.SensorAccuracyEvent;
-import net.nycjava.skylight.mocks.sensor.SensorEvent;
-import net.nycjava.skylight.mocks.sensor.SensorValuesEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorAccuracyEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorValuesEvent;
 
 // TODO change to use java.nio
 // TODO make more OO - use polymorphism

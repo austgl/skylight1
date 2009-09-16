@@ -1,5 +1,8 @@
-package net.nycjava.skylight.mocks.sensor;
+package net.nycjava.skylight1.mocks.sensor;
 
+import net.nycjava.skylight1.mocks.sensor.SensorAccuracyEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorValuesEvent;
 import junit.framework.TestCase;
 
 public class SensorEventTest extends TestCase {

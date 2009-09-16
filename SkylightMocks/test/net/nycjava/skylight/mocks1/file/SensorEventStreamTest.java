@@ -1,13 +1,15 @@
-package net.nycjava.skylight.mocks.file;
+package net.nycjava.skylight.mocks1.file;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import junit.framework.TestCase;
-import net.nycjava.skylight.mocks.sensor.SensorAccuracyEvent;
-import net.nycjava.skylight.mocks.sensor.SensorEvent;
-import net.nycjava.skylight.mocks.sensor.SensorValuesEvent;
+import net.nycjava.skylight1.mocks.file.SensorEventStreamReader;
+import net.nycjava.skylight1.mocks.file.SensorEventStreamWriter;
+import net.nycjava.skylight1.mocks.sensor.SensorAccuracyEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorEvent;
+import net.nycjava.skylight1.mocks.sensor.SensorValuesEvent;
 
 public class SensorEventStreamTest extends TestCase {
 	public void testStreamWritingAndReading() throws IOException {
