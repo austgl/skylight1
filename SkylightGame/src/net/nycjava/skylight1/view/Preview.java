@@ -1,9 +1,9 @@
 /**
  * 
  */
-package net.nycjava.skylight.view;
+package net.nycjava.skylight1.view;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
 import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;

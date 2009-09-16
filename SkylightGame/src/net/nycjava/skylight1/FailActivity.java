@@ -1,11 +1,11 @@
-package net.nycjava.skylight;
+package net.nycjava.skylight1;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
 
-import net.nycjava.skylight.R;
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;

@@ -1,7 +1,8 @@
-package net.nycjava.skylight;
+package net.nycjava.skylight1;
 
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.dependencyinjection.DependencyInjector;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -65,13 +66,11 @@ public abstract class SkylightActivity extends Activity {
 		menu.add(0, 0, Menu.NONE, getString(R.string.instructions));
 		menu.add(0, 1, Menu.NONE, getString(R.string.levelreached));
 		menu.add(0, 2, Menu.NONE, getString(R.string.about));
-		menu.add(0, 3, Menu.NONE, getString(R.string.website));
-		menu.add(0, 4, Menu.NONE, getString(R.string.exit));
+		menu.add(0, 3, Menu.NONE, getString(R.string.exit));
 		menu.getItem(0).setIcon(android.R.drawable.ic_menu_help);
 		menu.getItem(1).setIcon(android.R.drawable.ic_menu_view);
 		menu.getItem(2).setIcon(android.R.drawable.ic_menu_info_details);
-		menu.getItem(3).setIcon(android.R.drawable.ic_menu_compass);
-		menu.getItem(4).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.getItem(3).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return supRetVal;
 	}
 
@@ -105,13 +104,16 @@ public abstract class SkylightActivity extends Activity {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog = null;
+		LayoutInflater inflater = null;
+		View layout = null;
+		TextView text = null;
 		switch (id) {
 		case DIALOG_SHOW_LEVEL_ID:
 			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
 			int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
 
-			LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-			View layout = inflater.inflate(R.layout.custom_dialog, (ViewGroup) findViewById(R.id.layout_root));
+			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+			layout = inflater.inflate(R.layout.level_dialog, (ViewGroup) findViewById(R.id.layout_root));
 
 			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.levelreached)
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -120,35 +122,23 @@ public abstract class SkylightActivity extends Activity {
 						}
 					}).setView(layout).create();
 
-			TextView text = (TextView) layout.findViewById(R.id.highest_level);
-			text.setText(String.format("%d", oldHighScore + 1));
-
-			// dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.levelreached)
-			// .setMessage(String.format("%s   %d\n", getString(R.string.levelmessage), oldHighScore + 1))
-			// .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			// public void onClick(DialogInterface dialog, int whichButton) {
-			// removeDialog(DIALOG_SHOW_LEVEL_ID);
-			// }
-			// }).create();
-			// TextView text = new TextView(this);
-			// text.setText("hello world");
-			// ((FrameLayout) dialog.findViewById(android.R.id.content)).addView(text, new LayoutParams(
-			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-			/*
-			 * custom: Context mContext = getApplicationContext(); dialog = new Dialog(mContext);
-			 * dialog.setContentView(R.layout.custom_dialog); dialog.setTitle(R.string.levelreached); TextView text =
-			 * (TextView) dialog.findViewById(R.id.text); text.setText(R.string.levelmessage); ImageView image =
-			 * (ImageView) dialog.findViewById(R.id.image); image.setImageResource(R.drawable.icon_small); ...
-			 */
+			text = (TextView) layout.findViewById(R.id.highest_level);
+			text.setText(String.format("%d", oldHighScore));
 			break;
+			
 		case DIALOG_ABOUT_ID:
-			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.about).setMessage(
-					R.string.aboutmessage).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					removeDialog(DIALOG_ABOUT_ID);
-				}
-			}).create();
+			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+			layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_root));
+
+			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.about)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							removeDialog(DIALOG_ABOUT_ID);
+						}
+					}).setView(layout).create();
+
 			break;
+			
 		default:
 			dialog = null;
 		}

@@ -1,4 +1,4 @@
-package net.nycjava.skylight;
+package net.nycjava.skylight1;
 
 import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
@@ -14,8 +14,9 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 
 /**
  * reporting success; report acknowledged; go to get ready

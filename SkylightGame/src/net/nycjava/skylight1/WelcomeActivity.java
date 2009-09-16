@@ -1,9 +1,10 @@
-package net.nycjava.skylight;
+package net.nycjava.skylight1;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.view.MediaPlayerHelper;
-import net.nycjava.skylight.view.TypeFaceTextView;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.view.MediaPlayerHelper;
+import net.nycjava.skylight1.view.TypeFaceTextView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;

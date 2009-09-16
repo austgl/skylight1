@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.nycjava.skylight;
+package net.nycjava.skylight1;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,8 +1,8 @@
-package net.nycjava.skylight.service.impl;
+package net.nycjava.skylight1.service.impl;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.service.BalancedObjectPublicationService;
-import net.nycjava.skylight.service.SensorAppliedForceAdapter;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.service.BalancedObjectPublicationService;
+import net.nycjava.skylight1.service.SensorAppliedForceAdapter;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.util.Log;

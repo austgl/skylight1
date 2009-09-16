@@ -1,11 +1,11 @@
-package net.nycjava.skylight.service.impl;
+package net.nycjava.skylight1.service.impl;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.nycjava.skylight.service.BalancedObjectObserver;
-import net.nycjava.skylight.service.BalancedObjectPublicationService;
+import net.nycjava.skylight1.service.BalancedObjectObserver;
+import net.nycjava.skylight1.service.BalancedObjectPublicationService;
 
 public class BalancedObjectPublicationServiceImpl implements BalancedObjectPublicationService {
 	private static final int NUMBER_OF_MILLISECONDS_IN_A_SECOND = 1000;

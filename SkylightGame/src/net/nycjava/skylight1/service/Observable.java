@@ -1,4 +1,4 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight1.service;
 
 /**
  * Type-safe generic interface that can be extended or implemented by an observable.

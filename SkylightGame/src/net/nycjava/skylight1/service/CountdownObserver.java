@@ -1,4 +1,4 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight1.service;
 
 public interface CountdownObserver {
 	/**

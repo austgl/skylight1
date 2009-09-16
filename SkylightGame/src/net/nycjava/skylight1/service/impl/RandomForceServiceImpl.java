@@ -1,11 +1,11 @@
-package net.nycjava.skylight.service.impl;
+package net.nycjava.skylight1.service.impl;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.service.BalancedObjectPublicationService;
-import net.nycjava.skylight.service.RandomForceService;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.service.BalancedObjectPublicationService;
+import net.nycjava.skylight1.service.RandomForceService;
 
 public class RandomForceServiceImpl implements RandomForceService {
 	

@@ -1,11 +1,11 @@
-package net.nycjava.skylight.view;
+package net.nycjava.skylight1.view;
 
-import net.nycjava.skylight.R;
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.service.BalancedObjectObserver;
-import net.nycjava.skylight.service.BalancedObjectPublicationService;
-import net.nycjava.skylight.service.CountdownObserver;
-import net.nycjava.skylight.service.CountdownPublicationService;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.service.BalancedObjectObserver;
+import net.nycjava.skylight1.service.BalancedObjectPublicationService;
+import net.nycjava.skylight1.service.CountdownObserver;
+import net.nycjava.skylight1.service.CountdownPublicationService;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,12 +1,12 @@
-package net.nycjava.skylight.view;
+package net.nycjava.skylight1.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.nycjava.skylight.R;
-import net.nycjava.skylight.WelcomeActivity;
+import net.nycjava.skylight1.R;
+import net.nycjava.skylight1.WelcomeActivity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;

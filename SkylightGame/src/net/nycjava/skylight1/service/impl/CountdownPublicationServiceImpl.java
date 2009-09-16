@@ -1,12 +1,12 @@
-package net.nycjava.skylight.service.impl;
+package net.nycjava.skylight1.service.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import net.nycjava.skylight.service.CountdownObserver;
-import net.nycjava.skylight.service.CountdownPublicationService;
+import net.nycjava.skylight1.service.CountdownObserver;
+import net.nycjava.skylight1.service.CountdownPublicationService;
 
 public class CountdownPublicationServiceImpl implements CountdownPublicationService {
 
