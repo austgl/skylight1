@@ -1,12 +1,12 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight1.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.service.impl.BalancedObjectPublicationServiceImpl;
-import net.nycjava.skylight.service.impl.RandomForceServiceImpl;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.service.impl.BalancedObjectPublicationServiceImpl;
+import net.nycjava.skylight1.service.impl.RandomForceServiceImpl;
 
 public class RandomForceServiceImplTest extends TestCase {
 

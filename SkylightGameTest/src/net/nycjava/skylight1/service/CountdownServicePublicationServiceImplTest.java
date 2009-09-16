@@ -1,12 +1,12 @@
-package net.nycjava.skylight.service;
+package net.nycjava.skylight1.service;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import junit.framework.TestCase;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.service.impl.CountdownPublicationServiceImpl;
-import static net.nycjava.skylight.service.CountdownPublicationService.CounterStatus;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.service.impl.CountdownPublicationServiceImpl;
+import static net.nycjava.skylight1.service.CountdownPublicationService.CounterStatus;
 
 public class CountdownServicePublicationServiceImplTest extends TestCase {
 	private int currentCount = -1;
