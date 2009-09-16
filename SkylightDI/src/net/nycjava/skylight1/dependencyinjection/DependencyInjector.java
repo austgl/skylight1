@@ -1,4 +1,4 @@
-package net.nycjava.skylight.dependencyinjection;
+package net.nycjava.skylight1.dependencyinjection;
 
 import static java.lang.String.format;
 

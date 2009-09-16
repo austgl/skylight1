@@ -1,4 +1,4 @@
-package net.nycjava.skylight.dependencyinjection;
+package net.nycjava.skylight1.dependencyinjection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

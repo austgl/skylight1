@@ -1,5 +1,7 @@
 package net.nycjava.skylight.dependencyinjection;
 
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import junit.framework.TestCase;
 
 public class DependencyInjectingObjectFactoryTest extends TestCase {

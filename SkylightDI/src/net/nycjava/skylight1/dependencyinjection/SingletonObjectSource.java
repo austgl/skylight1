@@ -1,4 +1,4 @@
-package net.nycjava.skylight.dependencyinjection;
+package net.nycjava.skylight1.dependencyinjection;
 
 //TODO javadoc
 class SingletonObjectSource<T> extends ObjectSource<T> {
