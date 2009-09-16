@@ -16,6 +16,10 @@ import android.util.Log;
 import android.view.SurfaceView;
 
 public class MediaPlayerHelper {
+	public interface VideoStartListener {
+		void videoStarted(int anIndex);
+	}
+
 	private List<String> listOfMovies;
 
 	private Context context;
@@ -23,6 +27,10 @@ public class MediaPlayerHelper {
 	private MediaPlayer mediaPlayer;
 
 	private SurfaceView surfaceView;
+
+	private VideoStartListener videoStartListener;
+	
+	private int videoIndex;
 
 	public MediaPlayerHelper(Context aContext, SurfaceView aSurfaceView, String... aListOfResources) {
 		context = aContext;
@@ -44,6 +52,11 @@ public class MediaPlayerHelper {
 				mp.start();
 
 				surfaceView.setBackgroundResource(0);
+				
+				if (videoStartListener != null) {
+					videoStartListener.videoStarted(videoIndex);
+				}
+				videoIndex++;
 			}
 		});
 
@@ -66,6 +79,10 @@ public class MediaPlayerHelper {
 		loadNextMovie();
 
 		return mediaPlayer;
+	}
+	
+	public void setVideoStartListener(VideoStartListener aVideoStartListener) {
+		videoStartListener = aVideoStartListener;
 	}
 
 	private void loadNextMovie() {

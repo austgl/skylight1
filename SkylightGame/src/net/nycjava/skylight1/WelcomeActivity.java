@@ -1,10 +1,10 @@
 package net.nycjava.skylight1;
 
-import net.nycjava.skylight1.R;
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.view.MediaPlayerHelper;
 import net.nycjava.skylight1.view.TypeFaceTextView;
+import net.nycjava.skylight1.view.MediaPlayerHelper.VideoStartListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -49,6 +49,25 @@ public class WelcomeActivity extends SkylightActivity {
 				if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0) > 0)
 					mediaPlayerHelper.getListOfMovies().remove(1);
 			}
+
+			mediaPlayerHelper.setVideoStartListener(new VideoStartListener() {
+				@Override
+				public void videoStarted(int anIndex) {
+					Log.i(WelcomeActivity.class.getName(), "just starting video " + anIndex);
+					if (anIndex == 1 || demoOnly) {
+						final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
+						Log.i(WelcomeActivity.class.getName(), "showing text for" + captionTextView);
+						captionTextView.setText(getResources().getString(R.string.instructions));
+						captionTextView.setVisibility(View.VISIBLE);
+						Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
+						fadeOutAnimation.setStartOffset(1000);
+						fadeOutAnimation.setDuration(4000);
+						fadeOutAnimation.setFillAfter(true);
+						captionTextView.setAnimation(fadeOutAnimation);
+					}
+				}
+			});
+
 			mp = mediaPlayerHelper.createMediaListPlayer();
 		}
 
@@ -164,8 +183,8 @@ public class WelcomeActivity extends SkylightActivity {
 
 		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
 
-		TextView videoText = (TextView) contentView.findViewById(R.id.videoText);
-		videoText.setText(demoOnly ? getResources().getString(R.string.instructions) : null);
+		// TextView videoText = (TextView) contentView.findViewById(R.id.videoText);
+		// videoText.setText(demoOnly ? getResources().getString(R.string.instructions) : null);
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
@@ -227,11 +246,5 @@ public class WelcomeActivity extends SkylightActivity {
 		animatingButtons[0].setAnimation(buttonsAnimation);
 
 		buttonsAnimation.start();
-
-		Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-		fadeOutAnimation.setStartTime(3000);
-		fadeOutAnimation.setDuration(4000);
-		fadeOutAnimation.setFillAfter(true);
-		contentView.findViewById(R.id.videoText).setAnimation(fadeOutAnimation);
 	}
 }
