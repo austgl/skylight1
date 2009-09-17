@@ -36,6 +36,7 @@ public class MediaPlayerHelper {
 		context = aContext;
 		surfaceView = aSurfaceView;
 		listOfMovies = new ArrayList<String>(Arrays.asList(aListOfResources));
+		Log.i(MediaPlayerHelper.class.getName(), String.format("created new media player helper for movies %s", Arrays.toString(aListOfResources)));
 	}
 
 	public MediaPlayer createMediaListPlayer() {
@@ -64,12 +65,12 @@ public class MediaPlayerHelper {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				Log.i(WelcomeActivity.class.getName(), "mp is completed");
-				if(listOfMovies.size()>1) {
-					//TODO: delay for 2 seconds
-					surfaceView.setBackgroundResource(R.drawable.welcome_background);
-					// draw text on surfaceview: "How to Play:"
-					//TODO: delay for another 2 seconds
-				}
+//				if(listOfMovies.size()>1) {
+//					//TODO: delay for 2 seconds
+////					surfaceView.setBackgroundResource(R.drawable.welcome_background);
+//					// draw text on surfaceview: "How to Play:"
+//					//TODO: delay for another 2 seconds
+//				}
 				loadNextMovie();
 			}
 		});
@@ -92,6 +93,7 @@ public class MediaPlayerHelper {
 
 		try {
 			final String fileName = listOfMovies.remove(0);
+			Log.i(MediaPlayerHelper.class.getName(), String.format("about to load movie %s", fileName));
 			final AssetFileDescriptor afd = context.getAssets().openFd(fileName);
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
@@ -103,13 +105,5 @@ public class MediaPlayerHelper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setListOfMovies(List<String> listOfMovies) {
-		this.listOfMovies = listOfMovies;
-	}
-
-	public List<String> getListOfMovies() {
-		return listOfMovies;
 	}
 }

@@ -1,5 +1,8 @@
 package net.nycjava.skylight1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.view.MediaPlayerHelper;
@@ -40,15 +43,17 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
-			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview, "intro.mp4",
-					"demo.mp4");
-			if (demoOnly) {
-				mediaPlayerHelper.getListOfMovies().remove(0);
-			} else {
-				SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-				if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0) > 0)
-					mediaPlayerHelper.getListOfMovies().remove(1);
+			List<String> listOfMovies = new ArrayList<String>(2);
+			if (!demoOnly) {
+				listOfMovies.add("intro.mp4");
 			}
+			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0) > 0) {
+				listOfMovies.add("demo.mp4");
+			}
+
+			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview, listOfMovies
+					.toArray(new String[0]));
 
 			mediaPlayerHelper.setVideoStartListener(new VideoStartListener() {
 				@Override
@@ -56,8 +61,11 @@ public class WelcomeActivity extends SkylightActivity {
 					Log.i(WelcomeActivity.class.getName(), "just starting video " + anIndex);
 					if (anIndex == 1 || demoOnly) {
 						final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-						Log.i(WelcomeActivity.class.getName(), "showing text for" + captionTextView);
+						Log.i(WelcomeActivity.class.getName(), "showing text for " + captionTextView);
 						captionTextView.setText(getResources().getString(R.string.instructions));
+						captionTextView.setBackgroundColor(Color.TRANSPARENT);
+						captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
+						captionTextView.setDrawingCacheEnabled(false);
 						captionTextView.setVisibility(View.VISIBLE);
 						Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 						fadeOutAnimation.setStartOffset(1000);
@@ -73,15 +81,12 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			Log.i(WelcomeActivity.class.getName(), "surface changed");
 		}
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			if (mp.isPlaying()) {
-				mp.stop();
-			}
 			mp.release();
-			Log.i(WelcomeActivity.class.getName(), "surface destroyed");
 		}
 	}
 
@@ -183,9 +188,6 @@ public class WelcomeActivity extends SkylightActivity {
 
 		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
 
-		// TextView videoText = (TextView) contentView.findViewById(R.id.videoText);
-		// videoText.setText(demoOnly ? getResources().getString(R.string.instructions) : null);
-
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
 		holder.addCallback(new HolderCallback(demoOnly));
@@ -204,8 +206,16 @@ public class WelcomeActivity extends SkylightActivity {
 	}
 
 	@Override
-	protected void onPostResume() {
-		super.onPostResume();
+	protected void onResume() {
+		super.onResume();
+
+		// this next bit isn't doing what i want it to do... hide the caption to suppress the background that gets
+		// rendered just as the video is starting :o(
+		final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
+		captionTextView.setBackgroundColor(Color.TRANSPARENT);
+		captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
+		captionTextView.setDrawingCacheEnabled(false);
+		captionTextView.setVisibility(View.GONE);
 
 		buttonsAnimation = new Animation() {
 			@Override
@@ -246,5 +256,14 @@ public class WelcomeActivity extends SkylightActivity {
 		animatingButtons[0].setAnimation(buttonsAnimation);
 
 		buttonsAnimation.start();
+	}
+
+	@Override
+	protected void onPause() {
+		Log.i(WelcomeActivity.class.getName(), "paused");
+		super.onPause();
+		if (mp.isPlaying()) {
+			mp.stop();
+		}
 	}
 }

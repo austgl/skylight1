@@ -11,9 +11,8 @@
 		<net.nycjava.skylight1.view.TypeFaceTextView android:id="@+id/videoText" 
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:padding="10px"
-			android:background="#00ff0000"
 			android:focusable="false" android:textSize="32px" android:textColor="#ffffff"
-			typeface="skylight.ttf" android:visibility="gone"/>
+			typeface="skylight.ttf" android:visibility="gone" android:background="#00000000"/>
 	</FrameLayout>
 
 	<net.nycjava.skylight1.view.TypeFaceTextView
