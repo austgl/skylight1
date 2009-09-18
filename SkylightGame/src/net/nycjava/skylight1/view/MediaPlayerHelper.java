@@ -29,14 +29,15 @@ public class MediaPlayerHelper {
 	private SurfaceView surfaceView;
 
 	private VideoStartListener videoStartListener;
-	
+
 	private int videoIndex;
 
 	public MediaPlayerHelper(Context aContext, SurfaceView aSurfaceView, String... aListOfResources) {
 		context = aContext;
 		surfaceView = aSurfaceView;
 		listOfMovies = new ArrayList<String>(Arrays.asList(aListOfResources));
-		Log.i(MediaPlayerHelper.class.getName(), String.format("created new media player helper for movies %s", Arrays.toString(aListOfResources)));
+		Log.i(MediaPlayerHelper.class.getName(), String.format("created new media player helper for movies %s", Arrays
+				.toString(aListOfResources)));
 	}
 
 	public MediaPlayer createMediaListPlayer() {
@@ -53,7 +54,7 @@ public class MediaPlayerHelper {
 				mp.start();
 
 				surfaceView.setBackgroundResource(0);
-				
+
 				if (videoStartListener != null) {
 					videoStartListener.videoStarted(videoIndex);
 				}
@@ -65,12 +66,6 @@ public class MediaPlayerHelper {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				Log.i(WelcomeActivity.class.getName(), "mp is completed");
-//				if(listOfMovies.size()>1) {
-//					//TODO: delay for 2 seconds
-////					surfaceView.setBackgroundResource(R.drawable.welcome_background);
-//					// draw text on surfaceview: "How to Play:"
-//					//TODO: delay for another 2 seconds
-//				}
 				loadNextMovie();
 			}
 		});
@@ -81,7 +76,7 @@ public class MediaPlayerHelper {
 
 		return mediaPlayer;
 	}
-	
+
 	public void setVideoStartListener(VideoStartListener aVideoStartListener) {
 		videoStartListener = aVideoStartListener;
 	}

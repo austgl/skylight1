@@ -60,18 +60,19 @@ public class WelcomeActivity extends SkylightActivity {
 				public void videoStarted(int anIndex) {
 					Log.i(WelcomeActivity.class.getName(), "just starting video " + anIndex);
 					if (anIndex == 1 || demoOnly) {
-						final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-						Log.i(WelcomeActivity.class.getName(), "showing text for " + captionTextView);
-						captionTextView.setText(getResources().getString(R.string.instructions));
-						captionTextView.setBackgroundColor(Color.TRANSPARENT);
-						captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
-						captionTextView.setDrawingCacheEnabled(false);
-						captionTextView.setVisibility(View.VISIBLE);
-						Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-						fadeOutAnimation.setStartOffset(1000);
-						fadeOutAnimation.setDuration(4000);
-						fadeOutAnimation.setFillAfter(true);
-						captionTextView.setAnimation(fadeOutAnimation);
+						contentView.post(new Runnable() {
+							@Override
+							public void run() {
+								final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
+								captionTextView.setText(getResources().getString(R.string.instructions));
+								captionTextView.setVisibility(View.VISIBLE);
+								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
+								fadeOutAnimation.setStartOffset(1000);
+								fadeOutAnimation.setDuration(4000);
+								fadeOutAnimation.setFillAfter(true);
+								captionTextView.setAnimation(fadeOutAnimation);
+							}
+						});
 					}
 				}
 			});
@@ -86,7 +87,6 @@ public class WelcomeActivity extends SkylightActivity {
 
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			mp.release();
 		}
 	}
 
@@ -121,7 +121,8 @@ public class WelcomeActivity extends SkylightActivity {
 
 			// stop the media player
 			if (mp != null) {
-				mp.pause();
+				mp.release();
+				mp = null;
 			}
 
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
@@ -256,14 +257,22 @@ public class WelcomeActivity extends SkylightActivity {
 		animatingButtons[0].setAnimation(buttonsAnimation);
 
 		buttonsAnimation.start();
+
+		// if the resume is coming back from some pause, then resume the player
+		if (mp != null) {
+			mp.start();
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		Log.i(WelcomeActivity.class.getName(), "paused");
 		super.onPause();
-		if (mp.isPlaying()) {
-			mp.stop();
+
+		// if the media player has not already been disposed of (leaving this screen, as
+		// compared to pausing to go to another application), then pause the video
+		if (mp != null) {
+			mp.pause();
 		}
 	}
 }
