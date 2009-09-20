@@ -113,11 +113,13 @@ public class SkillTestActivity extends SkylightActivity {
 				if (remainingTime == 0) {
 					// record the new high score
 				    SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-				    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
-				    SharedPreferences.Editor editor = sharedPreferences.edit();
-				    editor.putInt(HIGH_SCORE_PREFERENCE_NAME, Math.max(oldHighScore, difficultyLevel));
-				    editor.commit();
-					
+				    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
+				    
+				    if(difficultyLevel>oldHighScore) {
+					    SharedPreferences.Editor editor = sharedPreferences.edit();				    
+					    editor.putInt(HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
+					    editor.commit();
+					}
 					// pass control to the success activity
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);

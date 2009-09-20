@@ -48,7 +48,7 @@ public class WelcomeActivity extends SkylightActivity {
 				listOfMovies.add("intro.mp4");
 			}
 			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0) > 0) {
+			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1) < 0) {
 				listOfMovies.add("demo.mp4");
 			}
 

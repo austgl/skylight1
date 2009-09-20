@@ -109,7 +109,7 @@ public abstract class SkylightActivity extends Activity {
 		switch (id) {
 		case DIALOG_SHOW_LEVEL_ID:
 			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, 0);
+			int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
 
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 			layout = inflater.inflate(R.layout.level_dialog, (ViewGroup) findViewById(R.id.layout_root));
