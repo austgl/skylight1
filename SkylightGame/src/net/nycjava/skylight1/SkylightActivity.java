@@ -1,6 +1,5 @@
 package net.nycjava.skylight1;
 
-import net.nycjava.skylight1.R;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
 import android.app.Activity;
@@ -123,9 +122,9 @@ public abstract class SkylightActivity extends Activity {
 					}).setView(layout).create();
 
 			text = (TextView) layout.findViewById(R.id.highest_level);
-			text.setText(String.format("%d", oldHighScore));
+			text.setText(String.format("%d", oldHighScore + 1));
 			break;
-			
+
 		case DIALOG_ABOUT_ID:
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 			layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_root));
@@ -138,7 +137,7 @@ public abstract class SkylightActivity extends Activity {
 					}).setView(layout).create();
 
 			break;
-			
+
 		default:
 			dialog = null;
 		}
