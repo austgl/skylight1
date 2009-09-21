@@ -58,19 +58,19 @@ final public class SkillTestView extends View {
 
 	private int extraMarginToAccommodateDoubleVision;
 
-	final private Typeface face;
+	private Typeface face;
 
 	private Bitmap levelGlassFullBitmap;
 
 	private Bitmap levelGlassEmptyBitmap;
 
-	final private int timeRemainingRectangleLeft;
+	private int timeRemainingRectangleLeft;
 
-	final private int timeRemainingRectangleTop;
+	private int timeRemainingRectangleTop;
 
-	final private int timeRemainingRectangleRight;
+	private int timeRemainingRectangleRight;
 
-	final private int timeRemainingRectangleBottom;
+	private int timeRemainingRectangleBottom;
 
 	private int glassRectangleLeft;
 
@@ -88,19 +88,19 @@ final public class SkillTestView extends View {
 
 	private boolean glassInvalidated;
 
-	final private int glassBitmapWidth;
+	private int glassBitmapWidth;
 
-	final private int glassBitmapHeight;
+	private int glassBitmapHeight;
 
-	final private int levelGlassWidth;
+	private int levelGlassWidth;
 
-	final private int levelGlassHeight;
+	private int levelGlassHeight;
 
-	final private Paint levelPaint = new Paint();
+	private Paint levelPaint = new Paint();
 
-	final private Paint arcPaint = new Paint();
+	private Paint arcPaint = new Paint();
 
-	final private Paint timePaint = new Paint();
+	private Paint timePaint = new Paint();
 
 	private Bitmap difficultyLevelBitmap;
 
@@ -117,6 +117,10 @@ final public class SkillTestView extends View {
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
 
+		initialize();
+	}
+
+	private void initialize() {
 		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
 		glassBitmapWidth = glassBitmap.getWidth();
 		glassBitmapHeight = glassBitmap.getHeight();
@@ -159,6 +163,8 @@ final public class SkillTestView extends View {
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
+		initialize();
+		
 		frames = 0;
 		timeStartedCountingFrames = 0;
 
