@@ -1,4 +1,4 @@
-package net.nycjava.skylight.tdc;
+package net.nycjava.skylight1.tdc;
 
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.dependencyinjection.DependencyInjector;
-import net.nycjava.skylight.mocks.camera.CameraParametersEvent;
-import net.nycjava.skylight.mocks.camera.CameraPreviewEvent;
-import net.nycjava.skylight.mocks.file.CameraEventStreamWriter;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
+import net.nycjava.skylight1.mocks.camera.CameraParametersEvent;
+import net.nycjava.skylight1.mocks.camera.CameraPreviewEvent;
+import net.nycjava.skylight1.mocks.file.CameraEventStreamWriter;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.PixelFormat;

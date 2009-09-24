@@ -1,4 +1,4 @@
-package net.nycjava.skylight.tdc;
+package net.nycjava.skylight1.tdc;
 
 import static java.lang.String.format;
 
@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import net.nycjava.skylight.dependencyinjection.Dependency;
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
-import net.nycjava.skylight.dependencyinjection.DependencyInjector;
-import net.nycjava.skylight.mocks.file.SensorEventStreamWriter;
-import net.nycjava.skylight.mocks.sensor.SensorValuesEvent;
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
+import net.nycjava.skylight1.mocks.file.SensorEventStreamWriter;
+import net.nycjava.skylight1.mocks.sensor.SensorValuesEvent;
+import net.nycjava.skylight1.tdc.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.SensorListener;

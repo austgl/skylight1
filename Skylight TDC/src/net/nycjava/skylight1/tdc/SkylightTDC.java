@@ -1,6 +1,7 @@
-package net.nycjava.skylight.tdc;
+package net.nycjava.skylight1.tdc;
 
-import net.nycjava.skylight.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import net.nycjava.skylight1.tdc.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.SensorManager;

@@ -1,4 +1,4 @@
-package net.nycjava.skylight.dependencyinjection;
+package net.nycjava.skylight1.dependencyinjection;
 
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
