@@ -52,7 +52,6 @@ public class FailActivity extends SkylightActivity {
 		adView.setLayoutParams(layoutParams);
 		adView.setKeywords(getString(R.string.keywords));
 		adView.setGravity(Gravity.BOTTOM);
-		AdManager.setInTestMode(true);
 		view.addView(adView);
 		
 		setContentView(view);

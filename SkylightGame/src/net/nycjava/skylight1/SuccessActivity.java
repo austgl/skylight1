@@ -53,7 +53,6 @@ public class SuccessActivity extends SkylightActivity {
 		adView.setLayoutParams(layoutParams);
 		adView.setKeywords("Android application");
 		adView.setGravity(Gravity.BOTTOM);
-		AdManager.setInTestMode(true);
 		contentView.addView(adView);
 		
 		setContentView(contentView);
