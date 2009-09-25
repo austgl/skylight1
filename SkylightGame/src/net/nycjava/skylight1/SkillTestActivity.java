@@ -49,6 +49,8 @@ public class SkillTestActivity extends SkylightActivity {
 	private int width, height;
 
 	private int difficultyLevel;
+	
+	private boolean previouslyPaused;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
@@ -89,6 +91,10 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		if (previouslyPaused) {
+			goToLoseActivity();
+		}
 
 		width = getWindowManager().getDefaultDisplay().getWidth();
 		height = getWindowManager().getDefaultDisplay().getHeight();
@@ -99,11 +105,7 @@ public class SkillTestActivity extends SkylightActivity {
 			}
 
 			public void fallenOverNotification() {
-				final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-				intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
-				balanceObjPublicationService.stopService();
-				finish();
-				startActivity(intent);
+				goToLoseActivity();
 			}
 		};
 		balanceObjPublicationService.addObserver(balanceObjObserver);
@@ -146,10 +148,20 @@ public class SkillTestActivity extends SkylightActivity {
 	protected void onPause() {
 		super.onPause();
 
+		previouslyPaused = true;
+		
 		countdownPublicationService.stopCountdown();
 		countdownPublicationService.removeObserver(countdownObserver);
 		balanceObjPublicationService.removeObserver(balanceObjObserver);
 		randomForceService.stop();
 		sensorAppliedForceAdapter.stop();
+	}
+
+	private void goToLoseActivity() {
+		final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+		intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
+		balanceObjPublicationService.stopService();
+		finish();
+		startActivity(intent);
 	}
 }
