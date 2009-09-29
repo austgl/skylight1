@@ -65,11 +65,9 @@ public abstract class SkylightActivity extends Activity {
 		menu.add(0, 0, Menu.NONE, getString(R.string.instructions));
 		menu.add(0, 1, Menu.NONE, getString(R.string.levelreached));
 		menu.add(0, 2, Menu.NONE, getString(R.string.about));
-		menu.add(0, 3, Menu.NONE, getString(R.string.exit));
 		menu.getItem(0).setIcon(android.R.drawable.ic_menu_help);
 		menu.getItem(1).setIcon(android.R.drawable.ic_menu_view);
 		menu.getItem(2).setIcon(android.R.drawable.ic_menu_info_details);
-		menu.getItem(3).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return supRetVal;
 	}
 
@@ -90,10 +88,6 @@ public abstract class SkylightActivity extends Activity {
 		case 3:
 			final Intent visitWebSiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.websiteurl)));
 			startActivity(visitWebSiteIntent);
-			return true;
-		case 4:
-			finish();
-			moveTaskToBack(true);
 			return true;
 		default:
 			return false;
