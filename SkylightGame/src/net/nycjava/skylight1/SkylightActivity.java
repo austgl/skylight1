@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +21,15 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 public abstract class SkylightActivity extends Activity {
+	private static final int MENU_ITEM_0 = 0;
+	private static final int MENU_ITEM_1 = 1;
+	private static final int MENU_ITEM_2 = 2;
+
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
 
 	public static final String DISPLAY_DEMO = SkylightActivity.class.getPackage().getName() + ".displayDemo";
 
-	public static final String HIGH_SCORE_PREFERENCE_NAME = "highScore";
+	public static final String HIGH_SCORE_PREFERENCE_NAME = "highLevel";
 
 	public static final int EASY_DIFFICULTY_LEVEL = 0;
 
@@ -32,6 +38,8 @@ public abstract class SkylightActivity extends Activity {
 	public static final int HARD_DIFFICULTY_LEVEL = 10;
 
 	public static Uri URI_SKY;
+	
+	public static String ANDROID_ID;
 
 	protected static final String SKYLIGHT_PREFS_FILE = "SkylightPrefsFile";
 
@@ -56,18 +64,22 @@ public abstract class SkylightActivity extends Activity {
 		// dependencies this activity may have
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(this);
 
-		URI_SKY = Uri.parse(getString(R.string.instructions));
+		if(URI_SKY==null) {
+			URI_SKY = Uri.parse(getString(R.string.instructions));
+			ANDROID_ID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+			Log.println(Log.DEBUG, this.getLocalClassName(), "ANDROID_ID = "+ANDROID_ID);
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
 
-		menu.add(0, 0, Menu.NONE, getString(R.string.instructions));
-		menu.add(0, 1, Menu.NONE, getString(R.string.levelreached));
-		menu.add(0, 2, Menu.NONE, getString(R.string.about));
-		menu.getItem(0).setIcon(android.R.drawable.ic_menu_help);
-		menu.getItem(1).setIcon(android.R.drawable.ic_menu_view);
-		menu.getItem(2).setIcon(android.R.drawable.ic_menu_info_details);
+		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.instructions));
+		menu.add(0, MENU_ITEM_1, Menu.NONE, getString(R.string.levelreached));
+		menu.add(0, MENU_ITEM_2, Menu.NONE, getString(R.string.about));
+		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_help);
+		menu.getItem(MENU_ITEM_1).setIcon(android.R.drawable.ic_menu_view);
+		menu.getItem(MENU_ITEM_2).setIcon(android.R.drawable.ic_menu_info_details);
 		return supRetVal;
 	}
 

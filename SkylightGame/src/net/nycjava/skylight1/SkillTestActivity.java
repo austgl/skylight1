@@ -86,6 +86,10 @@ public class SkillTestActivity extends SkylightActivity {
 
 		randomForceService.setDifficultyLevel(difficultyLevel);
 		balanceObjPublicationService.setDifficultyLevel(difficultyLevel);
+		
+		if(ANDROID_ID==null) { // in emulator
+			
+		}
 	}
 	
 	@Override

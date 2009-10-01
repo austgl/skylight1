@@ -1,6 +1,5 @@
 package net.nycjava.skylight1;
 
-import com.admob.android.ads.AdManager;
 import com.admob.android.ads.AdView;
 
 import android.content.Intent;

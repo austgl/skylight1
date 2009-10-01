@@ -33,7 +33,7 @@ import com.admob.android.ads.AdView;
  */
 public class FailActivity extends SkylightActivity {
 
-	private static final String HIGH_SCORES_SERVER = "www.faganphotos.com/stats";
+	private static final String HIGH_SCORES_SERVER = "balancethebeer.appspot.com/stats";
 
 	@Dependency
 	private LinearLayout view;
@@ -82,9 +82,7 @@ public class FailActivity extends SkylightActivity {
 							"").replace("]", ""
 									);// could be nicer
 					final String locale = Locale.getDefault().toString();
-					final int azimuthVariance = 0;
-					// without public-private key infrastructure, then this can be hacked by simply looking at the open
-					// source code!
+					final int azimuthVariance = 0; //TODO:
 					final int signature = 0;
 					final URL statisticsURL = new URL(String.format(
 							"http://%s?id=%s&level=%d&azimuth=%d&locale=%s&sig=%d", HIGH_SCORES_SERVER, hashedPhoneId,
@@ -96,10 +94,10 @@ public class FailActivity extends SkylightActivity {
 					final String bestLevels[] = responseLine.split(",");
 					final int bestScoreEver = Integer.parseInt(bestLevels[0]);
 					final int bestScoreToday = Integer.parseInt(bestLevels[1]);
-					Log.i(FailActivity.class.getName(), String.format("best scores are %d and %d", bestScoreEver,
-							bestScoreToday));
+					Log.i(FailActivity.class.getName(), String.format("\n\nHighest Level Reached:  ever: %d  today: %d\n\n",
+							bestScoreEver, bestScoreToday));
 				} catch (Exception e) {
-					Log.e(FailActivity.class.getName(), "failed to contact server for high scores", e);
+					Log.e(FailActivity.class.getName(), "~~~failed to contact server for high scores~~~", e);
 					return;
 				}
 			}
