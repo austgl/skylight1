@@ -67,6 +67,8 @@ public abstract class SkylightActivity extends Activity {
 		if(URI_SKY==null) {
 			URI_SKY = Uri.parse(getString(R.string.instructions));
 			ANDROID_ID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+			if(ANDROID_ID==null)
+				ANDROID_ID=String.format("EMULATOR-%d",System.currentTimeMillis());
 			Log.println(Log.DEBUG, this.getLocalClassName(), "ANDROID_ID = "+ANDROID_ID);
 		}
 	}

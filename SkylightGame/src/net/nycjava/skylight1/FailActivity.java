@@ -75,7 +75,7 @@ public class FailActivity extends SkylightActivity {
 			public void run() {
 				final int failedLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL, 0);
 				try {
-					final String phoneId = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+					final String phoneId = ANDROID_ID;
 					final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
 					messageDigest.update(phoneId.getBytes());
 					final String hashedPhoneId = Arrays.toString(messageDigest.digest()).replace(" ", "").replace("[",
