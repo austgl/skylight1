@@ -2,7 +2,6 @@ package net.nycjava.skylight1.service.impl;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.service.BalancedObjectPublicationService;
 import net.nycjava.skylight1.service.RandomForceService;
@@ -17,7 +16,7 @@ public class RandomForceServiceImpl implements RandomForceService {
 
 	protected static final double MAXIMUM_FORCE = 1.0d;
 
-	protected static final float FORCE_FACTOR = 0.3f;
+	protected static final float FORCE_FACTOR = 0.1f;
 	
 	static final float forceAdj[] = { 
 		1.0f,
@@ -103,11 +102,17 @@ public class RandomForceServiceImpl implements RandomForceService {
 			answer = forceAdj[4];
 		}
 		
+		float factor;
 		if(difficultyLevel >= difficultyLevels.length) {
-			answer = answer * difficultyLevels[difficultyLevels.length - 1];
+			// add on FORCE_FACTOR to the last force value in array
+			// for all other higher levels
+			factor = difficultyLevels[difficultyLevels.length - 1] + 
+			((difficultyLevel - difficultyLevels.length) * FORCE_FACTOR);
 		} else {
-			answer = answer * difficultyLevels[difficultyLevel];
+			factor =  difficultyLevels[difficultyLevel];
 		}
+		answer = answer * factor;
+
 		if(sign < 0.5) {
 			answer = -answer;
 		}
