@@ -37,9 +37,7 @@ public abstract class SkylightActivity extends Activity {
 
 	public static final int HARD_DIFFICULTY_LEVEL = 10;
 
-	public static Uri URI_SKY;
-	
-	public static String ANDROID_ID;
+	public static String androidId;
 
 	protected static final String SKYLIGHT_PREFS_FILE = "SkylightPrefsFile";
 
@@ -64,13 +62,11 @@ public abstract class SkylightActivity extends Activity {
 		// dependencies this activity may have
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(this);
 
-		if(URI_SKY==null) {
-			URI_SKY = Uri.parse(getString(R.string.instructions));
-			ANDROID_ID = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-			if(ANDROID_ID==null)
-				ANDROID_ID=String.format("EMULATOR-%d",System.currentTimeMillis());
-			Log.println(Log.DEBUG, this.getLocalClassName(), "ANDROID_ID = "+ANDROID_ID);
+		androidId = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
+		if(androidId==null) {
+			androidId=String.format("EMULATOR-%d",System.currentTimeMillis());
 		}
+		Log.println(Log.DEBUG, this.getLocalClassName(), "androidId = "+androidId);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

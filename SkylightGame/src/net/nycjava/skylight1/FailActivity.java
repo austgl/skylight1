@@ -75,9 +75,8 @@ public class FailActivity extends SkylightActivity {
 			public void run() {
 				final int failedLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL, 0);
 				try {
-					final String phoneId = ANDROID_ID;
 					final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
-					messageDigest.update(phoneId.getBytes());
+					messageDigest.update(androidId.getBytes());
 					final String hashedPhoneId = Arrays.toString(messageDigest.digest()).replace(" ", "").replace("[",
 							"").replace("]", ""
 									);// could be nicer
@@ -94,6 +93,7 @@ public class FailActivity extends SkylightActivity {
 					final String bestLevels[] = responseLine.split(",");
 					final int bestScoreEver = Integer.parseInt(bestLevels[0]);
 					final int bestScoreToday = Integer.parseInt(bestLevels[1]);
+					//TODO: store scores in preferences
 					Log.i(FailActivity.class.getName(), String.format("\n\nHighest Level Reached:  ever: %d  today: %d\n\n",
 							bestScoreEver, bestScoreToday));
 				} catch (Exception e) {
