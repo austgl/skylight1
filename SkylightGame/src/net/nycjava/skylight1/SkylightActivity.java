@@ -27,6 +27,8 @@ public abstract class SkylightActivity extends Activity {
 
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
 
+	public static final String COMPASS_READINGS = SkylightActivity.class.getPackage().getName() + ".compassReadings";
+
 	public static final String DISPLAY_DEMO = SkylightActivity.class.getPackage().getName() + ".displayDemo";
 
 	public static final String HIGH_SCORE_PREFERENCE_NAME = "highLevel";

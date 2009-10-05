@@ -1,5 +1,7 @@
 package net.nycjava.skylight1;
 
+import static java.lang.String.format;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,7 +17,6 @@ import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactor
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -78,10 +79,9 @@ public class FailActivity extends SkylightActivity {
 					final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
 					messageDigest.update(androidId.getBytes());
 					final String hashedPhoneId = Arrays.toString(messageDigest.digest()).replace(" ", "").replace("[",
-							"").replace("]", ""
-									);// could be nicer
+							"").replace("]", "");// could be nicer
 					final String locale = Locale.getDefault().toString();
-					final int azimuthVariance = 0; //TODO:
+					final int azimuthVariance = calculateAzimuth();
 					final int signature = 0;
 					final URL statisticsURL = new URL(String.format(
 							"http://%s?id=%s&level=%d&azimuth=%d&locale=%s&sig=%d", HIGH_SCORES_SERVER, hashedPhoneId,
@@ -93,13 +93,38 @@ public class FailActivity extends SkylightActivity {
 					final String bestLevels[] = responseLine.split(",");
 					final int bestScoreEver = Integer.parseInt(bestLevels[0]);
 					final int bestScoreToday = Integer.parseInt(bestLevels[1]);
-					//TODO: store scores in preferences
-					Log.i(FailActivity.class.getName(), String.format("\n\nHighest Level Reached:  ever: %d  today: %d\n\n",
-							bestScoreEver, bestScoreToday));
+					// TODO: store scores in preferences
+					Log.i(FailActivity.class.getName(), String.format(
+							"\n\nHighest Level Reached:  ever: %d  today: %d\n\n", bestScoreEver, bestScoreToday));
 				} catch (Exception e) {
 					Log.e(FailActivity.class.getName(), "~~~failed to contact server for high scores~~~", e);
 					return;
 				}
+			}
+
+			private int calculateAzimuth() {
+				final float compassReadings[] = getIntent().getFloatArrayExtra(COMPASS_READINGS);
+
+				// need at least two readings to get a variance
+				if (compassReadings.length < 2) {
+					Log.i(FailActivity.class.getName(), "returning az = 0");
+					return 0;
+				}
+
+				// using two-pass algorithm from http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance
+				float mean = 0f;
+				for (float compassReading : compassReadings) {
+					mean += compassReading;
+				}
+				mean = mean / (float) compassReadings.length;
+				float sumOfSquares = 0f;
+				for (float compassReading : compassReadings) {
+					final float distance = compassReading - mean;
+					sumOfSquares += distance * distance;
+				}
+				final int variance = (int) (sumOfSquares / (float) compassReadings.length - 1);
+				Log.i(FailActivity.class.getName(), format("az variance is %d", variance));
+				return variance;
 			}
 		}).start();
 	}

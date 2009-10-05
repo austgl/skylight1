@@ -1,7 +1,7 @@
 package net.nycjava.skylight1;
 
-import com.admob.android.ads.AdView;
-
+import net.nycjava.skylight1.dependencyinjection.Dependency;
+import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -13,9 +13,8 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import net.nycjava.skylight1.R;
-import net.nycjava.skylight1.dependencyinjection.Dependency;
-import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+
+import com.admob.android.ads.AdView;
 
 /**
  * reporting success; report acknowledged; go to get ready
@@ -64,6 +63,7 @@ public class SuccessActivity extends SkylightActivity {
 		intent.setClass(SuccessActivity.this, SkillTestActivity.class);
 		intent.putExtra(DIFFICULTY_LEVEL, getIntent().getIntExtra(DIFFICULTY_LEVEL, 0)
 				+ DIFFICULTY_LEVEL_INCREMENT);
+		intent.putExtra(COMPASS_READINGS, getIntent().getFloatArrayExtra(COMPASS_READINGS));
 		startActivity(intent);
 	}
 	

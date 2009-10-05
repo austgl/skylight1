@@ -136,14 +136,7 @@ public class SkillTestActivity extends SkylightActivity {
 					// pass control to the success activity
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
-					Float compassReading;
-					try {
-						compassReading = compassReadingFuture.get();
-						Log.i(SkillTestActivity.class.getName(), "compass reading is " + compassReading);
-						intent.putExtra("COMPASS", compassReading);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					addCompassReading(intent);
 					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 					finish();
 					startActivity(intent);
@@ -178,17 +171,33 @@ public class SkillTestActivity extends SkylightActivity {
 
 	private void goToLoseActivity() {
 		final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
-		Float compassReading;
-		try {
-			compassReading = compassReadingFuture.get();
-			Log.i(SkillTestActivity.class.getName(), "compass reading is " + compassReading);
-			intent.putExtra("COMPASS", compassReading);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		addCompassReading(intent);
 		intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 		balanceObjPublicationService.stopService();
 		finish();
 		startActivity(intent);
+	}
+
+	private void addCompassReading(final Intent anIntent) {
+		float newReadings[];
+		final float previousReadings[] = getIntent().getFloatArrayExtra(COMPASS_READINGS) != null ? getIntent()
+				.getFloatArrayExtra(COMPASS_READINGS) : new float[0];
+		try {
+			final Float compassReading;
+			if (compassReadingFuture.isDone()) {
+				compassReading = compassReadingFuture.get();
+				Log.i(SkillTestActivity.class.getName(), "compass reading is " + compassReading);
+				newReadings = new float[previousReadings.length + 1];
+				System.arraycopy(previousReadings, 0, newReadings, 0, previousReadings.length);
+				newReadings[previousReadings.length] = compassReading;
+			} else {
+				Log.e(SkillTestActivity.class.getName(), "compass reading was not done!");
+				newReadings = previousReadings;
+			}
+		} catch (Exception e) {
+			Log.e(SkillTestActivity.class.getName(), "unable to retrieve compass reading ", e);
+			newReadings = previousReadings;
+		}
+		anIntent.putExtra(COMPASS_READINGS, newReadings);
 	}
 }
