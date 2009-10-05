@@ -1,16 +1,19 @@
 package net.nycjava.skylight1;
 
-import net.nycjava.skylight1.R;
+import java.util.concurrent.Future;
+
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
 import net.nycjava.skylight1.service.BalancedObjectObserver;
 import net.nycjava.skylight1.service.BalancedObjectPublicationService;
+import net.nycjava.skylight1.service.CompassService;
 import net.nycjava.skylight1.service.CountdownObserver;
 import net.nycjava.skylight1.service.CountdownPublicationService;
 import net.nycjava.skylight1.service.RandomForceService;
 import net.nycjava.skylight1.service.SensorAppliedForceAdapter;
 import net.nycjava.skylight1.service.impl.BalancedObjectPublicationServiceImpl;
+import net.nycjava.skylight1.service.impl.CompassServiceAndroidImp;
 import net.nycjava.skylight1.service.impl.CountdownPublicationServiceImpl;
 import net.nycjava.skylight1.service.impl.RandomForceServiceImpl;
 import net.nycjava.skylight1.service.impl.SensorAppliedForceAdapterServiceAndroidImpl;
@@ -44,20 +47,23 @@ public class SkillTestActivity extends SkylightActivity {
 	@Dependency
 	private BalancedObjectPublicationService balanceObjPublicationService;
 
+	@Dependency
+	private CompassService compassService;
+
 	private BalancedObjectObserver balanceObjObserver;
 
 	private int width, height;
 
 	private int difficultyLevel;
-	
+
 	private boolean previouslyPaused;
+
+	private Future<Float> compassReadingFuture;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
-
-		SensorManager aSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class, aSensorManager);
+		aDependencyInjectingObjectFactory.registerImplementationObject(SensorManager.class,
+				(SensorManager) getSystemService(SENSOR_SERVICE));
 
 		aDependencyInjectingObjectFactory.registerSingletonImplementationClass(BalancedObjectPublicationService.class,
 				BalancedObjectPublicationServiceImpl.class);
@@ -70,6 +76,9 @@ public class SkillTestActivity extends SkylightActivity {
 
 		aDependencyInjectingObjectFactory.registerImplementationClass(SensorAppliedForceAdapter.class,
 				SensorAppliedForceAdapterServiceAndroidImpl.class);
+
+		aDependencyInjectingObjectFactory.registerImplementationClass(CompassService.class,
+				CompassServiceAndroidImp.class);
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(View.class, (LinearLayout) getLayoutInflater()
 				.inflate(R.layout.skilltest, null));
@@ -86,14 +95,14 @@ public class SkillTestActivity extends SkylightActivity {
 
 		randomForceService.setDifficultyLevel(difficultyLevel);
 		balanceObjPublicationService.setDifficultyLevel(difficultyLevel);
-		
 
+		compassReadingFuture = compassService.getCompassReading();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		
+
 		if (previouslyPaused) {
 			goToLoseActivity();
 		}
@@ -116,17 +125,25 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
 					// record the new high score
-				    SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-				    int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
-				    
-				    if(difficultyLevel>oldHighScore) {
-					    SharedPreferences.Editor editor = sharedPreferences.edit();				    
-					    editor.putInt(HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
-					    editor.commit();
+					SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+					int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
+
+					if (difficultyLevel > oldHighScore) {
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.putInt(HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
+						editor.commit();
 					}
 					// pass control to the success activity
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
+					Float compassReading;
+					try {
+						compassReading = compassReadingFuture.get();
+						Log.i(SkillTestActivity.class.getName(), "compass reading is " + compassReading);
+						intent.putExtra("COMPASS", compassReading);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 					finish();
 					startActivity(intent);
@@ -151,7 +168,7 @@ public class SkillTestActivity extends SkylightActivity {
 		super.onPause();
 
 		previouslyPaused = true;
-		
+
 		countdownPublicationService.stopCountdown();
 		countdownPublicationService.removeObserver(countdownObserver);
 		balanceObjPublicationService.removeObserver(balanceObjObserver);
@@ -161,6 +178,14 @@ public class SkillTestActivity extends SkylightActivity {
 
 	private void goToLoseActivity() {
 		final Intent intent = new Intent(SkillTestActivity.this, FailActivity.class);
+		Float compassReading;
+		try {
+			compassReading = compassReadingFuture.get();
+			Log.i(SkillTestActivity.class.getName(), "compass reading is " + compassReading);
+			intent.putExtra("COMPASS", compassReading);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 		balanceObjPublicationService.stopService();
 		finish();
