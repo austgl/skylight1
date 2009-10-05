@@ -51,14 +51,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 			float x = values[X_AXIS];
 			float y = values[Y_AXIS];
 			if (calibrateDone == false) {
-				if (Math.abs(x) > 5.0 || Math.abs(y) > 5.0) {
-					// User is holding the phone vertically (or at least > 30 deg)
+				if (Math.abs(x) > 2.5 || Math.abs(y) > 2.5) {
+					// User is holding the phone vertically (or at least > 15 deg)
 					// so put some 'good' defaults into range and let glass drop
 					lowX = -0.005f;
 					highX = 0.005f;
 					lowY = -0.005f;
 					highY = 0.005f;
 					calibrateDone = true;
+//					Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " +highY);
 				} else {
 					// user is holding holding the phone facing the sky (more or less)
 					if (calibrateCount < CALIBRATE_MAX_COUNT) {
@@ -71,6 +72,7 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 						countXY++;
 						calibrateCount++;
 					} else {
+//						Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " +highY);
 						calibrateDone = true;
 					}
 				}
