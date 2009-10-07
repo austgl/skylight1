@@ -33,11 +33,11 @@ final public class SkillTestView extends View {
 
 	private static final int SCREEN_MARGIN = 10;
 
-	private final static int backgroundsSpacing[] = { 2, 4, 7, 10, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49 };
+	private final static int backgroundsSpacing[] = { 2, 5, 7, 10, 13, 16, 19, 21, 24, 27, 30, 33, 36, 39};
 
 	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.largewoodgrain,
-			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2,
-			R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.fish,
+			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2, R.drawable.orbit,
+			R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.fish, R.drawable.earth,
 			R.drawable.skulls };
 
 	@Dependency
