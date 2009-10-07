@@ -1,5 +1,7 @@
 package net.nycjava.skylight1.view;
 
+import java.util.Arrays;
+
 import net.nycjava.skylight1.R;
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.service.BalancedObjectObserver;
@@ -27,15 +29,16 @@ final public class SkillTestView extends View {
 		glassPart, timeRemainingPart;
 	}
 
-	private static final int BACKGROUND_CHANGE_LEVEL_FREQUENCY = 2;
-
 	private static final int DEGREE_OF_DOUBLE_VISION = 10;
 
 	private static final int SCREEN_MARGIN = 10;
 
+	private final static int backgroundsSpacing[] = { 2, 4, 7, 10, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49 };
+
 	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.largewoodgrain,
 			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2,
-			R.drawable.water, R.drawable.space1, R.drawable.galaxy };
+			R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.fish,
+			R.drawable.skulls };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
@@ -164,7 +167,7 @@ final public class SkillTestView extends View {
 		super.onAttachedToWindow();
 
 		initialize();
-		
+
 		frames = 0;
 		timeStartedCountingFrames = 0;
 
@@ -358,8 +361,11 @@ final public class SkillTestView extends View {
 
 	private void setBackground() {
 		// set the background
-		final int backgroundResourceId = backgrounds[Math.min(difficultyLevel / BACKGROUND_CHANGE_LEVEL_FREQUENCY,
-				backgrounds.length - 1)];
+		final int backgroundResourceIndex = Arrays.binarySearch(backgroundsSpacing, difficultyLevel);
+		
+		final int adjustedBackgroundResourceIndex = backgroundResourceIndex < 0 ? -1 - backgroundResourceIndex : backgroundResourceIndex;  
+
+		final int backgroundResourceId = backgrounds[Math.min(Math.abs(adjustedBackgroundResourceIndex), backgrounds.length - 1)];
 
 		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
 		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);

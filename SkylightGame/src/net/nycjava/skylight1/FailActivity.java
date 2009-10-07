@@ -122,9 +122,12 @@ public class FailActivity extends SkylightActivity {
 					final float distance = compassReading - mean;
 					sumOfSquares += distance * distance;
 				}
-				final int variance = (int) (sumOfSquares / (float) compassReadings.length - 1);
-				Log.i(FailActivity.class.getName(), format("az variance is %d", variance));
-				return variance;
+				final double variance = sumOfSquares / (float) (compassReadings.length - 1);
+
+				final int standardDeviation = (int) Math.sqrt(variance);
+
+				Log.i(FailActivity.class.getName(), format("az variance is %d", standardDeviation));
+				return standardDeviation;
 			}
 		}).start();
 	}
