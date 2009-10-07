@@ -126,7 +126,7 @@ public class FailActivity extends SkylightActivity {
 
 				final int standardDeviation = (int) Math.sqrt(variance);
 
-				Log.i(FailActivity.class.getName(), format("az variance is %d", standardDeviation));
+				Log.i(FailActivity.class.getName(), format("az sd is %d", standardDeviation));
 				return standardDeviation;
 			}
 		}).start();

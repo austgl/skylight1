@@ -119,12 +119,14 @@ final public class SkillTestView extends View {
 
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
-
-		initialize();
 	}
 
 	private void initialize() {
-		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		if (difficultyLevel < 11) {
+			glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+		} else {
+			glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wine);
+		}
 		glassBitmapWidth = glassBitmap.getWidth();
 		glassBitmapHeight = glassBitmap.getHeight();
 
@@ -362,10 +364,12 @@ final public class SkillTestView extends View {
 	private void setBackground() {
 		// set the background
 		final int backgroundResourceIndex = Arrays.binarySearch(backgroundsSpacing, difficultyLevel);
-		
-		final int adjustedBackgroundResourceIndex = backgroundResourceIndex < 0 ? -1 - backgroundResourceIndex : backgroundResourceIndex;  
 
-		final int backgroundResourceId = backgrounds[Math.min(Math.abs(adjustedBackgroundResourceIndex), backgrounds.length - 1)];
+		final int adjustedBackgroundResourceIndex = backgroundResourceIndex < 0 ? -1 - backgroundResourceIndex
+				: backgroundResourceIndex;
+
+		final int backgroundResourceId = backgrounds[Math.min(Math.abs(adjustedBackgroundResourceIndex),
+				backgrounds.length - 1)];
 
 		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
 		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
