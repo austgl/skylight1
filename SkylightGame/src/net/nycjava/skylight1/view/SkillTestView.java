@@ -33,12 +33,12 @@ final public class SkillTestView extends View {
 
 	private static final int SCREEN_MARGIN = 10;
 
-	private final static int backgroundsSpacing[] = { 2, 5, 7, 10, 13, 16, 19, 21, 24, 27, 30, 33, 36, 39};
+	private final static int backgroundsSpacing[] = { 2, 5, 7, 10, 13, 16, 19, 21, 24, 27, 30, 33, 36, 39 };
 
 	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.largewoodgrain,
-			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2, R.drawable.orbit,
-			R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.fish, R.drawable.earth,
-			R.drawable.skulls };
+			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2,
+			R.drawable.orbit, R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios,
+			R.drawable.fish, R.drawable.earth, R.drawable.skulls };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
@@ -122,11 +122,7 @@ final public class SkillTestView extends View {
 	}
 
 	private void initialize() {
-		if (difficultyLevel < 11) {
-			glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
-		} else {
-			glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.wine);
-		}
+		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
 		glassBitmapWidth = glassBitmap.getWidth();
 		glassBitmapHeight = glassBitmap.getHeight();
 
