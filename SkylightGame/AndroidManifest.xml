@@ -27,14 +27,13 @@
 			</intent-filter>
 		</activity>
 		
-	    <!-- The application's publisher ID assigned by AdMob -->
-        <meta-data android:value="a14aa1593535539" android:name="ADMOB_PUBLISHER_ID" />  
+	    <!-- AD BANNER DEPENDENCY  - to be added by specific game's build script
+
+        -->  
 	</application>
 	
 	<uses-permission android:name="android.permission.INTERNET">
 	</uses-permission>
-	<!-- AdMob SDK permissions -->
-	<!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
 	
 	<uses-sdk android:minSdkVersion="3" />	
 

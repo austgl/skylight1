@@ -14,7 +14,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+/** AD BANNER DEPENDENCY - to be added by specific game's build script
 import com.admob.android.ads.AdView;
+*/
 
 /**
  * reporting success; report acknowledged; go to get ready
@@ -45,14 +47,14 @@ public class SuccessActivity extends SkylightActivity {
 		imageView.setImageResource(R.drawable.icon);
 		contentView.addView(imageView);
 		
-		//Add AdMob banner
+		/** AD BANNER DEPENDENCY - to be added by specific game's build script
 		AdView adView = new AdView(this);
 		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
 		adView.setLayoutParams(layoutParams);
 		adView.setKeywords("Android application");
 		adView.setGravity(Gravity.BOTTOM);
 		contentView.addView(adView);
-		
+		 */
 		setContentView(contentView);
 
 		MediaPlayer.create(getBaseContext(), R.raw.succeeded).start();
