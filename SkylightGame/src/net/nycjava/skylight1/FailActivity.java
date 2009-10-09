@@ -98,7 +98,7 @@ public class FailActivity extends SkylightActivity {
 					editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, globalBestLevel);
 					editor.commit();
 
-					Log.i(FailActivity.class.getName(), String.format("Highest Level Reached:  ever: %d  today: %d",
+					Log.i(FailActivity.class.getName(), String.format("Highest Level Reached: %d",
 							globalBestLevel));
 				} catch (Exception e) {
 					Log.e(FailActivity.class.getName(), "Failed to contact server for high scores", e);
