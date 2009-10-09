@@ -27,7 +27,7 @@
 			</intent-filter>
 		</activity>
 		
-    <meta-data android:value="a14aa1593535539" android:name="ADMOB_PUBLISHER_ID" />	</application>
+   	</application>
 	
 	<uses-permission android:name="android.permission.INTERNET">
 	</uses-permission>
