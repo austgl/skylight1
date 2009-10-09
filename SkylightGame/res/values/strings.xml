@@ -17,4 +17,6 @@
     <string name="levelmessage">\nThe highest level completed is</string>
     <string name="aboutmessage">\nBalance the Beer\n Version 1.0\n by Skylight1\n\nhttp://balancethebeer.com\n</string>
 	<string name="keywords">beer game bar pub drink</string>
+	<string name="locallevelreached">On this phone</string>
+	<string name="globallevelreached">On any phone this week</string>
 </resources>

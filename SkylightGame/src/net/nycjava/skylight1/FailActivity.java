@@ -15,21 +15,20 @@ import java.util.concurrent.Executors;
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 /** AD BANNER DEPENDENCY - to be added by specific game's build script
-import com.admob.android.ads.AdView;
-*/
+ import com.admob.android.ads.AdView;
+ */
 
 /**
  * reporting unsteady hand; report acknowledged; reporting slow hand; report acknowledged; go to welcome
@@ -61,13 +60,11 @@ public class FailActivity extends SkylightActivity {
 		imageView.setImageResource(R.drawable.icon_2);
 		view.addView(imageView);
 
-		/** AD BANNER DEPENDENCY - to be added by specific game's build script
-		AdView adView = new AdView(this);
-		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		adView.setLayoutParams(layoutParams);
-		adView.setKeywords(getString(R.string.keywords));
-		adView.setGravity(Gravity.BOTTOM);
-		view.addView(adView);
+		/**
+		 * AD BANNER DEPENDENCY - to be added by specific game's build script AdView adView = new AdView(this);
+		 * LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		 * adView.setLayoutParams(layoutParams); adView.setKeywords(getString(R.string.keywords));
+		 * adView.setGravity(Gravity.BOTTOM); view.addView(adView);
 		 */
 
 		setContentView(view);
@@ -92,15 +89,19 @@ public class FailActivity extends SkylightActivity {
 					final HttpURLConnection httpURLConnection = (HttpURLConnection) statisticsURL.openConnection();
 					final InputStream inputStream = httpURLConnection.getInputStream();
 					final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-					final String responseLine = br.readLine();
-					final String bestLevels[] = responseLine.split(",");
-					final int bestScoreEver = Integer.parseInt(bestLevels[0]);
-					final int bestScoreToday = Integer.parseInt(bestLevels[1]);
-					// TODO: store scores in preferences
-					Log.i(FailActivity.class.getName(), String.format(
-							"\n\nHighest Level Reached:  ever: %d  today: %d\n\n", bestScoreEver, bestScoreToday));
+					final String globalBestLevelString = br.readLine();
+					final int globalBestLevel = Integer.parseInt(globalBestLevelString);
+
+					// save the global best level
+					SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+					SharedPreferences.Editor editor = sharedPreferences.edit();
+					editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, globalBestLevel);
+					editor.commit();
+
+					Log.i(FailActivity.class.getName(), String.format("Highest Level Reached:  ever: %d  today: %d",
+							globalBestLevel));
 				} catch (Exception e) {
-					Log.e(FailActivity.class.getName(), "~~~failed to contact server for high scores~~~", e);
+					Log.e(FailActivity.class.getName(), "Failed to contact server for high scores", e);
 					return;
 				}
 			}

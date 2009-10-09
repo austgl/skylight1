@@ -32,6 +32,7 @@ public abstract class SkylightActivity extends Activity {
 	public static final String DISPLAY_DEMO = SkylightActivity.class.getPackage().getName() + ".displayDemo";
 
 	public static final String HIGH_SCORE_PREFERENCE_NAME = "highLevel";
+	public static final String GLOBAL_HIGH_SCORE_PREFERENCE_NAME = "globalHighLevel";
 
 	public static final int EASY_DIFFICULTY_LEVEL = 0;
 
@@ -111,11 +112,11 @@ public abstract class SkylightActivity extends Activity {
 		Dialog dialog = null;
 		LayoutInflater inflater = null;
 		View layout = null;
-		TextView text = null;
 		switch (id) {
 		case DIALOG_SHOW_LEVEL_ID:
 			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
+			int bestLevelCompleted = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
+			int globalBestLevelCompleted = sharedPreferences.getInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
 
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 			layout = inflater.inflate(R.layout.level_dialog, (ViewGroup) findViewById(R.id.layout_root));
@@ -127,8 +128,11 @@ public abstract class SkylightActivity extends Activity {
 						}
 					}).setView(layout).create();
 
-			text = (TextView) layout.findViewById(R.id.highest_level);
-			text.setText(String.format("%d", oldHighScore + 1));
+			final TextView highestLevelText = (TextView) layout.findViewById(R.id.highest_level);
+			highestLevelText.setText(String.format("%d", bestLevelCompleted + 1));
+
+			final TextView globalHighestLevelText = (TextView) layout.findViewById(R.id.global_highest_level);
+			globalHighestLevelText.setText(String.format("%d", globalBestLevelCompleted + 1));
 			break;
 
 		case DIALOG_ABOUT_ID:
