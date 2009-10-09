@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="net.nycjava.skylight1" android:versionCode="1"
-	android:versionName="1.0.0">
+	package="net.nycjava.skylight1" android:versionCode="2"
+	android:versionName="1.1">
 	<application android:icon="@drawable/icon"
 		android:label="@string/app_name" android:debuggable="false">
 
@@ -27,10 +27,7 @@
 			</intent-filter>
 		</activity>
 		
-	    <!-- AD BANNER DEPENDENCY  - to be added by specific game's build script
-
-        -->  
-	</application>
+    <meta-data android:value="a14aa1593535539" android:name="ADMOB_PUBLISHER_ID" />	</application>
 	
 	<uses-permission android:name="android.permission.INTERNET">
 	</uses-permission>
