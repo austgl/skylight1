@@ -132,7 +132,7 @@ public abstract class SkylightActivity extends Activity {
 			highestLevelText.setText(String.format("%d", bestLevelCompleted + 1));
 
 			final TextView globalHighestLevelText = (TextView) layout.findViewById(R.id.global_highest_level);
-			globalHighestLevelText.setText(String.format("%d", globalBestLevelCompleted + 1));
+			globalHighestLevelText.setText(String.format("%d", globalBestLevelCompleted));
 			break;
 
 		case DIALOG_ABOUT_ID:
