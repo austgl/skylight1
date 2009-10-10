@@ -125,14 +125,22 @@ public class SkillTestActivity extends SkylightActivity {
 			public void countdownNotification(int remainingTime) {
 				if (remainingTime == 0) {
 					// record the new high score
-					SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-					int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
-
+					final SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+					final int oldHighScore = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
 					if (difficultyLevel > oldHighScore) {
 						SharedPreferences.Editor editor = sharedPreferences.edit();
 						editor.putInt(HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
 						editor.commit();
 					}
+
+					// if this exceeds the week's global best level, then it is obviously going to become the global best level 
+					int oldGlobalHighScore = sharedPreferences.getInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
+					if (difficultyLevel > oldGlobalHighScore) {
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
+						editor.commit();
+					}
+					
 					// pass control to the success activity
 					countdownPublicationService.stopCountdown();
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
