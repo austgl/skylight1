@@ -137,7 +137,7 @@ public class SkillTestActivity extends SkylightActivity {
 					int oldGlobalHighScore = sharedPreferences.getInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
 					if (difficultyLevel > oldGlobalHighScore) {
 						SharedPreferences.Editor editor = sharedPreferences.edit();
-						editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, difficultyLevel);
+						editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, difficultyLevel+1);
 						editor.commit();
 					}
 					
