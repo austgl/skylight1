@@ -64,7 +64,7 @@ public class WelcomeActivity extends SkylightActivity {
 							@Override
 							public void run() {
 								final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-								captionTextView.setText(getResources().getString(R.string.instructions));
+								captionTextView.setText(getResources().getString(R.string.instructions)+":");
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 								fadeOutAnimation.setStartOffset(1000);
