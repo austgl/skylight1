@@ -33,12 +33,14 @@ final public class SkillTestView extends View {
 
 	private static final int SCREEN_MARGIN = 10;
 
-	private final static int backgroundsSpacing[] = { 2, 5, 7, 10, 13, 16, 19, 21, 24, 27, 30, 33, 36, 39 };
+	private final static int backgroundsSpacing[] = { 1, 4, 6, 9, 12, 15, 18, 20, 23, 25, 28, 30, 33, 36, 38,
+		                                              40, 42, 44, 46, 48, 50, 52 };
 
 	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.largewoodgrain,
 			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2,
-			R.drawable.orbit, R.drawable.water, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios,
-			R.drawable.fish, R.drawable.earth, R.drawable.skulls };
+			R.drawable.orbit, R.drawable.water, R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios,
+			R.drawable.fish, R.drawable.earth, R.drawable.skulls,
+			R.drawable.orbit, R.drawable.ice, R.drawable.galaxy, R.drawable.fish, R.drawable.earth, R.drawable.icon_2, R.drawable.hard};
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
