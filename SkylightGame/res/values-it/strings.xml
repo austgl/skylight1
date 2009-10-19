@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hard">Ubriaco</string>
+    <string name="normal">Normale</string>
+    <string name="easy">Sobrio</string>
+    <string name="app_name">Equilibrare la Birra</string>
+    <string name="welcome">Equilibrare la birra sullo schermo</string>
+    <string name="successmsg">Buono!\nGiocatore successivo tap per iniziare</string>
+    <string name="failmsg">Si Perde!!\nAcquistare bevande\nToccare per riawiare</string>
+	<string name="instructions">Istruzioni</string>
+	<string name="about">Circa</string>
+	<string name="exit">Uscita</string>
+    <string name="ok">Ok</string>
+	<string name="website">Sito Web</string>
+	<string name="websiteurl">http://balancethebeer.com</string>
+	<string name="levelreached">Miglior livello di</string>
+    <string name="levelmessage">\nIl più alto livello è complete</string>
+    <string name="aboutmessage">\nBalance the Beer\n Versione 1.1\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
+	<string name="keywords">beer game bar pub drink</string>
+	<string name="locallevelreached">Su questo telefono</string>
+	<string name="globallevelreached">Su qualsiasi telefono di questa settimana</string>
+</resources>
