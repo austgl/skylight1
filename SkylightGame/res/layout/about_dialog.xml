@@ -8,16 +8,16 @@
               >
 	<net.nycjava.skylight1.view.TypeFaceTextView android:id="@+id/about_text" android:gravity="center_horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/aboutmessage" android:padding="0px"
-		android:focusable="false" android:textSize="23px" android:textColor="#ffffff" android:textColorLink="#ffba9b77" android:autoLink="web"
-		typeface="skylight.ttf" 
+		android:text="@string/aboutmessage" android:padding="0dip"
+		android:focusable="false" android:textSize="23dip" android:textColor="#ffffff" android:textColorLink="#ffba9b77" android:autoLink="web"
+		typeface="skylight.ttf"
 		/>
-		
+
     <net.nycjava.skylight1.view.TypeFaceTextView android:id="@+id/website_text" android:gravity="center_horizontal"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
-        android:text="@string/websiteurl" android:padding="0px"
-        android:focusable="true" android:textSize="23px" android:textColor="#ffffff" android:textColorLink="#ff888888" android:autoLink="web"
-        typeface="skylight.ttf" 
+        android:text="@string/websiteurl" android:padding="0dip"
+        android:focusable="true" android:textSize="23dip" android:textColor="#ffffff" android:textColorLink="#ff888888" android:autoLink="web"
+        typeface="skylight.ttf"
          />
 
 </LinearLayout>
