@@ -215,12 +215,12 @@ public class ObjFileLoader {
 			final ModelCoordinates v3ModelCoordinates = v3.modelCoordinates;
 			final TextureCoordinates v3TextureCoordinates = v3.textureCoordinates;
 			final Normal v3Normal = v3.normal;
-			anOpenGLGeometryBuilder.add3DTriangleMTN(v1ModelCoordinates.x, v1ModelCoordinates.y, v1ModelCoordinates.z,
-					v1TextureCoordinates.u, v1TextureCoordinates.v, v1Normal.x, v1Normal.y, v1Normal.z,
-					v2ModelCoordinates.x, v2ModelCoordinates.y, v2ModelCoordinates.z, v2TextureCoordinates.u,
-					v2TextureCoordinates.v, v2Normal.x, v2Normal.y, v2Normal.z, v3ModelCoordinates.x,
-					v3ModelCoordinates.y, v3ModelCoordinates.z, v3TextureCoordinates.u, v3TextureCoordinates.v,
-					v3Normal.x, v3Normal.y, v3Normal.z);
+			anOpenGLGeometryBuilder.add3DTriangle(v1ModelCoordinates.x, v1ModelCoordinates.y, v1ModelCoordinates.z,
+					v2ModelCoordinates.x, v2ModelCoordinates.y, v2ModelCoordinates.z, v3ModelCoordinates.x,
+					v3ModelCoordinates.y, v3ModelCoordinates.z).setTextureCoordinates(v1TextureCoordinates.u,
+					v1TextureCoordinates.v, v2TextureCoordinates.u, v2TextureCoordinates.v, v3TextureCoordinates.u,
+					v3TextureCoordinates.v).setNormal(v1Normal.x, v1Normal.y, v1Normal.z, v2Normal.x, v2Normal.y,
+					v2Normal.z, v3Normal.x, v3Normal.y, v3Normal.z);
 		}
 
 		return anOpenGLGeometryBuilder.endGeometry();
