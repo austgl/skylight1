@@ -117,7 +117,7 @@ public class ObjFileLoader {
 						.group(2)), quickParseFloat(matcher.group(3))));
 			} else if (matcher.group(4) != null) {
 				texturesCoordinates.add(new TextureCoordinates(quickParseFloat(matcher.group(4)),
-						quickParseFloat(matcher.group(5))));
+						1f - quickParseFloat(matcher.group(5))));
 			} else if (matcher.group(6) != null) {
 				normals.add(new Normal(quickParseFloat(matcher.group(6)), quickParseFloat(matcher.group(7)),
 						quickParseFloat(matcher.group(8))));
