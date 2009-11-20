@@ -11,6 +11,10 @@ import java.util.regex.Pattern;
 
 import skylight1.opengl.OpenGLGeometry;
 import skylight1.opengl.OpenGLGeometryBuilder;
+import skylight1.opengl.OpenGLGeometryBuilder.NormalizableTriangle3D;
+import skylight1.opengl.OpenGLGeometryBuilder.TexturableRectangle2D;
+import skylight1.opengl.OpenGLGeometryBuilder.TexturableTriangle3D;
+import skylight1.opengl.OpenGLGeometryBuilderFactory.Void;
 import android.content.Context;
 
 public class ObjFileLoader {
@@ -196,7 +200,8 @@ public class ObjFileLoader {
 		return sign * result;
 	}
 
-	public OpenGLGeometry createGeometry(final OpenGLGeometryBuilder anOpenGLGeometryBuilder) {
+	public OpenGLGeometry createGeometry(
+			final OpenGLGeometryBuilder<TexturableTriangle3D<NormalizableTriangle3D<Void>>, TexturableRectangle2D<Void>> anOpenGLGeometryBuilder) {
 		anOpenGLGeometryBuilder.startGeometry();
 
 		for (int f = 0; f < faces.size(); f++) {
