@@ -2,7 +2,7 @@ package skylight1.opengl;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.List;
 
 public class ByteBufferFactory {
@@ -12,10 +12,10 @@ public class ByteBufferFactory {
 	public static ByteBuffer createBuffer(final List<Float> aListOfFloats) {
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(aListOfFloats.size() * Float.SIZE / Byte.SIZE);
 		byteBuffer.order(ByteOrder.nativeOrder());
-		final FloatBuffer byteBufferAsFloatBuffer = byteBuffer.asFloatBuffer();
+		final IntBuffer byteBufferAsFloatBuffer = byteBuffer.asIntBuffer();
 
 		for (float singleFloat : aListOfFloats) {
-			byteBufferAsFloatBuffer.put(singleFloat);
+			byteBufferAsFloatBuffer.put((int) (singleFloat * (1 << 16)));
 		}
 
 		return byteBuffer;

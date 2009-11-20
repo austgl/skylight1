@@ -337,22 +337,22 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 */
 	public void enable(GL10 aGL10) {
 		aGL10.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		aGL10.glVertexPointer(3, GL10.GL_FLOAT, 0, modelCoordinatesAsByteBuffer);
+		aGL10.glVertexPointer(3, GL10.GL_FIXED, 0, modelCoordinatesAsByteBuffer);
 		if (usesTextureCoordinates) {
 			aGL10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			aGL10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureCoordinatesAsByteBuffer);
+			aGL10.glTexCoordPointer(2, GL10.GL_FIXED, 0, textureCoordinatesAsByteBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		}
 		if (usesNormals) {
 			aGL10.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FLOAT, 0, normalsAsByteBuffer);
+			aGL10.glNormalPointer(GL10.GL_FIXED, 0, normalsAsByteBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 		}
 		if (usesColours) {
 			aGL10.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FLOAT, 0, coloursAsByteBuffer);
+			aGL10.glNormalPointer(GL10.GL_FIXED, 0, coloursAsByteBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		}
