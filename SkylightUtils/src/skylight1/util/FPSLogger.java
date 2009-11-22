@@ -4,6 +4,9 @@ import static java.lang.String.format;
 import android.os.SystemClock;
 import android.util.Log;
 
+/**
+ * Provides a facility for logging frames per second.
+ */
 public class FPSLogger {
 	// perhaps some future h/w will have even faster frame rates
 	private static final int MAXIMUM_FRAMES_PER_SECOND = 120;
@@ -18,34 +21,47 @@ public class FPSLogger {
 
 	final private String loggerName;
 
-	private final long millisecondsBetweenLoggingFPS;
+	final private int numberOfFramesBetweenLogging;
 
-	private long nextTimeToLogFPS;
+	private long timeStartedCountingFrames;
 
-	private long framesSinceLastLoggedFPS;
+	private int framesUntilNextLogStatement;
 
 	private boolean started;
 
-	public FPSLogger(final String aLoggerName, final long aMillisecondsBetweenLoggingFPS) {
-		loggerName = aLoggerName;
-		millisecondsBetweenLoggingFPS = aMillisecondsBetweenLoggingFPS;
+	/**
+	 * Constructs an FPSLogger.
+	 * 
+	 * @param aTag
+	 *            The tag to use in the Android logging API.
+	 * @param aNumberOfFramesBetweenLogging
+	 *            The number of calls to frameRendered between each log statement.
+	 */
+	public FPSLogger(final String aTag, final int aNumberOfFramesBetweenLogging) {
+		loggerName = aTag;
+		numberOfFramesBetweenLogging = aNumberOfFramesBetweenLogging;
+		framesUntilNextLogStatement = 1;
 	}
 
+	/**
+	 * Call this method once per frame rendered. Note: in the interests of making this method very low cost, if it is
+	 * called more than 120 times per second, it will throw an ArrayOutOfBoundsException.
+	 */
 	public void frameRendered() {
-		final long currentTimeMillis = SystemClock.uptimeMillis();
-		if (!started) {
-			nextTimeToLogFPS = currentTimeMillis + millisecondsBetweenLoggingFPS;
-			started = true;
-		} else {
-			if (currentTimeMillis > nextTimeToLogFPS) {
-				final int fPS = (int) (framesSinceLastLoggedFPS * 1000L / millisecondsBetweenLoggingFPS);
-				final String fPSMessage = FPS_MESSAGES[Math.min(fPS, MAXIMUM_FRAMES_PER_SECOND - 1)];
-				Log.i(loggerName, fPSMessage);
+		framesUntilNextLogStatement--;
 
-				framesSinceLastLoggedFPS = 0;
-				nextTimeToLogFPS += millisecondsBetweenLoggingFPS;
+		if (framesUntilNextLogStatement == 0) {
+			final long currentTimeMillis = SystemClock.uptimeMillis();
+			if (!started) {
+				started = true;
+			} else {
+				final int fPS = numberOfFramesBetweenLogging * 1000
+						/ (int) (currentTimeMillis - timeStartedCountingFrames);
+				final String fPSMessage = FPS_MESSAGES[fPS];
+				Log.i(loggerName, fPSMessage);
 			}
+			timeStartedCountingFrames = currentTimeMillis;
+			framesUntilNextLogStatement = numberOfFramesBetweenLogging;
 		}
-		framesSinceLastLoggedFPS++;
 	}
 }
