@@ -1,6 +1,6 @@
 package skylight1.opengl;
 
-import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -10,7 +10,7 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * Encapsulates the construction of OpenGLGeometry objects.
  */
-class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
+class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	// TODO decide what to do about clients not bothering to provide textures (for example) for some of the components
 	// of a geometry. this will not work as is!
 	private static class NewGeometryParameters {
@@ -24,10 +24,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 */
 	public class Triangle3D<X> implements TexturableTriangle3D<X>, ColourableTriangle3D<X>, NormalizableTriangle3D<X> {
 		public X setTextureCoordinates(float aU1, float aV1, float aU2, float aV2, float aU3, float aV3) {
-			if (!usesTextureCoordinates) {
-				throw new IllegalStateException("This OpenGLGeometryBuilder is not configured for textures");
-			}
-
 			textureCoordinates.add(aU1);
 			textureCoordinates.add(aV1);
 
@@ -42,10 +38,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 
 		public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2,
 				float aNormalZ2, float aNormalX3, float aNormalY3, float aNormalZ3) {
-			if (!usesNormals) {
-				throw new IllegalStateException("This OpenGLGeometryBuilder is not configured for normals");
-			}
-
 			normals.add(aNormalX1);
 			normals.add(aNormalY1);
 			normals.add(aNormalZ1);
@@ -63,10 +55,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
 				float aRed3, float aGreen3, float aBlue3) {
-			if (!usesColours) {
-				throw new IllegalStateException("This OpenGLGeometryBuilder is not configured for colours");
-			}
-
 			colours.add(aRed1);
 			colours.add(aGreen1);
 			colours.add(aBlue1);
@@ -88,10 +76,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 */
 	public class Rectangle2D<X> implements TexturableRectangle2D<X>, ColourableRectangle2D<X> {
 		public X setTextureCoordinates(float aU, float aV, float aUWidth, float aVHeight) {
-			if (!usesTextureCoordinates) {
-				throw new IllegalStateException("This OpenGLGeometryBuilder is not configured for textures");
-			}
-
 			// first triangle of rectangle
 			textureCoordinates.add(aU);
 			textureCoordinates.add(aV);
@@ -117,10 +101,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
 				float aRed3, float aGreen3, float aBlue3, float aRed4, float aGreen4, float aBlue4) {
-			if (!usesColours) {
-				throw new IllegalStateException("This OpenGLGeometryBuilder is not configured for colours");
-			}
-
 			// first triangle of rectangle
 			colours.add(aRed1);
 			colours.add(aGreen1);
@@ -155,12 +135,6 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 
 	private final Stack<NewGeometryParameters> geometryStack = new Stack<NewGeometryParameters>();
 
-	private final boolean usesNormals;
-
-	private final boolean usesTextureCoordinates;
-
-	private final boolean usesColours;
-
 	private final T triangle3D = (T) new Triangle3D();
 
 	private final R rectangle2D = (R) new Rectangle2D();
@@ -173,13 +147,13 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 
 	private List<Float> colours = new ArrayList<Float>();
 
-	private ByteBuffer modelCoordinatesAsByteBuffer;
+	IntBuffer modelCoordinatesAsBuffer;
 
-	private ByteBuffer textureCoordinatesAsByteBuffer;
+	IntBuffer textureCoordinatesAsBuffer;
 
-	private ByteBuffer normalsAsByteBuffer;
+	IntBuffer normalsAsBuffer;
 
-	private ByteBuffer coloursAsByteBuffer;
+	IntBuffer coloursAsBuffer;
 
 	private boolean complete;
 
@@ -193,9 +167,7 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 */
 	public OpenGLGeometryBuilderImpl(final boolean aUsesTexturesCoordinates, final boolean aUsesNormals,
 			final boolean aUsesColours) {
-		usesTextureCoordinates = aUsesTexturesCoordinates;
-		usesNormals = aUsesNormals;
-		usesColours = aUsesColours;
+		super(aUsesTexturesCoordinates, aUsesNormals, aUsesColours);
 		// TODO allow the client to choose interleaved arrays or not. interleaved arrays are better for updating the
 		// model coordinates, normals, colour and textures coordinates all at once, but non-interleaved are better for
 		// changing only one aspect of a geometry at a time, such as during texture-only animations
@@ -231,7 +203,8 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 		NewGeometryParameters newGeometryParameters = geometryStack.pop();
 		final int numberOfVertices = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX
 				- newGeometryParameters.firstVertexOffset;
-		return new OpenGLGeometry(newGeometryParameters.mode, newGeometryParameters.firstVertexOffset, numberOfVertices);
+		return new OpenGLGeometry(newGeometryParameters.mode, newGeometryParameters.firstVertexOffset,
+				numberOfVertices, this);
 	}
 
 	/**
@@ -305,26 +278,26 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 * Completes the use of this builder for building. Must be called before using any of the OpenGLGeometry created by
 	 * this object.
 	 */
-	public void complete() {
+	private void complete() {
 		if (!geometryStack.isEmpty()) {
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
-		modelCoordinatesAsByteBuffer = ByteBufferFactory.createBuffer(modelCoordinates);
+		modelCoordinatesAsBuffer = ByteBufferFactory.createBuffer(modelCoordinates).asIntBuffer();
 		modelCoordinates = null;
 
 		if (usesTextureCoordinates) {
-			textureCoordinatesAsByteBuffer = ByteBufferFactory.createBuffer(textureCoordinates);
+			textureCoordinatesAsBuffer = ByteBufferFactory.createBuffer(textureCoordinates).asIntBuffer();
 		}
 		textureCoordinates = null;
 
 		if (usesNormals) {
-			normalsAsByteBuffer = ByteBufferFactory.createBuffer(normals);
+			normalsAsBuffer = ByteBufferFactory.createBuffer(normals).asIntBuffer();
 		}
 		normals = null;
 
 		if (usesColours) {
-			coloursAsByteBuffer = ByteBufferFactory.createBuffer(colours);
+			coloursAsBuffer = ByteBufferFactory.createBuffer(colours).asIntBuffer();
 		}
 		colours = null;
 
@@ -335,23 +308,26 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 * Enables all of the features necessary to render any of the geometries created by this builder.
 	 */
 	public void enable(GL10 aGL10) {
+		if (!complete) {
+			complete();
+		}
 		aGL10.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		aGL10.glVertexPointer(3, GL10.GL_FIXED, 0, modelCoordinatesAsByteBuffer);
+		aGL10.glVertexPointer(3, GL10.GL_FIXED, 0, modelCoordinatesAsBuffer);
 		if (usesTextureCoordinates) {
 			aGL10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			aGL10.glTexCoordPointer(2, GL10.GL_FIXED, 0, textureCoordinatesAsByteBuffer);
+			aGL10.glTexCoordPointer(2, GL10.GL_FIXED, 0, textureCoordinatesAsBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		}
 		if (usesNormals) {
 			aGL10.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FIXED, 0, normalsAsByteBuffer);
+			aGL10.glNormalPointer(GL10.GL_FIXED, 0, normalsAsBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 		}
 		if (usesColours) {
 			aGL10.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FIXED, 0, coloursAsByteBuffer);
+			aGL10.glNormalPointer(GL10.GL_FIXED, 0, coloursAsBuffer);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		}

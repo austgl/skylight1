@@ -1,10 +1,10 @@
 package skylight1.opengl;
 
-import skylight1.opengl.OpenGLGeometryBuilder.ColourableRectangle2D;
-import skylight1.opengl.OpenGLGeometryBuilder.ColourableTriangle3D;
-import skylight1.opengl.OpenGLGeometryBuilder.NormalizableTriangle3D;
-import skylight1.opengl.OpenGLGeometryBuilder.TexturableRectangle2D;
-import skylight1.opengl.OpenGLGeometryBuilder.TexturableTriangle3D;
+import skylight1.opengl.GeometryBuilder.ColourableRectangle2D;
+import skylight1.opengl.GeometryBuilder.ColourableTriangle3D;
+import skylight1.opengl.GeometryBuilder.NormalizableTriangle3D;
+import skylight1.opengl.GeometryBuilder.TexturableRectangle2D;
+import skylight1.opengl.GeometryBuilder.TexturableTriangle3D;
 
 public class OpenGLGeometryBuilderFactory {
 	public static interface Void {
@@ -42,8 +42,9 @@ public class OpenGLGeometryBuilderFactory {
 		return new OpenGLGeometryBuilderImpl(false, false, false);
 	}
 
-	public static void test() {
-		createTexturableColourableNormalizable().add3DTriangle(0, 0, 0, 0, 0, 0, 0, 0, 0).setTextureCoordinates(0, 0,
-				0, 0, 0, 0).setColour(0, 0, 0, 0, 0, 0, 0, 0, 0).setNormal(0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public static FastGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<Void>> createFastTexture(
+			OpenGLGeometry aGeometry) {
+		return new FastGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<Void>>(
+				true, false, false, aGeometry.numberOfVerticies);
 	}
 }
