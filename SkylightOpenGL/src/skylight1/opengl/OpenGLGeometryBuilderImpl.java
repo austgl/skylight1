@@ -265,8 +265,7 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
-	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight, float aTextureX, float aTextureY,
-			float aTextureWidth, float aTextureHeight) {
+	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
 		checkCurrentGeometryAndCompleteAndCheckAndSetMode(GL10.GL_TRIANGLES);
 
 		if (modelCoordinates == null) {
@@ -299,7 +298,7 @@ class OpenGLGeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 		modelCoordinates.add(aY);
 		modelCoordinates.add(0f);
 
-		return null; // rectangle2D;
+		return rectangle2D;
 	}
 
 	/**

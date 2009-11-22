@@ -65,8 +65,7 @@ public interface OpenGLGeometryBuilder<T, R> {
 	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
-	R add2DRectangle(float anX, float aY, float aWidth, float aHeight, float aTextureX, float aTextureY,
-			float aTextureWidth, float aTextureHeight);
+	R add2DRectangle(float anX, float aY, float aWidth, float aHeight);
 
 	/**
 	 * Completes the use of this builder for building. Must be called before using any of the OpenGLGeometry created by
