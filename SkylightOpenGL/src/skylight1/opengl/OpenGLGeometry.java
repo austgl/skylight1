@@ -17,12 +17,25 @@ public class OpenGLGeometry {
 
 	private OpenGLGeometryBuilderImpl<?, ?> openGLGeometryBuilderImpl;
 
+	private final int modelPositionInBuffer;
+
+	private final int texturePositionInBuffer;
+
+	private final int normalsPositionInBuffer;
+
+	private final int coloursPositionInBuffer;
+
 	public OpenGLGeometry(final int aMode, final int aFirst, final int aNumberOfVerticies,
 			OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl) {
 		mode = aMode;
 		first = aFirst;
 		numberOfVerticies = aNumberOfVerticies;
 		openGLGeometryBuilderImpl = anOpenGLGeometryBuilderImpl;
+
+		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
+		texturePositionInBuffer = first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX;
+		normalsPositionInBuffer = first * FastGeometryBuilderImpl.NORMAL_COMPONENTS_PER_VERTEX;
+		coloursPositionInBuffer = first * FastGeometryBuilderImpl.COLOUR_PARTS_PER_VERTEX;
 	}
 
 	/**
@@ -38,7 +51,7 @@ public class OpenGLGeometry {
 	 */
 	public void updateModel(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
 		final IntBuffer modelCoordinatesAsBuffer = openGLGeometryBuilderImpl.modelCoordinatesAsBuffer;
-		modelCoordinatesAsBuffer.position(first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX);
+		modelCoordinatesAsBuffer.position(modelPositionInBuffer);
 		modelCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).modelCoordinates);
 	}
 
@@ -47,8 +60,7 @@ public class OpenGLGeometry {
 	 */
 	public void updateTexture(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
 		final IntBuffer textureCoordinatesAsBuffer = openGLGeometryBuilderImpl.textureCoordinatesAsBuffer;
-		// TODO precalc first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX... it's a small price to pay
-		textureCoordinatesAsBuffer.position(first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX);
+		textureCoordinatesAsBuffer.position(texturePositionInBuffer);
 		textureCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).textureCoordinates);
 	}
 
@@ -57,7 +69,7 @@ public class OpenGLGeometry {
 	 */
 	public void updateNormals(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
 		final IntBuffer normalAsBuffer = openGLGeometryBuilderImpl.normalsAsBuffer;
-		normalAsBuffer.position(first * FastGeometryBuilderImpl.NORMAL_COMPONENTS_PER_VERTEX);
+		normalAsBuffer.position(normalsPositionInBuffer);
 		normalAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).normalComponents);
 	}
 
@@ -66,7 +78,7 @@ public class OpenGLGeometry {
 	 */
 	public void updateColours(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
 		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
-		coloursAsBuffer.position(first * FastGeometryBuilderImpl.COLOUR_PARTS_PER_VERTEX);
+		coloursAsBuffer.position(coloursPositionInBuffer);
 		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);
 	}
 }
