@@ -85,14 +85,14 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			textureCoordinates[offset + 5] = v2;
 
 			// second triangle of rectangle
-			textureCoordinates[offset] = u2;
-			textureCoordinates[offset + 1] = v2;
+			textureCoordinates[offset + 6] = u2;
+			textureCoordinates[offset + 7] = v2;
 
-			textureCoordinates[offset + 2] = u1;
-			textureCoordinates[offset + 3] = v2;
+			textureCoordinates[offset + 8] = u1;
+			textureCoordinates[offset + 9] = v2;
 
-			textureCoordinates[offset + 4] = u1;
-			textureCoordinates[offset + 5] = v1;
+			textureCoordinates[offset + 10] = u1;
+			textureCoordinates[offset + 11] = v1;
 
 			return (X) this;
 		}
@@ -115,17 +115,17 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			colours[offset + 8] = (int) (aBlue3 * (1 << 16));
 
 			// second triangle of rectangle
-			colours[offset] = (int) (aRed3 * (1 << 16));
-			colours[offset + 1] = (int) (aGreen3 * (1 << 16));
-			colours[offset + 2] = (int) (aBlue3 * (1 << 16));
+			colours[offset + 9] = (int) (aRed3 * (1 << 16));
+			colours[offset + 10] = (int) (aGreen3 * (1 << 16));
+			colours[offset + 11] = (int) (aBlue3 * (1 << 16));
 
-			colours[offset + 3] = (int) (aRed2 * (1 << 16));
-			colours[offset + 4] = (int) (aGreen2 * (1 << 16));
-			colours[offset + 5] = (int) (aBlue2 * (1 << 16));
+			colours[offset + 12] = (int) (aRed2 * (1 << 16));
+			colours[offset + 13] = (int) (aGreen2 * (1 << 16));
+			colours[offset + 14] = (int) (aBlue2 * (1 << 16));
 
-			colours[offset + 6] = (int) (aRed4 * (1 << 16));
-			colours[offset + 7] = (int) (aGreen4 * (1 << 16));
-			colours[offset + 8] = (int) (aBlue4 * (1 << 16));
+			colours[offset + 15] = (int) (aRed4 * (1 << 16));
+			colours[offset + 16] = (int) (aGreen4 * (1 << 16));
+			colours[offset + 17] = (int) (aBlue4 * (1 << 16));
 
 			return (X) this;
 		}
