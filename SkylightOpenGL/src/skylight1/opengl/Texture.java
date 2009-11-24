@@ -106,7 +106,6 @@ public class Texture {
 		final Bitmap bitmap = BitmapFactory.decodeStream(anInputStream);
 		try {
 			// TODO check that bitmap is power of two
-			// TODO check that bitmap
 
 			// load the bitmap
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
