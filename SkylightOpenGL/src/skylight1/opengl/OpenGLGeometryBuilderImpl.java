@@ -12,12 +12,8 @@ import javax.microedition.khronos.opengles.GL10;
  */
 class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements OpenGLGeometryBuilder<T, R> {
 	// TODO decide what to do about clients not bothering to provide textures (for example) for some of the components
-	// of a geometry. this will not work as is!
-	private static class NewGeometryParameters {
-		int firstVertexOffset;
-
-		int mode;
-	}
+	// of a geometry. this will not work as is! Simple solution would be to add zeros in the add methods, and use set in
+	// the inner classes
 
 	/**
 	 * Inner class that permits the addition of texture, normals, and colours to a 3D triangle.
@@ -33,7 +29,10 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			textureCoordinates.add(aU3);
 			textureCoordinates.add(aV3);
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2,
@@ -50,7 +49,10 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			normals.add(aNormalY3);
 			normals.add(aNormalZ3);
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
@@ -67,7 +69,10 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			colours.add(aGreen3);
 			colours.add(aBlue3);
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 	}
 
@@ -96,7 +101,10 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			textureCoordinates.add(aU);
 			textureCoordinates.add(aV);
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
@@ -127,17 +135,26 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			colours.add(aGreen4);
 			colours.add(aBlue4);
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 	}
 
 	private static final int MODEL_COORDINATES_PER_VERTEX = 3;
 
-	private final Stack<NewGeometryParameters> geometryStack = new Stack<NewGeometryParameters>();
+	private static final int NO_MODE = -1;
 
-	private final T triangle3D = (T) new Triangle3D();
+	private int currentMode = NO_MODE;
 
-	private final R rectangle2D = (R) new Rectangle2D();
+	private final Stack<Integer> geometryStartVertexStack = new Stack<Integer>();
+
+	@SuppressWarnings("unchecked")
+	private final T triangle3D = (T) new Triangle3D<Object>();
+
+	@SuppressWarnings("unchecked")
+	private final R rectangle2D = (R) new Rectangle2D<Object>();
 
 	private List<Float> modelCoordinates = new ArrayList<Float>();
 
@@ -170,7 +187,8 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		super(aUsesTexturesCoordinates, aUsesNormals, aUsesColours);
 		// TODO allow the client to choose interleaved arrays or not. interleaved arrays are better for updating the
 		// model coordinates, normals, colour and textures coordinates all at once, but non-interleaved are better for
-		// changing only one aspect of a geometry at a time, such as during texture-only animations
+		// changing only one aspect of a geometry at a time, such as during texture animations on fixed models
+		// coordinates
 	}
 
 	/**
@@ -185,26 +203,30 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot start geometry after complete");
 		}
 
-		final NewGeometryParameters newGeometryParameters = new NewGeometryParameters();
-		newGeometryParameters.firstVertexOffset = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX;
-		geometryStack.push(newGeometryParameters);
+		int firstVertexOffset = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX;
+		geometryStartVertexStack.push(firstVertexOffset);
 	}
 
 	/**
 	 * @see OpenGLGeometryBuilderImpl#startGeometry()
 	 * @return The returned OpenGLGeometry must not be used until <i>after</i> this OpenGLGeometryBuilder has been
-	 *         completed.
+	 *         enabled.
 	 */
 	public OpenGLGeometry endGeometry() {
-		if (geometryStack.isEmpty()) {
+		if (geometryStartVertexStack.isEmpty()) {
 			throw new IllegalStateException("calls to endGeometry must match calls to startGeometry");
 		}
 
-		NewGeometryParameters newGeometryParameters = geometryStack.pop();
-		final int numberOfVertices = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX
-				- newGeometryParameters.firstVertexOffset;
-		return new OpenGLGeometry(newGeometryParameters.mode, newGeometryParameters.firstVertexOffset,
-				numberOfVertices, this);
+		int firstVertexOffset = geometryStartVertexStack.pop();
+		final int numberOfVertices = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX - firstVertexOffset;
+		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this);
+
+		// if the stack is empty, then clear the current mode: the next geometry can use a different mode
+		if (geometryStartVertexStack.isEmpty()) {
+			currentMode = NO_MODE;
+		}
+
+		return openGLGeometry;
 	}
 
 	/**
@@ -279,25 +301,25 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * this object.
 	 */
 	private void complete() {
-		if (!geometryStack.isEmpty()) {
+		if (!geometryStartVertexStack.isEmpty()) {
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
-		modelCoordinatesAsBuffer = ByteBufferFactory.createBuffer(modelCoordinates).asIntBuffer();
+		modelCoordinatesAsBuffer = ByteBufferFactory.createBuffer(modelCoordinates);
 		modelCoordinates = null;
 
 		if (usesTextureCoordinates) {
-			textureCoordinatesAsBuffer = ByteBufferFactory.createBuffer(textureCoordinates).asIntBuffer();
+			textureCoordinatesAsBuffer = ByteBufferFactory.createBuffer(textureCoordinates);
 		}
 		textureCoordinates = null;
 
 		if (usesNormals) {
-			normalsAsBuffer = ByteBufferFactory.createBuffer(normals).asIntBuffer();
+			normalsAsBuffer = ByteBufferFactory.createBuffer(normals);
 		}
 		normals = null;
 
 		if (usesColours) {
-			coloursAsBuffer = ByteBufferFactory.createBuffer(colours).asIntBuffer();
+			coloursAsBuffer = ByteBufferFactory.createBuffer(colours);
 		}
 		colours = null;
 
@@ -338,21 +360,15 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot add geometry to a completed builder");
 		}
 
-		if (geometryStack.isEmpty()) {
+		if (geometryStartVertexStack.isEmpty()) {
 			throw new IllegalStateException(
 					"Adding points, lines, and shapes may only be made between matched calls to startGeometry and endGeometry");
 		}
 
-		// get the current geometry
-		final NewGeometryParameters currentGeometry = geometryStack.peek();
-
-		// find out its current mode
-		final int currentMode = currentGeometry.mode;
-
 		// if no mode has been set yet (i.e., this is the first triangle, line, etc. for this geometry), then use the
 		// provided mode
-		if (currentMode == 0) {
-			currentGeometry.mode = aMode;
+		if (currentMode == NO_MODE) {
+			currentMode = aMode;
 		} else if (currentMode != aMode) {
 			// TODO show textual values for modes
 			throw new IllegalStateException(

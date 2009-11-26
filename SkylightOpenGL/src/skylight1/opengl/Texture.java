@@ -14,7 +14,7 @@ import android.opengl.GLUtils;
 import android.util.Log;
 
 /**
- * Encapsultes an OpenGL texture, with facilities for loading, activating, deactivating, and freeing.
+ * Encapsulates an OpenGL texture, with facilities for loading, activating, deactivating, and freeing.
  */
 public class Texture {
 	private int textureId;

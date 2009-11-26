@@ -1,7 +1,7 @@
 package skylight1.opengl;
 
 /**
- * Encapsulates the construction of OpenGLGeometry objects.
+ * Implementation of FastGeometryBuilder.
  */
 class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements FastGeometryBuilder<T, R> {
 	/**
@@ -20,7 +20,10 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			textureCoordinates[offset + 4] = (int) (aU3 * (1 << 16));
 			textureCoordinates[offset + 5] = (int) (aV3 * (1 << 16));
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2,
@@ -39,7 +42,10 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			normalComponents[offset + 7] = (int) (aNormalY3 * (1 << 16));
 			normalComponents[offset + 8] = (int) (aNormalZ3 * (1 << 16));
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
@@ -58,7 +64,10 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			colours[offset + 7] = (int) (aGreen3 * (1 << 16));
 			colours[offset + 8] = (int) (aBlue3 * (1 << 16));
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 	}
 
@@ -94,7 +103,10 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			textureCoordinates[offset + 10] = u1;
 			textureCoordinates[offset + 11] = v1;
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
@@ -127,7 +139,10 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			colours[offset + 16] = (int) (aGreen4 * (1 << 16));
 			colours[offset + 17] = (int) (aBlue4 * (1 << 16));
 
-			return (X) this;
+			@SuppressWarnings("unchecked")
+			X typeSafeThis = (X) this;
+
+			return typeSafeThis;
 		}
 	}
 
@@ -143,9 +158,13 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 
 	private static final int TRIANGLES_PER_RECTANGLE = 2;
 
-	private final T triangle3D = (T) new Triangle3D();
+	private static final int VERTICES_EXTENSION_SIZE = 6;
 
-	private final R rectangle2D = (R) new Rectangle2D();
+	@SuppressWarnings("unchecked")
+	private final T triangle3D = (T) new Triangle3D<Object>();
+
+	@SuppressWarnings("unchecked")
+	private final R rectangle2D = (R) new Rectangle2D<Object>();
 
 	int[] modelCoordinates;
 
@@ -178,11 +197,11 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 		}
 
 		if (aUsesNormals) {
-			textureCoordinates = new int[NORMAL_COMPONENTS_PER_VERTEX * aNumberOfVertices];
+			normalComponents = new int[NORMAL_COMPONENTS_PER_VERTEX * aNumberOfVertices];
 		}
 
 		if (aUsesColours) {
-			textureCoordinates = new int[COLOUR_PARTS_PER_VERTEX * aNumberOfVertices];
+			colours = new int[COLOUR_PARTS_PER_VERTEX * aNumberOfVertices];
 		}
 	}
 
@@ -196,6 +215,8 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 			float aZ3) {
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
 		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE;
+
+		updateArraySizesIfNecessary();
 
 		final int offset = vertexOffsetOfCurrentGeometry * MODEL_COORDINATES_PER_VERTEX;
 
@@ -223,6 +244,8 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
 		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE * TRIANGLES_PER_RECTANGLE;
+
+		updateArraySizesIfNecessary();
 
 		final int offset = vertexOffsetOfCurrentGeometry * MODEL_COORDINATES_PER_VERTEX;
 
@@ -260,6 +283,8 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
 		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE * TRIANGLES_PER_RECTANGLE;
 
+		updateArraySizesIfNecessary();
+
 		return rectangle2D;
 	}
 
@@ -268,6 +293,8 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
 		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE;
 
+		updateArraySizesIfNecessary();
+
 		return triangle3D;
 	}
 
@@ -275,5 +302,27 @@ class FastGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implements
 	public void reset() {
 		vertexOffsetOfCurrentGeometry = 0;
 		vertexOffsetOfNextGeometry = 0;
+	}
+
+	private void updateArraySizesIfNecessary() {
+		if (modelCoordinates.length < vertexOffsetOfNextGeometry * MODEL_COORDINATES_PER_VERTEX) {
+			modelCoordinates = extend(modelCoordinates, VERTICES_EXTENSION_SIZE * MODEL_COORDINATES_PER_VERTEX);
+			if (usesTextureCoordinates) {
+				textureCoordinates = extend(textureCoordinates, VERTICES_EXTENSION_SIZE
+						* TEXTURE_COORDINATES_PER_VERTEX);
+			}
+			if (usesColours) {
+				colours = extend(colours, VERTICES_EXTENSION_SIZE * COLOUR_PARTS_PER_VERTEX);
+			}
+			if (usesNormals) {
+				normalComponents = extend(normalComponents, VERTICES_EXTENSION_SIZE * NORMAL_COMPONENTS_PER_VERTEX);
+			}
+		}
+	}
+
+	private int[] extend(int[] anArray, int anExtensionSize) {
+		final int[] newArray = new int[anArray.length + anExtensionSize];
+		System.arraycopy(anArray, 0, newArray, 0, anArray.length);
+		return newArray;
 	}
 }

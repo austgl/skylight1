@@ -5,8 +5,7 @@ import java.nio.IntBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Used by onDrawFrame
- * 
+ * A Geometry that can render itself to an OpenGL context.
  */
 public class OpenGLGeometry {
 	private final int mode;
@@ -32,6 +31,7 @@ public class OpenGLGeometry {
 		numberOfVerticies = aNumberOfVerticies;
 		openGLGeometryBuilderImpl = anOpenGLGeometryBuilderImpl;
 
+		// To reduce calculations in the draw method, pre-calculate some offets
 		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
 		texturePositionInBuffer = first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX;
 		normalsPositionInBuffer = first * FastGeometryBuilderImpl.NORMAL_COMPONENTS_PER_VERTEX;
@@ -62,6 +62,7 @@ public class OpenGLGeometry {
 		final IntBuffer textureCoordinatesAsBuffer = openGLGeometryBuilderImpl.textureCoordinatesAsBuffer;
 		textureCoordinatesAsBuffer.position(texturePositionInBuffer);
 		textureCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).textureCoordinates);
+		textureCoordinatesAsBuffer.position(0);
 	}
 
 	/**

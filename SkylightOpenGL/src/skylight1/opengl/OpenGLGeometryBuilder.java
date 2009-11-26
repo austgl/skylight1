@@ -18,7 +18,7 @@ public interface OpenGLGeometryBuilder<T, R> extends GeometryBuilder<T, R> {
 	/**
 	 * @see OpenGLGeometryBuilder#startGeometry()
 	 * @return The returned OpenGLGeometry must not be used until <i>after</i> this OpenGLGeometryBuilder has been
-	 *         completed.
+	 *         enabled.
 	 */
 	OpenGLGeometry endGeometry();
 
@@ -26,5 +26,4 @@ public interface OpenGLGeometryBuilder<T, R> extends GeometryBuilder<T, R> {
 	 * Enables all of the features necessary to render any of the geometries created by this builder.
 	 */
 	void enable(GL10 aGL10);
-
 }

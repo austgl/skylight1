@@ -6,45 +6,47 @@ import skylight1.opengl.GeometryBuilder.NormalizableTriangle3D;
 import skylight1.opengl.GeometryBuilder.TexturableRectangle2D;
 import skylight1.opengl.GeometryBuilder.TexturableTriangle3D;
 
+/**
+ * Factory methods for creating type-safe FastGeometryBuilders. Each method is of the form
+ * create[Texturable][Colourable][Normalizable], where the presence of each of Texturable, Colourable, and Normalizable
+ * indicates the GeometryBuilder's abilities.
+ */
 public class OpenGLGeometryBuilderFactory {
-	public static interface Void {
+	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<NormalizableTriangle3D<Object>>>, TexturableRectangle2D<ColourableRectangle2D<Object>>> createTexturableColourableNormalizable() {
+		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<NormalizableTriangle3D<Object>>>, TexturableRectangle2D<ColourableRectangle2D<Object>>>(
+				true, true, true);
 	}
 
-	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<NormalizableTriangle3D<Void>>>, TexturableRectangle2D<ColourableRectangle2D<Void>>> createTexturableColourableNormalizable() {
-		return new OpenGLGeometryBuilderImpl(true, true, true);
+	public static OpenGLGeometryBuilder<TexturableTriangle3D<NormalizableTriangle3D<Object>>, TexturableRectangle2D<Object>> createTexturableNormalizable() {
+		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<NormalizableTriangle3D<Object>>, TexturableRectangle2D<Object>>(
+				true, true, false);
 	}
 
-	public static OpenGLGeometryBuilder<TexturableTriangle3D<NormalizableTriangle3D<Void>>, TexturableRectangle2D<Void>> createTexturableNormalizable() {
-		return new OpenGLGeometryBuilderImpl(true, true, false);
+	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Object>>, TexturableRectangle2D<ColourableRectangle2D<Object>>> createTexturableColourable() {
+		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<Object>>, TexturableRectangle2D<ColourableRectangle2D<Object>>>(
+				true, false, true);
 	}
 
-	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<ColourableRectangle2D<Void>>> createTexturableColourable() {
-		return new OpenGLGeometryBuilderImpl(true, false, true);
+	public static OpenGLGeometryBuilder<TexturableTriangle3D<Object>, TexturableRectangle2D<Object>> createTexturable() {
+		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<Object>, TexturableRectangle2D<Object>>(true, false,
+				false);
 	}
 
-	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<Void>> createTexturable() {
-		return new OpenGLGeometryBuilderImpl(true, false, false);
+	public static OpenGLGeometryBuilder<ColourableTriangle3D<NormalizableTriangle3D<Object>>, ColourableRectangle2D<Object>> createColourableNormalizable() {
+		return new OpenGLGeometryBuilderImpl<ColourableTriangle3D<NormalizableTriangle3D<Object>>, ColourableRectangle2D<Object>>(
+				false, true, true);
 	}
 
-	public static OpenGLGeometryBuilder<ColourableTriangle3D<NormalizableTriangle3D<Void>>, ColourableRectangle2D<Void>> createColourableNormalizable() {
-		return new OpenGLGeometryBuilderImpl(false, true, true);
+	public static OpenGLGeometryBuilder<NormalizableTriangle3D<Object>, Object> createNormalizable() {
+		return new OpenGLGeometryBuilderImpl<NormalizableTriangle3D<Object>, Object>(false, true, false);
 	}
 
-	public static OpenGLGeometryBuilder<NormalizableTriangle3D<Void>, Void> createNormalizable() {
-		return new OpenGLGeometryBuilderImpl(false, true, false);
+	public static OpenGLGeometryBuilder<ColourableTriangle3D<Object>, ColourableRectangle2D<Object>> createColourable() {
+		return new OpenGLGeometryBuilderImpl<ColourableTriangle3D<Object>, ColourableRectangle2D<Object>>(false, false,
+				true);
 	}
 
-	public static OpenGLGeometryBuilder<ColourableTriangle3D<Void>, ColourableRectangle2D<Void>> createColourable() {
-		return new OpenGLGeometryBuilderImpl(false, false, true);
-	}
-
-	public static OpenGLGeometryBuilder<Void, Void> create() {
-		return new OpenGLGeometryBuilderImpl(false, false, false);
-	}
-
-	public static FastGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<Void>> createFastTexture(
-			OpenGLGeometry aGeometry) {
-		return new FastGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<Void>>, TexturableRectangle2D<Void>>(
-				true, false, false, aGeometry.numberOfVerticies);
+	public static OpenGLGeometryBuilder<Object, Object> create() {
+		return new OpenGLGeometryBuilderImpl<Object, Object>(false, false, false);
 	}
 }
