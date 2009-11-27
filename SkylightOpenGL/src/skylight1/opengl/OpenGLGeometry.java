@@ -50,6 +50,10 @@ public class OpenGLGeometry {
 	 * Updates the model associated with this geometry.
 	 */
 	public void updateModel(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
+		if (!openGLGeometryBuilderImpl.complete) {
+			throw new IllegalStateException(
+					"Updates are not permitted until after the first time the geometry builder has been enabled.");
+		}
 		final IntBuffer modelCoordinatesAsBuffer = openGLGeometryBuilderImpl.modelCoordinatesAsBuffer;
 		modelCoordinatesAsBuffer.position(modelPositionInBuffer);
 		modelCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).modelCoordinates);
@@ -59,6 +63,10 @@ public class OpenGLGeometry {
 	 * Updates the textures associated with this geometry.
 	 */
 	public void updateTexture(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
+		if (!openGLGeometryBuilderImpl.complete) {
+			throw new IllegalStateException(
+					"Updates are not permitted until after the first time the geometry builder has been enabled.");
+		}
 		final IntBuffer textureCoordinatesAsBuffer = openGLGeometryBuilderImpl.textureCoordinatesAsBuffer;
 		textureCoordinatesAsBuffer.position(texturePositionInBuffer);
 		textureCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).textureCoordinates);
@@ -69,6 +77,10 @@ public class OpenGLGeometry {
 	 * Updates the normals associated with this geometry.
 	 */
 	public void updateNormals(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
+		if (!openGLGeometryBuilderImpl.complete) {
+			throw new IllegalStateException(
+					"Updates are not permitted until after the first time the geometry builder has been enabled.");
+		}
 		final IntBuffer normalAsBuffer = openGLGeometryBuilderImpl.normalsAsBuffer;
 		normalAsBuffer.position(normalsPositionInBuffer);
 		normalAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).normalComponents);
@@ -78,6 +90,10 @@ public class OpenGLGeometry {
 	 * Updates the colours associated with this geometry.
 	 */
 	public void updateColours(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
+		if (!openGLGeometryBuilderImpl.complete) {
+			throw new IllegalStateException(
+					"Updates are not permitted until after the first time the geometry builder has been enabled.");
+		}
 		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
 		coloursAsBuffer.position(coloursPositionInBuffer);
 		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);

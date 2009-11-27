@@ -172,7 +172,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	IntBuffer coloursAsBuffer;
 
-	private boolean complete;
+	boolean complete;
 
 	/**
 	 * @param aUsesTexturesCoordinates
