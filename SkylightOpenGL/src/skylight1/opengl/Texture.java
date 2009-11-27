@@ -11,7 +11,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 /**
  * Encapsulates an OpenGL texture, with facilities for loading, activating, deactivating, and freeing.
@@ -22,6 +21,13 @@ public class Texture {
 	private GL10 gL10;
 
 	private boolean textureAllocated;
+
+	/**
+	 * Load a texture from a bitmap
+	 */
+	public Texture(GL10 aGL10, Bitmap aBitmap) {
+		loadBitmap(aGL10, aBitmap);
+	}
 
 	/**
 	 * Load a texture from an input stream.
@@ -82,6 +88,17 @@ public class Texture {
 	}
 
 	private void loadBitmap(final GL10 aGL10, final InputStream anInputStream) {
+		// create the bitmap
+		final Bitmap bitmap = BitmapFactory.decodeStream(anInputStream);
+		try {
+			loadBitmap(aGL10, bitmap);
+		} finally {
+			// free up the bitmap
+			bitmap.recycle();
+		}
+	}
+
+	private void loadBitmap(final GL10 aGL10, final Bitmap aBitmap) {
 		// save for later
 		gL10 = aGL10;
 
@@ -102,22 +119,16 @@ public class Texture {
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 
-		// create the bitmap
-		final Bitmap bitmap = BitmapFactory.decodeStream(anInputStream);
-		try {
-			// TODO check that bitmap is power of two
+		// TODO check that bitmap is power of two
 
-			// load the bitmap
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
+		// load the bitmap
+		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, aBitmap, 0);
 
-			// check for an error
-			final int error = aGL10.glGetError();
-			if (error != 0) {
-				Log.e(Texture.class.getName(), format("error is %d = %s", error, aGL10.glGetString(error)));
-			}
-		} finally {
-			// free up the bitmap
-			bitmap.recycle();
+		// check for an error
+		final int error = aGL10.glGetError();
+		if (error != 0) {
+			throw new RuntimeException(format("Error loading bitmap as texture =%d: %s", error, aGL10
+					.glGetString(error)));
 		}
 	}
 }
