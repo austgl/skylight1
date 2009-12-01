@@ -1,8 +1,8 @@
 package skylight1.opengl;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -16,18 +16,20 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	// the inner classes
 
 	/**
-	 * Inner class that permits the addition of texture, normals, and colours to a 3D triangle.
+	 * Inner class that permits the addition of texture, normalComponents, and colours to a 3D triangle.
 	 */
 	public class Triangle3D<X> implements TexturableTriangle3D<X>, ColourableTriangle3D<X>, NormalizableTriangle3D<X> {
 		public X setTextureCoordinates(float aU1, float aV1, float aU2, float aV2, float aU3, float aV3) {
-			textureCoordinates.add(aU1);
-			textureCoordinates.add(aV1);
+			final int offset = vertexOffsetOfCurrentGeometry * TEXTURE_COORDINATES_PER_VERTEX;
 
-			textureCoordinates.add(aU2);
-			textureCoordinates.add(aV2);
+			textureCoordinates[offset] = (int) (aU1 * (1 << 16));
+			textureCoordinates[offset + 1] = (int) (aV1 * (1 << 16));
 
-			textureCoordinates.add(aU3);
-			textureCoordinates.add(aV3);
+			textureCoordinates[offset + 2] = (int) (aU2 * (1 << 16));
+			textureCoordinates[offset + 3] = (int) (aV2 * (1 << 16));
+
+			textureCoordinates[offset + 4] = (int) (aU3 * (1 << 16));
+			textureCoordinates[offset + 5] = (int) (aV3 * (1 << 16));
 
 			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
@@ -37,17 +39,19 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 		public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2,
 				float aNormalZ2, float aNormalX3, float aNormalY3, float aNormalZ3) {
-			normals.add(aNormalX1);
-			normals.add(aNormalY1);
-			normals.add(aNormalZ1);
+			final int offset = vertexOffsetOfCurrentGeometry * NORMAL_COMPONENTS_PER_VERTEX;
 
-			normals.add(aNormalX2);
-			normals.add(aNormalY2);
-			normals.add(aNormalZ2);
+			normalComponents[offset] = (int) (aNormalX1 * (1 << 16));
+			normalComponents[offset + 1] = (int) (aNormalY1 * (1 << 16));
+			normalComponents[offset + 2] = (int) (aNormalZ1 * (1 << 16));
 
-			normals.add(aNormalX3);
-			normals.add(aNormalY3);
-			normals.add(aNormalZ3);
+			normalComponents[offset + 3] = (int) (aNormalX2 * (1 << 16));
+			normalComponents[offset + 4] = (int) (aNormalY2 * (1 << 16));
+			normalComponents[offset + 5] = (int) (aNormalZ2 * (1 << 16));
+
+			normalComponents[offset + 6] = (int) (aNormalX3 * (1 << 16));
+			normalComponents[offset + 7] = (int) (aNormalY3 * (1 << 16));
+			normalComponents[offset + 8] = (int) (aNormalZ3 * (1 << 16));
 
 			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
@@ -57,17 +61,19 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
 				float aRed3, float aGreen3, float aBlue3) {
-			colours.add(aRed1);
-			colours.add(aGreen1);
-			colours.add(aBlue1);
+			final int offset = vertexOffsetOfCurrentGeometry * COLOUR_PARTS_PER_VERTEX;
 
-			colours.add(aRed2);
-			colours.add(aGreen2);
-			colours.add(aBlue2);
+			colours[offset] = (int) (aRed1 * (1 << 16));
+			colours[offset + 1] = (int) (aGreen1 * (1 << 16));
+			colours[offset + 2] = (int) (aBlue1 * (1 << 16));
 
-			colours.add(aRed3);
-			colours.add(aGreen3);
-			colours.add(aBlue3);
+			colours[offset + 3] = (int) (aRed2 * (1 << 16));
+			colours[offset + 4] = (int) (aGreen2 * (1 << 16));
+			colours[offset + 5] = (int) (aBlue2 * (1 << 16));
+
+			colours[offset + 6] = (int) (aRed3 * (1 << 16));
+			colours[offset + 7] = (int) (aGreen3 * (1 << 16));
+			colours[offset + 8] = (int) (aBlue3 * (1 << 16));
 
 			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
@@ -81,25 +87,32 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 */
 	public class Rectangle2D<X> implements TexturableRectangle2D<X>, ColourableRectangle2D<X> {
 		public X setTextureCoordinates(float aU, float aV, float aUWidth, float aVHeight) {
+			final int offset = vertexOffsetOfCurrentGeometry * TEXTURE_COORDINATES_PER_VERTEX;
+
+			final int u1 = (int) (aU * (1 << 16));
+			final int v1 = (int) (aV * (1 << 16));
+			final int u2 = (int) ((aU + aUWidth) * (1 << 16));
+			final int v2 = (int) ((aV + aVHeight) * (1 << 16));
+
 			// first triangle of rectangle
-			textureCoordinates.add(aU);
-			textureCoordinates.add(aV);
+			textureCoordinates[offset] = u1;
+			textureCoordinates[offset + 1] = v1;
 
-			textureCoordinates.add(aU + aUWidth);
-			textureCoordinates.add(aV);
+			textureCoordinates[offset + 2] = u2;
+			textureCoordinates[offset + 3] = v1;
 
-			textureCoordinates.add(aU + aUWidth);
-			textureCoordinates.add(aV + aVHeight);
+			textureCoordinates[offset + 4] = u2;
+			textureCoordinates[offset + 5] = v2;
 
 			// second triangle of rectangle
-			textureCoordinates.add(aU + aUWidth);
-			textureCoordinates.add(aV + aVHeight);
+			textureCoordinates[offset + 6] = u2;
+			textureCoordinates[offset + 7] = v2;
 
-			textureCoordinates.add(aU);
-			textureCoordinates.add(aV + aVHeight);
+			textureCoordinates[offset + 8] = u1;
+			textureCoordinates[offset + 9] = v2;
 
-			textureCoordinates.add(aU);
-			textureCoordinates.add(aV);
+			textureCoordinates[offset + 10] = u1;
+			textureCoordinates[offset + 11] = v1;
 
 			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
@@ -109,31 +122,33 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2,
 				float aRed3, float aGreen3, float aBlue3, float aRed4, float aGreen4, float aBlue4) {
+			final int offset = vertexOffsetOfCurrentGeometry * COLOUR_PARTS_PER_VERTEX;
+
 			// first triangle of rectangle
-			colours.add(aRed1);
-			colours.add(aGreen1);
-			colours.add(aBlue1);
+			colours[offset] = (int) (aRed1 * (1 << 16));
+			colours[offset + 1] = (int) (aGreen1 * (1 << 16));
+			colours[offset + 2] = (int) (aBlue1 * (1 << 16));
 
-			colours.add(aRed2);
-			colours.add(aGreen2);
-			colours.add(aBlue2);
+			colours[offset + 3] = (int) (aRed2 * (1 << 16));
+			colours[offset + 4] = (int) (aGreen2 * (1 << 16));
+			colours[offset + 5] = (int) (aBlue2 * (1 << 16));
 
-			colours.add(aRed3);
-			colours.add(aGreen3);
-			colours.add(aBlue3);
+			colours[offset + 6] = (int) (aRed3 * (1 << 16));
+			colours[offset + 7] = (int) (aGreen3 * (1 << 16));
+			colours[offset + 8] = (int) (aBlue3 * (1 << 16));
 
 			// second triangle of rectangle
-			colours.add(aRed3);
-			colours.add(aGreen3);
-			colours.add(aBlue3);
+			colours[offset + 9] = (int) (aRed3 * (1 << 16));
+			colours[offset + 10] = (int) (aGreen3 * (1 << 16));
+			colours[offset + 11] = (int) (aBlue3 * (1 << 16));
 
-			colours.add(aRed2);
-			colours.add(aGreen2);
-			colours.add(aBlue2);
+			colours[offset + 12] = (int) (aRed2 * (1 << 16));
+			colours[offset + 13] = (int) (aGreen2 * (1 << 16));
+			colours[offset + 14] = (int) (aBlue2 * (1 << 16));
 
-			colours.add(aRed4);
-			colours.add(aGreen4);
-			colours.add(aBlue4);
+			colours[offset + 15] = (int) (aRed4 * (1 << 16));
+			colours[offset + 16] = (int) (aGreen4 * (1 << 16));
+			colours[offset + 17] = (int) (aBlue4 * (1 << 16));
 
 			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
@@ -142,11 +157,23 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		}
 	}
 
-	private static final int MODEL_COORDINATES_PER_VERTEX = 3;
+	static final int MODEL_COORDINATES_PER_VERTEX = 3;
+
+	static final int TEXTURE_COORDINATES_PER_VERTEX = 2;
+
+	static final int NORMAL_COMPONENTS_PER_VERTEX = 3;
+
+	static final int COLOUR_PARTS_PER_VERTEX = 3;
+
+	private static final int VERTICES_PER_TRIANGLE = 3;
+
+	private static final int TRIANGLES_PER_RECTANGLE = 2;
+
+	private static final int VERTICES_EXTENSION_SIZE = 6;
 
 	private static final int NO_MODE = -1;
 
-	private int currentMode = NO_MODE;
+	private static int currentMode = NO_MODE;
 
 	private final Stack<Integer> geometryStartVertexStack = new Stack<Integer>();
 
@@ -156,13 +183,17 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	@SuppressWarnings("unchecked")
 	private final R rectangle2D = (R) new Rectangle2D<Object>();
 
-	private List<Float> modelCoordinates = new ArrayList<Float>();
+	int[] modelCoordinates;
 
-	private List<Float> textureCoordinates = new ArrayList<Float>();
+	int[] textureCoordinates;
 
-	private List<Float> normals = new ArrayList<Float>();
+	int[] normalComponents;
 
-	private List<Float> colours = new ArrayList<Float>();
+	int[] colours;
+
+	int vertexOffsetOfCurrentGeometry;
+
+	int vertexOffsetOfNextGeometry;
 
 	IntBuffer modelCoordinatesAsBuffer;
 
@@ -178,17 +209,126 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * @param aUsesTexturesCoordinates
 	 *            indicates if this geometries will include textures.
 	 * @param aUsesNormals
-	 *            indicates if this geometries will include normals.
+	 *            indicates if this geometries will include normalComponents.
 	 * @param aUsesColours
 	 *            indicates if this geometries will include colours.
 	 */
 	public OpenGLGeometryBuilderImpl(final boolean aUsesTexturesCoordinates, final boolean aUsesNormals,
-			final boolean aUsesColours) {
+			final boolean aUsesColours, int aNumberOfVertices) {
 		super(aUsesTexturesCoordinates, aUsesNormals, aUsesColours);
-		// TODO allow the client to choose interleaved arrays or not. interleaved arrays are better for updating the
-		// model coordinates, normals, colour and textures coordinates all at once, but non-interleaved are better for
-		// changing only one aspect of a geometry at a time, such as during texture animations on fixed models
-		// coordinates
+
+		modelCoordinates = new int[MODEL_COORDINATES_PER_VERTEX * aNumberOfVertices];
+
+		if (aUsesTexturesCoordinates) {
+			textureCoordinates = new int[TEXTURE_COORDINATES_PER_VERTEX * aNumberOfVertices];
+		}
+
+		if (aUsesNormals) {
+			normalComponents = new int[NORMAL_COMPONENTS_PER_VERTEX * aNumberOfVertices];
+		}
+
+		if (aUsesColours) {
+			colours = new int[COLOUR_PARTS_PER_VERTEX * aNumberOfVertices];
+		}
+	}
+
+	/**
+	 * Adds a 3D triangle to the current geometry. Uses mode GL_TRIANGLES.
+	 * 
+	 * @return A Triangle3D, which permits adding textures, colour and normalComponents as per the configuration of the
+	 *         OpenGLGeometryBuilder
+	 */
+	public T add3DTriangle(float anX1, float aY1, float aZ1, float anX2, float aY2, float aZ2, float anX3, float aY3,
+			float aZ3) {
+		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
+		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE;
+
+		checkCurrentGeometryAndCompleteAndCheckAndSetMode(GL10.GL_TRIANGLES);
+
+		updateArraySizesIfNecessary();
+
+		final int offset = vertexOffsetOfCurrentGeometry * MODEL_COORDINATES_PER_VERTEX;
+
+		modelCoordinates[offset] = (int) (anX1 * (1 << 16));
+		modelCoordinates[offset + 1] = (int) (aY1 * (1 << 16));
+		modelCoordinates[offset + 2] = (int) (aZ1 * (1 << 16));
+
+		modelCoordinates[offset + 3] = (int) (anX2 * (1 << 16));
+		modelCoordinates[offset + 4] = (int) (aY2 * (1 << 16));
+		modelCoordinates[offset + 5] = (int) (aZ2 * (1 << 16));
+
+		modelCoordinates[offset + 6] = (int) (anX3 * (1 << 16));
+		modelCoordinates[offset + 7] = (int) (aY3 * (1 << 16));
+		modelCoordinates[offset + 8] = (int) (aZ3 * (1 << 16));
+
+		return triangle3D;
+	}
+
+	/**
+	 * Adds a 2D (z = 0) upright rectangle to the current geometry. Uses mode GL_TRIANGLES.
+	 * 
+	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
+	 *         OpenGLGeometryBuilder
+	 */
+	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
+		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
+		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE * TRIANGLES_PER_RECTANGLE;
+
+		checkCurrentGeometryAndCompleteAndCheckAndSetMode(GL10.GL_TRIANGLES);
+
+		updateArraySizesIfNecessary();
+
+		final int offset = vertexOffsetOfCurrentGeometry * MODEL_COORDINATES_PER_VERTEX;
+
+		// triangle 1
+		modelCoordinates[offset] = (int) (anX * (1 << 16));
+		modelCoordinates[offset + 1] = (int) (aY * (1 << 16));
+		modelCoordinates[offset + 2] = 0;
+
+		modelCoordinates[offset + 3] = (int) ((anX + aWidth) * (1 << 16));
+		modelCoordinates[offset + 4] = (int) (aY * (1 << 16));
+		modelCoordinates[offset + 5] = 0;
+
+		modelCoordinates[offset + 6] = (int) ((anX + aWidth) * (1 << 16));
+		modelCoordinates[offset + 7] = (int) ((aY + aHeight) * (1 << 16));
+		modelCoordinates[offset + 8] = 0;
+
+		// triangle 2
+		modelCoordinates[offset + 9] = (int) ((anX + aWidth) * (1 << 16));
+		modelCoordinates[offset + 10] = (int) ((aY + aHeight) * (1 << 16));
+		modelCoordinates[offset + 11] = 0;
+
+		modelCoordinates[offset + 12] = (int) (anX * (1 << 16));
+		modelCoordinates[offset + 13] = (int) ((aY + aHeight) * (1 << 16));
+		modelCoordinates[offset + 14] = 0;
+
+		modelCoordinates[offset + 15] = (int) (anX * (1 << 16));
+		modelCoordinates[offset + 16] = (int) (aY * (1 << 16));
+		modelCoordinates[offset + 17] = 0;
+
+		return rectangle2D;
+	}
+
+	private void updateArraySizesIfNecessary() {
+		if (modelCoordinates.length < vertexOffsetOfNextGeometry * MODEL_COORDINATES_PER_VERTEX) {
+			modelCoordinates = extend(modelCoordinates, VERTICES_EXTENSION_SIZE * MODEL_COORDINATES_PER_VERTEX);
+			if (usesTextureCoordinates) {
+				textureCoordinates = extend(textureCoordinates, VERTICES_EXTENSION_SIZE
+						* TEXTURE_COORDINATES_PER_VERTEX);
+			}
+			if (usesColours) {
+				colours = extend(colours, VERTICES_EXTENSION_SIZE * COLOUR_PARTS_PER_VERTEX);
+			}
+			if (usesNormals) {
+				normalComponents = extend(normalComponents, VERTICES_EXTENSION_SIZE * NORMAL_COMPONENTS_PER_VERTEX);
+			}
+		}
+	}
+
+	private int[] extend(int[] anArray, int anExtensionSize) {
+		final int[] newArray = new int[anArray.length + anExtensionSize];
+		System.arraycopy(anArray, 0, newArray, 0, anArray.length);
+		return newArray;
 	}
 
 	/**
@@ -203,7 +343,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot start geometry after complete");
 		}
 
-		int firstVertexOffset = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX;
+		int firstVertexOffset = vertexOffsetOfNextGeometry;
 		geometryStartVertexStack.push(firstVertexOffset);
 	}
 
@@ -218,7 +358,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		}
 
 		int firstVertexOffset = geometryStartVertexStack.pop();
-		final int numberOfVertices = modelCoordinates.size() / MODEL_COORDINATES_PER_VERTEX - firstVertexOffset;
+		final int numberOfVertices = vertexOffsetOfNextGeometry - firstVertexOffset;
 		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this);
 
 		// if the stack is empty, then clear the current mode: the next geometry can use a different mode
@@ -230,100 +370,55 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	}
 
 	/**
-	 * Adds a 3D triangle to the current geometry. Uses mode GL_TRIANGLES.
-	 * 
-	 * @return A Triangle3D, which permits adding textures, colour and normals as per the configuration of the
-	 *         OpenGLGeometryBuilder
-	 */
-	public T add3DTriangle(float anX1, float aY1, float aZ1, float anX2, float aY2, float aZ2, float anX3, float aY3,
-			float aZ3) {
-		checkCurrentGeometryAndCompleteAndCheckAndSetMode(GL10.GL_TRIANGLES);
-
-		modelCoordinates.add(anX1);
-		modelCoordinates.add(aY1);
-		modelCoordinates.add(aZ1);
-
-		modelCoordinates.add(anX2);
-		modelCoordinates.add(aY2);
-		modelCoordinates.add(aZ2);
-
-		modelCoordinates.add(anX3);
-		modelCoordinates.add(aY3);
-		modelCoordinates.add(aZ3);
-
-		return triangle3D;
-	}
-
-	/**
-	 * Adds a 2D (z = 0) upright rectangle to the current geometry. Uses mode GL_TRIANGLES.
-	 * 
-	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
-	 *         OpenGLGeometryBuilder
-	 */
-	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
-		checkCurrentGeometryAndCompleteAndCheckAndSetMode(GL10.GL_TRIANGLES);
-
-		if (modelCoordinates == null) {
-			throw new IllegalStateException("Cannot change geometry after the buffers have been retrieved");
-		}
-
-		// first triangle of rectangle
-		modelCoordinates.add(anX);
-		modelCoordinates.add(aY);
-		modelCoordinates.add(0f);
-
-		modelCoordinates.add(anX + aWidth);
-		modelCoordinates.add(aY);
-		modelCoordinates.add(0f);
-
-		modelCoordinates.add(anX + aWidth);
-		modelCoordinates.add(aY + aHeight);
-		modelCoordinates.add(0f);
-
-		// second triangle of rectangle
-		modelCoordinates.add(anX + aWidth);
-		modelCoordinates.add(aY + aHeight);
-		modelCoordinates.add(0f);
-
-		modelCoordinates.add(anX);
-		modelCoordinates.add(aY + aHeight);
-		modelCoordinates.add(0f);
-
-		modelCoordinates.add(anX);
-		modelCoordinates.add(aY);
-		modelCoordinates.add(0f);
-
-		return rectangle2D;
-	}
-
-	/**
 	 * Completes the use of this builder for building. Must be called before using any of the OpenGLGeometry created by
 	 * this object.
 	 */
 	private void complete() {
+		// TODO allow the client to choose interleaved arrays or not. interleaved arrays are better for updating the
+		// model coordinates, normals, colour and textures coordinates all at once, but non-interleaved are better for
+		// changing only one aspect of a geometry at a time, such as during texture animations on fixed models
+		// coordinates
 		if (!geometryStartVertexStack.isEmpty()) {
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
-		modelCoordinatesAsBuffer = ByteBufferFactory.createBuffer(modelCoordinates);
+		modelCoordinatesAsBuffer = createBuffer(modelCoordinates);
 		modelCoordinates = null;
 
 		if (usesTextureCoordinates) {
-			textureCoordinatesAsBuffer = ByteBufferFactory.createBuffer(textureCoordinates);
+			textureCoordinatesAsBuffer = createBuffer(textureCoordinates);
 		}
 		textureCoordinates = null;
 
 		if (usesNormals) {
-			normalsAsBuffer = ByteBufferFactory.createBuffer(normals);
+			normalsAsBuffer = createBuffer(normalComponents);
 		}
-		normals = null;
+		normalComponents = null;
 
 		if (usesColours) {
-			coloursAsBuffer = ByteBufferFactory.createBuffer(colours);
+			coloursAsBuffer = createBuffer(colours);
 		}
 		colours = null;
 
 		complete = true;
+	}
+
+	/**
+	 * Creates a direct IntBuffer (in native byte order) and populates it with fixed point integers from a given list of
+	 * Floats.
+	 */
+	private IntBuffer createBuffer(final int[] anInts) {
+		// create a direct byte buffer in native byte order
+		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(anInts.length * Float.SIZE / Byte.SIZE);
+		byteBuffer.order(ByteOrder.nativeOrder());
+		final IntBuffer byteBufferAsIntBuffer = byteBuffer.asIntBuffer();
+
+		byteBufferAsIntBuffer.put(anInts);
+
+		// point the buffer back to the beginning
+		byteBufferAsIntBuffer.position(0);
+
+		return byteBufferAsIntBuffer;
 	}
 
 	/**

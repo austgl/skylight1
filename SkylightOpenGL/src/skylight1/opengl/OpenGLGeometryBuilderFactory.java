@@ -14,39 +14,39 @@ import skylight1.opengl.GeometryBuilder.TexturableTriangle3D;
 public class OpenGLGeometryBuilderFactory {
 	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<NormalizableTriangle3D<Object>>>, TexturableRectangle2D<ColourableRectangle2D<Object>>> createTexturableColourableNormalizable() {
 		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<NormalizableTriangle3D<Object>>>, TexturableRectangle2D<ColourableRectangle2D<Object>>>(
-				true, true, true);
+				true, true, true, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<TexturableTriangle3D<NormalizableTriangle3D<Object>>, TexturableRectangle2D<Object>> createTexturableNormalizable() {
 		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<NormalizableTriangle3D<Object>>, TexturableRectangle2D<Object>>(
-				true, true, false);
+				true, true, false, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<TexturableTriangle3D<ColourableTriangle3D<Object>>, TexturableRectangle2D<ColourableRectangle2D<Object>>> createTexturableColourable() {
 		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<ColourableTriangle3D<Object>>, TexturableRectangle2D<ColourableRectangle2D<Object>>>(
-				true, false, true);
+				true, false, true, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<TexturableTriangle3D<Object>, TexturableRectangle2D<Object>> createTexturable() {
 		return new OpenGLGeometryBuilderImpl<TexturableTriangle3D<Object>, TexturableRectangle2D<Object>>(true, false,
-				false);
+				false, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<ColourableTriangle3D<NormalizableTriangle3D<Object>>, ColourableRectangle2D<Object>> createColourableNormalizable() {
 		return new OpenGLGeometryBuilderImpl<ColourableTriangle3D<NormalizableTriangle3D<Object>>, ColourableRectangle2D<Object>>(
-				false, true, true);
+				false, true, true, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<NormalizableTriangle3D<Object>, Object> createNormalizable() {
-		return new OpenGLGeometryBuilderImpl<NormalizableTriangle3D<Object>, Object>(false, true, false);
+		return new OpenGLGeometryBuilderImpl<NormalizableTriangle3D<Object>, Object>(false, true, false, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<ColourableTriangle3D<Object>, ColourableRectangle2D<Object>> createColourable() {
 		return new OpenGLGeometryBuilderImpl<ColourableTriangle3D<Object>, ColourableRectangle2D<Object>>(false, false,
-				true);
+				true, 4000);
 	}
 
 	public static OpenGLGeometryBuilder<Object, Object> create() {
-		return new OpenGLGeometryBuilderImpl<Object, Object>(false, false, false);
+		return new OpenGLGeometryBuilderImpl<Object, Object>(false, false, false, 4000);
 	}
 }
