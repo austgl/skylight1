@@ -238,6 +238,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * @return A Triangle3D, which permits adding textures, colour and normalComponents as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
+	@Override
 	public T add3DTriangle(float anX1, float aY1, float aZ1, float anX2, float aY2, float aZ2, float anX3, float aY3,
 			float aZ3) {
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
@@ -270,6 +271,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
+	@Override
 	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
 		vertexOffsetOfCurrentGeometry = vertexOffsetOfNextGeometry;
 		vertexOffsetOfNextGeometry += VERTICES_PER_TRIANGLE * TRIANGLES_PER_RECTANGLE;

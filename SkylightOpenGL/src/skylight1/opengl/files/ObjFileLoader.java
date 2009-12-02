@@ -23,29 +23,29 @@ public class ObjFileLoader {
 	private static class ModelCoordinates {
 		Float x, y, z;
 
-		public ModelCoordinates(Float x, Float y, Float z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		public ModelCoordinates(Float anX, Float aY, Float aZ) {
+			x = anX;
+			y = aY;
+			z = aZ;
 		}
 	}
 
 	private static class TextureCoordinates {
 		Float u, v;
 
-		public TextureCoordinates(Float u, Float v) {
-			this.u = u;
-			this.v = v;
+		public TextureCoordinates(Float aU, Float aV) {
+			u = aU;
+			v = aV;
 		}
 	}
 
 	private static class Normal {
 		Float x, y, z;
 
-		public Normal(Float x, Float y, Float z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		public Normal(Float anX, Float aY, Float aZ) {
+			x = anX;
+			y = aY;
+			z = aZ;
 		}
 	}
 
@@ -56,20 +56,20 @@ public class ObjFileLoader {
 
 		Normal normal;
 
-		public Vertex(ModelCoordinates modelCoordinates, TextureCoordinates textureCoordinates, Normal normal) {
-			this.modelCoordinates = modelCoordinates;
-			this.textureCoordinates = textureCoordinates;
-			this.normal = normal;
+		public Vertex(ModelCoordinates aModelCoordinates, TextureCoordinates aTextureCoordinates, Normal aNormal) {
+			modelCoordinates = aModelCoordinates;
+			textureCoordinates = aTextureCoordinates;
+			normal = aNormal;
 		}
 	}
 
 	private static class Face {
 		Vertex v1, v2, v3;
 
-		public Face(Vertex v1, Vertex v2, Vertex v3) {
-			this.v1 = v1;
-			this.v2 = v2;
-			this.v3 = v3;
+		public Face(Vertex aV1, Vertex aV2, Vertex aV3) {
+			v1 = aV1;
+			v2 = aV2;
+			v3 = aV3;
 		}
 	}
 
