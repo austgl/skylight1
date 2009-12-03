@@ -1,7 +1,5 @@
 package skylight1.opengl;
 
-import java.nio.IntBuffer;
-
 import javax.microedition.khronos.opengles.GL10;
 
 /**
@@ -16,14 +14,14 @@ public class OpenGLGeometry {
 
 	private OpenGLGeometryBuilderImpl<?, ?> openGLGeometryBuilderImpl;
 
-	private final int modelPositionInBuffer;
-
-	private final int texturePositionInBuffer;
-
-	private final int normalsPositionInBuffer;
-
-	private final int coloursPositionInBuffer;
-
+//	private final int modelPositionInBuffer;
+//
+//	private final int texturePositionInBuffer;
+//
+//	private final int normalsPositionInBuffer;
+//
+//	private final int coloursPositionInBuffer;
+//
 	public OpenGLGeometry(final int aMode, final int aFirst, final int aNumberOfVerticies,
 			OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl) {
 		mode = aMode;
@@ -32,10 +30,10 @@ public class OpenGLGeometry {
 		openGLGeometryBuilderImpl = anOpenGLGeometryBuilderImpl;
 
 		// To reduce calculations in the draw method, pre-calculate some offets
-		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
-		texturePositionInBuffer = first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX;
-		normalsPositionInBuffer = first * FastGeometryBuilderImpl.NORMAL_COMPONENTS_PER_VERTEX;
-		coloursPositionInBuffer = first * FastGeometryBuilderImpl.COLOUR_PARTS_PER_VERTEX;
+//		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
+//		texturePositionInBuffer = first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX;
+//		normalsPositionInBuffer = first * FastGeometryBuilderImpl.NORMAL_COMPONENTS_PER_VERTEX;
+//		coloursPositionInBuffer = first * FastGeometryBuilderImpl.COLOUR_PARTS_PER_VERTEX;
 	}
 
 	/**
@@ -54,9 +52,9 @@ public class OpenGLGeometry {
 			throw new IllegalStateException(
 					"Updates are not permitted until after the first time the geometry builder has been enabled.");
 		}
-		final IntBuffer modelCoordinatesAsBuffer = openGLGeometryBuilderImpl.modelCoordinatesAsBuffer;
-		modelCoordinatesAsBuffer.position(modelPositionInBuffer);
-		modelCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).modelCoordinates);
+//		final IntBuffer modelCoordinatesAsBuffer = openGLGeometryBuilderImpl.modelCoordinatesAsBuffer;
+//		modelCoordinatesAsBuffer.position(modelPositionInBuffer);
+//		modelCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).modelCoordinates);
 	}
 
 	/**
@@ -67,10 +65,10 @@ public class OpenGLGeometry {
 			throw new IllegalStateException(
 					"Updates are not permitted until after the first time the geometry builder has been enabled.");
 		}
-		final IntBuffer textureCoordinatesAsBuffer = openGLGeometryBuilderImpl.textureCoordinatesAsBuffer;
-		textureCoordinatesAsBuffer.position(texturePositionInBuffer);
-		textureCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).textureCoordinates);
-		textureCoordinatesAsBuffer.position(0);
+//		final IntBuffer textureCoordinatesAsBuffer = openGLGeometryBuilderImpl.textureCoordinatesAsBuffer;
+//		textureCoordinatesAsBuffer.position(texturePositionInBuffer);
+//		textureCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).textureCoordinates);
+//		textureCoordinatesAsBuffer.position(0);
 	}
 
 	/**
@@ -81,9 +79,9 @@ public class OpenGLGeometry {
 			throw new IllegalStateException(
 					"Updates are not permitted until after the first time the geometry builder has been enabled.");
 		}
-		final IntBuffer normalAsBuffer = openGLGeometryBuilderImpl.normalsAsBuffer;
-		normalAsBuffer.position(normalsPositionInBuffer);
-		normalAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).normalComponents);
+//		final IntBuffer normalAsBuffer = openGLGeometryBuilderImpl.normalsAsBuffer;
+//		normalAsBuffer.position(normalsPositionInBuffer);
+//		normalAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).normalComponents);
 	}
 
 	/**
@@ -94,8 +92,8 @@ public class OpenGLGeometry {
 			throw new IllegalStateException(
 					"Updates are not permitted until after the first time the geometry builder has been enabled.");
 		}
-		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
-		coloursAsBuffer.position(coloursPositionInBuffer);
-		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);
+//		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
+//		coloursAsBuffer.position(coloursPositionInBuffer);
+//		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);
 	}
 }

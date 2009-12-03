@@ -1,11 +1,12 @@
 package skylight1.opengl;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
+
+import android.util.Log;
 
 /**
  * Encapsulates the construction of OpenGLGeometry objects.
@@ -195,13 +196,13 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	int vertexOffsetOfNextGeometry;
 
-	IntBuffer modelCoordinatesAsBuffer;
+	int modelCoordinatesAsBuffer;
 
-	IntBuffer textureCoordinatesAsBuffer;
+	int textureCoordinatesAsBuffer;
 
-	IntBuffer normalsAsBuffer;
+	int normalsAsBuffer;
 
-	IntBuffer coloursAsBuffer;
+	int coloursAsBuffer;
 
 	boolean complete;
 
@@ -374,8 +375,11 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	/**
 	 * Completes the use of this builder for building. Must be called before using any of the OpenGLGeometry created by
 	 * this object.
+	 * 
+	 * @param aGL10
+	 *            TODO
 	 */
-	private void complete() {
+	private void complete(GL10 aGL10) {
 		// TODO allow the client to choose interleaved arrays or not. interleaved arrays are better for updating the
 		// model coordinates, normals, colour and textures coordinates all at once, but non-interleaved are better for
 		// changing only one aspect of a geometry at a time, such as during texture animations on fixed models
@@ -384,21 +388,21 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
-		modelCoordinatesAsBuffer = createBuffer(modelCoordinates);
+		modelCoordinatesAsBuffer = createBuffer(modelCoordinates, aGL10);
 		modelCoordinates = null;
 
 		if (usesTextureCoordinates) {
-			textureCoordinatesAsBuffer = createBuffer(textureCoordinates);
+			textureCoordinatesAsBuffer = createBuffer(textureCoordinates, aGL10);
 		}
 		textureCoordinates = null;
 
 		if (usesNormals) {
-			normalsAsBuffer = createBuffer(normalComponents);
+			normalsAsBuffer = createBuffer(normalComponents, aGL10);
 		}
 		normalComponents = null;
 
 		if (usesColours) {
-			coloursAsBuffer = createBuffer(colours);
+			coloursAsBuffer = createBuffer(colours, aGL10);
 		}
 		colours = null;
 
@@ -408,19 +412,32 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	/**
 	 * Creates a direct IntBuffer (in native byte order) and populates it with fixed point integers from a given list of
 	 * Floats.
+	 * 
+	 * @param aGL10
+	 *            TODO
 	 */
-	private IntBuffer createBuffer(final int[] anInts) {
-		// create a direct byte buffer in native byte order
-		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(anInts.length * Float.SIZE / Byte.SIZE);
-		byteBuffer.order(ByteOrder.nativeOrder());
-		final IntBuffer byteBufferAsIntBuffer = byteBuffer.asIntBuffer();
+	private int createBuffer(final int[] anInts, GL10 aGL10) {
+		// // create a direct byte buffer in native byte order
+		// ByteBuffer byteBuffer = ByteBuffer.allocateDirect(anInts.length * Float.SIZE / Byte.SIZE);
+		// byteBuffer.order(ByteOrder.nativeOrder());
+		// final IntBuffer byteBufferAsIntBuffer = byteBuffer.asIntBuffer();
+		//
+		// byteBufferAsIntBuffer.put(anInts);
+		//
+		// // point the buffer back to the beginning
+		// byteBufferAsIntBuffer.position(0);
 
-		byteBufferAsIntBuffer.put(anInts);
+		GL11 gL11 = (GL11) aGL10;
+		int[] generatedBuffers = new int[1];
+		Log.i(OpenGLGeometryBuilderImpl.class.getName(), "error is " + gL11.glGetError());
+		gL11.glGenBuffers(1, generatedBuffers, 0);
+		Log.i(OpenGLGeometryBuilderImpl.class.getName(), "error is " + gL11.glGetError());
+		int bufferId = generatedBuffers[0];
+		gL11.glBindBuffer(GL11.GL_ARRAY_BUFFER, bufferId);
+		gL11.glBufferData(GL11.GL_ARRAY_BUFFER, anInts.length * Integer.SIZE / Byte.SIZE, IntBuffer.wrap(anInts),
+				GL11.GL_STATIC_DRAW);
 
-		// point the buffer back to the beginning
-		byteBufferAsIntBuffer.position(0);
-
-		return byteBufferAsIntBuffer;
+		return bufferId;
 	}
 
 	/**
@@ -428,25 +445,31 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 */
 	public void enable(GL10 aGL10) {
 		if (!complete) {
-			complete();
+			complete(aGL10);
 		}
+
+		GL11 gL11 = (GL11) aGL10;
 		aGL10.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-		aGL10.glVertexPointer(3, GL10.GL_FIXED, 0, modelCoordinatesAsBuffer);
+		gL11.glBindBuffer(GL11.GL_ARRAY_BUFFER, modelCoordinatesAsBuffer);
+		gL11.glVertexPointer(3, GL10.GL_FIXED, 0, 0);
 		if (usesTextureCoordinates) {
 			aGL10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-			aGL10.glTexCoordPointer(2, GL10.GL_FIXED, 0, textureCoordinatesAsBuffer);
+			gL11.glBindBuffer(GL11.GL_ARRAY_BUFFER, textureCoordinatesAsBuffer);
+			gL11.glTexCoordPointer(2, GL10.GL_FIXED, 0, 0);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
 		}
 		if (usesNormals) {
 			aGL10.glEnableClientState(GL10.GL_NORMAL_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FIXED, 0, normalsAsBuffer);
+			gL11.glBindBuffer(GL11.GL_ARRAY_BUFFER, normalsAsBuffer);
+			gL11.glNormalPointer(GL10.GL_FIXED, 0, 0);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_NORMAL_ARRAY);
 		}
 		if (usesColours) {
 			aGL10.glEnableClientState(GL10.GL_COLOR_ARRAY);
-			aGL10.glNormalPointer(GL10.GL_FIXED, 0, coloursAsBuffer);
+			gL11.glBindBuffer(GL11.GL_ARRAY_BUFFER, coloursAsBuffer);
+			gL11.glColorPointer(3, GL10.GL_FIXED, 0, 0);
 		} else {
 			aGL10.glDisableClientState(GL10.GL_COLOR_ARRAY);
 		}
