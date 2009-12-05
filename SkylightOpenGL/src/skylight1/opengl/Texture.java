@@ -10,10 +10,14 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Bitmap.Config;
 import android.opengl.GLUtils;
 
 /**
- * Encapsulates an OpenGL texture, with facilities for loading, activating, deactivating, and freeing.
+ * Encapsulates an OpenGL texture, with facilities for loading, activating, deactivating, and freeing. Warning: if mip
+ * maps are used, which is the default, extra texture space is consumed and additional textures may result in a major
+ * impact to rendering performance.
  */
 public class Texture {
 	private int textureId;
@@ -23,26 +27,47 @@ public class Texture {
 	private boolean textureAllocated;
 
 	/**
-	 * Load a texture from a bitmap
+	 * Load a texture from a bitmap. Use a mip map.
 	 */
-	public Texture(GL10 aGL10, Bitmap aBitmap) {
-		loadBitmap(aGL10, aBitmap);
+	public Texture(final GL10 aGL10, final Bitmap aBitmap) {
+		this(aGL10, aBitmap, true);
+	}
+
+	/**
+	 * Load a texture from a bitmap.
+	 */
+	public Texture(final GL10 aGL10, final Bitmap aBitmap, final boolean aUseMipMap) {
+		loadBitmap(aGL10, aBitmap, aUseMipMap);
+	}
+
+	/**
+	 * Load a texture from an input stream. Use a mip map.
+	 */
+	public Texture(final GL10 aGL10, final InputStream anInputStream) {
+		this(aGL10, anInputStream, true);
 	}
 
 	/**
 	 * Load a texture from an input stream.
 	 */
-	public Texture(GL10 aGL10, InputStream anInputStream) {
-		loadBitmap(aGL10, anInputStream);
+	public Texture(final GL10 aGL10, final InputStream anInputStream, final boolean aUseMipMap) {
+		loadBitmap(aGL10, anInputStream, aUseMipMap);
+	}
+
+	/**
+	 * Load a texture from a resource. Use a mip map.
+	 */
+	public Texture(final GL10 aGL10, final Context aContext, final int aTextureDrawable) {
+		this(aGL10, aContext, aTextureDrawable, true);
 	}
 
 	/**
 	 * Load a texture from a resource.
 	 */
-	public Texture(GL10 aGL10, Context aContext, int aTextureDrawable) {
+	public Texture(final GL10 aGL10, final Context aContext, final int aTextureDrawable, final boolean aUseMipMap) {
 		final InputStream inputStream = aContext.getResources().openRawResource(aTextureDrawable);
 		try {
-			loadBitmap(aGL10, inputStream);
+			loadBitmap(aGL10, inputStream, aUseMipMap);
 		} finally {
 			try {
 				inputStream.close();
@@ -75,7 +100,11 @@ public class Texture {
 	public void freeTexture() {
 		// release the texture
 		if (textureAllocated) {
-			gL10.glDeleteTextures(1, new int[] { textureId }, 0);
+			try {
+				gL10.glDeleteTextures(1, new int[] { textureId }, 0);
+			} catch (Exception e) {
+				// if the texture is no longer extant and the GLWrapper is in place, then a harmless exception is thrown
+			}
 		}
 		textureAllocated = false;
 	}
@@ -83,22 +112,23 @@ public class Texture {
 	@Override
 	protected void finalize() throws Throwable {
 		freeTexture();
+
 		// allow the super class to finalize too
 		super.finalize();
 	}
 
-	private void loadBitmap(final GL10 aGL10, final InputStream anInputStream) {
+	private void loadBitmap(final GL10 aGL10, final InputStream anInputStream, final boolean aUseMipMap) {
 		// create the bitmap
 		final Bitmap bitmap = BitmapFactory.decodeStream(anInputStream);
 		try {
-			loadBitmap(aGL10, bitmap);
+			loadBitmap(aGL10, bitmap, aUseMipMap);
 		} finally {
 			// free up the bitmap
 			bitmap.recycle();
 		}
 	}
 
-	private void loadBitmap(final GL10 aGL10, final Bitmap aBitmap) {
+	private void loadBitmap(final GL10 aGL10, final Bitmap aBitmap, final boolean aUseMipMap) {
 		// save for later
 		gL10 = aGL10;
 
@@ -114,15 +144,40 @@ public class Texture {
 		// TODO does it make sense to set these this early?
 		// TODO does this need to be decided by the client?
 		// TODO does this belong to the texture or the geometry?
-		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
+				aUseMipMap ? GL10.GL_LINEAR_MIPMAP_NEAREST : GL10.GL_NEAREST);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
 
-		// TODO check that bitmap is power of two
+		// TODO check that bitmap is a power of two
 
-		// load the bitmap
-		GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, aBitmap, 0);
+		// if not use mip map, then the bitmap is passed to OpenGL just the once
+		if (!aUseMipMap) {
+			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, aBitmap, 0);
+		} else {
+			// otherwise (use mip map), the bitmap is passed repeatedly, each time halved along each side, until it is
+			// only one pixel along its shortest dimension
+			float scale = 1;
+			int level = 0;
+			Bitmap scaledBitmap;
+			// TODO not sure falling back to RGB_565 is the best answer... don't really understand why some bitmaps
+			// don't have a config
+			final Config config = aBitmap.getConfig() == null ? Bitmap.Config.RGB_565 : aBitmap.getConfig();
+			do {
+				scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
+				final Canvas canvas = new Canvas(scaledBitmap);
+				canvas.scale(scale, scale);
+				canvas.drawBitmap(aBitmap, 0, 0, null);
+				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, scaledBitmap, 0);
+
+				// halve for each new level
+				scale = scale / 2f;
+				level++;
+
+				// keep going until one side of the texture reaches one pixel
+			} while (scaledBitmap.getWidth() > 1 && scaledBitmap.getHeight() > 1);
+		}
 
 		// check for an error
 		final int error = aGL10.glGetError();
