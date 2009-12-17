@@ -230,6 +230,9 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 
 		try {
 			final HttpURLConnection httpURLConnection = (HttpURLConnection) loggingURL.openConnection();
+			httpURLConnection.setRequestProperty("Content-type", "text/xml");
+			httpURLConnection.setRequestProperty("User-Agent", context.getApplicationContext().getPackageName());
+			httpURLConnection.setRequestProperty("Content-Length",Integer.toString(aLogMessage.length()));
 			httpURLConnection.setRequestMethod("POST");
 			httpURLConnection.setDoOutput(true);
 			OutputStream outputStream = httpURLConnection.getOutputStream();
