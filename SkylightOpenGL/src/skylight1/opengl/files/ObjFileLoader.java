@@ -1,5 +1,6 @@
 package skylight1.opengl.files;
 
+import static skylight1.opengl.files.QuickParseUtil.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,10 @@ import skylight1.opengl.OpenGLGeometry;
 import skylight1.opengl.OpenGLGeometryBuilder;
 import android.content.Context;
 
+/**
+ * Loads 3D model from a WaveFront OBJ file.
+ * 
+ */
 public class ObjFileLoader {
 	private static final String FLOAT = "(-?\\d+\\.\\d+)";
 
@@ -114,87 +119,27 @@ public class ObjFileLoader {
 			}
 
 			if (matcher.group(1) != null) {
-				modelCoordinates.add(new ModelCoordinates(quickParseFloat(matcher.group(1)), quickParseFloat(matcher
-						.group(2)), quickParseFloat(matcher.group(3))));
+				modelCoordinates.add(new ModelCoordinates(parseFloat(matcher.group(1)), parseFloat(matcher
+						.group(2)), parseFloat(matcher.group(3))));
 			} else if (matcher.group(4) != null) {
-				texturesCoordinates.add(new TextureCoordinates(quickParseFloat(matcher.group(4)),
-						1f - quickParseFloat(matcher.group(5))));
+				texturesCoordinates.add(new TextureCoordinates(parseFloat(matcher.group(4)),
+						1f - parseFloat(matcher.group(5))));
 			} else if (matcher.group(6) != null) {
-				normals.add(new Normal(quickParseFloat(matcher.group(6)), quickParseFloat(matcher.group(7)),
-						quickParseFloat(matcher.group(8))));
+				normals.add(new Normal(parseFloat(matcher.group(6)), parseFloat(matcher.group(7)),
+						parseFloat(matcher.group(8))));
 			} else if (matcher.group(9) != null) {
-				final Vertex v1 = new Vertex(modelCoordinates.get(quickParseInteger(matcher.group(9)) - 1),
-						texturesCoordinates.get(quickParseInteger(matcher.group(10)) - 1), normals
-								.get(quickParseInteger(matcher.group(11)) - 1));
-				final Vertex v2 = new Vertex(modelCoordinates.get(quickParseInteger(matcher.group(12)) - 1),
-						texturesCoordinates.get(quickParseInteger(matcher.group(13)) - 1), normals
-								.get(quickParseInteger(matcher.group(14)) - 1));
-				final Vertex v3 = new Vertex(modelCoordinates.get(quickParseInteger(matcher.group(15)) - 1),
-						texturesCoordinates.get(quickParseInteger(matcher.group(16)) - 1), normals
-								.get(quickParseInteger(matcher.group(17)) - 1));
+				final Vertex v1 = new Vertex(modelCoordinates.get(parseInteger(matcher.group(9)) - 1),
+						texturesCoordinates.get(parseInteger(matcher.group(10)) - 1), normals
+								.get(parseInteger(matcher.group(11)) - 1));
+				final Vertex v2 = new Vertex(modelCoordinates.get(parseInteger(matcher.group(12)) - 1),
+						texturesCoordinates.get(parseInteger(matcher.group(13)) - 1), normals
+								.get(parseInteger(matcher.group(14)) - 1));
+				final Vertex v3 = new Vertex(modelCoordinates.get(parseInteger(matcher.group(15)) - 1),
+						texturesCoordinates.get(parseInteger(matcher.group(16)) - 1), normals
+								.get(parseInteger(matcher.group(17)) - 1));
 				faces.add(new Face(v1, v2, v3));
 			}
 		}
-	}
-
-	private final static float[][] FLOAT_DECIMAL_VALUES = new float[7][10];
-
-	static {
-		for (int decimalPlace = 0; decimalPlace < FLOAT_DECIMAL_VALUES.length; decimalPlace++) {
-			for (int decimalValue = 0; decimalValue < 10; decimalValue++) {
-				FLOAT_DECIMAL_VALUES[decimalPlace][decimalValue] = (float) (Math.pow(10d, -decimalPlace) * decimalValue);
-			}
-		}
-	}
-
-	private float quickParseFloat(final String aStringRepresentationOfAFloat) {
-		final int startOfDigits;
-		final float sign;
-		if (aStringRepresentationOfAFloat.charAt(0) == '-') {
-			startOfDigits = 1;
-			sign = -1f;
-		} else {
-			startOfDigits = 0;
-			sign = 1f;
-		}
-		float result = FLOAT_DECIMAL_VALUES[0][aStringRepresentationOfAFloat.charAt(startOfDigits) - '0'];
-		int decimalPlace = 0;
-		final int stringLength = aStringRepresentationOfAFloat.length();
-		for (int i = startOfDigits + 2; i < stringLength; i++) {
-			decimalPlace++;
-			result += FLOAT_DECIMAL_VALUES[decimalPlace][aStringRepresentationOfAFloat.charAt(i) - '0'];
-		}
-		return sign * result;
-	}
-
-	private final static int[][] INTEGER_DECIMAL_VALUES = new int[4][10];
-
-	static {
-		for (int decimalPlace = 0; decimalPlace < INTEGER_DECIMAL_VALUES.length; decimalPlace++) {
-			for (int decimalValue = 0; decimalValue < 10; decimalValue++) {
-				INTEGER_DECIMAL_VALUES[decimalPlace][decimalValue] = (int) (Math.pow(10d, decimalPlace) * decimalValue);
-			}
-		}
-	}
-
-	private int quickParseInteger(final String aStringRepresentationOfAnInteger) {
-		final int startOfDigits;
-		final int sign;
-		if (aStringRepresentationOfAnInteger.charAt(0) == '-') {
-			startOfDigits = 1;
-			sign = -1;
-		} else {
-			startOfDigits = 0;
-			sign = 1;
-		}
-		int result = 0;
-		int decimalPlace = -1;
-		final int stringLength = aStringRepresentationOfAnInteger.length();
-		for (int i = stringLength - 1; i >= startOfDigits; i--) {
-			decimalPlace++;
-			result += INTEGER_DECIMAL_VALUES[decimalPlace][aStringRepresentationOfAnInteger.charAt(i) - '0'];
-		}
-		return sign * result;
 	}
 
 	public OpenGLGeometry createGeometry(
