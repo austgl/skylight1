@@ -54,9 +54,10 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 		try {
 			loggingURL = new URL(aURLString);
 		} catch (MalformedURLException e) {
-			final String errorMessage = String.format("URL is malformed", aURLString);
-			Log.e(LoggingExceptionHandler.class.getName(), errorMessage, e);
-			throw new IllegalArgumentException(errorMessage, e);
+			final String errorMessage = String.format("Logging URL is malformed \"%s\", setting to null", aURLString);
+			Log.i(LoggingExceptionHandler.class.getName(), errorMessage);
+			loggingURL = null;
+//			throw new IllegalArgumentException(errorMessage, e);
 		}
 	}
 
@@ -69,11 +70,13 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 	 *            context (i.e., activity, service, or application).
 	 */
 	public LoggingExceptionHandler(Context aContext) {
-		if (loggingURL == null) {
-			throw new IllegalStateException(
-					"The static method setURL must be called before a handler can be instantiated.");
-		}
 		context = aContext;
+
+		if (loggingURL == null) {
+//			throw new IllegalStateException(
+//					"The static method setURL must be called before a handler can be instantiated.");
+			return;
+		}
 
 		// save the original handler for later
 		originalHandler = Thread.currentThread().getUncaughtExceptionHandler();
@@ -227,20 +230,21 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 							"Nor permitted to use Internet; exception message not sent.");
 			return;
 		}
-
-		try {
-			final HttpURLConnection httpURLConnection = (HttpURLConnection) loggingURL.openConnection();
-			httpURLConnection.setRequestProperty("Content-type", "text/xml");
-			httpURLConnection.setRequestProperty("User-Agent", context.getApplicationContext().getPackageName());
-			httpURLConnection.setRequestProperty("Content-Length",Integer.toString(aLogMessage.length()));
-			httpURLConnection.setRequestMethod("POST");
-			httpURLConnection.setDoOutput(true);
-			OutputStream outputStream = httpURLConnection.getOutputStream();
-			PrintStream printStream = new PrintStream(outputStream);
-			printStream.append(aLogMessage);
-			printStream.close();
-		} catch (Exception e) {
-			Log.e(LoggingExceptionHandler.class.getName(), "Failed to send log message to server", e);
+		if(loggingURL!=null) {
+			try {
+				final HttpURLConnection httpURLConnection = (HttpURLConnection) loggingURL.openConnection();
+				httpURLConnection.setRequestProperty("Content-type", "text/xml");
+				httpURLConnection.setRequestProperty("User-Agent", context.getApplicationContext().getPackageName());
+				httpURLConnection.setRequestProperty("Content-Length",Integer.toString(aLogMessage.length()));
+				httpURLConnection.setRequestMethod("POST");
+				httpURLConnection.setDoOutput(true);
+				OutputStream outputStream = httpURLConnection.getOutputStream();
+				PrintStream printStream = new PrintStream(outputStream);
+				printStream.append(aLogMessage);
+				printStream.close();
+			} catch (Exception e) {
+				Log.e(LoggingExceptionHandler.class.getName(), "Failed to send log message to server", e);
+			}
 		}
 	}
 }
