@@ -41,23 +41,33 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 
 	private final static Pattern LOG_MESSAGE_PATTERN = Pattern.compile("./[^(]+\\( *(\\d+)\\).*");
 
+	private static URL loggingURL;
+
+	private static boolean loggingURLSet;
+
 	private final Context context;
 
 	private UncaughtExceptionHandler originalHandler;
 
-	private static URL loggingURL;
-
 	/**
-	 * Sets the server URL to which the information will be posted.
+	 * Sets the server URL to which the information will be posted.  If null is passed, then exceptions will not be logged
+	 * on a server, only to the Android log.
 	 */
 	public static void setURL(String aURLString) {
+		loggingURLSet = true;
+		
+		// if there is no URL, log and return 
+		if (aURLString == null) {
+			Log.e(LoggingExceptionHandler.class.getName(), "null URL passed, exceptions will not be sent to a server");
+			return;
+		}
+		
 		try {
 			loggingURL = new URL(aURLString);
 		} catch (MalformedURLException e) {
-			final String errorMessage = String.format("Logging URL is malformed \"%s\", setting to null", aURLString);
-			Log.i(LoggingExceptionHandler.class.getName(), errorMessage);
-			loggingURL = null;
-//			throw new IllegalArgumentException(errorMessage, e);
+			final String errorMessage = String.format("Logging URL \"%s\" is malformed", aURLString);
+			Log.e(LoggingExceptionHandler.class.getName(), errorMessage, e);
+			throw new IllegalArgumentException(errorMessage, e);
 		}
 	}
 
@@ -72,10 +82,9 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 	public LoggingExceptionHandler(Context aContext) {
 		context = aContext;
 
-		if (loggingURL == null) {
-//			throw new IllegalStateException(
-//					"The static method setURL must be called before a handler can be instantiated.");
-			return;
+		if (! loggingURLSet) {
+			throw new IllegalStateException(
+					"The static method setURL must be called before a handler can be instantiated.");
 		}
 
 		// save the original handler for later
@@ -176,7 +185,7 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 			// format as a string of hexadecimal digits
 			final StringBuilder stringBuilder = new StringBuilder();
 			for (byte b : messageDigest.digest()) {
-				stringBuilder.append(String.format("2X", b));
+				stringBuilder.append(String.format("%02X", b));
 			}
 
 			// return the result
@@ -230,7 +239,7 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 							"Nor permitted to use Internet; exception message not sent.");
 			return;
 		}
-		if(loggingURL!=null) {
+		if( loggingURL!=null) {
 			try {
 				final HttpURLConnection httpURLConnection = (HttpURLConnection) loggingURL.openConnection();
 				httpURLConnection.setRequestProperty("Content-type", "text/xml");
