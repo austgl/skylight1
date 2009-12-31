@@ -160,6 +160,8 @@ public class ToastActivity extends Activity {
     	if ( LOG ) Log.i(LOG_TAG, "onTiltEnded()");
 
 		//TODO show another message, etc..
+       	int pick = (int)(Math.random() * (double) splitList.length);
+    	message = splitList[pick];
 	}
 
     public void loadToasts() {
@@ -183,7 +185,8 @@ public class ToastActivity extends Activity {
             if(messageList == null) {
             	messageList = new ArrayList<String>();
             }
-            splitList  = text.split("%\r\n");
+            text = text.replaceAll("\r", "");
+            splitList  = text.split("%\n");
             messageList = null;
 
     	} catch (IOException e) {
