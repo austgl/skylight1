@@ -3,6 +3,7 @@ package skylight1.toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import skylight1.toast.view.MediaPlayerHelper;
@@ -47,7 +48,7 @@ public class ToastActivity extends Activity {
 
 	private String message;
 	private ArrayList<String> messageList;
-	private String[] messageAry;
+	private String[] splitList;
 
 	class HolderCallback implements Callback {
 
@@ -74,7 +75,8 @@ public class ToastActivity extends Activity {
 							@Override
 							public void run() {
 								final TextView captionTextView = (TextView) findViewById(R.id.videoText);
-								captionTextView.setText("A Toast for the New Year!");
+								//captionTextView.setText("A Toast for the New Year!");
+								captionTextView.setText(message);
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 								fadeOutAnimation.setStartOffset(2000);
@@ -109,6 +111,12 @@ public class ToastActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		message="Toasts go here";
+    	// Load up toasts in array
+    	loadToasts();
+    	int pick = (int)(Math.random() * (double) splitList.length);
+    	message = splitList[pick];
+    	
 		// create haptic feedback whenever a button is touched
 		final OnTouchListener onTouchListener = new OnTouchListener() {
 			@Override
@@ -134,8 +142,6 @@ public class ToastActivity extends Activity {
     	//Use volume controls for stream we output on.
     	setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-    	// Load up toasts in array
-    	loadToasts();
 		System.gc();
 	}
 
@@ -174,7 +180,11 @@ public class ToastActivity extends Activity {
             String text = new String(buffer);
 
             //XXX Commented out due to NullPointerException.
-            //messageList.toArray(text.split("%"));
+            if(messageList == null) {
+            	messageList = new ArrayList<String>();
+            }
+            splitList  = text.split("%\r\n");
+            messageList = null;
 
     	} catch (IOException e) {
             // Should never happen!
