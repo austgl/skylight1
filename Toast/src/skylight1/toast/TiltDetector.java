@@ -14,7 +14,7 @@ public class TiltDetector implements SensorEventListener {
 	
 	private static final String LOG_TAG = TiltDetector.class.getSimpleName();
 	
-	private static final int TRIGGER_DIFFERENCE = 20;
+	private static final int TRIGGER_DIFFERENCE = 30;
 
 	//Orientation values for when device is pointing up.
 	private static final int POINTING_UP_PITCH = -90;
