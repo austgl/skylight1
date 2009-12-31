@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,30 +32,30 @@ import skylight1.toast.view.TypeFaceTextView;
 import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 
 public class ToastActivity extends Activity {
-	
+
 	public static final boolean LOG = true;
-	
+
 	private static final String LOG_TAG = ToastActivity.class.getSimpleName();
 
 	private TiltDetector mTiltDetector;
-    
+
 	private SoundPlayer mSoundPlayer;
-	
+
 	private SensorManager mSensors;
-	
-	private View contentView;
 
-	private final class HolderCallback implements Callback {
+	class HolderCallback implements Callback {
 
-		public HolderCallback(boolean aDemoOnly) {
-//			demoOnly = aDemoOnly;
+		View contentView;
+
+		public HolderCallback(View view) {
+			contentView = view;
 		}
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			List<String> listOfMovies = new ArrayList<String>(2);
-			listOfMovies.add("intro.3gp");
-//				listOfMovies.add("demo.mp4");
+			listOfMovies.add("intro.mp4");
+			listOfMovies.add("toast.mp4");
 
 			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(ToastActivity.this, preview, listOfMovies
 					.toArray(new String[listOfMovies.size()]));
@@ -67,8 +68,7 @@ public class ToastActivity extends Activity {
 						contentView.post(new Runnable() {
 							@Override
 							public void run() {
-								final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-								//captionTextView.setText(getResources().getString(R.string.instructions)+":");
+								final TextView captionTextView = (TextView) findViewById(R.id.videoText);
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 								fadeOutAnimation.setStartOffset(1000);
@@ -117,11 +117,9 @@ public class ToastActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		contentView =  findViewById(R.id.main);
-
-		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
+		preview = (SurfaceView) findViewById(R.id.videoview);
 		holder = preview.getHolder();
-		holder.addCallback(new HolderCallback(true));
+		holder.addCallback(new HolderCallback(preview.getRootView()));
 
         mSoundPlayer = new SoundPlayer(this);
     	mSensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -132,29 +130,29 @@ public class ToastActivity extends Activity {
 
 		System.gc();
 	}
-	
+
     public void onTilt() {
     	if ( LOG ) Log.i(LOG_TAG, "onTilt()");
     	mSoundPlayer.clink();
     }
-    
+
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-//		final TextView captionTextView = (TextView) contentView.findViewById();
-//		captionTextView.setBackgroundColor(Color.TRANSPARENT);
-//		captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
-//		captionTextView.setDrawingCacheEnabled(false);
-//		captionTextView.setVisibility(View.GONE);
+		final TextView captionTextView = (TextView) findViewById(R.id.videoText);
+		captionTextView.setBackgroundColor(Color.TRANSPARENT);
+		captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
+		captionTextView.setDrawingCacheEnabled(false);
+		captionTextView.setVisibility(View.GONE);
 
 		// if the resume is coming back from some pause, then resume the player
 		if (mp != null) {
 			mp.start();
 		}
-		
+
    	   	List<Sensor> orientaionSensors = mSensors.getSensorList(Sensor.TYPE_ORIENTATION);
-   	   	
+
     	if ( orientaionSensors.isEmpty() ) {
         	AlertDialog.Builder builder = new AlertDialog.Builder(this);
         	builder.setMessage("Sorry, no orientation sensor was found. Toast needs one to run.")
@@ -165,11 +163,11 @@ public class ToastActivity extends Activity {
         	           }
         	       });
         	AlertDialog alert = builder.create();
-        	alert.show();  
+        	alert.show();
         	return;
     	} else {
-    		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0), 
-    			SensorManager.SENSOR_DELAY_UI);    	    
+    		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0),
+    			SensorManager.SENSOR_DELAY_UI);
     	}
 	}
 
@@ -193,7 +191,7 @@ public class ToastActivity extends Activity {
 			mp.stop();
 			mp=null;
 		}
-		
+
 		mSoundPlayer.release();
 		mSoundPlayer = null;
 	}
