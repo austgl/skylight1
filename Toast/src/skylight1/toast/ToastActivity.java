@@ -60,7 +60,6 @@ public class ToastActivity extends Activity {
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			List<String> listOfMovies = new ArrayList<String>(2);
-			listOfMovies.add("intro.mp4");
 			listOfMovies.add("toast.mp4");
 
 			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(ToastActivity.this, preview, listOfMovies
@@ -70,11 +69,12 @@ public class ToastActivity extends Activity {
 				@Override
 				public void videoStarted(int anIndex) {
 					Log.i(ToastActivity.class.getName(), "just starting video " + anIndex);
-					if (anIndex == 1 ) {
+					if (anIndex == 0 ) {
 						contentView.post(new Runnable() {
 							@Override
 							public void run() {
 								final TextView captionTextView = (TextView) findViewById(R.id.videoText);
+								captionTextView.setText("A Toast for the New Year!");
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 								fadeOutAnimation.setStartOffset(1000);
