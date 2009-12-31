@@ -3,9 +3,6 @@ package skylight1.toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import skylight1.toast.view.MediaPlayerHelper;
-import skylight1.toast.view.TypeFaceTextView;
-import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -20,6 +17,10 @@ import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
+
+import skylight1.toast.view.MediaPlayerHelper;
+import skylight1.toast.view.TypeFaceTextView;
+import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 
 public class ToastActivity extends Activity {
 
@@ -98,6 +99,8 @@ public class ToastActivity extends Activity {
 		};
 
 		setContentView(R.layout.main);
+
+		contentView =  findViewById(R.layout.main);
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
