@@ -48,11 +48,11 @@ public class ToastActivity extends Activity {
 	private String message;
 	private ArrayList<String> messageList;
 	private String[] messageAry;
-	
+
 	class HolderCallback implements Callback {
 
 		View contentView;
-		
+
 		public HolderCallback(View view) {
 			contentView = view;
 		}
@@ -77,8 +77,8 @@ public class ToastActivity extends Activity {
 								captionTextView.setText("A Toast for the New Year!");
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-								fadeOutAnimation.setStartOffset(1000);
-								fadeOutAnimation.setDuration(4000);
+								fadeOutAnimation.setStartOffset(2000);
+								fadeOutAnimation.setDuration(10000);
 								fadeOutAnimation.setFillAfter(true);
 								captionTextView.setAnimation(fadeOutAnimation);
 							}
@@ -155,33 +155,33 @@ public class ToastActivity extends Activity {
 
 		//TODO show another message, etc..
 	}
-	
+
     public void loadToasts() {
     	try {
             InputStream is = getAssets().open("toasts.txt");
-            
+
             // We guarantee that the available method returns the total
             // size of the asset...  of course, this does mean that a single
             // asset can't be more than 2 gigs.
             int size = is.available();
-            
+
             // Read the entire asset into a local byte buffer.
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            
+
             // Convert the buffer into a string.
             String text = new String(buffer);
-            
+
             //XXX Commented out due to NullPointerException.
             //messageList.toArray(text.split("%"));
-            
+
     	} catch (IOException e) {
             // Should never happen!
             throw new RuntimeException(e);
     	}
     }
-    
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -215,7 +215,7 @@ public class ToastActivity extends Activity {
     		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0),
     			SensorManager.SENSOR_DELAY_UI);
     	}
-    	
+
     	if(messageList == null) {
     		loadToasts();
     	}
