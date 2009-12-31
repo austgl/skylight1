@@ -139,11 +139,23 @@ public class ToastActivity extends Activity {
 		System.gc();
 	}
 
+	/**
+	 * Handles phone being tilted away from vertical.
+	 */
     public void onTilt() {
     	if ( LOG ) Log.i(LOG_TAG, "onTilt()");
     	mSoundPlayer.clink();
     }
-    
+
+    /**
+     * Handles phone being returned to vertical after a tilt.
+     */
+	public void onTiltEnded() {
+    	if ( LOG ) Log.i(LOG_TAG, "onTiltEnded()");
+
+		//TODO show another message, etc..
+	}
+	
     public void loadToasts() {
     	try {
             InputStream is = getAssets().open("toasts.txt");
@@ -160,7 +172,9 @@ public class ToastActivity extends Activity {
             
             // Convert the buffer into a string.
             String text = new String(buffer);
-            messageList.toArray(text.split("%"));
+            
+            //XXX Commented out due to NullPointerException.
+            //messageList.toArray(text.split("%"));
             
     	} catch (IOException e) {
             // Should never happen!
@@ -231,4 +245,5 @@ public class ToastActivity extends Activity {
 		mSoundPlayer.release();
 		mSoundPlayer = null;
 	}
+
 }
