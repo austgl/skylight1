@@ -36,7 +36,7 @@ import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 
 public class ToastActivity extends Activity {
 
-	public static final boolean LOG = true;
+	public static final boolean LOG = false;
 
 	private static final String LOG_TAG = ToastActivity.class.getSimpleName();
 
@@ -74,15 +74,7 @@ public class ToastActivity extends Activity {
 						contentView.post(new Runnable() {
 							@Override
 							public void run() {
-								final TextView captionTextView = (TextView) findViewById(R.id.videoText);
-								//captionTextView.setText("A Toast for the New Year!");
-								captionTextView.setText(message);
-								captionTextView.setVisibility(View.VISIBLE);
-								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
-								fadeOutAnimation.setStartOffset(2000);
-								fadeOutAnimation.setDuration(10000);
-								fadeOutAnimation.setFillAfter(true);
-								captionTextView.setAnimation(fadeOutAnimation);
+								fadeOutText();
 							}
 						});
 					}
@@ -102,6 +94,19 @@ public class ToastActivity extends Activity {
 		}
 	}
 
+	private void fadeOutText() {
+		final TextView captionTextView = (TextView) findViewById(R.id.videoText);
+		Log.i(ToastActivity.class.getName(), "toast message = " + message);
+		captionTextView.setText(message);
+		captionTextView.setVisibility(View.VISIBLE);
+		Animation fadeOutAnimation = new AlphaAnimation(0.0f, 1.0f);
+		fadeOutAnimation.setStartOffset(1000);
+		fadeOutAnimation.setDuration(5000);
+		fadeOutAnimation.setFillAfter(true);
+		captionTextView.setAnimation(fadeOutAnimation);
+	}
+
+
 	private SurfaceView preview;
 	private SurfaceHolder holder;
 	private MediaPlayer mp;
@@ -116,7 +121,7 @@ public class ToastActivity extends Activity {
     	loadToasts();
     	int pick = (int)(Math.random() * (double) splitList.length);
     	message = splitList[pick];
-    	
+
 		// create haptic feedback whenever a button is touched
 		final OnTouchListener onTouchListener = new OnTouchListener() {
 			@Override
@@ -159,9 +164,14 @@ public class ToastActivity extends Activity {
 	public void onTiltEnded() {
     	if ( LOG ) Log.i(LOG_TAG, "onTiltEnded()");
 
-		//TODO show another message, etc..
        	int pick = (int)(Math.random() * (double) splitList.length);
     	message = splitList[pick];
+
+		if (mp != null) {
+			mp.start();
+		}
+
+		fadeOutText();
 	}
 
     public void loadToasts() {

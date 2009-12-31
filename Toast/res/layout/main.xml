@@ -13,7 +13,7 @@
         <skylight1.toast.view.TypeFaceTextView android:id="@+id/videoText"
             android:layout_width="fill_parent" android:layout_height="wrap_content"
             android:padding="10dip" android:layout_gravity="center|center"
-            android:focusable="false" android:textSize="24dip" android:textColor="#ffffff"
+            android:focusable="false" android:textSize="26dip" android:textColor="#000055"
             typeface="skylight.ttf" android:visibility="gone" android:background="#00000000"/>
     </FrameLayout>
 
