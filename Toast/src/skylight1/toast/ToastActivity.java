@@ -3,7 +3,15 @@ package skylight1.toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import skylight1.toast.view.MediaPlayerHelper;
+import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +31,17 @@ import skylight1.toast.view.TypeFaceTextView;
 import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 
 public class ToastActivity extends Activity {
+	
+	public static final boolean LOG = true;
+	
+	private static final String LOG_TAG = ToastActivity.class.getSimpleName();
 
+	private TiltDetector mTiltDetector;
+    
+	private SoundPlayer mSoundPlayer;
+	
+	private SensorManager mSensors;
+	
 	private View contentView;
 
 	private final class HolderCallback implements Callback {
@@ -76,7 +94,6 @@ public class ToastActivity extends Activity {
 		}
 	}
 
-
 	private SurfaceView preview;
 	private SurfaceHolder holder;
 	private MediaPlayer mp;
@@ -100,15 +117,27 @@ public class ToastActivity extends Activity {
 
 		setContentView(R.layout.main);
 
-		contentView =  findViewById(R.layout.main);
+		contentView =  findViewById(R.id.main);
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
 		holder.addCallback(new HolderCallback(true));
 
+        mSoundPlayer = new SoundPlayer(this);
+    	mSensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+   		mTiltDetector = new TiltDetector(this);
+
+    	//Use volume controls for stream we output on.
+    	setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
 		System.gc();
 	}
-
+	
+    public void onTilt() {
+    	if ( LOG ) Log.i(LOG_TAG, "onTilt()");
+    	mSoundPlayer.clink();
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -123,12 +152,33 @@ public class ToastActivity extends Activity {
 		if (mp != null) {
 			mp.start();
 		}
+		
+   	   	List<Sensor> orientaionSensors = mSensors.getSensorList(Sensor.TYPE_ORIENTATION);
+   	   	
+    	if ( orientaionSensors.isEmpty() ) {
+        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setMessage("Sorry, no orientation sensor was found. Toast needs one to run.")
+        	       .setCancelable(false)
+        	       .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
+        	           public void onClick(DialogInterface dialog, int id) {
+        	                ToastActivity.this.finish();
+        	           }
+        	       });
+        	AlertDialog alert = builder.create();
+        	alert.show();  
+        	return;
+    	} else {
+    		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0), 
+    			SensorManager.SENSOR_DELAY_UI);    	    
+    	}
 	}
 
 	@Override
 	protected void onPause() {
 		Log.i(ToastActivity.class.getName(), "paused");
 		super.onPause();
+
+		mSensors.unregisterListener(mTiltDetector);
 
 		// if the media player has not already been disposed of (leaving this screen, as
 		// compared to pausing to go to another application), then pause the video
@@ -143,5 +193,8 @@ public class ToastActivity extends Activity {
 			mp.stop();
 			mp=null;
 		}
+		
+		mSoundPlayer.release();
+		mSoundPlayer = null;
 	}
 }
