@@ -1,5 +1,7 @@
 package skylight1.toast;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +45,14 @@ public class ToastActivity extends Activity {
 
 	private SensorManager mSensors;
 
+	private String message;
+	private ArrayList<String> messageList;
+	private String[] messageAry;
+	
 	class HolderCallback implements Callback {
 
 		View contentView;
-
+		
 		public HolderCallback(View view) {
 			contentView = view;
 		}
@@ -128,6 +134,8 @@ public class ToastActivity extends Activity {
     	//Use volume controls for stream we output on.
     	setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+    	// Load up toasts in array
+    	loadToasts();
 		System.gc();
 	}
 
@@ -135,7 +143,31 @@ public class ToastActivity extends Activity {
     	if ( LOG ) Log.i(LOG_TAG, "onTilt()");
     	mSoundPlayer.clink();
     }
-
+    
+    public void loadToasts() {
+    	try {
+            InputStream is = getAssets().open("toasts.txt");
+            
+            // We guarantee that the available method returns the total
+            // size of the asset...  of course, this does mean that a single
+            // asset can't be more than 2 gigs.
+            int size = is.available();
+            
+            // Read the entire asset into a local byte buffer.
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            
+            // Convert the buffer into a string.
+            String text = new String(buffer);
+            messageList.toArray(text.split("%"));
+            
+    	} catch (IOException e) {
+            // Should never happen!
+            throw new RuntimeException(e);
+    	}
+    }
+    
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -168,6 +200,10 @@ public class ToastActivity extends Activity {
     	} else {
     		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0),
     			SensorManager.SENSOR_DELAY_UI);
+    	}
+    	
+    	if(messageList == null) {
+    		loadToasts();
     	}
 	}
 
