@@ -5,7 +5,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 
 /**
- * Play requested sounds.
+ * Plays requested sounds.
  * 
  */
 public class SoundPlayer {
@@ -14,7 +14,7 @@ public class SoundPlayer {
 	
 	protected int mClinkSoundId;
 	
-	public SoundPlayer(Context context) {
+	public SoundPlayer(final Context context) {
 		mSoundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
 		mClinkSoundId = mSoundPool.load(context, R.raw.clink, 1);
 	}
@@ -26,7 +26,7 @@ public class SoundPlayer {
 		}
 	}	
 	
-	protected void play(Integer soundID, long[] vibePattern) {
+	protected void play(final Integer soundID) {
 
 		if ( null != mSoundPool && null != soundID ) {
 		    //Priority 0 so don't interrupt anything higher.
@@ -40,7 +40,7 @@ public class SoundPlayer {
 	}
 	
 	public void clink() {
-		play(mClinkSoundId, null);
+		play(mClinkSoundId);
 	}
 		
 }

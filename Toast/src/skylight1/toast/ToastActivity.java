@@ -3,19 +3,13 @@ package skylight1.toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import skylight1.toast.view.MediaPlayerHelper;
 import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
-import android.media.AudioManager;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,11 +24,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import skylight1.toast.view.MediaPlayerHelper;
-import skylight1.toast.view.TypeFaceTextView;
-import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
-
-public class ToastActivity extends Activity {
+public class ToastActivity extends Activity implements TiltDetector.TiltListener {
 
 	public static final boolean LOG = false;
 
@@ -43,8 +33,6 @@ public class ToastActivity extends Activity {
 	private TiltDetector mTiltDetector;
 
 	private SoundPlayer mSoundPlayer;
-
-	private SensorManager mSensors;
 
 	private String message;
 	private ArrayList<String> messageList;
@@ -122,26 +110,31 @@ public class ToastActivity extends Activity {
     	int pick = (int)(Math.random() * (double) splitList.length);
     	message = splitList[pick];
 
-		// create haptic feedback whenever a button is touched
+		setContentView(R.layout.main);
+
+		preview = (SurfaceView) findViewById(R.id.videoview);
+		//Fake tilt and create haptic feedback whenever screen touched.
 		final OnTouchListener onTouchListener = new OnTouchListener() {
 			@Override
 			public boolean onTouch(View aView, MotionEvent anEvent) {
 				if (anEvent.getAction() == MotionEvent.ACTION_DOWN) {
 					aView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
 							HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+					
+					onTiltStart();
+					onTiltEnd();
+					
+					return true;
 				}
 				return false;
 			}
 		};
-
-		setContentView(R.layout.main);
-
-		preview = (SurfaceView) findViewById(R.id.videoview);
+		preview.setOnTouchListener(onTouchListener);
+		
 		holder = preview.getHolder();
 		holder.addCallback(new HolderCallback(preview.getRootView()));
 
         mSoundPlayer = new SoundPlayer(this);
-    	mSensors = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
    		mTiltDetector = new TiltDetector(this);
 
     	//Use volume controls for stream we output on.
@@ -151,18 +144,20 @@ public class ToastActivity extends Activity {
 	}
 
 	/**
-	 * Handles phone being tilted away from vertical.
+	 * Plays clink sound when tilted.
 	 */
-    public void onTilt() {
-    	if ( LOG ) Log.i(LOG_TAG, "onTilt()");
+	@Override
+    public void onTiltStart() {
+    	if ( LOG ) Log.d(LOG_TAG, "onTiltStart()");
     	mSoundPlayer.clink();
     }
 
     /**
-     * Handles phone being returned to vertical after a tilt.
+     * Fades out the previous message and shows a new one when a tilt ends.
      */
-	public void onTiltEnded() {
-    	if ( LOG ) Log.i(LOG_TAG, "onTiltEnded()");
+	@Override
+	public void onTiltEnd() {
+    	if ( LOG ) Log.d(LOG_TAG, "onTiltEnd()");
 
        	int pick = (int)(Math.random() * (double) splitList.length);
     	message = splitList[pick];
@@ -191,7 +186,6 @@ public class ToastActivity extends Activity {
             // Convert the buffer into a string.
             String text = new String(buffer);
 
-            //XXX Commented out due to NullPointerException.
             if(messageList == null) {
             	messageList = new ArrayList<String>();
             }
@@ -220,24 +214,7 @@ public class ToastActivity extends Activity {
 			mp.start();
 		}
 
-   	   	List<Sensor> orientaionSensors = mSensors.getSensorList(Sensor.TYPE_ORIENTATION);
-
-    	if ( orientaionSensors.isEmpty() ) {
-        	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        	builder.setMessage("Sorry, no orientation sensor was found. Toast needs one to run.")
-        	       .setCancelable(false)
-        	       .setNegativeButton("Quit", new DialogInterface.OnClickListener() {
-        	           public void onClick(DialogInterface dialog, int id) {
-        	                ToastActivity.this.finish();
-        	           }
-        	       });
-        	AlertDialog alert = builder.create();
-        	alert.show();
-        	return;
-    	} else {
-    		mSensors.registerListener(mTiltDetector, orientaionSensors.get(0),
-    			SensorManager.SENSOR_DELAY_UI);
-    	}
+		mTiltDetector.setTiltListener(this);
 
     	if(messageList == null) {
     		loadToasts();
@@ -249,7 +226,7 @@ public class ToastActivity extends Activity {
 		Log.i(ToastActivity.class.getName(), "paused");
 		super.onPause();
 
-		mSensors.unregisterListener(mTiltDetector);
+		mTiltDetector.setTiltListener(null);
 
 		// if the media player has not already been disposed of (leaving this screen, as
 		// compared to pausing to go to another application), then pause the video
