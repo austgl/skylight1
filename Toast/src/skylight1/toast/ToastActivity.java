@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.widget.ImageView;
 import skylight1.toast.view.MediaPlayerHelper;
 import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 import android.app.Activity;
@@ -38,6 +42,91 @@ public class ToastActivity extends Activity implements TiltDetector.TiltListener
 	private ArrayList<String> messageList;
 	private String[] splitList;
 
+
+    private void fadeOutText() {
+        final TextView captionTextView = (TextView) findViewById(R.id.videoText);
+        Log.i(ToastActivity.class.getName(), "toast message = " + message);
+        captionTextView.setText(message);
+        captionTextView.setVisibility(View.VISIBLE);
+        Animation fadeOutAnimation = new AlphaAnimation(0.0f, 1.0f);
+//        fadeOutAnimation.setStartOffset(500);
+        fadeOutAnimation.setDuration(3000);
+//        fadeOutAnimation.setFillAfter(true);
+        captionTextView.setAnimation(fadeOutAnimation);
+    }
+
+
+//	private SurfaceView preview;
+//	private SurfaceHolder holder;
+    private MediaPlayer mp;
+
+    /**
+     * Called when the activity is first created.
+     */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		message="Toasts go here";
+    	// Load up toasts in array
+    	loadToasts();
+    	int pick = (int)(Math.random() * (double) splitList.length);
+    	message = splitList[pick];
+
+		setContentView(R.layout.main);
+
+        // Load the ImageView that will host the animation and
+        // set its background to our AnimationDrawable XML resource.
+        ImageView imageView = (ImageView) findViewById(R.id.videoview);
+        if (imageView != null) {
+            imageView.setBackgroundResource(R.anim.toast_anim);
+
+            // Get the background, which has been compiled to an AnimationDrawable object.
+            AnimationDrawable frameAnimation = (AnimationDrawable) imageView.getBackground();
+
+//             Start the animation (looped playback by default).
+//            frameAnimation.start();
+            AnimationRoutine animationRoutine = new AnimationRoutine();
+
+            Timer t = new Timer(false);
+            t.schedule(animationRoutine, 1000);
+        } else {
+            Log.e(LOG_TAG, "Error load Toast images for animation.");
+        }
+
+//		preview = (SurfaceView) findViewById(R.id.videoview);
+		//Fake tilt and create haptic feedback whenever screen touched.
+		final OnTouchListener onTouchListener = new OnTouchListener() {
+			@Override
+			public boolean onTouch(View aView, MotionEvent anEvent) {
+				if (anEvent.getAction() == MotionEvent.ACTION_DOWN) {
+					aView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+							HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+
+					onTiltStart();
+					onTiltEnd();
+
+					return true;
+				}
+				return false;
+			}
+		};
+		imageView.setOnTouchListener(onTouchListener);
+
+//		holder = preview.getHolder();
+//		holder.addCallback(new HolderCallback(preview.getRootView()));
+
+        mSoundPlayer = new SoundPlayer(this);
+   		mTiltDetector = new TiltDetector(this);
+
+    	//Use volume controls for stream we output on.
+    	setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+		System.gc();
+	}
+
+
+
 	class HolderCallback implements Callback {
 
 		View contentView;
@@ -51,7 +140,7 @@ public class ToastActivity extends Activity implements TiltDetector.TiltListener
 			List<String> listOfMovies = new ArrayList<String>(2);
 			listOfMovies.add("toast.mp4");
 
-			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(ToastActivity.this, preview, listOfMovies
+/*			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(ToastActivity.this, preview, listOfMovies
 					.toArray(new String[listOfMovies.size()]));
 
 			mediaPlayerHelper.setVideoStartListener(new VideoStartListener() {
@@ -70,6 +159,7 @@ public class ToastActivity extends Activity implements TiltDetector.TiltListener
 			});
 
 			mp = mediaPlayerHelper.createMediaListPlayer();
+*/
 		}
 
 		@Override
@@ -82,66 +172,24 @@ public class ToastActivity extends Activity implements TiltDetector.TiltListener
 		}
 	}
 
-	private void fadeOutText() {
-		final TextView captionTextView = (TextView) findViewById(R.id.videoText);
-		Log.i(ToastActivity.class.getName(), "toast message = " + message);
-		captionTextView.setText(message);
-		captionTextView.setVisibility(View.VISIBLE);
-		Animation fadeOutAnimation = new AlphaAnimation(0.0f, 1.0f);
-		fadeOutAnimation.setStartOffset(1000);
-		fadeOutAnimation.setDuration(5000);
-		fadeOutAnimation.setFillAfter(true);
-		captionTextView.setAnimation(fadeOutAnimation);
-	}
 
 
-	private SurfaceView preview;
-	private SurfaceHolder holder;
-	private MediaPlayer mp;
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 
-		message="Toasts go here";
-    	// Load up toasts in array
-    	loadToasts();
-    	int pick = (int)(Math.random() * (double) splitList.length);
-    	message = splitList[pick];
+    /**
+     * Called to start frame animation.
+     */
+    private class AnimationRoutine extends TimerTask {
+        AnimationRoutine() {
+        }
 
-		setContentView(R.layout.main);
+        public void run() {
+            ImageView img = (ImageView) findViewById(R.id.videoview);
+            AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
+            frameAnimation.start();
+        }
+    }
 
-		preview = (SurfaceView) findViewById(R.id.videoview);
-		//Fake tilt and create haptic feedback whenever screen touched.
-		final OnTouchListener onTouchListener = new OnTouchListener() {
-			@Override
-			public boolean onTouch(View aView, MotionEvent anEvent) {
-				if (anEvent.getAction() == MotionEvent.ACTION_DOWN) {
-					aView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
-							HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-					
-					onTiltStart();
-					onTiltEnd();
-					
-					return true;
-				}
-				return false;
-			}
-		};
-		preview.setOnTouchListener(onTouchListener);
-		
-		holder = preview.getHolder();
-		holder.addCallback(new HolderCallback(preview.getRootView()));
-
-        mSoundPlayer = new SoundPlayer(this);
-   		mTiltDetector = new TiltDetector(this);
-
-    	//Use volume controls for stream we output on.
-    	setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-		System.gc();
-	}
 
 	/**
 	 * Plays clink sound when tilted.
