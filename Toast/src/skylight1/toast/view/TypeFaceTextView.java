@@ -9,57 +9,83 @@ import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+/**
+ * Optionally outline text in black and display using XML specified typeface.
+ * <p>
+ * XML Attributes:<dl>
+ * <dt>outline</dt>
+ * <dd>Boolean attribute to enable outline. Default is true.</dd>
+ * 
+ * <dt>typeface</dt>
+ * <dd>File name of the typeface from the assets directory. Example: "skylight.ttf"</dd>
+ * </dl>
+ * <p>
+ * Implementation note: current outlining method doesn't work during AlphaAnimation until full visibility reached.
+ */
 public class TypeFaceTextView extends TextView {
-	private static final Paint BLACK_BORDER_PAINT = new Paint();
+	
+	private static final Paint BLACK_OUTLINE_PAINT = new Paint();
 
 	static {
-		BLACK_BORDER_PAINT.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
+		BLACK_OUTLINE_PAINT.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
 	}
 
-	private static final int BORDER_WIDTH = 1;
-
-	private Typeface typeface;
+	private static final int OUTLINE_WIDTH = 1;
+	
+	private static final boolean DEFAULT_IS_OUTLINE_ENABLED = true;
+	
+	private boolean isOutlineEnabled = DEFAULT_IS_OUTLINE_ENABLED;
 
 	public TypeFaceTextView(Context context) {
 		super(context);
+		init(null);
 	}
 
 	public TypeFaceTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		setDrawingCacheEnabled(false);
-
-		setTypeface(attrs);
-	}
-
-	private void setTypeface(AttributeSet attrs) {
-		final String typefaceFileName = attrs.getAttributeValue(null, "typeface");
-		if (typefaceFileName != null) {
-			typeface = Typeface.createFromAsset(getContext().getAssets(), typefaceFileName);
-		}
-
-		setTypeface(typeface);
+		init(attrs);
 	}
 
 	public TypeFaceTextView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
-		setTypeface(attrs);
+		init(attrs);
+	}
+	
+	private void init(AttributeSet attrs) {
+		
+		//Setup outlining if enabled.
+		if ( null != attrs ) {	
+			isOutlineEnabled = attrs.getAttributeBooleanValue(null, "outline", DEFAULT_IS_OUTLINE_ENABLED);
+		}
+		if ( isOutlineEnabled ) {
+			setDrawingCacheEnabled(false);	
+		}
+		
+		//Setup typeface if specified.
+		if ( null != attrs ) {	
+			final String typefaceFileName = attrs.getAttributeValue(null, "typeface");
+			if ( null != typefaceFileName ) {
+				final Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), typefaceFileName);
+				setTypeface(typeface);
+			}
+		}
 	}
 
 	@Override
 	public void draw(Canvas aCanvas) {
-		aCanvas.saveLayer(null, BLACK_BORDER_PAINT, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
-				| Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.MATRIX_SAVE_FLAG);
-		drawBackground(aCanvas, -BORDER_WIDTH, -BORDER_WIDTH);
-		drawBackground(aCanvas, BORDER_WIDTH + BORDER_WIDTH, 0);
-		drawBackground(aCanvas, 0, BORDER_WIDTH + BORDER_WIDTH);
-		drawBackground(aCanvas, -BORDER_WIDTH - BORDER_WIDTH, 0);
-		aCanvas.restore();
+		if ( isOutlineEnabled ) {
+			aCanvas.saveLayer(null, BLACK_OUTLINE_PAINT, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+					| Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.MATRIX_SAVE_FLAG);
+			drawOutlineSide(aCanvas, -OUTLINE_WIDTH, -OUTLINE_WIDTH);
+			drawOutlineSide(aCanvas, OUTLINE_WIDTH + OUTLINE_WIDTH, 0);
+			drawOutlineSide(aCanvas, 0, OUTLINE_WIDTH + OUTLINE_WIDTH);
+			drawOutlineSide(aCanvas, -OUTLINE_WIDTH - OUTLINE_WIDTH, 0);
+			aCanvas.restore();
+		}
 		super.draw(aCanvas);
 	}
 
-	private void drawBackground(Canvas aCanvas, int aDX, int aDY) {
+	private void drawOutlineSide(Canvas aCanvas, int aDX, int aDY) {
 		aCanvas.translate(aDX, aDY);
 		super.draw(aCanvas);
 	}
