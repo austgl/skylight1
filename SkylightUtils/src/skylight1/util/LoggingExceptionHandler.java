@@ -29,7 +29,7 @@ import android.util.Log;
 /**
  * Allows detailed logging of exceptions, including sending the information to a server. Particular care is taken not to
  * include any information that may be considered private by any reasonable person, such as phone id or location.
- * 
+ *
  * The following permissions are required to write the exception to a server, and to include log messages in the
  * message, respectively: <code>
  * <uses-permission android:name="android.permission.INTERNET" />
@@ -38,6 +38,7 @@ import android.util.Log;
  */
 public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 	private final static String XML_FORMAT = "<exception packageName=\"%s\" versionCode=\"%d\" versionName=\"%s\" threadName=\"%s\" time=\"%s\" \n\tphoneIdHash=\"%s\" device=\"%s\" configuration=\"%s\">\n\t<stackTrace>%s\n\t</stackTrace>\n\t<context>%s\n\t</context>\n\n\t<log>%s\n\t</log>\n</exception>";
+	private final static String SIMPLE_FORMAT_NOTIME = "%s,%d,%s,%s,%s,%s,%s,%s,%s,%s";
 
 	private final static Pattern LOG_MESSAGE_PATTERN = Pattern.compile("./[^(]+\\( *(\\d+)\\).*");
 
@@ -49,19 +50,22 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 
 	private UncaughtExceptionHandler originalHandler;
 
+	private Date previousDate = new Date();
+	private String previousMessage = "";
+
 	/**
 	 * Sets the server URL to which the information will be posted.  If null is passed, then exceptions will not be logged
 	 * on a server, only to the Android log.
 	 */
 	public static void setURL(String aURLString) {
 		loggingURLSet = true;
-		
-		// if there is no URL, log and return 
+
+		// if there is no URL, log and return
 		if (aURLString == null) {
 			Log.e(LoggingExceptionHandler.class.getName(), "null URL passed, exceptions will not be sent to a server");
 			return;
 		}
-		
+
 		try {
 			loggingURL = new URL(aURLString);
 		} catch (MalformedURLException e) {
@@ -73,7 +77,7 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 
 	/**
 	 * Creates the handler.
-	 * 
+	 *
 	 * @param aContext
 	 *            Used to obtain information about the context of the exception. Also a <code>toString()</code> of the
 	 *            context is included in the message, so it is recommended to provide a helpful toString() on your
@@ -93,11 +97,29 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 
 	@Override
 	public void uncaughtException(Thread aThread, Throwable aThrowable) {
+
+		Date date = new Date();
+
 		final String message = String.format(XML_FORMAT, getPackageName(), getVersionNumber(), getVersionName(),
-				getThreadName(aThread), getTimeAsString(), getHashedPhoneId(), getdeviceInformation(),
+				getThreadName(aThread), getTimeAsString(date), getHashedPhoneId(), getdeviceInformation(),
 				getConfiguration(), getStackTrace(aThrowable), getContextString(), getLog());
-		Log.e(LoggingExceptionHandler.class.getName(), message);
-		logToServer(message);
+
+		final String simplerMessage = String.format(SIMPLE_FORMAT_NOTIME, getPackageName(), getVersionNumber(), getVersionName(),
+				getThreadName(aThread), getHashedPhoneId(), getdeviceInformation(),
+				getConfiguration(), getStackTrace(aThrowable), getContextString(), getLog());
+
+		// don't log duplicates exceptions within 1 second
+		if(!simplerMessage.equals(previousMessage)) {
+			Log.e(LoggingExceptionHandler.class.getName(), message);
+			logToServer(message);
+		} else if(date.getTime()>(previousDate.getTime()+1000L) ) {
+			Log.e(LoggingExceptionHandler.class.getName(), message);
+			logToServer(message);
+		}
+
+		previousMessage = simplerMessage;
+		previousDate = date;
+
 
 		// give the original (perhaps the Android one) handler a chance to process the exception
 		if (originalHandler != null) {
@@ -154,11 +176,11 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 		return stringWriter.toString();
 	}
 
-	private String getTimeAsString() {
+	private String getTimeAsString(Date date) {
 		try {
 			final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 			simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-			return simpleDateFormat.format(new Date());
+			return simpleDateFormat.format(date);
 		} catch (Exception e) {
 			Log.e(LoggingExceptionHandler.class.getName(), "Unable to get phone id", e);
 			return "Not Available";
