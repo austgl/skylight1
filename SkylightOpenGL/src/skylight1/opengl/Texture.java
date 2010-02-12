@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Bitmap.Config;
 import android.opengl.GLUtils;
+import android.util.Log;
 
 /**
  * Encapsulates an OpenGL texture, with facilities for loading, activating, deactivating, and freeing. Warning: if mip
@@ -108,6 +109,10 @@ public class Texture {
 		}
 		textureAllocated = false;
 	}
+	
+	public int getTextureId() {
+		return textureId;
+	}
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -140,6 +145,11 @@ public class Texture {
 
 		// bind and activate the texture
 		activateTexture();
+		
+		int results[] = new int[2];
+		aGL10.glGetIntegerv(GL10.GL_MAX_TEXTURE_UNITS, results, 0);
+		aGL10.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, results, 1);
+		Log.i(Texture.class.getName(), String.format("available texture units %d, max side %d", results[0], results[1]));
 
 		// TODO does it make sense to set these this early?
 		// TODO does this need to be decided by the client?
