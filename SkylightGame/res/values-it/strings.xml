@@ -4,7 +4,7 @@
     <string name="normal">Normale</string>
     <string name="easy">Sobrio</string>
     <string name="app_name">Equilibrare la Birra</string>
-    <string name="welcome">Equilibrare la birra sullo schermo</string>
+    <string name="welcome">Tenere livello e selezionare un livello di</string>
     <string name="successmsg">Buono!\nGiocatore successivo tap per iniziare</string>
     <string name="failmsg">Si Perde!!\nAcquistare bevande\nToccare per riawiare</string>
 	<string name="instructions">Istruzioni</string>
