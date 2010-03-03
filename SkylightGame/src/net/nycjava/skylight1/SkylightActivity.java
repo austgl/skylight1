@@ -92,10 +92,10 @@ public abstract class SkylightActivity extends Activity {
 //			welcomeActivityIntent.setClass(SkylightActivity.this, WelcomeActivity.class);
 //			startActivity(welcomeActivityIntent);
 //			return true;
-		case 0:
+		case MENU_ITEM_0:
 			showDialog(DIALOG_SHOW_LEVEL_ID);
 			return true;
-		case 1:
+		case MENU_ITEM_1:
 			showDialog(DIALOG_ABOUT_ID);
 			return true;
 		case 3:

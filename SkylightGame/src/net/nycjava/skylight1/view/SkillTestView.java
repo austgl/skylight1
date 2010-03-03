@@ -33,14 +33,25 @@ final public class SkillTestView extends View {
 
 	private static final int SCREEN_MARGIN = 10;
 
-	private final static int backgroundsSpacing[] = { 1, 4, 6, 9, 12, 15, 18, 20, 23, 25, 28, 30, 33, 36, 38,
-		                                              40, 42, 44, 46, 48, 50, 52 };
+	private final static int backgroundsSpacing[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+		                                              16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+		                                              31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+		                                              46, 47, 48, 49, 50, 51 };
 
-	private final static int backgrounds[] = { R.drawable.background_table, R.drawable.largewoodgrain,
-			R.drawable.marble, R.drawable.wood, R.drawable.seafoam, R.drawable.tiles, R.drawable.seafoam2,
-			R.drawable.orbit, R.drawable.water, R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios,
-			R.drawable.fish, R.drawable.earth, R.drawable.skulls,
-			R.drawable.orbit, R.drawable.ice, R.drawable.galaxy, R.drawable.fish, R.drawable.earth, R.drawable.icon_2, R.drawable.hard};
+	private final static int backgrounds[] = {
+		    R.drawable.seafoam2, R.drawable.wood, R.drawable.tiles, R.drawable.water, R.drawable.dionysios,
+		    R.drawable.marble, R.drawable.largewoodgrain, R.drawable.fish, R.drawable.orbit, R.drawable.skulls,
+		    R.drawable.seafoam, R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.earth,
+			R.drawable.background_table,
+			R.drawable.seafoam2, R.drawable.wood, R.drawable.galaxy, R.drawable.fish, R.drawable.earth,
+			R.drawable.water, R.drawable.marble, R.drawable.tiles, R.drawable.largewoodgrain, R.drawable.seafoam,
+			R.drawable.background_table, R.drawable.orbit, R.drawable.ice, R.drawable.space1, R.drawable.dionysios,
+			R.drawable.skulls,
+			R.drawable.seafoam2, R.drawable.wood, R.drawable.largewoodgrain, R.drawable.water, R.drawable.marble,
+		    R.drawable.tiles, R.drawable.fish, R.drawable.orbit, R.drawable.skulls, R.drawable.seafoam,
+		    R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.earth,
+			R.drawable.background_table,
+			R.drawable.ice, R.drawable.fish, R.drawable.icon_2, R.drawable.hard };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;
