@@ -22,8 +22,8 @@ import android.widget.TextView;
 
 public abstract class SkylightActivity extends Activity {
 //	private static final int MENU_ITEM_0 = 0;
-	private static final int MENU_ITEM_1 = 0;
-	private static final int MENU_ITEM_2 = 1;
+	private static final int MENU_ITEM_0 = 0;
+	private static final int MENU_ITEM_1 = 1;
 
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
 
@@ -76,26 +76,26 @@ public abstract class SkylightActivity extends Activity {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
 
 //		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.instructions));
-		menu.add(0, MENU_ITEM_1, Menu.NONE, getString(R.string.levelreached));
-		menu.add(0, MENU_ITEM_2, Menu.NONE, getString(R.string.about));
+		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.levelreached));
+		menu.add(0, MENU_ITEM_1, Menu.NONE, getString(R.string.about));
 //		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_help);
-		menu.getItem(MENU_ITEM_1).setIcon(android.R.drawable.ic_menu_view);
-		menu.getItem(MENU_ITEM_2).setIcon(android.R.drawable.ic_menu_info_details);
+		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_view);
+		menu.getItem(MENU_ITEM_1).setIcon(android.R.drawable.ic_menu_info_details);
 		return supRetVal;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+//		case 0:
+//			final Intent welcomeActivityIntent = new Intent();
+//			welcomeActivityIntent.putExtra(DISPLAY_DEMO, true);
+//			welcomeActivityIntent.setClass(SkylightActivity.this, WelcomeActivity.class);
+//			startActivity(welcomeActivityIntent);
+//			return true;
 		case 0:
-			final Intent welcomeActivityIntent = new Intent();
-			welcomeActivityIntent.putExtra(DISPLAY_DEMO, true);
-			welcomeActivityIntent.setClass(SkylightActivity.this, WelcomeActivity.class);
-			startActivity(welcomeActivityIntent);
-			return true;
-		case 1:
 			showDialog(DIALOG_SHOW_LEVEL_ID);
 			return true;
-		case 2:
+		case 1:
 			showDialog(DIALOG_ABOUT_ID);
 			return true;
 		case 3:

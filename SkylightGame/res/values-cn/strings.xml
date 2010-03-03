@@ -15,7 +15,7 @@
 	<string name="websiteurl">http://balancethebeer.com</string>
 	<string name="levelreached">到达级别</string>
     <string name="levelmessage">\n 到达级别</string>
-    <string name="aboutmessage">\nBalance the Beer\n Versione 1.1\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
+    <string name="aboutmessage">\nBalance the Beer\n Versione 1.3\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
 	<string name="keywords">啤酒 游戏 酒吧 喝酒</string>
 	<string name="locallevelreached">本地最高级别</string>
 	<string name="globallevelreached">全球最高级别</string>
