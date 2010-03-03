@@ -4,7 +4,7 @@
     <string name="normal">Buzzed</string>
     <string name="easy">Sober</string>
     <string name="app_name">Balance The Beer</string>
-    <string name="welcome">Hold Phone Flat and Select a Level</string>
+    <string name="welcome">Hold the Phone Flat and Select a Level</string>
     <string name="successmsg">Well done!\nNext player tap to begin</string>
     <string name="failmsg">Oops!! You Lose!!\nDrinks on you\nTap to restart</string>
 	<string name="instructions">How to Play</string>
