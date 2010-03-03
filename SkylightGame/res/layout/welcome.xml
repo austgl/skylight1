@@ -10,16 +10,9 @@
 			android:focusable="false" android:layout_gravity="top|center"/>
 		<net.nycjava.skylight1.view.TypeFaceTextView android:id="@+id/videoText"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:padding="10dip"
 			android:focusable="false" android:textSize="32dip" android:textColor="#ffffff"
 			typeface="skylight.ttf" android:visibility="gone" android:background="#00000000"/>
 	</FrameLayout>
-
-	<net.nycjava.skylight1.view.TypeFaceTextView
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:text="@string/welcome" android:padding="10dip"
-		android:focusable="false" android:textSize="32dip" android:textColor="#ffffff"
-		typeface="skylight.ttf" />
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:orientation="horizontal" android:layout_width="fill_parent"
@@ -52,4 +45,11 @@
 			android:textSize="25dip">
 		</net.nycjava.skylight1.view.TypeFaceTextView>
     </LinearLayout>
+    
+	<net.nycjava.skylight1.view.TypeFaceTextView
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:text="@string/welcome" android:padding="10dip"
+		android:focusable="false" android:textSize="32dip" android:textColor="#ffffff"
+		typeface="skylight.ttf" />
+
 </LinearLayout>

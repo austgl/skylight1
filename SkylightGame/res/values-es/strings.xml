@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hard">Mamado</string>
-    <string name="normal">Movido</string>
-    <string name="easy">Picaron</string>
-    <string name="app_name">Balancea la Chela</string>
-    <string name="welcome">Balancea la Chela en la screen</string>
+    <string name="normal">Entonado</string>
+    <string name="easy">Sobrio</string>
+    <string name="app_name">Balance de la Cerveza</string>
+    <string name="welcome">Mantenga plano y seleccione el nivel</string>
     <string name="successmsg">Bien hecho!\nSiguiente tap para empezar</string>
-    <string name="failmsg">Oops!! Perdistes!!\nPaga la cuenta!\nTap para rempezar</string>
+    <string name="failmsg">Oops!! Perdistes!!\nPaga la cuenta!\nTap para empezar</string>
 	<string name="instructions">Como jugar</string>
 	<string name="about">Acerca</string>
 	<string name="exit">Salida</string>

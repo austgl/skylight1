@@ -21,9 +21,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 public abstract class SkylightActivity extends Activity {
-	private static final int MENU_ITEM_0 = 0;
-	private static final int MENU_ITEM_1 = 1;
-	private static final int MENU_ITEM_2 = 2;
+//	private static final int MENU_ITEM_0 = 0;
+	private static final int MENU_ITEM_1 = 0;
+	private static final int MENU_ITEM_2 = 1;
 
 	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
 
@@ -75,10 +75,10 @@ public abstract class SkylightActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
 
-		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.instructions));
+//		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.instructions));
 		menu.add(0, MENU_ITEM_1, Menu.NONE, getString(R.string.levelreached));
 		menu.add(0, MENU_ITEM_2, Menu.NONE, getString(R.string.about));
-		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_help);
+//		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_help);
 		menu.getItem(MENU_ITEM_1).setIcon(android.R.drawable.ic_menu_view);
 		menu.getItem(MENU_ITEM_2).setIcon(android.R.drawable.ic_menu_info_details);
 		return supRetVal;

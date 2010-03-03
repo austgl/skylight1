@@ -50,10 +50,10 @@ public class MediaPlayerHelper {
 			public void onPrepared(MediaPlayer mp) {
 				Log.i(WelcomeActivity.class.getName(), "mp is prepared");
 
+				surfaceView.setBackgroundResource(0);
+
 				// start the video
 				mp.start();
-
-				surfaceView.setBackgroundResource(0);
 
 				if (videoStartListener != null) {
 					videoStartListener.videoStarted(videoIndex);
@@ -90,7 +90,11 @@ public class MediaPlayerHelper {
 			final String fileName = listOfMovies.remove(0);
 			Log.i(MediaPlayerHelper.class.getName(), String.format("about to load movie %s", fileName));
 			final AssetFileDescriptor afd = context.getAssets().openFd(fileName);
-			mediaPlayer.reset();
+//			mediaPlayer.reset();
+			mediaPlayer.stop();
+			mediaPlayer.release();
+			mediaPlayer = null;
+			createMediaListPlayer();
 			mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 			mediaPlayer.prepareAsync();
 		} catch (IllegalArgumentException e) {

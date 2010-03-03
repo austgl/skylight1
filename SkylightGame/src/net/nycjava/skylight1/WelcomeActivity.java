@@ -7,9 +7,9 @@ import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.view.MediaPlayerHelper;
 import net.nycjava.skylight1.view.TypeFaceTextView;
-import net.nycjava.skylight1.view.MediaPlayerHelper.VideoStartListener;
+//import net.nycjava.skylight1.view.MediaPlayerHelper.VideoStartListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
+//import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -44,27 +44,27 @@ public class WelcomeActivity extends SkylightActivity {
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
 			List<String> listOfMovies = new ArrayList<String>(2);
-			if (!demoOnly) {
-				listOfMovies.add("intro.mp4");
-			}
-			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1) < 0 || demoOnly) {
-				listOfMovies.add("demo.mp4");
-			}
+//			if (!demoOnly) {
+				listOfMovies.add("intro.3gp");
+//			}
+//			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+//			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1) < 0 || demoOnly) {
+//				listOfMovies.add("demo.mp4");
+//			}
 
 			MediaPlayerHelper mediaPlayerHelper = new MediaPlayerHelper(WelcomeActivity.this, preview, listOfMovies
-					.toArray(new String[0]));
-
+					.toArray(new String[listOfMovies.size()]));
+/*
 			mediaPlayerHelper.setVideoStartListener(new VideoStartListener() {
 				@Override
 				public void videoStarted(int anIndex) {
 					Log.i(WelcomeActivity.class.getName(), "just starting video " + anIndex);
-					if (anIndex == 1 || demoOnly) {
+					if (demoOnly) {
 						contentView.post(new Runnable() {
 							@Override
 							public void run() {
 								final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-								captionTextView.setText(getResources().getString(R.string.instructions)+":");
+								captionTextView.setText(getResources().getString(R.string.instructions));
 								captionTextView.setVisibility(View.VISIBLE);
 								Animation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);
 								fadeOutAnimation.setStartOffset(1000);
@@ -76,7 +76,7 @@ public class WelcomeActivity extends SkylightActivity {
 					}
 				}
 			});
-
+*/
 			mp = mediaPlayerHelper.createMediaListPlayer();
 		}
 
@@ -273,6 +273,14 @@ public class WelcomeActivity extends SkylightActivity {
 		// compared to pausing to go to another application), then pause the video
 		if (mp != null) {
 			mp.pause();
+		}
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mp != null) {
+			mp.stop();
+			mp=null;
 		}
 	}
 }
