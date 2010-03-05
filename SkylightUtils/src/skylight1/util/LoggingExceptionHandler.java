@@ -61,7 +61,7 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 		loggingURLSet = true;
 
 		// if there is no URL, log and return
-		if (aURLString == null) {
+		if (aURLString == null || aURLString.length()==0) {
 			Log.e(LoggingExceptionHandler.class.getName(), "null URL passed, exceptions will not be sent to a server");
 			return;
 		}
