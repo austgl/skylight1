@@ -27,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 /** AD BANNER DEPENDENCY - to be added by specific game's build script
+ import android.view.Gravity;
+ import android.view.ViewGroup.LayoutParams;
  import com.admob.android.ads.AdView;
  */
 
@@ -60,11 +62,11 @@ public class FailActivity extends SkylightActivity {
 		imageView.setImageResource(R.drawable.icon_2);
 		view.addView(imageView);
 
-		/**
-		 * AD BANNER DEPENDENCY - to be added by specific game's build script AdView adView = new AdView(this);
-		 * LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		 * adView.setLayoutParams(layoutParams); adView.setKeywords(getString(R.string.keywords));
-		 * adView.setGravity(Gravity.BOTTOM); view.addView(adView);
+		/** AD BANNER DEPENDENCY - to be added by specific game's build script
+         AdView adView = new AdView(this);
+		 LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		 adView.setLayoutParams(layoutParams); adView.setKeywords(getString(R.string.keywords));
+		 adView.setGravity(Gravity.BOTTOM); view.addView(adView);
 		 */
 
 		setContentView(view);
