@@ -7,8 +7,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 
 
 import android.content.Context;
@@ -20,14 +23,23 @@ public class Chest {
 	private Context context;
 
 	private boolean somethingWasLoaded;
-	private Hashtable<String, Record> hashmap;		
+	private Map<String, Record> hashmap;		
 	
 	//===========================	
 	public interface Record {
 		
-		public static final int TYPE_LONG 		= 1;
-		public static final int TYPE_BOOLEAN 	= 2;
-		public static final int TYPE_FLOAT 		= 3;
+		enum Type {
+		    LONG, BOOLEAN, FLOAT;
+
+			public static Type valueOf(int i) {
+				
+				for (Type type : Type.values()) {
+					if (i == type.ordinal() ) { return type; }					
+				}
+
+				throw new IllegalArgumentException(String.format("Invalid type modifier: %d ", i));
+			} 
+		}		
 		
 		public void write(String k, DataOutputStream dos) throws IOException;
 
@@ -49,19 +61,10 @@ public class Chest {
 
 		public void write(String k,DataOutputStream dos) throws IOException {
 			dos.writeUTF(k);			
-			dos.writeInt(Record.TYPE_LONG);			
+			dos.writeInt(Record.Type.LONG.ordinal());			
 			dos.writeLong(v);			
 		}
 		
-		private void log(String k, int type, long v) {
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"------SAVE----------");
-			Log.v(this.getClass().getName(),"key="+k);
-			Log.v(this.getClass().getName(),"type="+type);
-			Log.v(this.getClass().getName(),"value="+v);
-		}
-
 		public long get() {
 			return v;
 		}
@@ -87,19 +90,11 @@ public class Chest {
 
 		public void write(String k,DataOutputStream dos) throws IOException {
 			dos.writeUTF(k);
-			dos.writeInt(Record.TYPE_BOOLEAN);
-			dos.writeBoolean(v);
-		//	this.log(k,Record.TYPE_BOOLEAN,v);
+			dos.writeInt(Record.Type.BOOLEAN.ordinal());
+			dos.writeBoolean(v);		
 		}
 		
-		private void log(String k, int type, boolean v) {
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"------SAVE----------");
-			Log.v(this.getClass().getName(),"key="+k);
-			Log.v(this.getClass().getName(),"type="+type);
-			Log.v(this.getClass().getName(),"value="+v);
-		}
+	
 		
 		public boolean get() {
 			return v;
@@ -127,21 +122,11 @@ public class Chest {
 
 		public void write(String k,DataOutputStream dos) throws IOException {
 			dos.writeUTF(k);
-			dos.writeInt(Record.TYPE_FLOAT);
-			dos.writeFloat(v);	
-		//	this.log(k,Record.TYPE_FLOAT,v);
+			dos.writeInt(Record.Type.FLOAT.ordinal());
+			dos.writeFloat(v);			
 		}
 		
-		private void log(String k, int type, float v) {
-
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"");
-			Log.v(this.getClass().getName(),"------SAVE----------");
-			Log.v(this.getClass().getName(),"key="+k);
-			Log.v(this.getClass().getName(),"type="+type);
-			Log.v(this.getClass().getName(),"value="+v);
-		}
-		
+				
 		public float get() {
 			return v;
 		}
@@ -157,10 +142,14 @@ public class Chest {
 
 		this.context = context;		
 		this.somethingWasLoaded = false;		
-		this.hashmap = new Hashtable<String, Record>();		
+		this.hashmap = new HashMap<String, Record>();		
 	}
 
-	//==============
+	/**
+	 * Stores the data that was put into a file.  
+	 *
+	 * @param  filename
+	 */	
 	public void saveToDisk(String filename) {
 			
 			FileOutputStream fOut;
@@ -189,21 +178,14 @@ public class Chest {
 			}
 		
 }
-		
-	//========================		
-	private void writeData(DataOutputStream dos) throws IOException {
-		  
-		final Hashtable<String, Record> hm = this.hashmap;		
-		final Enumeration<String> e = hm.keys();
-		
-		while(e.hasMoreElements()) {		
-			final String k = e.nextElement();	        
-	        final Record r =  hashmap.get(k);		        
-	        r.write(k,dos);
-		  }		
-	}
 
-	//========================
+	
+
+	/**
+	 * Loads data from the given file.
+	 *
+	 * @param  filename
+	 */	
 	public void loadFromDisk(String filename) {
 				
 		try {			
@@ -225,14 +207,14 @@ public class Chest {
 	            		      while (true) { // exception deals catches EOF
 	            		    	  
 	            		    	  final String 	k = dis.readUTF();	            		    	  
-	            		    	  final int 	type = dis.readInt();	 
+	            		    	  final Record.Type type =  Record.Type.valueOf(dis.readInt());	 
 	            		    	  
 	            		    	  final Record record;	            		    	  
 	            		    	  
 	            		    	  switch (type) {	            		    	  	
-	            		    	  	case Record.TYPE_BOOLEAN:  	record = new BooleanRecord(dis);  	break;
-	            		    	  	case Record.TYPE_FLOAT:  	record = new FloatRecord(dis);  	break;
-	            		    	  	case Record.TYPE_LONG:  	record = new LongRecord(dis);  		break;
+	            		    	  	case BOOLEAN:  	record = new BooleanRecord(dis);  	break;
+	            		    	  	case FLOAT:  	record = new FloatRecord(dis);  	break;
+	            		    	  	case LONG:  	record = new LongRecord(dis);  		break;
 	            		    	  	
 	            		    	  	default: throw new RuntimeException(String.format("Err loading chest: unknown type: '%d'",type));
 	            		    	  }
@@ -256,6 +238,21 @@ public class Chest {
 			Log.e(this.getClass().getName(),"Could not load gamedata from file");
 		}					
 		}
+	
+	
+	
+	//========================		
+	private void writeData(DataOutputStream dos) throws IOException {
+		  
+		final Map<String, Record> hm = this.hashmap;		
+		final Iterator<Entry<String, Record>> iterator = hm.entrySet().iterator();
+		
+		while (iterator.hasNext()) {			
+			final Entry<String,Record> entry = iterator.next();
+			entry.getValue().write(entry.getKey(), dos);
+		  }
+	}
+
 	
 	//=====================
 	public boolean isEmpty() {		
