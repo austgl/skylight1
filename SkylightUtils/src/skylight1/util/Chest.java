@@ -37,7 +37,7 @@ public class Chest {
 					if (i == type.ordinal() ) { return type; }					
 				}
 
-				throw new IllegalArgumentException(String.format("Invalid type modifier: %d ", i));
+				throw new IllegalArgumentException(String.format("Invalid type: '%d'", i));
 			} 
 		}		
 		
