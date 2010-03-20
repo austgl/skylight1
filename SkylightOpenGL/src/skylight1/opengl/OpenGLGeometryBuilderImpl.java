@@ -169,8 +169,6 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private static final int TRIANGLES_PER_RECTANGLE = 2;
 
-	private static final int VERTICES_EXTENSION_SIZE = 6;
-
 	private static final int NO_MODE = -1;
 
 	private static int currentMode = NO_MODE;
@@ -313,22 +311,21 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private void updateArraySizesIfNecessary() {
 		if (modelCoordinates.length < vertexOffsetOfNextGeometry * MODEL_COORDINATES_PER_VERTEX) {
-			modelCoordinates = extend(modelCoordinates, VERTICES_EXTENSION_SIZE * MODEL_COORDINATES_PER_VERTEX);
+			modelCoordinates = extend(modelCoordinates);
 			if (usesTextureCoordinates) {
-				textureCoordinates = extend(textureCoordinates, VERTICES_EXTENSION_SIZE
-						* TEXTURE_COORDINATES_PER_VERTEX);
+				textureCoordinates = extend(textureCoordinates);
 			}
 			if (usesColours) {
-				colours = extend(colours, VERTICES_EXTENSION_SIZE * COLOUR_PARTS_PER_VERTEX);
+				colours = extend(colours);
 			}
 			if (usesNormals) {
-				normalComponents = extend(normalComponents, VERTICES_EXTENSION_SIZE * NORMAL_COMPONENTS_PER_VERTEX);
+				normalComponents = extend(normalComponents);
 			}
 		}
 	}
 
-	private int[] extend(int[] anArray, int anExtensionSize) {
-		final int[] newArray = new int[anArray.length + anExtensionSize];
+	private int[] extend(int[] anArray) {
+		final int[] newArray = new int[anArray.length * 4];
 		System.arraycopy(anArray, 0, newArray, 0, anArray.length);
 		return newArray;
 	}
