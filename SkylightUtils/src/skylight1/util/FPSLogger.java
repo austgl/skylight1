@@ -31,7 +31,7 @@ public class FPSLogger {
 
 	/**
 	 * Constructs an FPSLogger.
-	 * 
+	 *
 	 * @param aTag
 	 *            The tag to use in the Android logging API.
 	 * @param aNumberOfFramesBetweenLogging
@@ -63,5 +63,9 @@ public class FPSLogger {
 			timeStartedCountingFrames = currentTimeMillis;
 			framesUntilNextLogStatement = numberOfFramesBetweenLogging;
 		}
+	}
+
+	public boolean isStarted() {
+		return started;
 	}
 }
