@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="skylight1.wallpaper">
+
+    <application
+        android:label="@string/wallpapers"
+        android:icon="@drawable/ic_launcher_wallpaper">
+
+        <service
+            android:label="@string/wallpapers"
+            android:name=".Skylight1Wallpaper"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+            <meta-data android:name="android.service.wallpaper" android:resource="@xml/skylight1" />
+        </service>
+
+    </application>
+</manifest>
