@@ -5,11 +5,11 @@
     package="skylight1.wallpaper">
 
     <application
-        android:label="@string/wallpapers"
+        android:label="@string/skylight1wallpaper"
         android:icon="@drawable/ic_launcher_wallpaper">
 
         <service
-            android:label="@string/wallpapers"
+            android:label="@string/skylight1wallpaper"
             android:name=".Skylight1Wallpaper"
             android:permission="android.permission.BIND_WALLPAPER">
             <intent-filter>
@@ -17,6 +17,12 @@
             </intent-filter>
             <meta-data android:name="android.service.wallpaper" android:resource="@xml/skylight1" />
         </service>
+
+        <activity
+            android:label="@string/skylight1wallpaper_settings"
+            android:name=".Skylight1WallpaperSettings"
+            android:exported="true">
+        </activity>
 
     </application>
 </manifest>

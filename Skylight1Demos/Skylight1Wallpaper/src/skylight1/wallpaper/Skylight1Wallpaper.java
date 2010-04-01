@@ -20,7 +20,7 @@ package skylight1.wallpaper;
 
 import skylight1.wallpaper.R;
 import android.app.WallpaperManager;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,7 +28,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.Display;
@@ -40,6 +39,7 @@ import android.view.WindowManager;
 
 public class Skylight1Wallpaper extends WallpaperService {
 
+    public static final String SHARED_PREFS_NAME="skylight1wallpaper";
     private final Handler mHandler = new Handler();
 
     @Override
@@ -59,9 +59,11 @@ public class Skylight1Wallpaper extends WallpaperService {
         return new WallpaperEngine();
     }
 
-    class WallpaperEngine extends Engine {
+    class WallpaperEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-        private final Paint mPaint = new Paint();
+        private static final int EXISTINGWALLPAPER = 0;
+        private static final int DEFAULTWALLPAPER = 1;
+		private final Paint mPaint = new Paint();
         private float mTouchX = -1;
         private float mTouchY = -1;
         private int width, height;
@@ -71,6 +73,7 @@ public class Skylight1Wallpaper extends WallpaperService {
         private int mFrameCount = 0;
         private boolean mVisible;
         private boolean mPrintVisible;
+        private SharedPreferences mPrefs;
         private Bitmap backgroundBitmap = null;
         private Bitmap foregroundBitmap = null;
 
@@ -85,22 +88,26 @@ public class Skylight1Wallpaper extends WallpaperService {
             	}
             }
         };
+		private int bgId;
 
         WallpaperEngine() {
             Display display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
             height = display.getHeight();
             width = display.getWidth();
-            setBackgroundBitmap(R.drawable.bg);
             foregroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fingerprint);
+
+            mPrefs = Skylight1Wallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
+            mPrefs.registerOnSharedPreferenceChangeListener(this);
+            onSharedPreferenceChanged(mPrefs, "background");
         }
 
         private void setBackgroundBitmap(int id) {
             backgroundBitmap = BitmapFactory.decodeResource(getResources(), id);
             backgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
-
-            //TODO: use existing wallpaper for background - add current to list of backgrounds to choose from
-            //Drawable currentWallPaperDrawable = WallpaperManager.getInstance(getApplicationContext()).getFastDrawable();
-            //backgroundBitmap = ((BitmapDrawable)currentWallPaperDrawable).getBitmap();
+        }
+        private void setBackgroundBitmap() {
+            Drawable currentWallPaperDrawable = WallpaperManager.getInstance(getApplicationContext()).getDrawable();
+            backgroundBitmap = ((BitmapDrawable)currentWallPaperDrawable).getBitmap();
         }
 
         @Override
@@ -198,13 +205,44 @@ public class Skylight1Wallpaper extends WallpaperService {
         }
 
         void drawTouchPoint(Canvas c) {
-      	  Log.i("drawTouchPoint:", "foregroundBitmap="+foregroundBitmap+" mTouchX="+mTouchX+" mTouchY="+mTouchY);
-
       	  if (mTouchX >=0 && mTouchY >= 0) {
         	if(foregroundBitmap!=null) {
         		c.drawBitmap(foregroundBitmap, mTouchX-mCenterX, mTouchY-mCenterY/2, mPaint);
         	}
           }
         }
+
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			try {
+				bgId = Integer.parseInt(sharedPreferences.getString(key, ""+DEFAULTWALLPAPER));
+			} catch(NumberFormatException nfe) {
+				bgId = DEFAULTWALLPAPER;
+			}
+			Log.i(SHARED_PREFS_NAME,"bgId="+bgId);
+            if(bgId==EXISTINGWALLPAPER) {
+                setBackgroundBitmap();
+            } else {
+            	setBackgroundBitmap(Skylight1Wallpaper.images[bgId]);
+            }
+		}
     } //Engine
+
+	private static int[] images = {
+        R.drawable.bg, // previous wall paper
+        R.drawable.bg,
+        R.drawable.whitewall,
+        R.drawable.concretewall,
+        R.drawable.plastictarget,
+        R.drawable.greenplasticdewdrops,
+        R.drawable.mixedcoloredpaint,
+        R.drawable.multicoloredlights,
+        R.drawable.woodfloor,
+        R.drawable.dirtyglass,
+        R.drawable.waterripple,
+        R.drawable.jetsofwater,
+        R.drawable.cloudsreflectedinwater,
+        R.drawable.coloredjellybubbles,
+        R.drawable.about
+	};
 }

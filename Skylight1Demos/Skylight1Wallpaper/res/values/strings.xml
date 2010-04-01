@@ -21,6 +21,12 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Application name -->
-    <string name="wallpapers">Skylight1 Wallpaper</string>
+    <string name="skylight1wallpaper">Fingerprint Wallpaper</string>
+    <string name="skylight1wallpaper_settings">Fingerprint Wallpaper Settings</string>
+    <string name="author">Skylight1 Open Source Project</string>
+    <string name="description">Monitors your fingerprint on a selected background.</string>
+    <string name="skylight1wallpaper_settings_title">Wallpaper Background</string>
+    <string name="skylight1wallpaper_settings_summary">select background image</string>
+
 
 </resources>

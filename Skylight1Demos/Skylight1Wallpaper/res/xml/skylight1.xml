@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright (c) 2009,2010 The Skylight1 Open Source Project http://skylight1.googlecode.com
+ * Copyright (c) 2009,2010 The Skylight1 Open Source Project
+ *
+ * http://skylight1.googlecode.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,4 +22,8 @@
 <!-- The attributes in this XML file provide configuration information -->
 
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
+    android:author="@string/author"
+    android:description="@string/description"
+    android:thumbnail="@drawable/thumbnail"
+    android:settingsActivity="skylight1.wallpaper.Skylight1WallpaperSettings"
 />
