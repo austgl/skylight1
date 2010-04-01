@@ -21,6 +21,7 @@
         <activity
             android:label="@string/skylight1wallpaper_settings"
             android:name=".Skylight1WallpaperSettings"
+            android:theme="@android:style/Theme.Light.WallpaperSettings"
             android:exported="true">
         </activity>
 
