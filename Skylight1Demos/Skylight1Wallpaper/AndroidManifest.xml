@@ -2,11 +2,13 @@
 
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="skylight1.wallpaper">
+    package="skylight1.wallpaper"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <application
         android:label="@string/skylight1wallpaper"
-        android:icon="@drawable/ic_launcher_wallpaper">
+        android:icon="@drawable/ic_launcher_wallpaper" android:debuggable="false">
 
         <service
             android:label="@string/skylight1wallpaper"

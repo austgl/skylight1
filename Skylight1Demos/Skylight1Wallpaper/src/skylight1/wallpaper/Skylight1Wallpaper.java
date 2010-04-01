@@ -95,7 +95,7 @@ public class Skylight1Wallpaper extends WallpaperService {
             height = display.getHeight();
             width = display.getWidth();
             foregroundBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fingerprint);
-Log.i("FINGERPRINT","HEIGHT="+foregroundBitmap.getHeight());
+//Log.i("FINGERPRINT","HEIGHT="+foregroundBitmap.getHeight());
             mPrefs = Skylight1Wallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             onSharedPreferenceChanged(mPrefs, "background");
@@ -219,7 +219,6 @@ Log.i("FINGERPRINT","HEIGHT="+foregroundBitmap.getHeight());
 			} catch(NumberFormatException nfe) {
 				bgId = DEFAULTWALLPAPER;
 			}
-			Log.i(SHARED_PREFS_NAME,"bgId="+bgId);
             if(bgId==EXISTINGWALLPAPER) {
                 setBackgroundBitmap();
             } else {
