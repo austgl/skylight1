@@ -6,6 +6,9 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-sdk android:minSdkVersion="7" />
+    <uses-feature android:name="android.software.live_wallpaper" />
+
     <application
         android:label="@string/skylight1wallpaper"
         android:icon="@drawable/ic_launcher_wallpaper" android:debuggable="false">
