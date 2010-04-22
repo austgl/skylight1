@@ -27,6 +27,8 @@ public class FPSLogger {
 
 	private int framesUntilNextLogStatement;
 
+	private int fPS;
+
 	private boolean started;
 
 	/**
@@ -47,7 +49,7 @@ public class FPSLogger {
 	 * Call this method once per frame rendered. Note: in the interests of making this method very low cost, if it is
 	 * called more than 120 times per second, it will throw an ArrayOutOfBoundsException.
 	 */
-	public void frameRendered() {
+	public int frameRendered() {
 		framesUntilNextLogStatement--;
 
 		if (framesUntilNextLogStatement == 0) {
@@ -55,7 +57,7 @@ public class FPSLogger {
 			if (!started) {
 				started = true;
 			} else {
-				final int fPS = numberOfFramesBetweenLogging * 1000
+				fPS = numberOfFramesBetweenLogging * 1000
 						/ (int) (currentTimeMillis - timeStartedCountingFrames);
 				final String fPSMessage = FPS_MESSAGES[fPS];
 				Log.i(loggerName, fPSMessage);
@@ -63,6 +65,7 @@ public class FPSLogger {
 			timeStartedCountingFrames = currentTimeMillis;
 			framesUntilNextLogStatement = numberOfFramesBetweenLogging;
 		}
+		return fPS;
 	}
 
 	public boolean isStarted() {
