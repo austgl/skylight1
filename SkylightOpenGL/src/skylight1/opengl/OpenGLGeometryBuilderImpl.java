@@ -7,6 +7,8 @@ import java.util.Stack;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.util.FloatMath;
+
 /**
  * Encapsulates the construction of OpenGLGeometry objects.
  */
@@ -358,7 +360,8 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 		int firstVertexOffset = geometryStartVertexStack.pop();
 		final int numberOfVertices = vertexOffsetOfNextGeometry - firstVertexOffset;
-		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this);
+		final float[] sphere = calculateBoundingSphere(modelCoordinates, firstVertexOffset, numberOfVertices);
+		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this, sphere);
 
 		// if the stack is empty, then clear the current mode: the next geometry can use a different mode
 		if (geometryStartVertexStack.isEmpty()) {
@@ -366,6 +369,37 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		}
 
 		return openGLGeometry;
+	}
+
+	private float[] calculateBoundingSphere(int[] aModelCoordinates,
+			int aFirstVertexOffset, int aNumberOfVertices) {
+		float minX = aModelCoordinates[0];
+		float minY = aModelCoordinates[1];
+		float minZ = aModelCoordinates[2];
+		float maxX = minX;
+		float maxY = minY;
+		float maxZ = minZ;
+		for (int vertexIndex = 1; vertexIndex < aNumberOfVertices; vertexIndex++) {
+			int x = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex];
+			int y = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex + 1];
+			int z = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex + 2];
+			minX = Math.min(minX, x);
+			minY = Math.min(minY, y);
+			minZ = Math.min(minZ, z);
+			maxX = Math.max(maxX, x);
+			maxY = Math.max(maxY, y);
+			maxZ = Math.max(maxZ, z);
+		}
+		minX = minX / (1 << 16);
+		maxX = maxX / (1 << 16);
+		minY = minY / (1 << 16);
+		maxY = maxY / (1 << 16);
+		minZ = minZ / (1 << 16);
+		maxZ = maxZ / (1 << 16);
+		float dX = maxX - minX;
+		float dY = maxY - minY;
+		float dZ = maxZ - minZ;
+		return new float[] {(minX + maxX)/2, (minY + maxY)/2, (minZ + maxZ)/2, FloatMath.sqrt(dX*dX + dY*dY + dZ*dZ)/2};
 	}
 
 	/**

@@ -23,14 +23,17 @@ public class OpenGLGeometry {
 	private final int normalsPositionInBuffer;
 
 	private final int coloursPositionInBuffer;
+	
+	private final float[] boundingSphere;
 
 	public OpenGLGeometry(final int aMode, final int aFirst, final int aNumberOfVerticies,
-			OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl) {
+			OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl, final float[] aBoundingSphere) {
 		mode = aMode;
 		first = aFirst;
 		numberOfVerticies = aNumberOfVerticies;
 		openGLGeometryBuilderImpl = anOpenGLGeometryBuilderImpl;
-
+		boundingSphere = aBoundingSphere;
+		
 		// To reduce calculations in the draw method, pre-calculate some offets
 		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
 		texturePositionInBuffer = first * FastGeometryBuilderImpl.TEXTURE_COORDINATES_PER_VERTEX;
@@ -44,6 +47,10 @@ public class OpenGLGeometry {
 	 */
 	public void draw(GL10 aGL10) {
 		aGL10.glDrawArrays(mode, first, numberOfVerticies);
+	}
+
+	public float[] getBoundingSphere() {
+		return boundingSphere;
 	}
 
 	/**
