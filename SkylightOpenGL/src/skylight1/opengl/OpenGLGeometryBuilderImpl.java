@@ -373,16 +373,17 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private float[] calculateBoundingSphere(int[] aModelCoordinates,
 			int aFirstVertexOffset, int aNumberOfVertices) {
-		float minX = aModelCoordinates[0];
-		float minY = aModelCoordinates[1];
-		float minZ = aModelCoordinates[2];
+		int coordinateIndex = aFirstVertexOffset * MODEL_COORDINATES_PER_VERTEX;
+		float minX = aModelCoordinates[coordinateIndex++];
+		float minY = aModelCoordinates[coordinateIndex++];
+		float minZ = aModelCoordinates[coordinateIndex++];
 		float maxX = minX;
 		float maxY = minY;
 		float maxZ = minZ;
 		for (int vertexIndex = 1; vertexIndex < aNumberOfVertices; vertexIndex++) {
-			int x = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex];
-			int y = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex + 1];
-			int z = aModelCoordinates[aFirstVertexOffset + MODEL_COORDINATES_PER_VERTEX * vertexIndex + 2];
+			int x = aModelCoordinates[coordinateIndex++];
+			int y = aModelCoordinates[coordinateIndex++];
+			int z = aModelCoordinates[coordinateIndex++];
 			minX = Math.min(minX, x);
 			minY = Math.min(minY, y);
 			minZ = Math.min(minZ, z);
