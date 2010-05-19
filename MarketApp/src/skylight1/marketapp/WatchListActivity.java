@@ -4,18 +4,24 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import roboguice.activity.GuiceActivity;
+import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.DummyEquityPricingInformationFeed;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
 import skylight1.marketapp.model.EquityPricingInformation;
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-public class WatchListActivity extends Activity {
-	// TODO inject this!!!!
+import com.google.inject.Inject;
+
+public class WatchListActivity extends GuiceActivity {
+	@Inject
 	private EquityPricingInformationFeed equityPricingInformationFeed;
+
+	@InjectView(R.id.tempTickerName)
+	private TextView textView;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -37,8 +43,7 @@ public class WatchListActivity extends Activity {
 						EquityPricingInformation equityPricingInformation = aSetOfEquityPricingInformation.iterator().next();
 						Log.i(WatchListActivity.class.getName(), equityPricingInformation.getTicker());
 						try {
-							((TextView) findViewById(R.id.tempTickerName)).setText(String
-									.format("%s = %f", equityPricingInformation.getTicker(), equityPricingInformation.getLastPrice()));
+							textView.setText(String.format("%s = %f", equityPricingInformation.getTicker(), equityPricingInformation.getLastPrice()));
 						} catch (Exception e) {
 							Log.i(WatchListActivity.class.getName(), "exception!", e);
 						}
