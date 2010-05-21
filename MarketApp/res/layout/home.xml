@@ -5,4 +5,7 @@
     android:layout_height="fill_parent"
     >
 <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WatchList" android:id="@+id/watchListButton"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Portfolio" android:id="@+id/portfolioButton"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Alerts" android:id="@+id/alertButton"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pricing Engine" android:id="@+id/pricingEngineButton"></Button>
 </LinearLayout>
