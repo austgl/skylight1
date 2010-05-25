@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import android.util.Log;
 import skylight1.marketapp.model.EquityPricingInformation;
 
 /*
@@ -13,6 +14,8 @@ import skylight1.marketapp.model.EquityPricingInformation;
  * 
  */
 public class AbstractEquityPricingInformation implements EquityPricingInformationFeed {
+    private static String TAG = "AbstractEquityPricingInformation";
+
     private final Map<EquityFeedObserver, Set<String>> observers = new HashMap<EquityFeedObserver, Set<String>>();
 
     protected Set<String> getTickers() {
@@ -71,10 +74,13 @@ public class AbstractEquityPricingInformation implements EquityPricingInformatio
 
     protected void notifyObservers(Set<EquityPricingInformation> aSetOfEquityPricingInformation) {
         for (Entry<EquityFeedObserver, Set<String>> equityFeedObserverTicker : observers.entrySet()) {
+            Log.i(TAG, "Telling observers");
             final Set<String> tickersForObserver = equityFeedObserverTicker.getValue();
             final Set<EquityPricingInformation> subsetOfEquityPricingInformation = new HashSet<EquityPricingInformation>();
             for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
+                Log.i(TAG, "Should I tell " + tickersForObserver + ", " + equityPricingInformation);
                 if (tickersForObserver.contains(equityPricingInformation.getTicker())) {
+                    Log.i(TAG, "Telling...");
                     subsetOfEquityPricingInformation.add(equityPricingInformation);
                 }
             }

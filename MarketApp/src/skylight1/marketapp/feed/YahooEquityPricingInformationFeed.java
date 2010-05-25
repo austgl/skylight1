@@ -59,14 +59,18 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                     while ((line = reader.readLine()) != null) {
                         // AAPL",245.29,245.10,124.55,272.46,+12.76
                         String[] parts = line.split(",");
+                        String ticker = parts[0].replace("\"",""); // replaceAll didn't work!! Will do regex later
 
-                        EquityPricingInformation information = new EquityPricingInformation(parts[0], parts[0],
+                        Log.i(TAG, "TICKER:" + ticker);
+                        Log.i(TAG, line);
+                        EquityPricingInformation information = new EquityPricingInformation(ticker, ticker,
                                 new BigDecimal(parts[1]), null, new Date(), new BigDecimal(parts[2]),
                                 null, new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
 
+                        Log.i(TAG, "Object not NULL?" + information);
                         setOfEquityPricingInformation.add(information);
-                        Log.i(TAG, line);
                     }
+                    Log.i(TAG, "Notfiying everyone");
                     notifyObservers(setOfEquityPricingInformation);
                 } catch (Exception e) {
                     Log.e(TAG, "Unable to get stock quotes", e);
