@@ -29,7 +29,7 @@ public class WatchListActivity extends GuiceActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.watchlist);
 
-		equityPricingInformationFeed = new DummyEquityPricingInformationFeed();
+//		equityPricingInformationFeed = new DummyEquityPricingInformationFeed();
 
 		EquityFeedObserver equityFeedObserver = new EquityFeedObserver() {
 
@@ -39,7 +39,7 @@ public class WatchListActivity extends GuiceActivity {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						Log.i(WatchListActivity.class.getName(), "here I am!!!");
+						Log.i(WatchListActivity.class.getName(), "Updating watchList UI on UI Thread!!!");
 						EquityPricingInformation equityPricingInformation = aSetOfEquityPricingInformation.iterator().next();
 						Log.i(WatchListActivity.class.getName(), equityPricingInformation.getTicker());
 						try {
