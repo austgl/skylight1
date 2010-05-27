@@ -11,14 +11,15 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-		</activity>
+					</activity>
 
 		<activity android:name=".WatchListActivity" />
         <activity android:name=".AlertActivity" android:label="Alerts"/>
         <activity android:name=".PortfolioActivity" android:label="Portfolio"/>
         <activity android:name=".PricingEngineActivity" android:label="PricingEngine"/>
-
-    </application>
+         <provider android:name="dbMarket" android:authorities="skylight1.marketapp"></provider>
+</application>
 	<uses-sdk android:minSdkVersion="3" />
+   
 
 </manifest> 
