@@ -95,7 +95,7 @@ public class PortfolioActivity extends ListActivity {
                 holder.avgPriceTextView = (TextView) convertView.findViewById(R.id.avgPrice);
                 holder.numberOfSharesTextView = (TextView) convertView.findViewById(R.id.numberOfShares);
                 holder.currentPriceTextView = (TextView) convertView.findViewById(R.id.currentPrice);
-                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
+//                holder.icon = (ImageView) convertView.findViewById(R.id.icon);
 
                 convertView.setTag(holder);
             } else {

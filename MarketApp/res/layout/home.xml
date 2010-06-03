@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/background"
     >
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="WatchList" android:id="@+id/watchListButton"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Portfolio" android:id="@+id/portfolioButton"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Alerts" android:id="@+id/alertButton"></Button>
-<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Pricing Engine" android:id="@+id/pricingEngineButton"></Button>
-</LinearLayout>
+<Button
+android:id="@+id/watchListButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="50px"
+ android:background="@drawable/watchlist"
+>
+</Button>
+
+<Button
+android:id="@+id/portfolioButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="180px"
+android:layout_y="50px"
+ android:background="@drawable/portfolio"
+>
+</Button>
+<Button
+android:id="@+id/alertButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="220px"
+ android:background="@drawable/alert"
+>
+</Button>
+
+<Button
+android:id="@+id/pricingEngineButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="180px"
+android:layout_y="220px"
+ android:background="@drawable/price"
+>
+</Button>
+</AbsoluteLayout>

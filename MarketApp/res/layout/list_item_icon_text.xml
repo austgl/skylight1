@@ -19,32 +19,30 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <ImageView android:id="@+id/icon"
-        android:layout_width="48dip"
-        android:layout_height="48dip" />
+ 
 
     <TextView android:id="@+id/ticker"
         android:layout_gravity="center_vertical"
         android:layout_width="0dip"
         android:layout_weight="1.0"
         android:textSize="16dip"
-        android:layout_height="wrap_content" />
+        android:layout_height="48dip" />
 
         <TextView android:id="@+id/avgPrice"
         android:layout_gravity="center_vertical"
         android:layout_width="0dip"
         android:layout_weight="1.0"
-        android:layout_height="wrap_content" />
+        android:layout_height="48dip" />
 
     <TextView android:id="@+id/numberOfShares"
         android:layout_gravity="center_vertical"
         android:layout_width="0dip"
         android:layout_weight="1.0"
-        android:layout_height="wrap_content" />
+        android:layout_height="48dip" />
 
     <TextView android:id="@+id/currentPrice"
         android:layout_gravity="center_vertical"
         android:layout_width="0dip"
         android:layout_weight="1.0"
-        android:layout_height="wrap_content" />
+        android:layout_height="48dip" />
 </LinearLayout>
