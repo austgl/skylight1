@@ -123,7 +123,7 @@ public class dbMarket   extends ContentProvider {
 		private static final String DATABASE_CREATE =
 		      "create table " + MARKET_TABLE +"("+ KEY_ID + " integer primary key autoincrement, "
 		      + KEY_DATE + " LONG, "
-		      + KEY_SYMBOL + " TEXT, );"     ;
+		      + KEY_SYMBOL + " TEXT );"     ;
 		      		
 		      
 		      
