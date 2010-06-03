@@ -15,7 +15,7 @@ public class DummyEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
 	public DummyEquityPricingInformationFeed() {
 		dummySetOfEquityPricingInformation
-				.add(new EquityPricingInformation("NADIA", "Juan", new BigDecimal(50), new BigDecimal(100000), new Date(), new BigDecimal(40), new BigDecimal(120000), new Date()));
+				.add(new EquityPricingInformation("AAPL", "AAPL", new BigDecimal(50), new BigDecimal(100000), new Date(), new BigDecimal(40), new BigDecimal(120000), new Date()));
 
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
