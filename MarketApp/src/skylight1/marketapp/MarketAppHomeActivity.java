@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+//import skylight1.marketapp.CandleStickActivity;
 
 public class MarketAppHomeActivity extends GuiceActivity {
     @InjectView(R.id.watchListButton)
@@ -18,6 +19,8 @@ public class MarketAppHomeActivity extends GuiceActivity {
     private Button portfolioButton;
     @InjectView(R.id.pricingEngineButton)
     private Button pricingEngineButton;
+    @InjectView(R.id.candleButton)
+    private Button candleButton;
 
     /**
      * Called when the activity is first created.
@@ -55,6 +58,13 @@ public class MarketAppHomeActivity extends GuiceActivity {
             @Override
             public void onClick(View aV) {
                 Intent intent = new Intent(MarketAppHomeActivity.this, PricingEngineActivity.class);
+                startActivity(intent);
+            }
+        });
+        candleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View aV) {
+                Intent intent = new Intent(MarketAppHomeActivity.this, CandleSticksActivity.class);
                 startActivity(intent);
             }
         });

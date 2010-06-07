@@ -29,7 +29,7 @@ android:id="@+id/alertButton"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_x="30px"
-android:layout_y="220px"
+android:layout_y="175px"
  android:background="@drawable/alert"
 >
 </Button>
@@ -39,8 +39,18 @@ android:id="@+id/pricingEngineButton"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_x="180px"
-android:layout_y="220px"
+android:layout_y="175px"
  android:background="@drawable/price"
+>
+</Button>
+
+<Button
+android:id="@+id/candleButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="300px"
+ android:background="@drawable/candle"
 >
 </Button>
 </AbsoluteLayout>
