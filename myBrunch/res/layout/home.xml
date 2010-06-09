@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    >
+<Button
+android:id="@+id/watchListButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="50px"
+ android:background="@drawable/watchlist"
+>
+</Button>
+
+<Button
+android:id="@+id/portfolioButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="180px"
+android:layout_y="50px"
+ android:background="@drawable/portfolio"
+>
+</Button>
+<Button
+android:id="@+id/alertButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="175px"
+ android:background="@drawable/alert"
+>
+</Button>
+
+<Button
+android:id="@+id/pricingEngineButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="180px"
+android:layout_y="175px"
+ android:background="@drawable/price"
+>
+</Button>
+
+<Button
+android:id="@+id/candleButton"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_x="30px"
+android:layout_y="300px"
+ android:background="@drawable/candle"
+>
+</Button>
+</AbsoluteLayout>
