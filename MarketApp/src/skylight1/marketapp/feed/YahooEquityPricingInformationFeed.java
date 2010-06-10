@@ -4,7 +4,6 @@ import android.util.Log;
 import skylight1.marketapp.model.EquityPricingInformation;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -13,8 +12,58 @@ import java.net.URL;
 import java.util.*;
 
 public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInformation {
-    private static String TAG = "YAHOO";
+    private static final String TAG = YahooEquityPricingInformationFeed.class.getSimpleName();
 
+
+    /*
+     * Retrieve the basic information that is displayed on a watch list page.
+     *  symbol, name, last price, market cap, price change, percent change
+     *
+     * @param aTicker The ticker symbol to request
+     *
+     */
+    public void getBasicTickerInfo(String aTicker) {
+        //TODO: How to return the information?  Create an new class?
+
+
+        /*
+        * s = symbol
+        * n = name
+        * l1 = last price
+        * j1 = market capitalization
+        * c - change and percent change
+        */
+        String url = "http://download.finance.yahoo.com/d/quotes.csv?s="
+                + aTicker
+                + "&f=snl1j1c";
+//    Log.i(TAG,url);
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream is = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            //
+            // Loop over Yahoo response and extract pricing information
+
+            while ((line = reader.readLine()) != null)
+
+            {
+                // AAPL",245.29,245.10,124.55,272.46,+12.76
+                String[] parts = line.split(",");
+                String ticker = parts[0].replace("\"", ""); // replaceAll didn't work!! Will do regex later
+                String[] change = parts[4].replace("\"", "").split("-");
+                String priceChangeStr = change[0].trim();
+                String percentChangeStr = change[1].trim();
+                Log.i(TAG, "(ticker,last)=>(" + ticker + "," + parts[1] + "," + parts[2]
+                        + "," + parts[3]
+                        + "," + priceChangeStr
+                        + "," + percentChangeStr
+                        + ")");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public YahooEquityPricingInformationFeed() {
 
@@ -59,7 +108,7 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                     while ((line = reader.readLine()) != null) {
                         // AAPL",245.29,245.10,124.55,272.46,+12.76
                         String[] parts = line.split(",");
-                        String ticker = parts[0].replace("\"",""); // replaceAll didn't work!! Will do regex later
+                        String ticker = parts[0].replace("\"", ""); // replaceAll didn't work!! Will do regex later
 
                         Log.i(TAG, "TICKER:" + ticker);
                         Log.i(TAG, line);
