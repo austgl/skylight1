@@ -1,6 +1,8 @@
 package skylight1.marketapp;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import roboguice.activity.GuiceActivity;
+import roboguice.activity.GuiceListActivity;
 import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
@@ -23,18 +26,22 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 
-public class WatchListActivity extends GuiceActivity {
-    @Inject
-    private EquityPricingInformationFeed equityPricingInformationFeed;
+public class WatchListActivity extends GuiceListActivity {
+    private static final String TAG = WatchListActivity.class.getSimpleName();
 
     @Inject
-    private MarketDatabase marketDatabase;
+    public EquityPricingInformationFeed equityPricingInformationFeed;
 
-    @InjectView(R.id.tempTickerName)
-    private TextView textView;
+    @Inject
+    public MarketDatabase marketDatabase;
+
+//    @InjectView(R.id.tempTickerName) public TextView textView;
+
     ListView dbView;
-    ArrayAdapter<EquityPricingInformation> aa;
+//    ArrayAdapter<EquityPricingInformation> aa;
+    ArrayAdapter<String> aa;
     ArrayList<EquityPricingInformation> MarketTable = new ArrayList<EquityPricingInformation>();
+    private static String[] tickerList = {"AAPL", "MSFT", "GOOG"};
 
     /**
      * Called when the activity is first created.
@@ -43,10 +50,21 @@ public class WatchListActivity extends GuiceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.watchlist);
+//        EquityPricingInformation eq1 = new EquityPricingInformation("AAPL", "AAPL", new BigDecimal(50), new BigDecimal(100000), new Date(), new BigDecimal(40), new BigDecimal(120000), new Date());
+//        MarketTable.add(eq1);
         dbView = (ListView) this.findViewById(R.layout.epidb);
         int layoutID = android.R.layout.simple_list_item_1;
-        aa = new ArrayAdapter<EquityPricingInformation>(this, layoutID, MarketTable);
-        //dbView.setAdapter(aa);
+//        aa = new ArrayAdapter<EquityPricingInformation>(this, layoutID, tickerList);
+        aa = new ArrayAdapter<String>(this, layoutID, tickerList);
+        if (aa == null) {
+            Log.e(TAG, "NULL ArrayAdapter");
+        } else {
+          //  dbView.setAdapter(aa);
+             setListAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                tickerList));
+        }
+
 
     }
 
@@ -65,7 +83,7 @@ public class WatchListActivity extends GuiceActivity {
                         EquityPricingInformation equityPricingInformation = aSetOfEquityPricingInformation.iterator().next();
                         Log.i(WatchListActivity.class.getName(), equityPricingInformation.getTicker());
                         try {
-                            textView.setText(String.format("%s = %f", equityPricingInformation.getTicker(), equityPricingInformation.getLastPrice()));
+//                            textView.setText(String.format("%s = %f", equityPricingInformation.getTicker(), equityPricingInformation.getLastPrice()));
                         } catch (Exception e) {
                             Log.i(WatchListActivity.class.getName(), "exception!", e);
                         }
