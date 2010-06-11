@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import com.sun.jndi.dns.DnsName;
 
 import java.util.*;
 
