@@ -7,6 +7,8 @@ package skylight1.marketapp;
  * Time: 8:28:03 PM
  */
 public class PortfolioItem {
+    private static final String TAG = PortfolioItem.class.getSimpleName();
+
     public String getAveragePriceStr() {
         return averagePriceStr;
     }
