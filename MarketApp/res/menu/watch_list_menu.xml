@@ -5,18 +5,8 @@
         <item android:id="@+id/add_watch_ticker"
               android:title="Add Ticker"/>
 
-
-        <item android:id="@+id/mid_polygon"
-              android:title="polygon"/>
-
-
-        <item android:id="@+id/mid_square_polygon"
-              android:title="Feras Test"/>
-
-
-        <item android:id="@+id/mid_rectangle"
-              android:title="Tower Defense"/>
-
+        <item android:id="@+id/refresh_prices"
+              android:title="Refresh Prices"/>
 
         <item android:id="@+id/menu_clear"
               android:title="clear"/>

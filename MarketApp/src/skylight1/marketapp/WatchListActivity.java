@@ -3,6 +3,10 @@ package skylight1.marketapp;
 import java.util.ArrayList;
 import java.util.Set;
 
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import roboguice.activity.GuiceActivity;
 import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.EquityFeedObserver;
@@ -87,7 +91,28 @@ public class WatchListActivity extends GuiceActivity {
             //Notify the array adapter of a change.
             aa.notifyDataSetChanged();
         }
-
     }
-}//end of class
-	
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.add_watch_ticker) {
+            Intent intent = new Intent(WatchListActivity.this, AddWatchListTickerActivity.class);
+            startActivity(intent);
+
+        } else if (item.getItemId() == R.id.refresh_prices) {
+            Log.i("FOO", "Clicked mid_OpenGL_AnimatedTriangle15 II");
+
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu
+            menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.watch_list_menu, menu);
+
+        return true;
+    }
+}	

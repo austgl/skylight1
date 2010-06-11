@@ -1,6 +1,5 @@
 package skylight1.marketapp;
 
-import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,27 +74,27 @@ public class MarketAppHomeActivity extends GuiceActivity {
         });
     }
 
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.add_watch_ticker) {
-            Log.i("FOO", "Clicked mid_OpenGL_AnimatedTriangle15 II");
             Intent intent = new Intent(MarketAppHomeActivity.this, AddWatchListTickerActivity.class);
             startActivity(intent);
 
-        } else if (item.getItemId() == R.id.mid_rectangle) {
-            Log.i("FOO", "Clicked mid_OpenGL_AnimatedTriangle15 II");
-//             setContentView(surface);
+        } else if (item.getItemId() == R.id.sync_cloud) {
+            Log.i("FOO", "Sync'ing with cloud");
 
         }
         return true;
     }
 
-    // @Override
-
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu1, menu);
+        inflater.inflate(R.menu.main_menu, menu);
 
         return true;
     }
+    
 }
