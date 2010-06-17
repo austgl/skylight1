@@ -34,26 +34,20 @@ public class MarketDatabase extends ContentProvider {
     public static final int REAL_TIME_COLUMN = 3;
     public static final int BID_TIME_COLUMN = 4;
     private Set<String> watchList = new HashSet<String>();
+    private SQLiteDatabase marketDB;
 
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
         int count;
-        try {
-            count = marketDB.delete(MARKET_TABLE, where, whereArgs);
-            String segment = uri.getPathSegments().get(1);
-            count = marketDB.delete(MARKET_TABLE, KEY_ID + "="
-                    + segment
-                    + (!TextUtils.isEmpty(where) ? " AND ("
-                    + where + ')' : ""), whereArgs);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Unsupported URI: " + uri);
-        }
+        count=marketDB.delete(MARKET_TABLE, where, whereArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
+           
         return count;
     }
 
     @Override
     public String getType(Uri uri) {
-        return "vnd.android.cursor.dir/vnd.skylight1.market.provider.MarketDB.dbMarket.";
+        return "vnd.android.cursor.dir/vnd.skylight1.market.provider.EquityPricingInformation";
 
     }
 
@@ -90,6 +84,9 @@ public class MarketDatabase extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(MARKET_TABLE);
+   //   this is a row query,limit the result set to the passed in a row.
+       qb.appendWhere(KEY_ID+"="+uri.getPath());
+       
         // If no sort order is specified sort by date / time
         String orderBy;
         if (TextUtils.isEmpty(sortOrder)) {
@@ -112,32 +109,24 @@ public class MarketDatabase extends ContentProvider {
     public int update(Uri uri, ContentValues values, String where,
                       String[] whereArgs) {
         int count;
-        try {
-            String segment = uri.getPathSegments().get(1);
-            count = marketDB.update(MARKET_TABLE, values, KEY_ID
-                    + "=" + segment
-                    + (!TextUtils.isEmpty(where) ? " AND ("
-                    + where + ')' : ""), whereArgs);
-        }
-        catch (Exception e) {
-            throw new IllegalArgumentException("Unknown URI " + uri);
-        }
+                    
+            count = marketDB.update(MARKET_TABLE, values, where,whereArgs);
+               getContext().getContentResolver().notifyChange(uri, null) ;   
         return count;
     }
 
-    private SQLiteDatabase marketDB;
+  
 
     private static class marketDatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE =
                 "create table " + MARKET_TABLE + "(" + KEY_ID + " integer primary key autoincrement, "
-                        + KEY_DATE + " LONG, "
-                        + KEY_SYMBOL + " TEXT );";
+                                                + KEY_SYMBOL + " TEXT"+KEY_B2+"STRING" ;
 
 
         public marketDatabaseHelper(Context context, String name,
                                     CursorFactory factory, int version) {
             super(context, name, factory, version);
-            // TODO Auto-generated constructor stub
+            
         }
 
         @Override
@@ -147,7 +136,7 @@ public class MarketDatabase extends ContentProvider {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // TODO Auto-generated method stub
+           
             Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS " + MARKET_TABLE);
