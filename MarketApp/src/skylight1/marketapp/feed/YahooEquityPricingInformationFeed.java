@@ -125,6 +125,6 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                     Log.e(TAG, "Unable to get stock quotes", e);
                 }
             }
-        }, 5000, 60000);
+        }, 1000, 5000);
     }
 }

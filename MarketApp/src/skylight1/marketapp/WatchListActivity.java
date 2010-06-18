@@ -1,17 +1,13 @@
 package skylight1.marketapp;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
+import android.content.Context;
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import roboguice.activity.GuiceActivity;
+import android.graphics.Color;
+import android.view.*;
+import android.widget.*;
 import roboguice.activity.GuiceListActivity;
-import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
 import skylight1.marketapp.model.EquityPricingInformation;
@@ -20,14 +16,104 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.inject.Inject;
 
 public class WatchListActivity extends GuiceListActivity {
+
+    private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
+        private LayoutInflater mInflater;
+
+
+        public EfficientAdapter(Context context, List<EquityPricingInformation> anEquitiyPricingInformationList) {
+
+            super(context, R.layout.list_item_icon_text, anEquitiyPricingInformationList);
+            // Cache the LayoutInflate to avoid asking for a new one each time.
+            mInflater = LayoutInflater.from(context);
+
+            // Icons bound to the rows.
+        }
+
+
+        /*   *//**
+         * The number of items in the list is determined by the number of speeches
+         * in our array.
+         *
+         * @see android.widget.ListAdapter#getCount()
+         *//*
+        public int getCount() {
+            return watchListItems.size();
+        }
+
+        *//**
+         * Since the data comes from an array, just returning the index is
+         * sufficent to get at the data. If we were using a more complex data
+         * structure, we would return whatever object represents one row in the
+         * list.
+         *
+         * @see android.widget.ListAdapter#getItem(int)
+         *//*
+        public Object getItem(int position) {
+            return position;
+        }
+
+        *//**
+         * Use the array index as a unique id.
+         *
+         * @see android.widget.ListAdapter#getItemId(int)
+         *//*
+        public long getItemId(int position) {
+            return position;
+        }
+*/
+
+        /**
+         * Make a view to hold each row.
+         *
+         * @see android.widget.ListAdapter#getView(int, android.view.View,
+         *      android.view.ViewGroup)
+         */
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // A ViewHolder keeps references to children views to avoid unneccessary calls
+            // to findViewById() on each row.
+
+            // When convertView is not null, we can reuse it directly, there is no need
+            // to re-inflate it. We only inflate a new View when the convertView supplied
+            // by ListView is null.
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.list_item_icon_text, null);
+            }
+
+            TextView tickerTextView = (TextView) convertView.findViewById(R.id.ticker);
+            TextView avgPriceTextView = (TextView) convertView.findViewById(R.id.avgPrice);
+            TextView numberOfSharesTextView = (TextView) convertView.findViewById(R.id.numberOfShares);
+            TextView currentPriceTextView = (TextView) convertView.findViewById(R.id.currentPrice);
+
+            // Bind the data efficiently with the holder.
+            avgPriceTextView.setTextColor(Color.GREEN);
+            final EquityPricingInformation item = getItem(position);
+            tickerTextView.setText(item.getTicker());
+            avgPriceTextView.setText(item.getLastPrice().toString());
+            numberOfSharesTextView.setText("Tim");
+            currentPriceTextView.setText("100.0");
+
+
+            return convertView;
+        }
+
+/*
+        static class ViewHolder {
+            TextView tickerTextView;
+            TextView avgPriceTextView;
+            TextView numberOfSharesTextView;
+            TextView currentPriceTextView;
+        }
+*/
+    }
+
     private static final String TAG = WatchListActivity.class.getSimpleName();
+
+    private Map<String, EquityPricingInformation> tickerToEquityPricingInformationMap = new HashMap<String, EquityPricingInformation>();
 
     @Inject
     public EquityPricingInformationFeed equityPricingInformationFeed;
@@ -39,9 +125,10 @@ public class WatchListActivity extends GuiceListActivity {
 
     ListView dbView;
 //    ArrayAdapter<EquityPricingInformation> aa;
-    ArrayAdapter<String> aa;
+    ArrayAdapter<EquityPricingInformation> aa;
+//    ListAdapter bb;
     ArrayList<EquityPricingInformation> MarketTable = new ArrayList<EquityPricingInformation>();
-    private static String[] tickerList = {"AAPL", "MSFT", "GOOG"};
+//    private static String[] tickerList = {"AAPL", "MSFT", "GOOG"};
 
     /**
      * Called when the activity is first created.
@@ -53,18 +140,14 @@ public class WatchListActivity extends GuiceListActivity {
 //        EquityPricingInformation eq1 = new EquityPricingInformation("AAPL", "AAPL", new BigDecimal(50), new BigDecimal(100000), new Date(), new BigDecimal(40), new BigDecimal(120000), new Date());
 //        MarketTable.add(eq1);
         dbView = (ListView) this.findViewById(R.layout.epidb);
-        int layoutID = android.R.layout.simple_list_item_1;
+//        int layoutID = android.R.layout.simple_list_item_1;
 //        aa = new ArrayAdapter<EquityPricingInformation>(this, layoutID, tickerList);
-        aa = new ArrayAdapter<String>(this, layoutID, tickerList);
-        if (aa == null) {
-            Log.e(TAG, "NULL ArrayAdapter");
-        } else {
-          //  dbView.setAdapter(aa);
-             setListAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                tickerList));
-        }
+//        Set<String> tickerList = marketDatabase.getWatchListTickers();
 
+        aa = new EfficientAdapter(this, new ArrayList<EquityPricingInformation>());
+
+        //  dbView.setAdapter(aa);
+        setListAdapter(aa);
 
     }
 
@@ -80,36 +163,60 @@ public class WatchListActivity extends GuiceListActivity {
                     @Override
                     public void run() {
                         Log.i(WatchListActivity.class.getName(), "Updating watchList UI on UI Thread!!!");
-                        EquityPricingInformation equityPricingInformation = aSetOfEquityPricingInformation.iterator().next();
-                        Log.i(WatchListActivity.class.getName(), equityPricingInformation.getTicker());
-                        try {
-//                            textView.setText(String.format("%s = %f", equityPricingInformation.getTicker(), equityPricingInformation.getLastPrice()));
-                        } catch (Exception e) {
-                            Log.i(WatchListActivity.class.getName(), "exception!", e);
+                        for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
+                            final String ticker = equityPricingInformation.getTicker();
+                            Log.i(TAG, ticker);
+                            if (tickerToEquityPricingInformationMap.containsKey(ticker)) {
+                                aa.remove(tickerToEquityPricingInformationMap.get(ticker));
+                            }
+
+                            aa.add(equityPricingInformation);
+                            aa.notifyDataSetChanged();  // Let view know data set has changed
+                            tickerToEquityPricingInformationMap.put(ticker, equityPricingInformation);
+                            addEquityPricingInformation(equityPricingInformation);
                         }
                     }
                 });
             }
         };
+        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver,
-                marketDatabase.getWatchListTickers());
+                watchListTickers);
+//        watchListTickers.
     }
+
+    /*
+     * Add pricing information to the database
+     */
 
     private void addEquityPricingInformation(EquityPricingInformation epi) {
         ContentResolver cr = getContentResolver();
-        String w = MarketDatabase.KEY_SYMBOL + "=" + epi.getTicker();
-        Cursor c = cr.query(MarketDatabase.CONTENT_URI, null, w, null, null);
-        int dbCount = c.getCount();
-        c.close();
-        if (dbCount > 0) {
-            ContentValues values = new ContentValues();
-            values.put(MarketDatabase.KEY_SYMBOL, epi.getTicker());
-            cr.insert(MarketDatabase.CONTENT_URI, values);
+        String whereClause = MarketDatabase.KEY_SYMBOL + "='" + epi.getTicker() + "'";
+        // Check to see if ticker exists
+        Log.i(TAG, "where=" + whereClause);
+        Cursor c = cr.query(MarketDatabase.CONTENT_URI, null, whereClause, null, null);
+        int dbCount;
+        
+        if (c != null) {
+             dbCount = c.getCount();
+            c.close();
+        } else {
+            dbCount = 0;
+        }
+        ContentValues values = new ContentValues();
+        values.put(MarketDatabase.KEY_SYMBOL, epi.getTicker());
+
+        if (dbCount > 0) { // Then ticker exists so update
+
+            cr.update(MarketDatabase.CONTENT_URI, values, whereClause, null);
             MarketTable.add(epi);
-            //Notify the array adapter of a change.
-            aa.notifyDataSetChanged();
+
+        } else {
+            cr.insert(MarketDatabase.CONTENT_URI, values);
+            // TODO: Insert ticker
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
