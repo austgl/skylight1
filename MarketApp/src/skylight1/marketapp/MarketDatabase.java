@@ -26,8 +26,8 @@ public class MarketDatabase extends ContentProvider {
     public static final String KEY_ID = "_id";
     public static final String KEY_DATE = "date";
     public static final String KEY_SYMBOL = "symbol";
-    public static final String KEY_B2 = "ask real-time";
-    public static final String KEY_B3 = "bid real-time";
+    public static final String KEY_B2 = "ask_real_time";
+    public static final String KEY_B3 = "bid_real_time";
     // Column indexes
     public static final int DATE_COLUMN = 1;
     public static final int SYMBOL_COLUMN = 2;
@@ -119,8 +119,9 @@ public class MarketDatabase extends ContentProvider {
 
     private static class marketDatabaseHelper extends SQLiteOpenHelper {
         private static final String DATABASE_CREATE =
-                "create table " + MARKET_TABLE + "(" + KEY_ID + " integer primary key autoincrement, "
-                                                + KEY_SYMBOL + " TEXT"+KEY_B2+"STRING" ;
+            "create table " + MARKET_TABLE + "(" + KEY_ID + " integer primary key autoincrement, "
+            + KEY_DATE + " LONG, "
+            + KEY_SYMBOL + " TEXT );";
 
 
         public marketDatabaseHelper(Context context, String name,
@@ -131,6 +132,7 @@ public class MarketDatabase extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+        	Log.i(TAG,"Create database: " + DATABASE_CREATE);
             db.execSQL(DATABASE_CREATE);
         }
 
