@@ -28,8 +28,13 @@ public class MarketAppWebServlet extends HttpServlet {
         try {
             // First clear out any from previous session:
             String query = "select from " + WatchListItem.class.getName();
+            List<WatchListItem> items = (List<WatchListItem>) pm.newQuery(query).execute();
+            pm.deletePersistentAll(items);
+
+            query = "select from " + WatchList.class.getName();
             List<WatchList> lists = (List<WatchList>) pm.newQuery(query).execute();
             pm.deletePersistentAll(lists);
+            
             WatchList wl = new WatchList("Tech Stocks","aardvark");
             wl.getItems().add(new WatchListItem("goog"));
             wl.getItems().add(new WatchListItem("msft"));
@@ -41,6 +46,7 @@ public class MarketAppWebServlet extends HttpServlet {
             wl.getItems().add(new WatchListItem("XOM"));
             wl.getItems().add(new WatchListItem("goog"));
             pm.makePersistent(wl);
+
         } finally {
             pm.close();
         }
