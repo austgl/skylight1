@@ -30,13 +30,13 @@ public class MarketAppWebServlet extends HttpServlet {
             String query = "select from " + WatchListItem.class.getName();
             List<WatchList> lists = (List<WatchList>) pm.newQuery(query).execute();
             pm.deletePersistentAll(lists);
-            WatchList wl = new WatchList("Tech Stocks");
+            WatchList wl = new WatchList("Tech Stocks","aardvark");
             wl.getItems().add(new WatchListItem("goog"));
             wl.getItems().add(new WatchListItem("msft"));
             wl.getItems().add(new WatchListItem("IBM"));
             pm.makePersistent(wl);
 
-            wl = new WatchList("Energy Stocks");
+            wl = new WatchList("Energy Stocks","aardvark");
             wl.getItems().add(new WatchListItem("BP"));
             wl.getItems().add(new WatchListItem("XOM"));
             wl.getItems().add(new WatchListItem("goog"));
@@ -47,7 +47,7 @@ public class MarketAppWebServlet extends HttpServlet {
         // Now pretend we're in another part of the app and we want to retrieve them:
         pm = PMF.get().getPersistenceManager();
         try {
-            String query = "select from " + WatchList.class.getName();
+            String query = "select from " + WatchList.class.getName() + " where user == 'aardvark'" ;
             List<WatchList> lists = (List<WatchList>) pm.newQuery(query).execute();
             for(WatchList l : lists) {
             	resp.getWriter().println("\nItems in " + l.getListName());
