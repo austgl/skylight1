@@ -14,6 +14,30 @@ import java.util.List;
  */
 public class EquityTimeSeries {
 
+    public Date getDate() {
+        return date;
+    }
+
+    public double getOpen() {
+        return open;
+    }
+
+    public double getHigh() {
+        return high;
+    }
+
+    public double getLow() {
+        return low;
+    }
+
+    public double getClose() {
+        return close;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
     private Date date;
     private double open;
     private double high;
