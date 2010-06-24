@@ -24,7 +24,9 @@
 			</intent-filter>
         </activity>
          <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"></provider>
+        <activity android:name=".CompanyDetails" android:label="CompanyDetails"/>
         <activity android:name=".CandleSticksActivity" android:label="CandleSticks"/>
+		
 </application>
 	<uses-sdk android:minSdkVersion="3" />
    
