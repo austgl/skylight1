@@ -21,6 +21,15 @@ public class CandleStick {
 	/** The bot right y. */
 	private int botRightY;
 	
+	/** The top. */
+	private int top;
+	
+	/** The bottom. */
+	private int bottom;
+	
+	/** The x. */
+	private int x;
+	
 	/** The color. */
 	private int color;
 	
@@ -159,6 +168,60 @@ public class CandleStick {
 	 */
 	public void setColor(int color) {
 		this.color = color;
+	}
+
+	/**
+	 * Gets the top.
+	 * 
+	 * @return the top
+	 */
+	public int getTop() {
+		return top;
+	}
+
+	/**
+	 * Sets the top.
+	 * 
+	 * @param top the new top
+	 */
+	public void setTop(int top) {
+		this.top = top;
+	}
+
+	/**
+	 * Gets the bottom.
+	 * 
+	 * @return the bottom
+	 */
+	public int getBottom() {
+		return bottom;
+	}
+
+	/**
+	 * Sets the bottom.
+	 * 
+	 * @param bottom the new bottom
+	 */
+	public void setBottom(int bottom) {
+		this.bottom = bottom;
+	}
+
+	/**
+	 * Gets the x.
+	 * 
+	 * @return the x
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * Sets the x.
+	 * 
+	 * @param x the new x
+	 */
+	public void setX(int x) {
+		this.x = x;
 	}
 	
 }

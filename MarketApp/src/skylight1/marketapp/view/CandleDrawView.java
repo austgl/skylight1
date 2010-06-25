@@ -1,73 +1,289 @@
 package skylight1.marketapp.view;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.view.View;
 import java.io.*;
 
-//import android.content.Context;
+import skylight1.marketapp.EquityTimeSeries;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CandleDrawView.
+ */
 public class CandleDrawView extends View{
-	private HashMap candleMap;
-	private ShapeDrawable mDrawable1, mDrawable2, mDrawable;
-	private int x, y, width,height;
+	
+	/** The max high. */
+	double maxHigh;
+	
+	/** The min low. */
+	double minLow;
+	
+	/** The Constant CFACTOR. */
+	static final double CFACTOR =0.7;  
+	
+	/** The Constant MARGIN1. */
+	static final int MARGIN1=40;
+	
+	/** The Constant MARGIN2. */
+	static final int MARGIN2=30;
+	
+	/** The Constant MARGIN3. */
+	static final int MARGIN3=20;
+	
+	/** The Constant NUMPRICE. */
+	static final int NUMPRICE=10;
+    
+    /**
+     * Instantiates a new candle draw view.
+     * 
+     * @param context the context
+     */
     public CandleDrawView(Context context) {
         super(context);
-        x = 10;
-        y = 200;
-        width = 10;
-        height = 100;
-
-        mDrawable1 = new ShapeDrawable();//new OvalShape());
-        mDrawable1.getPaint().setColor(0xff74AC23);
-        mDrawable1.setBounds(x, y, x + width, y + height);
-        mDrawable2 = new ShapeDrawable();//new OvalShape());
-        mDrawable2.getPaint().setColor(0xFFFF0000);
-        mDrawable2.setBounds(x+15, y+5, x + 15+ width, y +5+height);
-        
     }
-    public List<CandleData> getDummyCandleData(){	
-    	List candleDataList = new ArrayList<CandleData>();
+    
+    /**
+     * Gets the max high.
+     * 
+     * @return the max high
+     */
+    public double getMaxHigh() {
+		return maxHigh;
+	}
+	
+	/**
+	 * Sets the max high.
+	 * 
+	 * @param maxHigh the new max high
+	 */
+	public void setMaxHigh(double maxHigh) {
+		this.maxHigh = maxHigh;
+	}
+	
+	/**
+	 * Gets the min low.
+	 * 
+	 * @return the min low
+	 */
+	public double getMinLow() {
+		return minLow;
+	}
+	
+	/**
+	 * Sets the min low.
+	 * 
+	 * @param minLow the new min low
+	 */
+	public void setMinLow(double minLow) {
+		this.minLow = minLow;
+	}
+	
+	/**
+	 * Gets the candle sticks.
+	 * 
+	 * @param candleDataList the candle data list
+	 * @param rect the rect
+	 * 
+	 * @return the candle sticks
+	 */
+	public List<CandleStick> getCandleSticks(List<EquityTimeSeries> candleDataList, Rect rect){
+    	List<CandleStick> candleStickList = new ArrayList<CandleStick>();
+    
+    	setMaxHigh(Collections.max(candleDataList, new highSort()).getHigh());
+    	setMinLow(Collections.min(candleDataList, new lowSort()).getLow());
+    	int num = candleDataList.size();
+    	Iterator<EquityTimeSeries> itr = candleDataList.iterator(); 
+    	int i=0;
+    	int width=rect.width()/num;
+    	while(itr.hasNext()) {
+    	    EquityTimeSeries candleData = (EquityTimeSeries)itr.next(); 
+    	    CandleStick candleStick = getCandleStick(candleData,getMaxHigh(),getMinLow(),rect,width, num,i);
+    	    i++;
+    	    candleStickList.add(candleStick);
+    	} 
     	
-    	String[] candleStr={"7/1/2009	105	106.27	104.73	104.84",	
-    	"6/30/2009	105.69	106.03	103.81	104.42",	
-    	"6/29/2009	105.99	106.18	105.16	105.83",	
-    	"6/26/2009	106.5	106.5	105.05	105.68",	
-    	"6/25/2009	103.7	106.79	103.51	106.06",
-    	"6/24/2009	105.39	106.48	103.72	104.15",	
-    	"6/23/2009	104.75	104.87	103.79	104.44",	
-    	"6/22/2009	105.18	105.88	104.23	104.52",
-    	"6/19/2009	106.31	106.65	105.5	105.89",
-    	"6/18/2009	106.93	107.53	106.12	106.33"};	
-    	for (int i=0;i<10;i++){
-    		 String[] result = candleStr[i].split("\t");
-    		 CandleData candleData = new CandleData();
-    	     candleData.setDate(result[0]);
-    	     candleData.setOpen(Float.valueOf(result[1]));
-    	     candleData.setHigh(Float.valueOf(result[2]));
-    	     candleData.setLow(Float.valueOf(result[3]));
-    	     candleData.setClose(Float.valueOf(result[4]));
-    	     if (candleData.getClose()>candleData.getOpen()){
-    	    	 candleData.setBull(true);
-    	     }
-    	     candleDataList.add(candleData);
-    	}
-    	return candleDataList;
+    	return candleStickList;
     }
-   
+    
+    /**
+     * Gets the candle stick.
+     * 
+     * @param candleData the candle data
+     * @param max the max
+     * @param min the min
+     * @param rect the rect
+     * @param width the width
+     * @param num the num
+     * @param ind the ind
+     * 
+     * @return the candle stick
+     */
+    public  CandleStick getCandleStick(EquityTimeSeries candleData,double max,double min,Rect rect, int width,int num, int ind){
+    	CandleStick candleStick = new CandleStick();
+  
+    	int x=rect.left+ind*width;
+    	candleStick.setTopLeftX(x-(int)(width*CFACTOR/2));
+    	candleStick.setBotRightX(x+(int)(width*CFACTOR/2));
+    	int topLeftY,botRightY, top, bot;
+    	int height = rect.bottom-rect.top;
+    	
+		topLeftY = (int)(((candleData.getClose()-min)*height)/(min-max)+ rect.bottom);	
+		botRightY= (int)(((candleData.getOpen()-min)*height)/(min-max)+ rect.bottom);
+		top = (int)(((candleData.getHigh()-min)*height)/(min-max)+ rect.bottom);	
+		bot= (int)(((candleData.getLow()-min)*height)/(min-max)+ rect.bottom);
+		
+		if (botRightY>topLeftY){
+			candleStick.setTopLeftY(topLeftY);
+			candleStick.setBotRightY(botRightY);
+		}else{
+			candleStick.setTopLeftY(botRightY);
+			candleStick.setBotRightY(topLeftY);
+		}
+		candleStick.setTop(top);
+		candleStick.setBottom(bot);
+		candleStick.setX(x);
+		if (candleData.getClose()>candleData.getOpen()){
+			candleStick.setColor(Color.GREEN);
+		}else{
+			candleStick.setColor(Color.RED);
+		}
+		candleStick.setDate(candleData.getDate());
+    	return candleStick;
+    }
+    
+    /**
+     * Gets the new rect.
+     * 
+     * @param canvas the canvas
+     * 
+     * @return the new rect
+     */
+    protected Rect getNewRect(Canvas canvas) {
+    	Rect rect = canvas.getClipBounds();
+    	Rect newRect = new Rect();
+    	newRect.top=rect.top+MARGIN1;
+    	newRect.bottom=rect.bottom-MARGIN1;
+    	newRect.left=rect.left+MARGIN1;
+    	newRect.right=rect.right-MARGIN1;
+    	return newRect;
+    }
+    
+    /**
+     * Draw enclosure.
+     * 
+     * @param canvas the canvas
+     * @param newRect the new rect
+     */
+    protected void drawEnclosure(Canvas canvas, Rect newRect) {
+    	NumberFormat nf= NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(2);
+    	ShapeDrawable mDrawable1 = new ShapeDrawable();
+    	mDrawable1.getPaint().setColor(Color.BLUE);
+     	canvas.drawLine(newRect.left-MARGIN2,newRect.bottom+MARGIN2,newRect.right+MARGIN2,newRect.bottom+MARGIN2,mDrawable1.getPaint());
+    	canvas.drawLine(newRect.left-MARGIN2,newRect.bottom+MARGIN2,newRect.left-MARGIN2,newRect.top-MARGIN2,mDrawable1.getPaint());
+    	canvas.drawLine(newRect.left-MARGIN2,newRect.top-MARGIN2,newRect.right+MARGIN2,newRect.top-MARGIN2,mDrawable1.getPaint());
+    	canvas.drawLine(newRect.right+MARGIN2,newRect.top-MARGIN2,newRect.right+MARGIN2,newRect.bottom+MARGIN2,mDrawable1.getPaint());
+    	int incr = newRect.height()/NUMPRICE;
+    	
+    	/*Draw prices */
+    	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+5,newRect.top, mDrawable1.getPaint());
+    	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+5,newRect.bottom, mDrawable1.getPaint());
+    	for (int i=0;i<=NUMPRICE;i++){
+    		canvas.drawLine(newRect.right+MARGIN2,newRect.top+incr*i, newRect.right+MARGIN2-2,newRect.top+incr*i,mDrawable1.getPaint());
+    		if (i>0 &&i<NUMPRICE& (i%2==0)){
+    			double price=getMaxHigh() - (getMaxHigh()-getMinLow())*i/NUMPRICE;
+    			canvas.drawText(nf.format(price),newRect.right-MARGIN3+5 ,newRect.top+incr*i, mDrawable1.getPaint());
+    		}
+    	}
+    }
+    
+    /**
+     * Draw candles.
+     * 
+     * @param canvas the canvas
+     * @param candleStickList the candle stick list
+     * @param newRect the new rect
+     */
+    protected void drawCandles(Canvas canvas, List<CandleStick> candleStickList, Rect newRect ) {
+    	ShapeDrawable  mDrawable;
+    	Iterator itr = candleStickList.iterator(); 
+    	int i=0;
+    	int num=candleStickList.size()/2;
+    	while(itr.hasNext()) {
+    		mDrawable = new ShapeDrawable();
+           i++;
+    		CandleStick candleStick = (CandleStick)itr.next();
+    		mDrawable.getPaint().setColor(candleStick.getColor());
+    		mDrawable.setBounds(candleStick.getTopLeftX(), candleStick.getTopLeftY(), 
+    				candleStick.getBotRightX(), candleStick.getBotRightY());
+
+    		mDrawable.draw(canvas);
+    	
+        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom(),mDrawable.getPaint());
+    
+        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-2,mDrawable.getPaint());
+        
+        if ((i%(num+1))==0){
+        	StringBuffer myDate= new StringBuffer();
+        	myDate.append(new SimpleDateFormat("MMM,yyyy").format(candleStick.getDate()));
+        	canvas.drawText(myDate.toString(),candleStick.getX() ,newRect.top-MARGIN2+10, mDrawable.getPaint());
+        }
+    	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-2 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+    	}
+    }
+    
+    /* (non-Javadoc)
+     * @see android.view.View#onDraw(android.graphics.Canvas)
+     */
     protected void onDraw(Canvas canvas) {
-    	mDrawable1.draw(canvas);
-    	canvas.drawLine(x+width/2, y-30, x+width/2,y+height+40,mDrawable1.getPaint());
-    	mDrawable2.draw(canvas);
-    	canvas.drawLine(x+15+width/2, y-20, x+15+width/2,y+height+40,mDrawable2.getPaint());
+    	ShapeDrawable  mDrawable;
+    	Rect rect = canvas.getClipBounds();
+    	List<EquityTimeSeries> candleDataList=EquityTimeSeries.dummyData();
+    	Rect newRect=getNewRect(canvas);
+    	List<CandleStick> candleStickList=getCandleSticks(candleDataList, newRect);
+    	drawEnclosure(canvas, newRect);
+    	drawCandles(canvas, candleStickList, newRect );
+    
+    }
+    
+    /**
+     * The Class highSort.
+     */
+    class highSort implements Comparator<EquityTimeSeries> {
+    	
+	    /* (non-Javadoc)
+	     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	     */
+	    public int compare(EquityTimeSeries one, EquityTimeSeries two){
+    	 return (new Double(one.getHigh())).compareTo(new Double(two.getHigh()));
+    	}
+    }
+    
+    /**
+     * The Class lowSort.
+     */
+    class lowSort implements Comparator<EquityTimeSeries> {
+    	
+	    /* (non-Javadoc)
+	     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	     */
+	    public int compare(EquityTimeSeries one, EquityTimeSeries two){
+    	 return (new Double(one.getLow())).compareTo(new Double(two.getLow()));
+    	}
     }
    
 }
