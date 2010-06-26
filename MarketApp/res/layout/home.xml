@@ -67,10 +67,10 @@ android:layout_y="230dp"
 android:id="@+id/pricingEngineText"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="Pricing Engine"
+android:text="Company Detail"
 android:textColor="#ff000000"
-android:layout_x="45dp"
-android:layout_y="365dp"
+android:layout_x="35dp"
+android:layout_y="360dp"
 >
 </TextView>
 <Button
