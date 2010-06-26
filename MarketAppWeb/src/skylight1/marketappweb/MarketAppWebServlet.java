@@ -72,6 +72,7 @@ public class MarketAppWebServlet extends HttpServlet {
 		}
 		showAll(resp);
 		syncTests(resp);
+		clearAll(); // We won't leave anything behind in case we make incompatible changes to the structure
 	}
 	
 	private void clearAll() {
