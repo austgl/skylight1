@@ -61,7 +61,7 @@ public class MarketAppHomeActivity extends GuiceActivity {
         pricingEngineButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View aV) {
-                Intent intent = new Intent(MarketAppHomeActivity.this, PricingEngineActivity.class);
+                Intent intent = new Intent(MarketAppHomeActivity.this, CompanyDetail.class);
                 startActivity(intent);
             }
         });

@@ -4,7 +4,8 @@
     <group android:id="@+id/menuGroup_Portfolio">
         <item android:id="@+id/add_position"
               android:title="Add Position"/>
-
+     <item android:id="@+id/Detail"
+              android:title="Detail"/>
 
         <item android:id="@+id/sync_cloud"
               android:title="Cloud Sync"/>

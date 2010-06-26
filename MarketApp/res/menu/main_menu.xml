@@ -4,8 +4,7 @@
     <group android:id="@+id/menuGroup_Main">
         <item android:id="@+id/add_watch_ticker"
               android:title="Add Ticker"/>
-
-
+              
         <item android:id="@+id/sync_cloud"
               android:title="Cloud Sync"/>
 

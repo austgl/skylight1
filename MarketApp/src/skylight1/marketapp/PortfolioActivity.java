@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -18,17 +19,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 /**
  * Created by IntelliJ IDEA. User: melling Date: May 20, 2010 Time: 7:57:45 PM
  */
 public class PortfolioActivity extends ListActivity {
 
 	private static final String TAG = PortfolioActivity.class.getSimpleName();
-	public static String ITEM_ID = "ID";
-	public static String TIKER = "TIKER";
-	public static String NUMBER_OF_SHARES = "NUMBER";
-	public static String CURRENT_PRICE = "PRICE";
-	public static String AVG_PRICE = "AVGPRICE";
+	public static final String ITEM_ID = "ID";
+	public static final String TIKER = "TIKER";
+	public static final String NUMBER_OF_SHARES = "NUMBER";
+	public static final String CURRENT_PRICE = "PRICE";
+	public static final String AVG_PRICE = "AVGPRICE";
+	
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
@@ -37,6 +41,7 @@ public class PortfolioActivity extends ListActivity {
 		menu.setHeaderTitle("Context Menu");
 		menu.add(0, v.getId(), 0, "Action 1");
 		menu.add(0, v.getId(), 0, "Action 2");
+		menu.add(0, v.getId(), 0, "Action 3");
 	}
 
 	// private static final String[] DATA = {"AAPL", "GOOG"};
@@ -103,7 +108,6 @@ public class PortfolioActivity extends ListActivity {
 			if (convertView == null) {
 				convertView = mInflater.inflate(R.layout.list_item_icon_text,
 						null);
-
 				// Creates a ViewHolder and store references to the two children
 				// views
 				// we want to bind data to.
@@ -186,9 +190,16 @@ public class PortfolioActivity extends ListActivity {
 			Log.i(TAG, "Refreshing portfolio prices");
 
 		}
+		else if (item.getItemId() == R.id.Detail) {
+			Log.i(TAG, "CompanyDetail");
+			Intent intent = new Intent(this, CompanyDetail.class);
+			startActivity(intent);
+
+		}
 		return true;
 	}
 
+	
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		TextView ticker = (TextView) v.findViewById(R.id.ticker);
@@ -215,8 +226,7 @@ public class PortfolioActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.portfolio_menu, menu);
-
+		inflater.inflate(R.menu.portfolio_menu, menu);			
 		return true;
 	}
 
