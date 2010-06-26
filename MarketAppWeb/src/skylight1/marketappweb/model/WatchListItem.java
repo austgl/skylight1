@@ -24,7 +24,7 @@ public class WatchListItem implements Comparable<WatchListItem> {
     private String ticker;  
     
     @Persistent
-	private Boolean deleted;
+	private boolean deleted;
 	
     @Persistent
 	private Date lastEdited;
@@ -47,11 +47,12 @@ public class WatchListItem implements Comparable<WatchListItem> {
 		return ticker;
 	}
 	
-	public Boolean getDeleted() {
+	public boolean getDeleted() {
 		return deleted;
 	}
 	
-	public void setDeleted(Boolean deleted) {
+	public void setDeleted(boolean deleted) {
+		lastEdited = new Date(); // let's do this in case someone forgets
 		this.deleted = deleted;
 	}
 	
@@ -70,7 +71,7 @@ public class WatchListItem implements Comparable<WatchListItem> {
 	}
 	
 	/**
-	 * If we had only one watch list, the ticker would make a good primary key. But since 
+	 * If we had only one watch list (and one user), the ticker would make a good primary key. But since 
 	 * we'll want to allow the same stock in multiple watch lists, we'll need some other 
 	 * way to keep a single entry for any given ticker within a watch list. So let's
 	 * try this and keep an owned SortedSet of these in each watch list.
@@ -80,4 +81,18 @@ public class WatchListItem implements Comparable<WatchListItem> {
 		return ticker.compareToIgnoreCase(wli.getTicker());
 	}
 
+	@Override 
+	public boolean equals(Object that) {
+	    if ( this == that ) 
+	    	return true;
+	    if ( !(that instanceof WatchListItem) )
+	    	return false;
+	    return ticker.equals(((WatchListItem)that).getTicker()); 
+	  }
+
+	@Override
+	public int hashCode() {
+		return ticker.hashCode();
+	}
+	
 }
