@@ -12,7 +12,7 @@ import javax.servlet.http.*;
 import skylight1.marketappweb.model.*;
 
 @SuppressWarnings({"unchecked","serial"})
-public class SyncServlet extends HttpServlet {
+public class SyncServletJava extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
