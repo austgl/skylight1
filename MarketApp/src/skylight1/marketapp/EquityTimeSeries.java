@@ -58,7 +58,7 @@ public class EquityTimeSeries {
      * Constructor that dates the Date as a string.
      */
 
-    private EquityTimeSeries(String date, double open, double high, double low, double close, int volume) {
+    public EquityTimeSeries(String date, double open, double high, double low, double close, int volume) {
         this.date = extractDate(date);
         this.open = open;
         this.high = high;
