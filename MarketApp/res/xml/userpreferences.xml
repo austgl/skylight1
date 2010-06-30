@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/skylight1.marketapp"
+        >
+    <ListPreference
+            android:key="PREF_PRICE_REFRESH"
+            android:title="Equity Refresh Time"
+            android:summary="Frequency of Price Updates"
+            android:entries="@array/price_refresh_option"
+            android:entryValues="@array/price_refresh_values"
+            android:dialogTitle="Price Refresh"
+            android:defaultValue="60"
+            />
+    <CheckBoxPreference
+            android:key="PREF_WATCHLIST_CLOUD_BACKUP"
+            android:title="Watchlist Cloud Backup"
+            android:summary="Backup watchlists to cloud"
+            android:defaultValue="false"
+            />
+    <CheckBoxPreference
+            android:key="PREF_PORTFOLIO_CLOUD_BACKUP"
+            android:title="Portfolio Cloud Backup"
+            android:summary="Backup portfolios to cloud"
+            android:defaultValue="false"
+            />
+
+</PreferenceScreen>

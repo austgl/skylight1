@@ -84,6 +84,12 @@ public class MarketAppHomeActivity extends GuiceActivity {
 
         } else if (item.getItemId() == R.id.sync_cloud) {
             Log.i("FOO", "Sync'ing with cloud");
+        } else if (item.getItemId() == R.id.helpMenu) {
+            Intent intent = new Intent(MarketAppHomeActivity.this, HelpActivity.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.preferenceMenu) {
+            Intent intent = new Intent(MarketAppHomeActivity.this, Preferences.class);
+            startActivity(intent);
 
         }
         return true;
@@ -96,5 +102,5 @@ public class MarketAppHomeActivity extends GuiceActivity {
 
         return true;
     }
-    
+
 }

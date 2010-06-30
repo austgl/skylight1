@@ -23,11 +23,13 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
         </activity>
-        <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"></provider>
+        <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"/>
         <activity android:name=".CompanyDetails" android:label="CompanyDetails"/>
         <activity android:name=".CandleSticksActivity" android:label="CandleSticks"/>
-        <activity android:name=".CompanyDetail" android:label="Detail"/>		
-</application>
+        <activity android:name=".CompanyDetail" android:label="Detail"/>
+        <activity android:name=".HelpActivity" android:label="Help"/>
+        <activity android:name=".Preferences" android:label="Preferences"/>
+    </application>
 	<uses-sdk android:minSdkVersion="3" />
    
 

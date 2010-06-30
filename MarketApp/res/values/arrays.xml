@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="price_refresh_option">
+        <item>Once a Minute</item>
+        <item>10 Minutes</item>
+        <item>30 Minutes</item>
+        <item>Manual</item>
+    </string-array>
+
+    <string-array name="price_refresh_values">
+        <item>60</item>
+        <item>600</item>
+        <item>18000</item>
+        <item>-1</item>
+    </string-array>
+</resources>

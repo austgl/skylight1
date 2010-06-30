@@ -4,11 +4,14 @@
     <group android:id="@+id/menuGroup_Main">
         <item android:id="@+id/add_watch_ticker"
               android:title="Add Ticker"/>
-              
+
         <item android:id="@+id/sync_cloud"
               android:title="Cloud Sync"/>
 
-        <item android:id="@+id/menu_clear"
-              android:title="clear"/>
+        <item android:id="@+id/preferenceMenu"
+              android:title="Preferences"/>
+
+        <item android:id="@+id/helpMenu"
+              android:title="Help"/>
     </group>
 </menu>
