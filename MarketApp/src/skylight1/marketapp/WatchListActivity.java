@@ -21,6 +21,8 @@ import com.google.inject.Inject;
 
 public class WatchListActivity extends GuiceListActivity {
 
+    EquityFeedObserver equityFeedObserver;
+
     private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
         private LayoutInflater mInflater;
 
@@ -151,10 +153,28 @@ public class WatchListActivity extends GuiceListActivity {
 
     }
 
+    /*
+     *
+     */
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
+
+        equityPricingInformationFeed.removeEquityForObserver(equityFeedObserver, watchListTickers);
+        Log.i(TAG, "Removing tickers");
+    }
+
+    /*
+    *
+    */
+
     @Override
     public void onResume() {
         super.onResume();
-        EquityFeedObserver equityFeedObserver = new EquityFeedObserver() {
+        equityFeedObserver = new EquityFeedObserver() {
 
             @Override
             public void equityPricingInformationUpdate(final Set<EquityPricingInformation> aSetOfEquityPricingInformation) {
@@ -196,9 +216,9 @@ public class WatchListActivity extends GuiceListActivity {
         Log.i(TAG, "where=" + whereClause);
         Cursor c = cr.query(MarketDatabase.CONTENT_URI, null, whereClause, null, null);
         int dbCount;
-        
+
         if (c != null) {
-             dbCount = c.getCount();
+            dbCount = c.getCount();
             c.close();
         } else {
             dbCount = 0;
@@ -212,7 +232,7 @@ public class WatchListActivity extends GuiceListActivity {
             MarketTable.add(epi);
 
         } else {
-            cr.insert(MarketDatabase.CONTENT_URI, values);
+//            cr.insert(MarketDatabase.CONTENT_URI, values);
             // TODO: Insert ticker
         }
     }
