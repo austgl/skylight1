@@ -1,17 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
 
     <TextView android:id="@+id/helpLine1"
               android:textColor="#ffffff00"
               android:layout_gravity="center_horizontal"
               android:layout_width="fill_parent"
-              android:layout_weight="1.0"
+              android:layout_weight="1. "
               android:layout_height="16dip"
               android:text="Watchlists"
             />
-    
+
+    <ImageView android:id="@+id/imagebutton"
+               android:src="@drawable/help_portfolio"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <Button android:id="@+id/previousHelpButton"
+                android:text="Previous"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                />
+        <Button android:id="@+id/nextHelpButton"
+                android:text="Next"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                />
+        <Button android:id="@+id/homeHelpButton"
+                android:text="Home"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                />
+    </LinearLayout>
 </LinearLayout>
