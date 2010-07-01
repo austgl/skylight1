@@ -35,7 +35,7 @@ public class MarketDatabase extends ContentProvider {
     public static final int BID_TIME_COLUMN = 4;
     private Set<String> watchList = new HashSet<String>();
     private SQLiteDatabase marketDB;
-
+    private SQLiteOpenHelper dbOpenHelper;
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
         int count;
@@ -72,9 +72,10 @@ public class MarketDatabase extends ContentProvider {
         Context context = getContext();
         marketDatabaseHelper dbHelper;
 
-        dbHelper = new marketDatabaseHelper(context, DATABASE_NAME,
+       this.dbOpenHelper = new marketDatabaseHelper(context, DATABASE_NAME,
                 null, DATABASE_VERSION);
-        marketDB = dbHelper.getWritableDatabase();
+        marketDB = dbOpenHelper.getWritableDatabase();
+        this.establishDb();
         return (marketDB == null) ? false : true;
 
     }
@@ -147,6 +148,25 @@ public class MarketDatabase extends ContentProvider {
 
     }//end of marketDatabaseHelper extends SQLiteOpenHelper
 
+    
+    private void establishDb(){
+    	if(this.dbOpenHelper==null){
+    		this.marketDB=this.dbOpenHelper.getWritableDatabase();
+    		//Our class  contains a member-variable reference to a
+    		// SQLiteDatabase object marketDB,it is used to open
+    		// database connections,to execute SQL statements.    		//
+    	}
+    }
+    
+    //cleanup method is used by callers who can invoke it when they pause
+    //in order to close connections.
+    
+    public void cleanup(){
+    	if(this.marketDB !=null){
+    		this.dbOpenHelper.close();
+    		this.marketDB=null;
+    	}
+    }
     public void addWatchListTicker(String aTicker) {
         watchList.add(aTicker);
     }
