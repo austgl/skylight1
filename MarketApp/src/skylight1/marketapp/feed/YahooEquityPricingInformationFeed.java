@@ -73,18 +73,19 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
             public void run() {
                 Set<EquityPricingInformation> setOfEquityPricingInformation = new HashSet<EquityPricingInformation>();
 
-                Log.i(YahooEquityPricingInformationFeed.class.getName(), "Yahoo we are");
+//                Log.i(YahooEquityPricingInformationFeed.class.getName(), "Yahoo we are");
 
                 try {
                     // Get all observed tickers
                     Set<String> allTickers = getTickers();
 
                     // return if no observed tickers
-                    Log.i(TAG, "Observed tickers:" + allTickers);
                     if (allTickers.isEmpty()) {
-                        Log.i(TAG, "No observed tickers");
+//                        Log.i(TAG, "No observed tickers");
                         return;
                     }
+                    // Only show message if we have observed tickers
+                    Log.i(TAG, "Observed tickers:" + allTickers);
 
                     // Contact Yahoo for pricing
                     StringBuffer tickerList = new StringBuffer();
@@ -120,13 +121,13 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                         Log.i(TAG, "Object not NULL?" + information);
                         setOfEquityPricingInformation.add(information);
                     }
-                    Log.i(TAG, "Notfiying everyone");
+                    Log.i(TAG, "Notifying everyone");
                     notifyObservers(setOfEquityPricingInformation);
                 } catch (Exception e) {
                     Log.e(TAG, "Unable to get stock quotes", e);
                 }
             }
-        }, 1000, 5000);
+        }, 1000, 10000);
     }
 
     /*

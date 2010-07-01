@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import roboguice.activity.GuiceActivity;
 import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
+import skylight1.marketapp.model.PortDbAdapter;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -38,10 +39,16 @@ public class AddWatchListTickerActivity extends GuiceActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
+                mDbHelper.open();
+
                 final String newTicker = newTickerTextView.getText().toString();
                 Log.i(TAG, "New Ticker is: " + newTicker);
                 marketDatabase.addWatchListTicker(newTicker);
                 newTickerTextView.setText("");
+
+                // mdm
+                mDbHelper.createPort(newTicker);
             }
 
         });

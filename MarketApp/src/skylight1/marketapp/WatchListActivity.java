@@ -18,10 +18,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.inject.Inject;
+import skylight1.marketapp.model.PortDbAdapter;
 
 public class WatchListActivity extends GuiceListActivity {
 
     EquityFeedObserver equityFeedObserver;
+    private PortDbAdapter mDbHelper;
 
     private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
         private LayoutInflater mInflater;
@@ -151,6 +153,12 @@ public class WatchListActivity extends GuiceListActivity {
         //  dbView.setAdapter(aa);
         setListAdapter(aa);
 
+
+        // melling's DB
+
+        mDbHelper = new PortDbAdapter(this);
+        mDbHelper.open();
+
     }
 
     /*
@@ -167,14 +175,32 @@ public class WatchListActivity extends GuiceListActivity {
         Log.i(TAG, "Removing tickers");
     }
 
+
+    private Set<String> loadTickersFromDatabase() {
+        Set<String> tickerSet = new HashSet<String>();
+
+        Cursor portfolioCursor = mDbHelper.fetchAllPorts();
+        startManagingCursor(portfolioCursor);
+
+        portfolioCursor.moveToFirst();
+        do {
+            int id = portfolioCursor.getInt(0);
+            String ticker = portfolioCursor.getString(1);
+            Log.i(TAG, id + "- " + ticker);
+            tickerSet.add(ticker);
+        } while (portfolioCursor.moveToNext());
+        return tickerSet;
+    }
     /*
     *
     */
 
     @Override
     public void onResume() {
+
         super.onResume();
         equityFeedObserver = new EquityFeedObserver() {
+
 
             @Override
             public void equityPricingInformationUpdate(final Set<EquityPricingInformation> aSetOfEquityPricingInformation) {
@@ -199,15 +225,17 @@ public class WatchListActivity extends GuiceListActivity {
                 });
             }
         };
-        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
+
+        final Set<String> watchListTickers =loadTickersFromDatabase();
+//        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver,
                 watchListTickers);
 //        watchListTickers.
     }
 
     /*
-     * Add pricing information to the database
-     */
+    * Add pricing information to the database
+    */
 
     private void addEquityPricingInformation(EquityPricingInformation epi) {
         ContentResolver cr = getContentResolver();
