@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	 android:background="@drawable/background">                                 
-	<TextView android:layout_width="fill_parent" android:id="@+id/alertTicker"
-		android:textColor="#ff000000" android:layout_height="wrap_content" android:text="alerts" />
+              android:orientation="vertical" android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@drawable/background">
+    <TextView android:layout_width="fill_parent" android:id="@+id/alertTicker"
+              android:textColor="#ff000000" android:layout_height="wrap_content" android:text="Ticker Alerts"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+        <Button android:id="@+id/saveTickersButton"
+                android:text="Save Watchlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        <Button android:id="@+id/loadTickersButton"
+                android:text="Load Watchlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+    </LinearLayout>
 </LinearLayout>
