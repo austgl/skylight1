@@ -29,9 +29,9 @@ public class WatchListActivity extends GuiceListActivity {
         private LayoutInflater mInflater;
 
 
-        public EfficientAdapter(Context context, List<EquityPricingInformation> anEquitiyPricingInformationList) {
+        public EfficientAdapter(Context context, List<EquityPricingInformation> anEquityPricingInformationList) {
 
-            super(context, R.layout.list_item_icon_text, anEquitiyPricingInformationList);
+            super(context, R.layout.list_item_icon_text, anEquityPricingInformationList);
             // Cache the LayoutInflate to avoid asking for a new one each time.
             mInflater = LayoutInflater.from(context);
 
@@ -78,7 +78,7 @@ public class WatchListActivity extends GuiceListActivity {
          *      android.view.ViewGroup)
          */
         public View getView(int position, View convertView, ViewGroup parent) {
-            // A ViewHolder keeps references to children views to avoid unneccessary calls
+            // A ViewHolder keeps references to children views to avoid unnecessary calls
             // to findViewById() on each row.
 
             // When convertView is not null, we can reuse it directly, there is no need
@@ -122,7 +122,7 @@ public class WatchListActivity extends GuiceListActivity {
     @Inject
     public EquityPricingInformationFeed equityPricingInformationFeed;
 
-    @Inject
+//    @Inject
     public MarketDatabase marketDatabase;
 
 //    @InjectView(R.id.tempTickerName) public TextView textView;
@@ -157,8 +157,8 @@ public class WatchListActivity extends GuiceListActivity {
         // melling's DB
 
         mDbHelper = new PortDbAdapter(this);
-        mDbHelper.open();
-
+//        mDbHelper.open();
+        marketDatabase = new MarketDatabase();
     }
 
     /*
@@ -179,16 +179,19 @@ public class WatchListActivity extends GuiceListActivity {
     private Set<String> loadTickersFromDatabase() {
         Set<String> tickerSet = new HashSet<String>();
 
+        mDbHelper.open();
         Cursor portfolioCursor = mDbHelper.fetchAllPorts();
         startManagingCursor(portfolioCursor);
 
-        portfolioCursor.moveToFirst();
-        do {
+        //   portfolioCursor.moveToFirst();
+        while (portfolioCursor.moveToNext()) {
             int id = portfolioCursor.getInt(0);
             String ticker = portfolioCursor.getString(1);
             Log.i(TAG, id + "- " + ticker);
             tickerSet.add(ticker);
-        } while (portfolioCursor.moveToNext());
+        }
+        mDbHelper.close();
+
         return tickerSet;
     }
     /*
@@ -226,8 +229,9 @@ public class WatchListActivity extends GuiceListActivity {
             }
         };
 
-        final Set<String> watchListTickers =loadTickersFromDatabase();
-//        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
+        final Set<String> watchListTickers = loadTickersFromDatabase();
+        final Set<String> watchListTickers2 = marketDatabase.getWatchListTickers();
+
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver,
                 watchListTickers);
 //        watchListTickers.
@@ -238,11 +242,11 @@ public class WatchListActivity extends GuiceListActivity {
     */
 
     private void addEquityPricingInformation(EquityPricingInformation epi) {
-        ContentResolver cr = getContentResolver();
+        ContentResolver contentResolver = getContentResolver();
         String whereClause = MarketDatabase.KEY_SYMBOL + "='" + epi.getTicker() + "'";
         // Check to see if ticker exists
         Log.i(TAG, "where=" + whereClause);
-        Cursor c = cr.query(MarketDatabase.CONTENT_URI, null, whereClause, null, null);
+        Cursor c = contentResolver.query(MarketDatabase.CONTENT_URI, null, whereClause, null, null);
         int dbCount;
 
         if (c != null) {
@@ -256,12 +260,11 @@ public class WatchListActivity extends GuiceListActivity {
 
         if (dbCount > 0) { // Then ticker exists so update
 
-            cr.update(MarketDatabase.CONTENT_URI, values, whereClause, null);
+            contentResolver.update(MarketDatabase.CONTENT_URI, values, whereClause, null);
             MarketTable.add(epi);
 
         } else {
-//            cr.insert(MarketDatabase.CONTENT_URI, values);
-            // TODO: Insert ticker
+            contentResolver.insert(MarketDatabase.CONTENT_URI, values);
         }
     }
 

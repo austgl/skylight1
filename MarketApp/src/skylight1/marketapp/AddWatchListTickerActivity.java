@@ -49,6 +49,7 @@ public class AddWatchListTickerActivity extends GuiceActivity {
 
                 // mdm
                 mDbHelper.createPort(newTicker);
+                mDbHelper.close();
             }
 
         });
