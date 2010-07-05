@@ -13,7 +13,7 @@ public class CompanyDetails extends Activity {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		String id = String.valueOf(settings.getInt(PortfolioActivity.ITEM_ID, 1));
-		String tiker = settings.getString(PortfolioActivity.TIKER, "1");
+		String tiker = settings.getString(PortfolioActivity.TICKER, "1");
 		String number_ofshares = settings.getString(PortfolioActivity.NUMBER_OF_SHARES, "1");
 		String current_price = settings.getString(PortfolioActivity.CURRENT_PRICE, "1");
 		String avg_price = settings.getString(PortfolioActivity.AVG_PRICE, "1");

@@ -4,7 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<TextView android:id="@+id/add_watch_list_ticker_label"
 		android:text="Enter Ticker" android:layout_width="wrap_content"
-		android:layout_height="wrap_content"></TextView>
+		android:layout_height="wrap_content"/>
 	<EditText android:layout_height="wrap_content"
 		android:layout_width="200dip" android:id="@+id/add_watch_list_ticker_text"
 		android:layout_below="@id/add_watch_list_ticker_label"

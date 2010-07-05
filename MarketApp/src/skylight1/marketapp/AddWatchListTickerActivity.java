@@ -22,13 +22,13 @@ public class AddWatchListTickerActivity extends GuiceActivity {
     private EquityPricingInformationFeed equityPricingInformationFeed;
 
     @Inject
-    private MarketDatabase marketDatabase;
+    public MarketDatabase marketDatabase;
 
     @InjectView(R.id.add_watch_list_ticker_text)
     private EditText newTickerTextView;
 
     @InjectView(R.id.add_watch_list_ticker_add_button)
-    private Button addButton;
+    public Button addButton;
 
 
     @Override

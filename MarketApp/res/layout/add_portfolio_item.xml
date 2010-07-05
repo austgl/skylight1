@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/RelativeLayout01"
+                android:layout_width="fill_parent" android:layout_height="fill_parent"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@+id/add_portfolio_item_ticker_label"
+              android:text="Enter Ticker" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
+    <EditText android:layout_height="wrap_content"
+              android:layout_width="200dip" android:id="@+id/add_portfolio_item_ticker_text"
+              android:layout_below="@id/add_portfolio_item_ticker_label"
+              android:layout_alignParentLeft="true"/>
+
+    <TextView android:id="@+id/add_portfolio_item_quantity_label"
+              android:text="Quantity"
+              android:layout_width="wrap_content"
+              android:layout_below="@id/add_portfolio_item_ticker_text"
+              android:layout_height="wrap_content"/>
+    <EditText
+            android:id="@+id/add_portfolio_item_quantity_text"
+            android:layout_height="wrap_content"
+            android:layout_width="200dip"
+            android:layout_below="@id/add_portfolio_item_quantity_label"
+            android:layout_alignParentLeft="true"/>
+
+    <TextView android:id="@+id/add_portfolio_item_avg_price_label"
+              android:text="Average Price"
+              android:layout_width="wrap_content"
+              android:layout_below="@id/add_portfolio_item_quantity_text"
+              android:layout_height="wrap_content"/>
+    <EditText
+            android:id="@+id/add_portfolio_item_avg_price_text"
+            android:layout_height="wrap_content"
+            android:layout_width="200dip"
+            android:layout_below="@id/add_portfolio_item_avg_price_label"
+            android:layout_alignParentLeft="true"/>
+
+    <Button
+            android:id="@+id/portfolio_item_add_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" android:text="Add"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/add_watch_list_ticker_text"
+            android:layout_alignTop="@+id/add_portfolio_item_ticker_text"/>
+</RelativeLayout>

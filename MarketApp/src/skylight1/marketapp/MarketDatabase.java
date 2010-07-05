@@ -23,10 +23,13 @@ public class MarketDatabase extends ContentProvider {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "market.db";
     private static final String WATCHLIST_TABLE = "watchlist"; // Don't put word table in the name
+    private static final String PORTFOLIO_TABLE = "portfolio";
     // Column Names
     public static final String KEY_ID = "_id";
     public static final String KEY_DATE = "date";
     public static final String KEY_SYMBOL = "symbol";
+    public static final String KEY_QUANTITY = "quantity";
+    public static final String KEY_AVG_PRICE = "avg_price";
 //    public static final String KEY_B2 = "ask_real_time";
 //    public static final String KEY_B3 = "bid_real_time";
     // Column indexes
@@ -38,6 +41,27 @@ public class MarketDatabase extends ContentProvider {
     private SQLiteDatabase marketDB;
     //    private SQLiteOpenHelper dbOpenHelper;
     MarketDatabaseHelper dbHelper;
+    private Context mContext;
+
+    /**
+     * Constructor - takes the context to allow the database to be
+     * opened/created
+     *
+     * @param ctx the Context within which to work
+     */
+    public MarketDatabase(Context ctx) {
+        this.mContext = ctx;
+    }
+
+
+    /*
+     * Need to provide a default constructor because we are a Provider in AndroidManifest.xml
+     *  TODO: This won't work because we need context 
+     */
+
+    public MarketDatabase() {
+
+    }
 
     @Override
     public int delete(Uri uri, String where, String[] whereArgs) {
@@ -53,6 +77,10 @@ public class MarketDatabase extends ContentProvider {
         return "vnd.android.cursor.dir/vnd.skylight1.market.provider.EquityPricingInformation";
 
     }
+
+    /*
+     *
+     */
 
     @Override
     public Uri insert(Uri _uri, ContentValues values) {
@@ -71,16 +99,47 @@ public class MarketDatabase extends ContentProvider {
     }
 
 
+    /*
+    *
+    */
+
+    public long insertPortfolioItem(String ticker, int quantity, float avgPrice) {
+        //	 Insert the new row, will return the row number if successful.
+        long status;
+        Log.i(TAG, "insertPortfolio");
+        ContentValues newPortfolioItem = new ContentValues();
+        newPortfolioItem.put(KEY_SYMBOL, ticker);
+        newPortfolioItem.put(KEY_QUANTITY, quantity);
+        newPortfolioItem.put(KEY_AVG_PRICE, avgPrice);
+
+        // Return a URI to the newly inserted row on success.
+//        if (rowID > 0) {
+//            Uri uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
+//            getContext().getContentResolver().notifyChange(uri, null);
+//            return uri;
+//        } else {
+//            throw new SQLException("Failed to insert row into " + _uri);
+//        }
+        if (marketDB == null) {
+            Log.e(TAG, "marketDB is null");
+            status = 0;
+        } else {
+            status = marketDB.insert(PORTFOLIO_TABLE, null, newPortfolioItem);
+        }
+        return status;
+    }
+
+    /*
+     *
+     */
+
     @Override
     public boolean onCreate() {
         Context context = getContext();
 
         Log.i(TAG, "== Setting up MarketDatabase ==");
 
-        dbHelper = new MarketDatabaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        marketDB = dbHelper.getWritableDatabase();
-        establishDb();
+        open();
         return (marketDB != null);
 
     }
@@ -125,11 +184,19 @@ public class MarketDatabase extends ContentProvider {
 
 
     private static class MarketDatabaseHelper extends SQLiteOpenHelper {
-        private static final String DATABASE_CREATE =
+        private static final String WATCHLIST_CREATE =
                 "create table " + WATCHLIST_TABLE + "(" + KEY_ID + " integer primary key autoincrement, "
                         + KEY_DATE + " LONG, "
-                        + KEY_SYMBOL + " TEXT );";
+                        + KEY_SYMBOL + " varchar(20) );";
 
+
+        private static final String PORTFOLIO_CREATE =
+                "create table " + PORTFOLIO_TABLE + "(" + KEY_ID + " integer primary key autoincrement, "
+                        + KEY_DATE + " LONG, "
+                        + KEY_SYMBOL + " varchar(20),"
+                        + "quantity  LONG, "
+                        + "avg_price  float "
+                        + ");";
 
         public MarketDatabaseHelper(Context context, String name,
                                     CursorFactory factory, int version) {
@@ -139,15 +206,18 @@ public class MarketDatabase extends ContentProvider {
         /*
          *
          */
+
         @Override
         public void onCreate(SQLiteDatabase db) {
-            Log.i(TAG, "Create database: " + DATABASE_CREATE);
-            db.execSQL(DATABASE_CREATE);
+            Log.i(TAG, "Create database: " + WATCHLIST_CREATE);
+            db.execSQL(WATCHLIST_CREATE);
+            db.execSQL(PORTFOLIO_CREATE);
         }
 
         /*
         *
         */
+
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -155,14 +225,28 @@ public class MarketDatabase extends ContentProvider {
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS " + WATCHLIST_TABLE);
             onCreate(db);
+            // TODO: Handle other tables
         }
 
     }//end of marketDatabaseHelper extends SQLiteOpenHelper
 
 
-    private void establishDb() {
-        if (dbHelper != null) {
+    /*
+    *
+    */
+
+    public void open() {
+        if (mContext != null) {
+            dbHelper = new MarketDatabaseHelper(mContext, DATABASE_NAME, null, DATABASE_VERSION);
+
             marketDB = dbHelper.getWritableDatabase();
+            if (dbHelper != null) {
+                marketDB = dbHelper.getWritableDatabase();
+            } else {
+                Log.e(TAG, "dbHelper is null");
+            }
+        } else {
+            Log.e(TAG, "Context is not defined.");
         }
     }
 
@@ -173,12 +257,21 @@ public class MarketDatabase extends ContentProvider {
         if (marketDB != null) {
             dbHelper.close();
             marketDB = null;
+            Log.i(TAG, "Database Cleanup");
         }
     }
+
+    /*
+     * Dummy function that just adds to the set
+     */
 
     public void addWatchListTicker(String aTicker) {
         watchList.add(aTicker);
     }
+
+    /*
+     *
+     */
 
     public Set<String> getWatchListTickers() {
         return Collections.unmodifiableSet(watchList);

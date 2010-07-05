@@ -16,13 +16,9 @@
 		<activity android:name=".WatchListActivity" />
         <activity android:name=".AlertActivity" android:label="Alerts"/>
         <activity android:name=".PortfolioActivity" android:label="Portfolio"/>
-        <activity android:name=".PricingEngineActivity" android:label="PricingEngine"/>
-        <activity android:name=".AddWatchListTickerActivity" android:label="AddWatchListTickerActivity">
-            <intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-        </activity>
+        <activity android:name=".AddWatchListTickerActivity" android:label="AddWatchListTickerActivity"/>
+        <activity android:name=".AddPortfolioItemActivity" android:label="Add Position"/>
+
         <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"/>
         <activity android:name=".CompanyDetails" android:label="CompanyDetails"/>
         <activity android:name=".CandleSticksActivity" android:label="CandleSticks"/>

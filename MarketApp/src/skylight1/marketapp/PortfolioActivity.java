@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -28,7 +27,7 @@ public class PortfolioActivity extends ListActivity {
 
 	private static final String TAG = PortfolioActivity.class.getSimpleName();
 	public static final String ITEM_ID = "ID";
-	public static final String TIKER = "TIKER";
+	public static final String TICKER = "TICKER";
 	public static final String NUMBER_OF_SHARES = "NUMBER";
 	public static final String CURRENT_PRICE = "PRICE";
 	public static final String AVG_PRICE = "AVGPRICE";
@@ -155,35 +154,41 @@ public class PortfolioActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.portfolio);
 		Log.i(TAG, "Fetching prices");
-		portfolioItems.add(new PortfolioItem("AAPL", 202.0f, 1000, 250.10f));
-		portfolioItems.add(new PortfolioItem("GOOG", 20.0f, 10000, 50.10f));
-		portfolioItems.add(new PortfolioItem("MSFT", 20.1f, 50000, 250.10f));
-		portfolioItems.add(new PortfolioItem("IBM", 22.0f, 100000, 19.21f));
-		portfolioItems.add(new PortfolioItem("C", 3.74f, 100, 3.78f));
-		portfolioItems.add(new PortfolioItem("JDSU", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("ADBE", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("PALM", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("F", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("GM", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("JNPR", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("AMD", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("INTC", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("GE", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("RIMM", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("WEC", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("DELL", 10.78f, 9999, 12.54f));
-		portfolioItems.add(new PortfolioItem("SY", 10.78f, 9999, 12.54f));
+//        initPortfolioList();
 
 		setListAdapter(new EfficientAdapter(this));
 
 	}
 
-	@Override
+/*
+    private void initPortfolioList() {
+        portfolioItems.add(new PortfolioItem("AAPL", 202.0f, 1000, 250.10f));
+        portfolioItems.add(new PortfolioItem("GOOG", 20.0f, 10000, 50.10f));
+        portfolioItems.add(new PortfolioItem("MSFT", 20.1f, 50000, 250.10f));
+        portfolioItems.add(new PortfolioItem("IBM", 22.0f, 100000, 19.21f));
+        portfolioItems.add(new PortfolioItem("C", 3.74f, 100, 3.78f));
+        portfolioItems.add(new PortfolioItem("JDSU", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("ADBE", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("PALM", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("F", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("GM", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("JNPR", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("AMD", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("INTC", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("GE", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("RIMM", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("WEC", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("DELL", 10.78f, 9999, 12.54f));
+        portfolioItems.add(new PortfolioItem("SY", 10.78f, 9999, 12.54f));
+    }
+*/
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		if (item.getItemId() == R.id.add_position) {
 			Intent intent = new Intent(PortfolioActivity.this,
-					AddWatchListTickerActivity.class);
+					AddPortfolioItemActivity.class);
 			startActivity(intent);
 
 		} else if (item.getItemId() == R.id.refresh_portfolio_prices) {
@@ -212,7 +217,7 @@ public class PortfolioActivity extends ListActivity {
 				.getDefaultSharedPreferences(getBaseContext());
 		Editor edit = settings.edit();
 		edit.putInt(ITEM_ID, position);
-		edit.putString(TIKER, ticker.getText().toString());
+		edit.putString(TICKER, ticker.getText().toString());
 		edit.putString(NUMBER_OF_SHARES, numberofshares.getText().toString());
 		edit.putString(CURRENT_PRICE, currentPrice.getText().toString());
 		edit.putString(AVG_PRICE, avgPrice.getText().toString());

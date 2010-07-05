@@ -89,16 +89,22 @@ public class WatchListActivity extends GuiceListActivity {
             }
 
             TextView tickerTextView = (TextView) convertView.findViewById(R.id.ticker);
+            tickerTextView.setTextColor(Color.BLACK);
+
             TextView avgPriceTextView = (TextView) convertView.findViewById(R.id.avgPrice);
             TextView numberOfSharesTextView = (TextView) convertView.findViewById(R.id.numberOfShares);
+            numberOfSharesTextView.setTextColor(Color.BLACK);
+
             TextView currentPriceTextView = (TextView) convertView.findViewById(R.id.currentPrice);
+            currentPriceTextView.setTextColor(Color.BLACK);
 
             // Bind the data efficiently with the holder.
             avgPriceTextView.setTextColor(Color.GREEN);
             final EquityPricingInformation item = getItem(position);
             tickerTextView.setText(item.getTicker());
+
             avgPriceTextView.setText(item.getLastPrice().toString());
-            numberOfSharesTextView.setText("Tim");
+            numberOfSharesTextView.setText("N/A");
             currentPriceTextView.setText("100.0");
 
 
@@ -211,7 +217,7 @@ public class WatchListActivity extends GuiceListActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.i(WatchListActivity.class.getName(), "Updating watchList UI on UI Thread!!!");
+                        Log.i(TAG, "Updating watchList UI on UI Thread!!!");
                         for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
                             final String ticker = equityPricingInformation.getTicker();
                             Log.i(TAG, ticker);
