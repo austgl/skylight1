@@ -87,6 +87,10 @@ public class MarketDatabase extends ContentProvider {
         //	 Insert the new row, will return the row number if successful.
 
         Log.i(TAG, "insert ticker");
+        if (marketDB == null) {
+            Log.e(TAG, "marketDB is null.  Opening...");
+            open();
+        }
         long rowID = marketDB.insert(WATCHLIST_TABLE, "ticker", values);
         // Return a URI to the newly inserted row on success.
         if (rowID > 0) {
@@ -146,7 +150,7 @@ public class MarketDatabase extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        Context context = getContext();
+        mContext = getContext();   // TODO: where should we set the context?
 
         Log.i(TAG, "== Setting up MarketDatabase ==");
 
@@ -158,7 +162,20 @@ public class MarketDatabase extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+
+        // A little error checking
+        if (marketDB == null) {
+            Log.e(TAG, "marketDB is null");
+            return null;
+        }
+
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+
+        if (qb == null) {
+            Log.e(TAG, "qb is null");
+            return null;
+        }
+
         qb.setTables(WATCHLIST_TABLE);
         //   this is a row query,limit the result set to the passed in a row.
 //        qb.appendWhere(KEY_ID + "=" + uri.getPath());

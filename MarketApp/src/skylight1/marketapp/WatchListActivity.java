@@ -111,6 +111,8 @@ public class WatchListActivity extends GuiceListActivity {
 //        PortDbAdapter mDbHelper = new PortDbAdapter(this);
 //        mDbHelper.open();
         marketDatabase = new MarketDatabase(this);
+        marketDatabase.open();
+
     }
 
     /*
@@ -159,7 +161,6 @@ public class WatchListActivity extends GuiceListActivity {
 
     private Set<String> loadTickersFromMarketDB() {
         Set<String> tickerSet = new HashSet<String>();
-        marketDatabase.open();
         Log.i(TAG, "Getting Watchlist tickers");
 
         Cursor tickerCursor = marketDatabase.getAllWatchlistTickers();
@@ -170,7 +171,7 @@ public class WatchListActivity extends GuiceListActivity {
             Log.i(TAG, "Ticker: " + id + "==> " + ticker);
             tickerSet.add(ticker);
         }
-        marketDatabase.cleanup();
+//        marketDatabase.cleanup();
         return tickerSet;
     }
 
@@ -182,6 +183,14 @@ public class WatchListActivity extends GuiceListActivity {
     public void onResume() {
 
         super.onResume();
+
+        // First show the tickers and current prices... Uh, we have no prices yet.
+        final Set<String> watchListTickers = loadTickersFromMarketDB();
+//        EquityPricingInformation eq = new EquityPricingInformation();
+//
+//        for (String ticker: watchListTickers) {
+//            aa.add(ticker);
+//        }
         equityFeedObserver = new EquityFeedObserver() {
 
 
@@ -200,7 +209,7 @@ public class WatchListActivity extends GuiceListActivity {
                             }
 
                             aa.add(equityPricingInformation);
-                            aa.notifyDataSetChanged();  // Let view know data set has changed
+                            aa.notifyDataSetChanged();  // Let view know data set has changed - TODO: Should this be inside loop?
                             tickerToEquityPricingInformationMap.put(ticker, equityPricingInformation);
                             addEquityPricingInformation(equityPricingInformation);
                         }
@@ -211,7 +220,7 @@ public class WatchListActivity extends GuiceListActivity {
 
 //        final Set<String> watchListTickers = loadTickersFromDatabase();
 //        final Set<String> watchListTickers2 = marketDatabase.getWatchListTickers();
-        final Set<String> watchListTickers = loadTickersFromMarketDB();
+//        final Set<String> watchListTickers = loadTickersFromMarketDB();
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver, watchListTickers);
     }
 
