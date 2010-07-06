@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.google.inject.Inject;
 import roboguice.activity.GuiceActivity;
 import roboguice.inject.InjectView;
@@ -21,8 +20,8 @@ public class AddWatchListTickerActivity extends GuiceActivity {
     @Inject
     private EquityPricingInformationFeed equityPricingInformationFeed;
 
-    @Inject
-    public MarketDatabase marketDatabase;
+    //    @Inject
+    private MarketDatabase marketDatabase;
 
     @InjectView(R.id.add_watch_list_ticker_text)
     private EditText newTickerTextView;
@@ -39,17 +38,27 @@ public class AddWatchListTickerActivity extends GuiceActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
-                mDbHelper.open();
 
                 final String newTicker = newTickerTextView.getText().toString();
                 Log.i(TAG, "New Ticker is: " + newTicker);
-                marketDatabase.addWatchListTicker(newTicker);
-                newTickerTextView.setText("");
 
-                // mdm
+                // Juan's Database
+                marketDatabase = new MarketDatabase(AddWatchListTickerActivity.this);
+                marketDatabase.open();
+                marketDatabase.insertWatchlistTicker(newTicker);
+                marketDatabase.addWatchListTicker(newTicker);   // TODO: Remove
+                marketDatabase.cleanup();
+
+
+                // melling's Database
+                PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
+                mDbHelper.open();
                 mDbHelper.createPort(newTicker);
                 mDbHelper.close();
+
+                // Now clear the field for next ticker
+                newTickerTextView.setText("");
+
             }
 
         });

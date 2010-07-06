@@ -18,12 +18,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.google.inject.Inject;
-import skylight1.marketapp.model.PortDbAdapter;
 
 public class WatchListActivity extends GuiceListActivity {
 
     EquityFeedObserver equityFeedObserver;
-    private PortDbAdapter mDbHelper;
 
     private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
         private LayoutInflater mInflater;
@@ -35,41 +33,8 @@ public class WatchListActivity extends GuiceListActivity {
             // Cache the LayoutInflate to avoid asking for a new one each time.
             mInflater = LayoutInflater.from(context);
 
-            // Icons bound to the rows.
         }
 
-
-        /*   *//**
-         * The number of items in the list is determined by the number of speeches
-         * in our array.
-         *
-         * @see android.widget.ListAdapter#getCount()
-         *//*
-        public int getCount() {
-            return watchListItems.size();
-        }
-
-        *//**
-         * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
-         * structure, we would return whatever object represents one row in the
-         * list.
-         *
-         * @see android.widget.ListAdapter#getItem(int)
-         *//*
-        public Object getItem(int position) {
-            return position;
-        }
-
-        *//**
-         * Use the array index as a unique id.
-         *
-         * @see android.widget.ListAdapter#getItemId(int)
-         *//*
-        public long getItemId(int position) {
-            return position;
-        }
-*/
 
         /**
          * Make a view to hold each row.
@@ -111,14 +76,6 @@ public class WatchListActivity extends GuiceListActivity {
             return convertView;
         }
 
-/*
-        static class ViewHolder {
-            TextView tickerTextView;
-            TextView avgPriceTextView;
-            TextView numberOfSharesTextView;
-            TextView currentPriceTextView;
-        }
-*/
     }
 
     private static final String TAG = WatchListActivity.class.getSimpleName();
@@ -129,16 +86,11 @@ public class WatchListActivity extends GuiceListActivity {
     public EquityPricingInformationFeed equityPricingInformationFeed;
 
 //    @Inject
-    public MarketDatabase marketDatabase;
-
-//    @InjectView(R.id.tempTickerName) public TextView textView;
+    private MarketDatabase marketDatabase;
 
     ListView dbView;
-//    ArrayAdapter<EquityPricingInformation> aa;
     ArrayAdapter<EquityPricingInformation> aa;
-//    ListAdapter bb;
-    ArrayList<EquityPricingInformation> MarketTable = new ArrayList<EquityPricingInformation>();
-//    private static String[] tickerList = {"AAPL", "MSFT", "GOOG"};
+    ArrayList<EquityPricingInformation> marketTable = new ArrayList<EquityPricingInformation>();
 
     /**
      * Called when the activity is first created.
@@ -147,24 +99,18 @@ public class WatchListActivity extends GuiceListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.watchlist);
-//        EquityPricingInformation eq1 = new EquityPricingInformation("AAPL", "AAPL", new BigDecimal(50), new BigDecimal(100000), new Date(), new BigDecimal(40), new BigDecimal(120000), new Date());
-//        MarketTable.add(eq1);
         dbView = (ListView) this.findViewById(R.layout.epidb);
-//        int layoutID = android.R.layout.simple_list_item_1;
-//        aa = new ArrayAdapter<EquityPricingInformation>(this, layoutID, tickerList);
-//        Set<String> tickerList = marketDatabase.getWatchListTickers();
 
         aa = new EfficientAdapter(this, new ArrayList<EquityPricingInformation>());
 
-        //  dbView.setAdapter(aa);
         setListAdapter(aa);
 
 
         // melling's DB
 
-        mDbHelper = new PortDbAdapter(this);
+//        PortDbAdapter mDbHelper = new PortDbAdapter(this);
 //        mDbHelper.open();
-        marketDatabase = new MarketDatabase();
+        marketDatabase = new MarketDatabase(this);
     }
 
     /*
@@ -182,6 +128,10 @@ public class WatchListActivity extends GuiceListActivity {
     }
 
 
+    /*
+    * Get tickers from melling's DB.
+    */
+/*
     private Set<String> loadTickersFromDatabase() {
         Set<String> tickerSet = new HashSet<String>();
 
@@ -200,7 +150,31 @@ public class WatchListActivity extends GuiceListActivity {
 
         return tickerSet;
     }
+*/
+
+
     /*
+     * Get tickers from Juan's DB.
+     */
+
+    private Set<String> loadTickersFromMarketDB() {
+        Set<String> tickerSet = new HashSet<String>();
+        marketDatabase.open();
+        Log.i(TAG, "Getting Watchlist tickers");
+
+        Cursor tickerCursor = marketDatabase.getAllWatchlistTickers();
+
+        while (tickerCursor.moveToNext()) {
+            int id = tickerCursor.getInt(0);
+            String ticker = tickerCursor.getString(1);
+            Log.i(TAG, "Ticker: " + id + "==> " + ticker);
+            tickerSet.add(ticker);
+        }
+        marketDatabase.cleanup();
+        return tickerSet;
+    }
+
+   /*
     *
     */
 
@@ -235,13 +209,12 @@ public class WatchListActivity extends GuiceListActivity {
             }
         };
 
-        final Set<String> watchListTickers = loadTickersFromDatabase();
-        final Set<String> watchListTickers2 = marketDatabase.getWatchListTickers();
-
-        equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver,
-                watchListTickers);
-//        watchListTickers.
+//        final Set<String> watchListTickers = loadTickersFromDatabase();
+//        final Set<String> watchListTickers2 = marketDatabase.getWatchListTickers();
+        final Set<String> watchListTickers = loadTickersFromMarketDB();
+        equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver, watchListTickers);
     }
+
 
     /*
     * Add pricing information to the database
@@ -267,7 +240,7 @@ public class WatchListActivity extends GuiceListActivity {
         if (dbCount > 0) { // Then ticker exists so update
 
             contentResolver.update(MarketDatabase.CONTENT_URI, values, whereClause, null);
-            MarketTable.add(epi);
+            marketTable.add(epi);
 
         } else {
             contentResolver.insert(MarketDatabase.CONTENT_URI, values);

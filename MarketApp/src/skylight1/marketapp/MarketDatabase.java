@@ -86,7 +86,7 @@ public class MarketDatabase extends ContentProvider {
     public Uri insert(Uri _uri, ContentValues values) {
         //	 Insert the new row, will return the row number if successful.
 
-        Log.i(TAG, "insert");
+        Log.i(TAG, "insert ticker");
         long rowID = marketDB.insert(WATCHLIST_TABLE, "ticker", values);
         // Return a URI to the newly inserted row on success.
         if (rowID > 0) {
@@ -103,6 +103,25 @@ public class MarketDatabase extends ContentProvider {
     *
     */
 
+    public long insertWatchlistTicker(String ticker) {
+        //	 Insert the new row, will return the row number if successful.
+        long status;
+        Log.i(TAG, "insert Ticker");
+        ContentValues newWatchlistTicker = new ContentValues();
+        newWatchlistTicker.put(KEY_SYMBOL, ticker);
+
+        if (marketDB == null) {
+            Log.e(TAG, "marketDB is null");
+            status = 0;
+        } else {
+            status = marketDB.insert(WATCHLIST_TABLE, null, newWatchlistTicker);
+        }
+        return status;
+    }
+    /*
+    *
+    */
+
     public long insertPortfolioItem(String ticker, int quantity, float avgPrice) {
         //	 Insert the new row, will return the row number if successful.
         long status;
@@ -112,14 +131,6 @@ public class MarketDatabase extends ContentProvider {
         newPortfolioItem.put(KEY_QUANTITY, quantity);
         newPortfolioItem.put(KEY_AVG_PRICE, avgPrice);
 
-        // Return a URI to the newly inserted row on success.
-//        if (rowID > 0) {
-//            Uri uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
-//            getContext().getContentResolver().notifyChange(uri, null);
-//            return uri;
-//        } else {
-//            throw new SQLException("Failed to insert row into " + _uri);
-//        }
         if (marketDB == null) {
             Log.e(TAG, "marketDB is null");
             status = 0;
@@ -182,6 +193,15 @@ public class MarketDatabase extends ContentProvider {
         return count;
     }
 
+    public Cursor getAllWatchlistTickers() {
+        return marketDB.query(WATCHLIST_TABLE, new String[]{KEY_ID, KEY_SYMBOL}, null, null, null, null, null);
+
+    }
+
+    public Cursor getAllPositions() {
+        return marketDB.query(PORTFOLIO_TABLE, new String[]{KEY_ID, KEY_SYMBOL}, null, null, null, null, null);
+
+    }
 
     private static class MarketDatabaseHelper extends SQLiteOpenHelper {
         private static final String WATCHLIST_CREATE =
