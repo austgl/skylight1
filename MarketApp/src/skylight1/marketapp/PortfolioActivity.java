@@ -237,7 +237,7 @@ public class PortfolioActivity extends ListActivity {
 
         } else if (item.getItemId() == R.id.Detail) {
             Log.i(TAG, "CompanyDetail");
-            Intent intent = new Intent(this, CompanyDetail.class);
+            Intent intent = new Intent(this, CompanyDetailActivity0.class);
             startActivity(intent);
 
         }
@@ -262,7 +262,7 @@ public class PortfolioActivity extends ListActivity {
         edit.putString(CURRENT_PRICE, currentPrice.getText().toString());
         edit.putString(AVG_PRICE, avgPrice.getText().toString());
         edit.commit();
-        Intent i = new Intent(this, CompanyDetails.class);
+        Intent i = new Intent(this, CompanyDetailActivity.class);
         startActivity(i);
         sendBroadcast(i);
 

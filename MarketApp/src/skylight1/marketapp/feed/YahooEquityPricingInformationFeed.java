@@ -2,6 +2,7 @@ package skylight1.marketapp.feed;
 
 import android.util.Log;
 import skylight1.marketapp.EquityTimeSeries;
+import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
 
 import java.io.BufferedReader;
@@ -130,10 +131,40 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
         }, 1000, 10000);
     }
 
+
     /*
-     *
-     *
-     */
+    * Get Company information for the Company Detail page
+    *
+    */
+    public CompanyDetail getCompanyDetail(String aTicker) {
+
+        String url = "http://download.finance.yahoo.com/d/quotes.csv?s=" + aTicker + "&f=snld1t1c1p2v";
+        System.out.println(url);
+        CompanyDetail companyDetail = new CompanyDetail(aTicker);
+
+        try {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream is = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                for (String s : parts) {
+                    Log.i(TAG, s);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return companyDetail;
+    }
+
+    /*
+    *
+    *
+    */
     public List<EquityTimeSeries> getPriceHistoryForTicker(String aTicker) {
         List<EquityTimeSeries> aList = new ArrayList<EquityTimeSeries>();
 

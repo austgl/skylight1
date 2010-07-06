@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 //import skylight1.marketapp.CandleStickActivity;
 
 public class MarketAppHomeActivity extends GuiceActivity {
@@ -61,7 +62,7 @@ public class MarketAppHomeActivity extends GuiceActivity {
         pricingEngineButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View aV) {
-                Intent intent = new Intent(MarketAppHomeActivity.this, CompanyDetail.class);
+                Intent intent = new Intent(MarketAppHomeActivity.this, CompanyDetailActivity0.class);
                 startActivity(intent);
             }
         });
@@ -91,6 +92,9 @@ public class MarketAppHomeActivity extends GuiceActivity {
             Intent intent = new Intent(MarketAppHomeActivity.this, CandleSticksActivity.class);
             startActivity(intent);
 
+        } else if (item.getItemId() == R.id.testMenu) {
+            YahooEquityPricingInformationFeed y = new YahooEquityPricingInformationFeed();
+            y.getCompanyDetail("AAPL");
         } else if (item.getItemId() == R.id.preferenceMenu) {
             Intent intent = new Intent(MarketAppHomeActivity.this, Preferences.class);
             startActivity(intent);

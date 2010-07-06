@@ -20,9 +20,9 @@
         <activity android:name=".AddPortfolioItemActivity" android:label="Add Position"/>
 
         <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"/>
-        <activity android:name=".CompanyDetails" android:label="CompanyDetails"/>
+        <activity android:name=".CompanyDetailActivity" android:label="CompanyDetails"/>
         <activity android:name=".CandleSticksActivity" android:label="CandleSticks"/>
-        <activity android:name=".CompanyDetail" android:label="Detail"/>
+        <activity android:name=".CompanyDetailActivity0" android:label="Detail"/>
         <activity android:name=".HelpActivity" android:label="Help"/>
         <activity android:name=".Preferences" android:label="Preferences"/>
     </application>

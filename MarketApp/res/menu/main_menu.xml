@@ -15,6 +15,9 @@
         <item android:id="@+id/preferenceMenu"
               android:title="Preferences"/>
 
+        <item android:id="@+id/testMenu"
+              android:title="Test"/>
+
         <item android:id="@+id/helpMenu"
               android:title="Help"/>
     </group>
