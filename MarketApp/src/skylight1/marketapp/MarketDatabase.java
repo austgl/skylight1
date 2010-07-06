@@ -171,10 +171,6 @@ public class MarketDatabase extends ContentProvider {
 
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        if (qb == null) {
-            Log.e(TAG, "qb is null");
-            return null;
-        }
 
         qb.setTables(WATCHLIST_TABLE);
         //   this is a row query,limit the result set to the passed in a row.

@@ -8,6 +8,10 @@
         <item android:id="@+id/sync_cloud"
               android:title="Cloud Sync"/>
 
+
+        <item android:id="@+id/candlestick"
+              android:title="Candlesticks"/>
+
         <item android:id="@+id/preferenceMenu"
               android:title="Preferences"/>
 

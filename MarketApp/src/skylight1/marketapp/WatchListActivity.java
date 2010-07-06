@@ -164,6 +164,7 @@ public class WatchListActivity extends GuiceListActivity {
         Log.i(TAG, "Getting Watchlist tickers");
 
         Cursor tickerCursor = marketDatabase.getAllWatchlistTickers();
+        startManagingCursor(tickerCursor); // Prevents error: "Finalizing a Cursor that has not been deactivated or closed"
 
         while (tickerCursor.moveToNext()) {
             int id = tickerCursor.getInt(0);

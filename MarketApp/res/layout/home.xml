@@ -29,10 +29,10 @@ android:layout_y="50dp"
 android:id="@+id/watchListText"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="Watch List"
+android:text="Watchlist"
 android:textColor="#ff000000"
 android:layout_x="50dp"
-android:layout_y="185dp"
+android:layout_y="190dp"
 >
 </TextView>
 <Button
@@ -86,9 +86,9 @@ android:layout_y="230dp"
 android:id="@+id/alertText"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:text="Alerts"
+android:text="Candlesticks"
 android:textColor="#ff000000"
-android:layout_x="220dp"
+android:layout_x="200dp"
 android:layout_y="365dp"
 >
 </TextView>

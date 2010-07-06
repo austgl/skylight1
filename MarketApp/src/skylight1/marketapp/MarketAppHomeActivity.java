@@ -46,7 +46,7 @@ public class MarketAppHomeActivity extends GuiceActivity {
         alertButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View aV) {
-                Intent intent = new Intent(MarketAppHomeActivity.this, AlertActivity.class);
+                Intent intent = new Intent(MarketAppHomeActivity.this, CandleSticksActivity.class);
                 startActivity(intent);
             }
         });
@@ -87,6 +87,10 @@ public class MarketAppHomeActivity extends GuiceActivity {
         } else if (item.getItemId() == R.id.helpMenu) {
             Intent intent = new Intent(MarketAppHomeActivity.this, HelpActivity.class);
             startActivity(intent);
+        } else if (item.getItemId() == R.id.candlestick) {
+            Intent intent = new Intent(MarketAppHomeActivity.this, CandleSticksActivity.class);
+            startActivity(intent);
+
         } else if (item.getItemId() == R.id.preferenceMenu) {
             Intent intent = new Intent(MarketAppHomeActivity.this, Preferences.class);
             startActivity(intent);
