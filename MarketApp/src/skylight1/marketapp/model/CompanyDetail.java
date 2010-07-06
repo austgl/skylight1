@@ -10,13 +10,43 @@ public class CompanyDetail {
 
     String ticker;
     String name;
+
+    public float getTodaysPriceChange() {
+        return todaysPriceChange;
+    }
+
+    public void setTodaysPriceChange(float todaysPriceChange) {
+        this.todaysPriceChange = todaysPriceChange;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    float price;
+    float todaysPriceChange;
+
+    public float getTodaysPercentChange() {
+        return todaysPercentChange;
+    }
+
+    public void setTodaysPercentChange(float todaysPercentChange) {
+        this.todaysPercentChange = todaysPercentChange;
+    }
+
+    float todaysPercentChange;
+
     long volume;
     String exchange;
     String ebita;
     String pegRatio;
     float mavg50;
     float mavg200;
-    String pe;
+    float peRatio;
     String bidSize;
     String askSize;
 
@@ -76,12 +106,12 @@ public class CompanyDetail {
         this.name = name;
     }
 
-    public String getPe() {
-        return pe;
+    public float getPeRatio() {
+        return peRatio;
     }
 
-    public void setPe(String pe) {
-        this.pe = pe;
+    public void setPeRatio(float peRatio) {
+        this.peRatio = peRatio;
     }
 
     public String getPegRatio() {
@@ -111,5 +141,25 @@ public class CompanyDetail {
 
     public CompanyDetail(String ticker) {
         this.ticker = ticker;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyDetail{" +
+                "askSize='" + askSize + '\'' +
+                ", ticker='" + ticker + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", todaysPriceChange=" + todaysPriceChange +
+                ", todaysPercentChange=" + todaysPercentChange +
+                ", volume=" + volume +
+                ", exchange='" + exchange + '\'' +
+                ", ebita='" + ebita + '\'' +
+                ", pegRatio='" + pegRatio + '\'' +
+                ", mavg50=" + mavg50 +
+                ", mavg200=" + mavg200 +
+                ", peRatio=" + peRatio +
+                ", bidSize='" + bidSize + '\'' +
+                '}';
     }
 }

@@ -134,11 +134,13 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
     /*
     * Get Company information for the Company Detail page
+    * Yahoo fields:
+    *    http://www.seangw.com/wordpress/index.php/2010/01/formatting-stock-data-from-yahoo-finance/
     *
     */
     public CompanyDetail getCompanyDetail(String aTicker) {
 
-        String url = "http://download.finance.yahoo.com/d/quotes.csv?s=" + aTicker + "&f=snld1t1c1p2v";
+        String url = "http://download.finance.yahoo.com/d/quotes.csv?s=" + aTicker + "&f=nl1d1t1c1p2vem3m4xj1";
         System.out.println(url);
         CompanyDetail companyDetail = new CompanyDetail(aTicker);
 
@@ -147,16 +149,46 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
             InputStream is = connection.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
+            int i = 0;
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 for (String s : parts) {
                     Log.i(TAG, s);
                 }
+                String name = parts[i].replace("\"", "");
+                companyDetail.setName(name);
+                i++;
+
+                float lastPrice = Float.parseFloat(parts[i]);
+                companyDetail.setPrice(lastPrice);
+                
+                float priceChange = Float.parseFloat(parts[4]);
+                companyDetail.setTodaysPriceChange(priceChange);
+                StringBuffer s = new StringBuffer(parts[5].replace("\"", ""));
+
+                s.setLength(s.length() - 1); // chop last char: %
+                Log.i(TAG, "Percent: " + s);
+                float percentChange = Float.parseFloat(s.toString());
+                companyDetail.setTodaysPercentChange(percentChange);
+                long volume = Integer.parseInt(parts[6]);
+                companyDetail.setVolume(volume);
+                //
+                float pe = Float.parseFloat(parts[7]);
+                companyDetail.setPeRatio(pe);
+
+                float mvAvg50 = Float.parseFloat(parts[8]);
+                companyDetail.setMavg50(mvAvg50);
+
+                float mvAvg200 = Float.parseFloat(parts[9]);
+                companyDetail.setMavg200(mvAvg200);
+
+                companyDetail.setExchange(parts[10]);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.i(TAG, companyDetail.toString());
 
         return companyDetail;
     }
