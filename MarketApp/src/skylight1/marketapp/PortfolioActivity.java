@@ -176,7 +176,8 @@ public class PortfolioActivity extends ListActivity {
         Log.i(TAG, "Getting Position tickers");
 
         Cursor tickerCursor = marketDatabase.getAllPositions();
-
+        startManagingCursor(tickerCursor); // Prevents error: "Finalizing a Cursor that has not been deactivated or closed"
+        
         while (tickerCursor.moveToNext()) {
             int id = tickerCursor.getInt(0);
             String ticker = tickerCursor.getString(1);

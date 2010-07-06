@@ -187,6 +187,7 @@ public class WatchListActivity extends GuiceListActivity {
 
         // First show the tickers and current prices... Uh, we have no prices yet.
         final Set<String> watchListTickers = loadTickersFromMarketDB();
+        Log.i(TAG, "# Tickers: " + watchListTickers.size());
 //        EquityPricingInformation eq = new EquityPricingInformation();
 //
 //        for (String ticker: watchListTickers) {
