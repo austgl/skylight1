@@ -70,7 +70,7 @@ public class WatchListActivity extends GuiceListActivity {
 
             avgPriceTextView.setText(item.getLastPrice().toString());
             numberOfSharesTextView.setText(Float.toString(item.getPriceChange())); // TODO: format properly
-            currentPriceTextView.setText(Float.toString(item.getPercentChange())+"%"); // TODO: format properly
+            currentPriceTextView.setText(Float.toString(item.getPercentChange()) + "%"); // TODO: format properly
 
 
             return convertView;
@@ -176,7 +176,7 @@ public class WatchListActivity extends GuiceListActivity {
         return tickerSet;
     }
 
-   /*
+    /*
     *
     */
 
@@ -200,10 +200,18 @@ public class WatchListActivity extends GuiceListActivity {
             public void equityPricingInformationUpdate(final Set<EquityPricingInformation> aSetOfEquityPricingInformation) {
                 // TODO update my list
                 runOnUiThread(new Runnable() {
+
+                    /*
+                     * We are going to be called with a prices for which we've subscribed.  Sorting the set for now to control the
+                     * ordering.
+                     * 
+                     */
                     @Override
                     public void run() {
                         Log.i(TAG, "Updating watchList UI on UI Thread!!!");
-                        for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
+                        SortedSet<EquityPricingInformation> sortedPrices = new TreeSet<EquityPricingInformation>(aSetOfEquityPricingInformation);
+//                        for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
+                        for (EquityPricingInformation equityPricingInformation : sortedPrices) {
                             final String ticker = equityPricingInformation.getTicker();
                             Log.i(TAG, ticker);
                             if (tickerToEquityPricingInformationMap.containsKey(ticker)) {

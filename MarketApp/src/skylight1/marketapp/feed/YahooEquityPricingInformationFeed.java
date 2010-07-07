@@ -115,7 +115,7 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                         // AAPL",245.29,245.10,124.55,272.46,+12.76
 
                         String[] parts = line.split(",");
-                       
+
                         String ticker = parts[0].replace("\"", ""); // replaceAll didn't work!! Will do regex later
 
                         Log.i(TAG, "TICKER:" + ticker);

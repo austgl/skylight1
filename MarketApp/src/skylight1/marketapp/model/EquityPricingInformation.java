@@ -5,7 +5,7 @@ import android.util.Log;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class EquityPricingInformation {
+public class EquityPricingInformation implements Comparable<EquityPricingInformation> {
     private static String TAG = "EquityPricingInformation";
 
 	private final String ticker;
@@ -91,5 +91,10 @@ public class EquityPricingInformation {
                 ", priceChange=" + priceChange +
                 ", percentChange=" + percentChange +
                 '}';
+    }
+
+    @Override
+    public int compareTo(EquityPricingInformation equityPricingInformation) {
+        return ticker.compareTo(equityPricingInformation.getTicker());
     }
 }
