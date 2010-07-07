@@ -23,6 +23,25 @@ public class EquityPricingInformation {
 	private final BigDecimal priorDayVolume;
 
 	private final Date priorDayClose;
+    private float priceChange;
+
+    public float getPercentChange() {
+        return percentChange;
+    }
+
+    public void setPercentChange(float percentChange) {
+        this.percentChange = percentChange;
+    }
+
+    public float getPriceChange() {
+        return priceChange;
+    }
+
+    public void setPriceChange(float priceChange) {
+        this.priceChange = priceChange;
+    }
+
+    private float percentChange;
 
 	public EquityPricingInformation(String aTicker, String aName, BigDecimal aLastPrice, BigDecimal aTodayVolume, Date aPriceTime,
 			BigDecimal aPriorDayClosePrice, BigDecimal aPriorDayVolume, Date aPriorDayClose) {
@@ -61,14 +80,16 @@ public class EquityPricingInformation {
     @Override
     public String toString() {
         return "EquityPricingInformation{" +
-                "ticker='" + ticker + '\'' +
+                "lastPrice=" + lastPrice +
+                ", ticker='" + ticker + '\'' +
                 ", name='" + name + '\'' +
-                ", lastPrice=" + lastPrice +
                 ", todayVolume=" + todayVolume +
                 ", priceTime=" + priceTime +
                 ", priorDayClosePrice=" + priorDayClosePrice +
                 ", priorDayVolume=" + priorDayVolume +
                 ", priorDayClose=" + priorDayClose +
+                ", priceChange=" + priceChange +
+                ", percentChange=" + percentChange +
                 '}';
     }
 }

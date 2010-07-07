@@ -67,6 +67,9 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
         }
     }
 
+    /*
+     *
+     */
     public YahooEquityPricingInformationFeed() {
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -99,7 +102,7 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
                     String url = "http://download.finance.yahoo.com/d/quotes.csv?s="
                             + tickerList.toString()
-                            + "&f=sb2b3jkm6";
+                            + "&f=sb2b3jkm6c1p2";
                     Log.i(TAG, url);
                     HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                     InputStream is = connection.getInputStream();
@@ -110,7 +113,9 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
                     while ((line = reader.readLine()) != null) {
                         // AAPL",245.29,245.10,124.55,272.46,+12.76
+
                         String[] parts = line.split(",");
+                       
                         String ticker = parts[0].replace("\"", ""); // replaceAll didn't work!! Will do regex later
 
                         Log.i(TAG, "TICKER:" + ticker);
@@ -119,7 +124,19 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
                                 new BigDecimal(parts[1]), null, new Date(), new BigDecimal(parts[2]),
                                 null, new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
 
-                        Log.i(TAG, "Object not NULL?" + information);
+                        Log.i(TAG, "Change: " + parts[6] + "," + parts[7]);
+                        float priceChange = Float.parseFloat(parts[6]);
+//                        companyDetail.setTodaysPriceChange(priceChange);
+                        StringBuffer s = new StringBuffer(parts[7].replace("\"", ""));
+
+                        s.setLength(s.length() - 1); // chop last char: %
+                        Log.i(TAG, "Percent: " + s);
+
+                        float percentChange = Float.parseFloat(s.toString());
+//                        Log.i(TAG, "Object not NULL?" + information);
+                        information.setPriceChange(priceChange);
+                        information.setPercentChange(percentChange);
+
                         setOfEquityPricingInformation.add(information);
                     }
                     Log.i(TAG, "Notifying everyone");
@@ -162,7 +179,7 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
                 float lastPrice = Float.parseFloat(parts[i]);
                 companyDetail.setPrice(lastPrice);
-                
+
                 float priceChange = Float.parseFloat(parts[4]);
                 companyDetail.setTodaysPriceChange(priceChange);
                 StringBuffer s = new StringBuffer(parts[5].replace("\"", ""));

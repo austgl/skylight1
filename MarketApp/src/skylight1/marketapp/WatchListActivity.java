@@ -69,8 +69,8 @@ public class WatchListActivity extends GuiceListActivity {
             tickerTextView.setText(item.getTicker());
 
             avgPriceTextView.setText(item.getLastPrice().toString());
-            numberOfSharesTextView.setText("N/A");
-            currentPriceTextView.setText("100.0");
+            numberOfSharesTextView.setText(Float.toString(item.getPriceChange())); // TODO: format properly
+            currentPriceTextView.setText(Float.toString(item.getPercentChange())+"%"); // TODO: format properly
 
 
             return convertView;
