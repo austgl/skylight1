@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
+import skylight1.marketapp.model.CompanyDetail;
+
 
 /**
  * Created by IntelliJ IDEA. User: melling Date: May 20, 2010 Time: 7:57:45 PM
@@ -28,15 +31,26 @@ import java.util.Set;
 public class PortfolioActivity extends ListActivity {
 
     private static final String TAG = PortfolioActivity.class.getSimpleName();
-    public static final String ITEM_ID = "ID";
-    public static final String TICKER = "TICKER";
-    public static final String NUMBER_OF_SHARES = "NUMBER";
-    public static final String CURRENT_PRICE = "PRICE";
-    public static final String AVG_PRICE = "AVGPRICE";
+    public static final String ITEM_ID = "id";
+    public static final String TICKER = "ticker";
+    public static final String PRICE ="price";
+    public static final String ASKSIZE = "askSize";
+    public static final String TODAYSPRICECHANGE = "todaysPriceChange";
+    public static final String TODAYPERCENTCHANGE = "todaysPercentChange";
+    public static final String VOLUME ="volume";
+    public static final String EXCHANGE = "exchange";
+    public static final String EBITDA = "ebitda";
+    public static final String PEGRATIO = "pegRatio";
+    public static final String MAVG50 = "mavg50";
+    public static final String MAVG200 = "mavg200";
+    public static final String PERATIO ="peRatio";
+    public static final String BIDSIZE ="bidSize";
     
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
+    
+    private YahooEquityPricingInformationFeed ef;
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -237,6 +251,7 @@ public class PortfolioActivity extends ListActivity {
             Log.i(TAG, "Refreshing portfolio prices");
 
         } else if (item.getItemId() == R.id.Detail) {
+
             Log.i(TAG, "CompanyDetail");
             Intent intent = new Intent(this, CompanyDetailActivity0.class);
             startActivity(intent);
@@ -245,24 +260,37 @@ public class PortfolioActivity extends ListActivity {
         return true;
     }
 
+    public static final String NAME="NAME";
 
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         TextView ticker = (TextView) v.findViewById(R.id.ticker);
-        TextView numberofshares = (TextView) v
-                .findViewById(R.id.numberOfShares);
-        TextView avgPrice = (TextView) v.findViewById(R.id.avgPrice);
-        TextView currentPrice = (TextView) v.findViewById(R.id.currentPrice);
-
+        ef = new YahooEquityPricingInformationFeed();
+        
+    	CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());    	
+    	
+    	Log.i(TAG, "CompanyDetail:"+cd.toString());
+        
         SharedPreferences settings = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         Editor edit = settings.edit();
+
         edit.putInt(ITEM_ID, position);
-        edit.putString(TICKER, ticker.getText().toString());
-        edit.putString(NUMBER_OF_SHARES, numberofshares.getText().toString());
-        edit.putString(CURRENT_PRICE, currentPrice.getText().toString());
-        edit.putString(AVG_PRICE, avgPrice.getText().toString());
-        edit.commit();
+        edit.putString(TICKER, cd.getTicker());
+        edit.putString(NAME,cd.getName());
+        edit.putString(PRICE,Float.toString(cd.getPrice()));
+        edit.putString(ASKSIZE, cd.getAskSize());
+        edit.putString(TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
+        edit.putString(TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
+        edit.putString(VOLUME, Long.toString(cd.getVolume()));
+        edit.putString(EXCHANGE, cd.getExchange());
+        edit.putString(MAVG50, Float.toString(cd.getMavg50()));
+        edit.putString(MAVG200,Float.toString(cd.getMavg200() ));
+        edit.putString(EBITDA, cd.getEbita());
+        edit.putString(PEGRATIO, cd.getPegRatio());
+        edit.putString(PERATIO,Float.toString(cd.getPeRatio()));
+        edit.putString(BIDSIZE, cd.getBidSize());  
+        edit.commit();   	
         Intent i = new Intent(this, CompanyDetailActivity.class);
         startActivity(i);
         sendBroadcast(i);
