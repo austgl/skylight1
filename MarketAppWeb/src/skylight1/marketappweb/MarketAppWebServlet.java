@@ -19,8 +19,18 @@ import skylight1.marketappweb.model.*;
  * to try out the JDO classes, but I imagine we will want our servlets (or whatever) in
  * a controller directory.
  */
+
+
+
 @SuppressWarnings({"unchecked","serial"})
 public class MarketAppWebServlet extends HttpServlet {
+
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
+	throws IOException {
+		String x = req.getReader().readLine();
+		System.out.println(x);
+	}		
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws IOException {
 		resp.setContentType("text/plain");
