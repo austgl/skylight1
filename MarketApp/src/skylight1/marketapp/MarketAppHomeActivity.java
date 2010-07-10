@@ -1,5 +1,8 @@
 package skylight1.marketapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,7 +14,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
+import skylight1.marketapp.model.WatchList;
+import skylight1.marketapp.model.WatchListItem;
+import skylight1.marketapp.Synchronizer;
 //import skylight1.marketapp.CandleStickActivity;
 
 public class MarketAppHomeActivity extends GuiceActivity {
@@ -84,7 +91,19 @@ public class MarketAppHomeActivity extends GuiceActivity {
             startActivity(intent);
 
         } else if (item.getItemId() == R.id.sync_cloud) {
-            Log.i("FOO", "Sync'ing with cloud");
+        	List<WatchList> l = new ArrayList<WatchList>();
+        	String result = "";
+        	if(Synchronizer.doSynchronization(Synchronizer.generateDummyWatchLists(), l)) {
+        		for(WatchList wl : l) {
+        			result += wl.getListName() + ":\n";
+        			for(WatchListItem i : wl.getItems())
+        				result += "\t" + i.toString() + "\n";
+        		}
+        	}
+        	else
+        		result = "Synchronization failed";
+			Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+          Log.i("FOO", "Sync'ing with cloud");
         } else if (item.getItemId() == R.id.helpMenu) {
             Intent intent = new Intent(MarketAppHomeActivity.this, HelpActivity.class);
             startActivity(intent);
