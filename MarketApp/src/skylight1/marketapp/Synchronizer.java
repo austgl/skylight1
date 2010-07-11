@@ -25,7 +25,25 @@ import android.util.Xml;
 import skylight1.marketapp.model.WatchList;
 import skylight1.marketapp.model.WatchListItem;
 
+/**
+ * 
+ * @author Rob
+ * 
+ * This will actually connect to the app engine emulator running on the same machine and synchronize the watch lists.
+ * It is actually working on the MarketAppWeb side, but here we are just using the dummy watch lists so far.
+ * The new classes I added, WatchList and WatchListItem, are primarily to illustrate the extra data we'll need to make
+ * synchronization possible. In practice, we may want to generate and parse the required XML at a lower level, but I don't
+ * think these classes add much overhead. The doSynchronization method does the work, and the list returned in 
+ * synchronizedLists contains all the data. I suspect the simplest thing will be to remove everything currently in the
+ * database, and recreate everything from synchronizedLists.
+ * 
+ *  When we have a UI for editing watch lists, if the user decides to delete a watch list or one of its items, we
+ *  should just set its deleted flag to true stop displaying it. The cloud synchronizer will decide when it is
+ *  actually deleted. But if the user does not set up an account for web synchronization, deletion can be done
+ *  immediately.
+ */
 public class Synchronizer {
+	
 	public static List<WatchList> generateDummyWatchLists() {
 		List<WatchList> l = new ArrayList<WatchList>();
 		WatchList wl = new WatchList("Tech Stocks",new TreeSet<WatchListItem>());
@@ -35,9 +53,13 @@ public class Synchronizer {
 		l.add(wl);
 
 		wl = new WatchList("Energy Stocks",new TreeSet<WatchListItem>());
-		wl.getItems().add(new WatchListItem("BP"));
+		WatchListItem i = new WatchListItem("BP");
+		i.setDeleted(false);
+		wl.getItems().add(i);
 		wl.getItems().add(new WatchListItem("XOM"));
-		wl.getItems().add(new WatchListItem("GOOG"));
+		i = new WatchListItem("GOOG");
+		i.setDeleted(false);
+		wl.getItems().add(i);
 		l.add(wl);
 		return l;
 	}
@@ -49,6 +71,10 @@ public class Synchronizer {
  * @return true on success
  */
 	public static boolean doSynchronization(List<WatchList> androidLists, List<WatchList> synchronizedLists) {
+		// You can't use localhost, because that's the phone (emulator). The emulator maps the host machine
+		// to 10.0.2.2, and you need that when using the app engine emulator. Explanation here:
+		// http://blog.js-development.com/2009/10/accessing-host-machine-from-your.html
+		// Of course, in production, we'll connect to the actual GAE.
 		String uriString = "http://10.0.2.2:8888/sync";
 		URI uri = null;
 		try {
@@ -87,7 +113,7 @@ public class Synchronizer {
 		serializer.setOutput(writer);
 		serializer.startDocument("UTF-8", true);
 		serializer.startTag("", "lists");
-		serializer.attribute("", "user", "aardvark"); // We better do something
+		serializer.attribute("", "user", "aardvark"); // TODO: We better do something
 														// better than this!!
 		serializer.attribute("", "password", "");
 
