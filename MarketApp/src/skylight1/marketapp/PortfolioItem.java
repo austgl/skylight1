@@ -64,7 +64,31 @@ public class PortfolioItem {
     private String ticker;
     private float averagePrice;
     private int numberOfShares;
-    private float currentPrice;
+    private float currentPrice;    
+    private String id;
+    
+    public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+    public PortfolioItem(String ticker, float averagePrice, int numberOfShares, float currentPrice, String id) {
+        this.ticker = ticker;
+        this.averagePrice = averagePrice;
+        this.averagePriceStr = String.format("%8.2f", averagePrice);
+
+        this.numberOfShares = numberOfShares;
+        this.numberOfSharesStr =  String.format("%d", numberOfShares);
+
+
+        this.currentPrice = currentPrice;
+        this.currentPriceStr = String.format("%8.2f",currentPrice);//Put in setter
+        
+        this.id= id;
+    }
 
     // Tim, IntelliJ filled these in!!!
 

@@ -23,7 +23,7 @@ public class MarketDatabase extends ContentProvider {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "market.db";
     private static final String WATCHLIST_TABLE = "watchlist"; // Don't put word table in the name
-    private static final String PORTFOLIO_TABLE = "portfolio";
+    static final String PORTFOLIO_TABLE = "portfolio";
     // Column Names
     public static final String KEY_ID = "_id";
     public static final String KEY_DATE = "date";
@@ -71,6 +71,33 @@ public class MarketDatabase extends ContentProvider {
 
         return count;
     }
+    
+    
+    public int delete(Uri uri,
+    					String where, 
+    					String[] whereArgs, 
+    					String tablename,
+    					Context context) {
+        int count =0;
+        StringBuffer wherebuf;
+        try{
+        	if(whereArgs.length >0){       		
+        		wherebuf = new StringBuffer();
+        		wherebuf.append(where).append("=").append(whereArgs[0]);
+        		for(int i = 1; i < whereArgs.length; i++){        			
+        			wherebuf.append(" or ")
+        				.append(where)
+        				.append("=")
+        				.append(whereArgs[i]);
+        		}    
+        		count = marketDB.delete(tablename, wherebuf.toString() , null); 
+        		context.getContentResolver().notifyChange(uri, null);
+        	}
+	     } catch(Exception e) {
+         	e.printStackTrace();
+         }
+	     return count;
+     }
 
     @Override
     public String getType(Uri uri) {
@@ -147,7 +174,7 @@ public class MarketDatabase extends ContentProvider {
     /*
      *
      */
-
+     
     @Override
     public boolean onCreate() {
         mContext = getContext();   // TODO: where should we set the context?

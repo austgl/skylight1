@@ -1,20 +1,29 @@
 package skylight1.marketapp;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnLongClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,13 +54,14 @@ public class PortfolioActivity extends ListActivity {
     public static final String MAVG200 = "mavg200";
     public static final String PERATIO ="peRatio";
     public static final String BIDSIZE ="bidSize";
+    public static final String NAME="name";
     
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
     
     private YahooEquityPricingInformationFeed ef;
-
+    
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenuInfo menuInfo) {
@@ -64,16 +74,31 @@ public class PortfolioActivity extends ListActivity {
 
     // private static final String[] DATA = {"AAPL", "GOOG"};
     static List<PortfolioItem> portfolioItems = new ArrayList<PortfolioItem>();
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
-    private static class EfficientAdapter extends BaseAdapter {
+        super.onCreate(savedInstanceState);
+        // setContentView(R.layout.portfolio);
+        Log.i(TAG, "Fetching prices");
+//        initPortfolioList();
+        marketDatabase = new MarketDatabase(this);
+        aa = new EfficientAdapter(this);
+        setListAdapter(aa);
+
+    }
+    
+    private static class EfficientAdapter extends BaseAdapter implements OnTouchListener {
+   // private static class EfficientAdapter extends BaseAdapter implements OnItemLongClickListener {
         private LayoutInflater mInflater;
+        private String dbid;
+        private String tickerMsg;
 
         public EfficientAdapter(Context context) {
             // Cache the LayoutInflate to avoid asking for a new one each time.
             mInflater = LayoutInflater.from(context);
 
             // Icons bound to the rows.
-        }
+        }       
 
         /**
          * The number of items in the list is determined by the number of
@@ -105,7 +130,7 @@ public class PortfolioActivity extends ListActivity {
         public long getItemId(int position) {
             return position;
         }
-
+        
         /**
          * Make a view to hold each row.
          *
@@ -117,7 +142,7 @@ public class PortfolioActivity extends ListActivity {
             // unnecessary calls
             // to findViewById() on each row.
             ViewHolder holder;
-
+            int pos = position;    
             // When convertView is not null, we can reuse it directly, there is
             // no need
             // to reinflate it. We only inflate a new View when the convertView
@@ -137,7 +162,7 @@ public class PortfolioActivity extends ListActivity {
                 holder.numberOfSharesTextView = (TextView) convertView
                         .findViewById(R.id.numberOfShares);
                 holder.currentPriceTextView = (TextView) convertView
-                        .findViewById(R.id.currentPrice);
+                        .findViewById(R.id.currentPrice);           
 
                 convertView.setTag(holder);
             } else {
@@ -155,31 +180,64 @@ public class PortfolioActivity extends ListActivity {
             holder.numberOfSharesTextView
                     .setText(item.getNumberOfSharesAsStr());
             holder.currentPriceTextView.setText(item.getCurrentPriceStr());
-
+            dbid = item.getId();       
+			convertView.setOnTouchListener(this);          
+            tickerMsg = item.getTicker();
             return convertView;
         }
 
+        
         static class ViewHolder {
             TextView tickerTextView;
             TextView avgPriceTextView;
             TextView numberOfSharesTextView;
             TextView currentPriceTextView;
         }
+        
+        
+//		@Override
+//		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+//				int arg2, long arg3) {
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+        
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+
+			final Context context = this.mInflater.getContext();	
+
+			AlertDialog.Builder b = new AlertDialog.Builder(this.mInflater.getContext());
+			b.setTitle("Delete Ticker");
+			b.setMessage("Ticker "+tickerMsg.toUpperCase()+" will be deleted");			
+			b.setPositiveButton("Delete",new DialogInterface.OnClickListener()
+			{								
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Log.i(TAG, "Deleting Ticker DB_ID =" + dbid );					
+					MarketDatabase marketDatabase2 = new MarketDatabase(context);
+					String whereArgs[] = new String[1];
+					whereArgs[0]=dbid;				
+					marketDatabase2.open();
+					marketDatabase2.delete(MarketDatabase.CONTENT_URI, 
+											MarketDatabase.KEY_ID, 
+											whereArgs, 
+											MarketDatabase.PORTFOLIO_TABLE, context);
+					marketDatabase2.cleanup();
+				}				
+			});
+				
+			b.setNegativeButton("Cancel-det",new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub	
+				}
+			});
+			b.setCancelable(true);			
+			b.show();						
+			return  false;			
+		}
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        // setContentView(R.layout.portfolio);
-        Log.i(TAG, "Fetching prices");
-//        initPortfolioList();
-        marketDatabase = new MarketDatabase(this);
-        aa = new EfficientAdapter(this);
-        setListAdapter(aa);
-
-    }
-
 
     /*
     * Get tickers from Juan's DB.
@@ -196,22 +254,26 @@ public class PortfolioActivity extends ListActivity {
             int id = tickerCursor.getInt(0);
             String ticker = tickerCursor.getString(1);
             Log.i(TAG, "Ticker: " + id + "==> " + ticker);
-            tickerSet.add(ticker);
+            tickerSet.add(ticker+","+id);
         }
         marketDatabase.cleanup();
         return tickerSet;
     }
-
-
+    
+    /*
+     * Get tickers from Juan's DB.
+     */
+    
     @Override
     public void onResume() {
         super.onResume();
-
         Log.i(TAG, "onResume");
         portfolioItems.clear();
         final Set<String> positions = loadPositionsFromMarketDB();
         for (String ticker: positions) {
-            portfolioItems.add(new PortfolioItem(ticker, 202.0f, 1000, 250.10f));
+        	String [] ticker_id = ticker.split(",");
+        	
+            portfolioItems.add(new PortfolioItem(ticker_id[0], 202.0f, 1000, 250.10f,ticker_id[1]));
         }
         aa.notifyDataSetChanged();
     }
@@ -260,7 +322,6 @@ public class PortfolioActivity extends ListActivity {
         return true;
     }
 
-    public static final String NAME="NAME";
 
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -294,7 +355,6 @@ public class PortfolioActivity extends ListActivity {
         Intent i = new Intent(this, CompanyDetailActivity.class);
         startActivity(i);
         sendBroadcast(i);
-
     }
 
     @Override
