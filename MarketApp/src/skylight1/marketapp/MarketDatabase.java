@@ -239,7 +239,7 @@ public class MarketDatabase extends ContentProvider {
     }
 
     public Cursor getAllPositions() {
-        return marketDB.query(PORTFOLIO_TABLE, new String[]{KEY_ID, KEY_SYMBOL}, null, null, null, null, null);
+        return marketDB.query(PORTFOLIO_TABLE, new String[]{KEY_ID, KEY_SYMBOL, KEY_QUANTITY, KEY_AVG_PRICE}, null, null, null, null, null);
 
     }
 

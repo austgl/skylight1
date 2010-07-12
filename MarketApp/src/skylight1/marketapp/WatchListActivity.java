@@ -213,7 +213,8 @@ public class WatchListActivity extends GuiceListActivity {
 //                        for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
                         for (EquityPricingInformation equityPricingInformation : sortedPrices) {
                             final String ticker = equityPricingInformation.getTicker();
-                            Log.i(TAG, ticker);
+                            Log.i(TAG, "Displaying: " + ticker);
+                            
                             if (tickerToEquityPricingInformationMap.containsKey(ticker)) {
                                 aa.remove(tickerToEquityPricingInformationMap.get(ticker));
                             }

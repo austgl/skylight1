@@ -6,7 +6,7 @@ package skylight1.marketapp;
  * Date: May 20, 2010
  * Time: 8:28:03 PM
  */
-public class PortfolioItem {
+public class PortfolioItem implements Comparable<PortfolioItem> {
     private static final String TAG = PortfolioItem.class.getSimpleName();
 
     public String getAveragePriceStr() {
@@ -64,16 +64,16 @@ public class PortfolioItem {
     private String ticker;
     private float averagePrice;
     private int numberOfShares;
-    private float currentPrice;    
+    private float currentPrice;
     private String id;
-    
-    public String getId() {
-		return id;
-	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public PortfolioItem(String ticker, float averagePrice, int numberOfShares, float currentPrice, String id) {
         this.ticker = ticker;
@@ -81,13 +81,13 @@ public class PortfolioItem {
         this.averagePriceStr = String.format("%8.2f", averagePrice);
 
         this.numberOfShares = numberOfShares;
-        this.numberOfSharesStr =  String.format("%d", numberOfShares);
+        this.numberOfSharesStr = String.format("%d", numberOfShares);
 
 
         this.currentPrice = currentPrice;
-        this.currentPriceStr = String.format("%8.2f",currentPrice);//Put in setter
-        
-        this.id= id;
+        this.currentPriceStr = String.format("%8.2f", currentPrice);//Put in setter
+
+        this.id = id;
     }
 
     // Tim, IntelliJ filled these in!!!
@@ -98,17 +98,20 @@ public class PortfolioItem {
         this.averagePriceStr = String.format("%8.2f", averagePrice);
 
         this.numberOfShares = numberOfShares;
-        this.numberOfSharesStr =  String.format("%d", numberOfShares);
+        this.numberOfSharesStr = String.format("%d", numberOfShares);
 
 
         this.currentPrice = currentPrice;
-        this.currentPriceStr = String.format("%8.2f",currentPrice);//Put in setter
+        this.currentPriceStr = String.format("%8.2f", currentPrice);//Put in setter
     }
 
-    public float getProfit() {
-        // numberOfShares * currentPrice  - numberOfShares * avgPrice
-        return 100.01f;
+    public float getPnL() {
+        return numberOfShares * currentPrice - numberOfShares*averagePrice;
     }
 
+    @Override
+    public int compareTo(PortfolioItem portfolioItem) {
+        return ticker.compareTo(portfolioItem.getTicker());
+    }
 
 }

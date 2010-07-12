@@ -1,37 +1,29 @@
 package skylight1.marketapp;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemLongClickListener;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
+import skylight1.marketapp.model.EquityPricingInformation;
+
+import java.util.*;
 
 
 /**
@@ -42,26 +34,26 @@ public class PortfolioActivity extends ListActivity {
     private static final String TAG = PortfolioActivity.class.getSimpleName();
     public static final String ITEM_ID = "id";
     public static final String TICKER = "ticker";
-    public static final String PRICE ="price";
+    public static final String PRICE = "price";
     public static final String ASKSIZE = "askSize";
     public static final String TODAYSPRICECHANGE = "todaysPriceChange";
     public static final String TODAYPERCENTCHANGE = "todaysPercentChange";
-    public static final String VOLUME ="volume";
+    public static final String VOLUME = "volume";
     public static final String EXCHANGE = "exchange";
     public static final String EBITDA = "ebitda";
     public static final String PEGRATIO = "pegRatio";
     public static final String MAVG50 = "mavg50";
     public static final String MAVG200 = "mavg200";
-    public static final String PERATIO ="peRatio";
-    public static final String BIDSIZE ="bidSize";
-    public static final String NAME="name";
-    
+    public static final String PERATIO = "peRatio";
+    public static final String BIDSIZE = "bidSize";
+    public static final String NAME = "name";
+
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
-    
+
     private YahooEquityPricingInformationFeed ef;
-    
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenuInfo menuInfo) {
@@ -72,8 +64,8 @@ public class PortfolioActivity extends ListActivity {
         menu.add(0, v.getId(), 0, "Action 3");
     }
 
-    // private static final String[] DATA = {"AAPL", "GOOG"};
     static List<PortfolioItem> portfolioItems = new ArrayList<PortfolioItem>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -86,9 +78,9 @@ public class PortfolioActivity extends ListActivity {
         setListAdapter(aa);
 
     }
-    
+
     private static class EfficientAdapter extends BaseAdapter implements OnTouchListener {
-   // private static class EfficientAdapter extends BaseAdapter implements OnItemLongClickListener {
+        // private static class EfficientAdapter extends BaseAdapter implements OnItemLongClickListener {
         private LayoutInflater mInflater;
         private String dbid;
         private String tickerMsg;
@@ -98,7 +90,7 @@ public class PortfolioActivity extends ListActivity {
             mInflater = LayoutInflater.from(context);
 
             // Icons bound to the rows.
-        }       
+        }
 
         /**
          * The number of items in the list is determined by the number of
@@ -130,7 +122,7 @@ public class PortfolioActivity extends ListActivity {
         public long getItemId(int position) {
             return position;
         }
-        
+
         /**
          * Make a view to hold each row.
          *
@@ -142,7 +134,7 @@ public class PortfolioActivity extends ListActivity {
             // unnecessary calls
             // to findViewById() on each row.
             ViewHolder holder;
-            int pos = position;    
+            int pos = position;
             // When convertView is not null, we can reuse it directly, there is
             // no need
             // to reinflate it. We only inflate a new View when the convertView
@@ -162,7 +154,7 @@ public class PortfolioActivity extends ListActivity {
                 holder.numberOfSharesTextView = (TextView) convertView
                         .findViewById(R.id.numberOfShares);
                 holder.currentPriceTextView = (TextView) convertView
-                        .findViewById(R.id.currentPrice);           
+                        .findViewById(R.id.currentPrice);
 
                 convertView.setTag(holder);
             } else {
@@ -180,100 +172,111 @@ public class PortfolioActivity extends ListActivity {
             holder.numberOfSharesTextView
                     .setText(item.getNumberOfSharesAsStr());
             holder.currentPriceTextView.setText(item.getCurrentPriceStr());
-            dbid = item.getId();       
-			convertView.setOnTouchListener(this);          
+            dbid = item.getId();
+            convertView.setOnTouchListener(this);
             tickerMsg = item.getTicker();
             return convertView;
         }
 
-        
+
         static class ViewHolder {
             TextView tickerTextView;
             TextView avgPriceTextView;
             TextView numberOfSharesTextView;
             TextView currentPriceTextView;
         }
-        
-        
+
+
 //		@Override
 //		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 //				int arg2, long arg3) {
 //			// TODO Auto-generated method stub
 //			return false;
 //		}
-        
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
 
-			final Context context = this.mInflater.getContext();	
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
 
-			AlertDialog.Builder b = new AlertDialog.Builder(this.mInflater.getContext());
-			b.setTitle("Delete Ticker");
-			b.setMessage("Ticker "+tickerMsg.toUpperCase()+" will be deleted");			
-			b.setPositiveButton("Delete",new DialogInterface.OnClickListener()
-			{								
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					Log.i(TAG, "Deleting Ticker DB_ID =" + dbid );					
-					MarketDatabase marketDatabase2 = new MarketDatabase(context);
-					String whereArgs[] = new String[1];
-					whereArgs[0]=dbid;				
-					marketDatabase2.open();
-					marketDatabase2.delete(MarketDatabase.CONTENT_URI, 
-											MarketDatabase.KEY_ID, 
-											whereArgs, 
-											MarketDatabase.PORTFOLIO_TABLE, context);
-					marketDatabase2.cleanup();
-				}				
-			});
-				
-			b.setNegativeButton("Cancel-det",new OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub	
-				}
-			});
-			b.setCancelable(true);			
-			b.show();						
-			return  false;			
-		}
+            final Context context = this.mInflater.getContext();
+
+            AlertDialog.Builder b = new AlertDialog.Builder(this.mInflater.getContext());
+            b.setTitle("Delete Ticker");
+            b.setMessage("Ticker " + tickerMsg.toUpperCase() + " will be deleted");
+            b.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.i(TAG, "Deleting Ticker DB_ID =" + dbid);
+                    MarketDatabase marketDatabase2 = new MarketDatabase(context);
+                    String whereArgs[] = new String[1];
+                    whereArgs[0] = dbid;
+                    marketDatabase2.open();
+                    marketDatabase2.delete(MarketDatabase.CONTENT_URI,
+                            MarketDatabase.KEY_ID,
+                            whereArgs,
+                            MarketDatabase.PORTFOLIO_TABLE, context);
+                    marketDatabase2.cleanup();
+                }
+            });
+
+            b.setNegativeButton("Cancel-det", new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // TODO Auto-generated method stub
+                }
+            });
+            b.setCancelable(true);
+            b.show();
+            return false;
+        }
     }
 
     /*
     * Get tickers from Juan's DB.
     */
-    private Set<String> loadPositionsFromMarketDB() {
-        Set<String> tickerSet = new HashSet<String>();
+
+    private Set<PortfolioItem> loadPositionsFromMarketDB() {
+        Set<PortfolioItem> tickerSet = new HashSet<PortfolioItem>();
         marketDatabase.open();
         Log.i(TAG, "Getting Position tickers");
+        PortfolioItem portfolioItem;
 
         Cursor tickerCursor = marketDatabase.getAllPositions();
         startManagingCursor(tickerCursor); // Prevents error: "Finalizing a Cursor that has not been deactivated or closed"
-        
+
         while (tickerCursor.moveToNext()) {
             int id = tickerCursor.getInt(0);
             String ticker = tickerCursor.getString(1);
-            Log.i(TAG, "Ticker: " + id + "==> " + ticker);
-            tickerSet.add(ticker+","+id);
+            int quantity = tickerCursor.getInt(2);
+            float avgPrice = tickerCursor.getFloat(3);
+            Log.i(TAG, "Ticker: " + id + "==> " + ticker + ", nShares=" + quantity + ", AvgPrc=" + avgPrice);
+            portfolioItem = new PortfolioItem(ticker, avgPrice, quantity, avgPrice);
+            tickerSet.add(portfolioItem);
         }
         marketDatabase.cleanup();
         return tickerSet;
     }
-    
+
     /*
-     * Get tickers from Juan's DB.
-     */
-    
+    * Get tickers from Juan's DB.
+    */
+
     @Override
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
         portfolioItems.clear();
-        final Set<String> positions = loadPositionsFromMarketDB();
-        for (String ticker: positions) {
-        	String [] ticker_id = ticker.split(",");
-        	
-            portfolioItems.add(new PortfolioItem(ticker_id[0], 202.0f, 1000, 250.10f,ticker_id[1]));
+        final Set<PortfolioItem> positions = loadPositionsFromMarketDB();
+        SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
+
+        for (PortfolioItem position : sortedPositions) {
+
+//        	String [] ticker_id = ticker.split(",");
+
+//            portfolioItems.add(new PortfolioItem(ticker_id[0], 202.0f, 1000, 250.10f,ticker_id[1]));
+            portfolioItems.add(new PortfolioItem(position.getTicker(),
+                    position.getAveragePrice(),
+                    position.getNumberOfShares(),
+                    position.getAveragePrice(), position.getTicker()));
         }
         aa.notifyDataSetChanged();
     }
@@ -327,31 +330,31 @@ public class PortfolioActivity extends ListActivity {
         super.onListItemClick(l, v, position, id);
         TextView ticker = (TextView) v.findViewById(R.id.ticker);
         ef = new YahooEquityPricingInformationFeed();
-        
-    	CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());    	
-    	
-    	Log.i(TAG, "CompanyDetail:"+cd.toString());
-        
+
+        CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());
+
+        Log.i(TAG, "CompanyDetail:" + cd.toString());
+
         SharedPreferences settings = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         Editor edit = settings.edit();
 
         edit.putInt(ITEM_ID, position);
         edit.putString(TICKER, cd.getTicker());
-        edit.putString(NAME,cd.getName());
-        edit.putString(PRICE,Float.toString(cd.getPrice()));
+        edit.putString(NAME, cd.getName());
+        edit.putString(PRICE, Float.toString(cd.getPrice()));
         edit.putString(ASKSIZE, cd.getAskSize());
         edit.putString(TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
         edit.putString(TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
         edit.putString(VOLUME, Long.toString(cd.getVolume()));
         edit.putString(EXCHANGE, cd.getExchange());
         edit.putString(MAVG50, Float.toString(cd.getMavg50()));
-        edit.putString(MAVG200,Float.toString(cd.getMavg200() ));
+        edit.putString(MAVG200, Float.toString(cd.getMavg200()));
         edit.putString(EBITDA, cd.getEbita());
         edit.putString(PEGRATIO, cd.getPegRatio());
-        edit.putString(PERATIO,Float.toString(cd.getPeRatio()));
-        edit.putString(BIDSIZE, cd.getBidSize());  
-        edit.commit();   	
+        edit.putString(PERATIO, Float.toString(cd.getPeRatio()));
+        edit.putString(BIDSIZE, cd.getBidSize());
+        edit.commit();
         Intent i = new Intent(this, CompanyDetailActivity.class);
         startActivity(i);
         sendBroadcast(i);
