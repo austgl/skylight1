@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 public class WatchListActivity extends GuiceListActivity {
 
     EquityFeedObserver equityFeedObserver;
+    private Set<String> watchListTickers;
 
     private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
         private LayoutInflater mInflater;
@@ -123,7 +124,7 @@ public class WatchListActivity extends GuiceListActivity {
     @Override
     public void onPause() {
         super.onPause();
-        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
+//        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
 
         equityPricingInformationFeed.removeEquityForObserver(equityFeedObserver, watchListTickers);
         Log.i(TAG, "Removing tickers");
@@ -186,7 +187,7 @@ public class WatchListActivity extends GuiceListActivity {
         super.onResume();
 
         // First show the tickers and current prices... Uh, we have no prices yet.
-        final Set<String> watchListTickers = loadTickersFromMarketDB();
+        watchListTickers = loadTickersFromMarketDB();
         Log.i(TAG, "# Tickers: " + watchListTickers.size());
 //        EquityPricingInformation eq = new EquityPricingInformation();
 //
