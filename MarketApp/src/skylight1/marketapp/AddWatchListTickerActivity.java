@@ -39,7 +39,7 @@ public class AddWatchListTickerActivity extends GuiceActivity {
             @Override
             public void onClick(View view) {
 
-                final String newTicker = newTickerTextView.getText().toString();
+                final String newTicker = newTickerTextView.getText().toString().toUpperCase();
                 Log.i(TAG, "New Ticker is: " + newTicker);
 
                 // Juan's Database

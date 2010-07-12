@@ -35,7 +35,7 @@ public class AddPortfolioItemActivity extends Activity {  // This is intentional
                 EditText quantityView = (EditText) findViewById(R.id.add_portfolio_item_quantity_text);
                 EditText avgPriceView = (EditText) findViewById(R.id.add_portfolio_item_avg_price_text);
                 try {
-                    tickerStr = tickerView.getText().toString();
+                    tickerStr = tickerView.getText().toString().toUpperCase();
                     avgPrice = Float.parseFloat(avgPriceView.getText().toString());
                     numOfShares = Integer.parseInt(quantityView.getText().toString());
 
