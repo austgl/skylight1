@@ -1,7 +1,6 @@
 package skylight1.marketapp;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -19,8 +18,13 @@ import android.view.View.OnTouchListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.google.inject.Inject;
+import roboguice.activity.GuiceListActivity;
+import skylight1.marketapp.feed.EquityFeedObserver;
+import skylight1.marketapp.feed.EquityPricingInformationFeed;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
+import skylight1.marketapp.model.EquityPricingInformation;
 
 import java.util.*;
 
@@ -28,7 +32,7 @@ import java.util.*;
 /**
  * Created by IntelliJ IDEA. User: melling Date: May 20, 2010 Time: 7:57:45 PM
  */
-public class PortfolioActivity extends ListActivity {
+public class PortfolioActivity extends GuiceListActivity {
 
     private static final String TAG = PortfolioActivity.class.getSimpleName();
     public static final String ITEM_ID = "id";
@@ -47,13 +51,21 @@ public class PortfolioActivity extends ListActivity {
     public static final String BIDSIZE = "bidSize";
     public static final String NAME = "name";
 
+    private Map<String, EquityPricingInformation> tickerToEquityPricingInformationMap = new HashMap<String, EquityPricingInformation>();
+    private Map<String, PortfolioItem> portfolioItemTickerMap = new HashMap<String, PortfolioItem>();
+
+    Set<String> portfolioTickerSet;
+    EquityFeedObserver equityFeedObserver;
+
+    @Inject
+    public EquityPricingInformationFeed equityPricingInformationFeed;
+
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Context Menu");
         menu.add(0, v.getId(), 0, "Action 1");
@@ -77,9 +89,8 @@ public class PortfolioActivity extends ListActivity {
     }
 
     private static class EfficientAdapter extends BaseAdapter implements OnTouchListener {
-        // private static class EfficientAdapter extends BaseAdapter implements OnItemLongClickListener {
         private LayoutInflater mInflater;
-        private String dbid;
+        private String dbId;
         private String tickerMsg;
 
         public EfficientAdapter(Context context) {
@@ -101,7 +112,7 @@ public class PortfolioActivity extends ListActivity {
 
         /**
          * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
+         * sufficient to get at the data. If we were using a more complex data
          * structure, we would return whatever object represents one row in the
          * list.
          *
@@ -152,7 +163,7 @@ public class PortfolioActivity extends ListActivity {
                 holder.currentPriceTextView = (TextView) convertView
                         .findViewById(R.id.currentPrice);
                 holder.currentPnlTextView = (TextView) convertView
-                                       .findViewById(R.id.positionPnl);
+                        .findViewById(R.id.positionPnl);
 
                 convertView.setTag(holder);
             } else {
@@ -170,8 +181,8 @@ public class PortfolioActivity extends ListActivity {
             holder.numberOfSharesTextView
                     .setText(item.getNumberOfSharesAsStr());
             holder.currentPriceTextView.setText(item.getCurrentPriceStr());
-             holder.currentPnlTextView.setText("" + item.getPnL());
-            dbid = item.getId();
+            holder.currentPnlTextView.setText("" + item.getPnL());
+            dbId = item.getId();
             convertView.setOnTouchListener(this);
             tickerMsg = item.getTicker();
             return convertView;
@@ -205,10 +216,10 @@ public class PortfolioActivity extends ListActivity {
             b.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Log.i(TAG, "Deleting Ticker DB_ID =" + dbid);
+                    Log.i(TAG, "Deleting Ticker DB_ID =" + dbId);
                     MarketDatabase marketDatabase2 = new MarketDatabase(context);
                     String whereArgs[] = new String[1];
-                    whereArgs[0] = dbid;
+                    whereArgs[0] = dbId;
                     marketDatabase2.open();
                     marketDatabase2.delete(MarketDatabase.CONTENT_URI,
                             MarketDatabase.KEY_ID,
@@ -256,6 +267,14 @@ public class PortfolioActivity extends ListActivity {
         return tickerSet;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+//        final Set<String> watchListTickers = marketDatabase.getWatchListTickers();
+
+        equityPricingInformationFeed.removeEquityForObserver(equityFeedObserver, portfolioTickerSet);
+        Log.i(TAG, "Removing tickers");
+    }
     /*
     * Get tickers from Juan's DB.
     */
@@ -267,52 +286,81 @@ public class PortfolioActivity extends ListActivity {
         portfolioItems.clear();
         final Set<PortfolioItem> positions = loadPositionsFromMarketDB();
 
+
         // Calculate P&L
-        double pnl=0f;
-        double portfolioValue=0;
+        double pnl = 0f;
+        double portfolioValue = 0;
 
         for (PortfolioItem position : positions) {
-            
+
             pnl += position.getPnL();
             portfolioValue += position.getMarktetValue();
         }
+        Log.i(TAG, pnl + "," + portfolioValue);
 
-
-        SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
+        final SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
+        portfolioTickerSet = new TreeSet<String>();
 
         for (PortfolioItem position : sortedPositions) {
-
-//        	String [] ticker_id = ticker.split(",");
-
-//            portfolioItems.add(new PortfolioItem(ticker_id[0], 202.0f, 1000, 250.10f,ticker_id[1]));
-            portfolioItems.add(new PortfolioItem(position.getTicker(),
+            PortfolioItem p;
+            portfolioTickerSet.add(position.getTicker());
+            p = new PortfolioItem(position.getTicker(),
                     position.getAveragePrice(),
                     position.getNumberOfShares(),
-                    position.getAveragePrice(), position.getTicker()));
+                    position.getAveragePrice(), position.getTicker());
+
+
+            portfolioItems.add(p);
+            portfolioItemTickerMap.put(position.getTicker(), p);
         }
         aa.notifyDataSetChanged();
+
+
+        equityFeedObserver = new EquityFeedObserver() {
+
+
+            @Override
+            public void equityPricingInformationUpdate(final Set<EquityPricingInformation> aSetOfEquityPricingInformation) {
+                // TODO update my list
+                runOnUiThread(new Runnable() {
+
+                    /*
+                     * We are going to be called with a prices for which we've subscribed.  Sorting the set for now to control the
+                     * ordering.
+                     *
+                     */
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "Updating portfolio UI on UI Thread");
+                        SortedSet<EquityPricingInformation> sortedPrices = new TreeSet<EquityPricingInformation>(aSetOfEquityPricingInformation);
+                        for (EquityPricingInformation equityPricingInformation : sortedPrices) {
+                            final String ticker = equityPricingInformation.getTicker();
+                            Log.i(TAG, "Displaying PortfolioItem: " + ticker);
+
+                            if (tickerToEquityPricingInformationMap.containsKey(ticker)) {
+                                PortfolioItem p = portfolioItemTickerMap.get(ticker);
+                                p.setCurrentPrice((equityPricingInformation.getLastPrice().floatValue()));
+                                // Get Portfolio item and update latest price
+//                                 aa.remove();
+                            }
+
+//                            aa.add(equityPricingInformation);
+                            tickerToEquityPricingInformationMap.put(ticker, equityPricingInformation);
+//                            addEquityPricingInformation(equityPricingInformation);
+                        }
+                        aa.notifyDataSetChanged();  // Let view know data set has changed - TODO: Should this be inside loop?
+                    }
+                });
+            }
+        };
+
+        equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver, portfolioTickerSet);
     }
 
 /*
     private void initPortfolioList() {
         portfolioItems.add(new PortfolioItem("AAPL", 202.0f, 1000, 250.10f));
         portfolioItems.add(new PortfolioItem("GOOG", 20.0f, 10000, 50.10f));
-        portfolioItems.add(new PortfolioItem("MSFT", 20.1f, 50000, 250.10f));
-        portfolioItems.add(new PortfolioItem("IBM", 22.0f, 100000, 19.21f));
-        portfolioItems.add(new PortfolioItem("C", 3.74f, 100, 3.78f));
-        portfolioItems.add(new PortfolioItem("JDSU", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("ADBE", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("PALM", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("F", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("GM", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("JNPR", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("AMD", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("INTC", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("GE", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("RIMM", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("WEC", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("DELL", 10.78f, 9999, 12.54f));
-        portfolioItems.add(new PortfolioItem("SY", 10.78f, 9999, 12.54f));
     }
 */
 

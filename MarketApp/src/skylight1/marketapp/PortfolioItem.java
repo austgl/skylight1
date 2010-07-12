@@ -59,6 +59,7 @@ public class PortfolioItem implements Comparable<PortfolioItem> {
 
     public void setCurrentPrice(float currentPrice) {
         this.currentPrice = currentPrice;
+        this.currentPriceStr = String.format("%8.2f", currentPrice);//Put in setter
     }
 
     private String ticker;
