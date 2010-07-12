@@ -15,34 +15,38 @@
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
- 
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
 
     <TextView android:id="@+id/ticker"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1.0"
-        android:textSize="16dip"
-        android:layout_height="48dip" />
+              android:layout_gravity="center_vertical"
+              android:layout_width="0dip"
+              android:layout_weight="1.0"
+              android:textSize="16dip"
+              android:layout_height="48dip"/>
 
-        <TextView android:id="@+id/avgPrice"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1.0"
-        android:layout_height="48dip" />
+    <TextView android:id="@+id/avgPrice"
+              android:layout_gravity="center_vertical"
+              android:layout_width="0dip"
+              android:layout_weight="1.0"
+              android:layout_height="48dip"/>
 
     <TextView android:id="@+id/numberOfShares"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1.0"
-        android:layout_height="48dip" />
+              android:layout_gravity="center_vertical"
+              android:layout_width="0dip"
+              android:layout_weight="1.0"
+              android:layout_height="48dip"/>
 
     <TextView android:id="@+id/currentPrice"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1.0"
-        android:layout_height="48dip" />
+              android:layout_gravity="center_vertical"
+              android:layout_width="0dip"
+              android:layout_weight="1.0"
+              android:layout_height="48dip"/>
+
+    <TextView android:id="@+id/positionPnl"
+              android:layout_gravity="center_vertical"
+              android:layout_width="0dip"
+              android:layout_weight="1.0"
+              android:layout_height="48dip"/>
 </LinearLayout>

@@ -106,7 +106,11 @@ public class PortfolioItem implements Comparable<PortfolioItem> {
     }
 
     public float getPnL() {
-        return numberOfShares * currentPrice - numberOfShares*averagePrice;
+        return numberOfShares * currentPrice - numberOfShares * averagePrice;
+    }
+
+    public float getMarktetValue() {
+        return numberOfShares * currentPrice;
     }
 
     @Override

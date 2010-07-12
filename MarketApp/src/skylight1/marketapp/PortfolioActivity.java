@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
-import skylight1.marketapp.model.EquityPricingInformation;
 
 import java.util.*;
 
@@ -51,8 +50,6 @@ public class PortfolioActivity extends ListActivity {
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
-
-    private YahooEquityPricingInformationFeed ef;
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -134,7 +131,6 @@ public class PortfolioActivity extends ListActivity {
             // unnecessary calls
             // to findViewById() on each row.
             ViewHolder holder;
-            int pos = position;
             // When convertView is not null, we can reuse it directly, there is
             // no need
             // to reinflate it. We only inflate a new View when the convertView
@@ -155,6 +151,8 @@ public class PortfolioActivity extends ListActivity {
                         .findViewById(R.id.numberOfShares);
                 holder.currentPriceTextView = (TextView) convertView
                         .findViewById(R.id.currentPrice);
+                holder.currentPnlTextView = (TextView) convertView
+                                       .findViewById(R.id.positionPnl);
 
                 convertView.setTag(holder);
             } else {
@@ -172,6 +170,7 @@ public class PortfolioActivity extends ListActivity {
             holder.numberOfSharesTextView
                     .setText(item.getNumberOfSharesAsStr());
             holder.currentPriceTextView.setText(item.getCurrentPriceStr());
+             holder.currentPnlTextView.setText("" + item.getPnL());
             dbid = item.getId();
             convertView.setOnTouchListener(this);
             tickerMsg = item.getTicker();
@@ -184,6 +183,7 @@ public class PortfolioActivity extends ListActivity {
             TextView avgPriceTextView;
             TextView numberOfSharesTextView;
             TextView currentPriceTextView;
+            TextView currentPnlTextView;
         }
 
 
@@ -266,6 +266,18 @@ public class PortfolioActivity extends ListActivity {
         Log.i(TAG, "onResume");
         portfolioItems.clear();
         final Set<PortfolioItem> positions = loadPositionsFromMarketDB();
+
+        // Calculate P&L
+        double pnl=0f;
+        double portfolioValue=0;
+
+        for (PortfolioItem position : positions) {
+            
+            pnl += position.getPnL();
+            portfolioValue += position.getMarktetValue();
+        }
+
+
         SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
 
         for (PortfolioItem position : sortedPositions) {
@@ -329,7 +341,7 @@ public class PortfolioActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         TextView ticker = (TextView) v.findViewById(R.id.ticker);
-        ef = new YahooEquityPricingInformationFeed();
+        YahooEquityPricingInformationFeed ef = new YahooEquityPricingInformationFeed();
 
         CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());
 
