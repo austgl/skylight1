@@ -417,7 +417,7 @@ public class PortfolioActivity extends GuiceListActivity {
         edit.commit();
         Intent i = new Intent(this, CompanyDetailActivity.class);
         startActivity(i);
-        sendBroadcast(i);
+      //  sendBroadcast(i);
     }
 
     @Override
