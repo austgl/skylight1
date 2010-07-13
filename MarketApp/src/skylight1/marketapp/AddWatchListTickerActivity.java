@@ -39,22 +39,26 @@ public class AddWatchListTickerActivity extends GuiceActivity {
             @Override
             public void onClick(View view) {
 
-                final String newTicker = newTickerTextView.getText().toString().toUpperCase();
-                Log.i(TAG, "New Ticker is: " + newTicker);
+            	final String listOfTickers = newTickerTextView.getText().toString();
+            	final String[] tickers = listOfTickers.split(",");
+            	
+            	for(int i = 0; i < tickers.length; i++) {
+            		final String newTicker = tickers[i].toUpperCase();
+                    Log.i(TAG, "New Ticker is: " + newTicker);
 
-                // Juan's Database
-                marketDatabase = new MarketDatabase(AddWatchListTickerActivity.this);
-                marketDatabase.open();
-                marketDatabase.insertWatchlistTicker(newTicker);
-                marketDatabase.addWatchListTicker(newTicker);   // TODO: Remove
-                marketDatabase.cleanup();
+                    // Juan's Database
+                    marketDatabase = new MarketDatabase(AddWatchListTickerActivity.this);
+                    marketDatabase.open();
+                    marketDatabase.insertWatchlistTicker(newTicker);
+                    marketDatabase.addWatchListTicker(newTicker);   // TODO: Remove
+                    marketDatabase.cleanup();
 
-
-                // melling's Database
-                PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
-                mDbHelper.open();
-                mDbHelper.createPort(newTicker);
-                mDbHelper.close();
+                    // melling's Database
+                    PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
+                    mDbHelper.open();
+                    mDbHelper.createPort(newTicker);
+                    mDbHelper.close();
+            	}
 
                 // Now clear the field for next ticker
                 newTickerTextView.setText("");
