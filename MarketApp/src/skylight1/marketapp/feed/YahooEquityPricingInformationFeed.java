@@ -120,24 +120,28 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
 
                         Log.i(TAG, "TICKER:" + ticker);
                         Log.i(TAG, line);
-                        EquityPricingInformation information = new EquityPricingInformation(ticker, ticker,
-                                new BigDecimal(parts[1]), null, new Date(), new BigDecimal(parts[2]),
-                                null, new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+                        if(parts[1].equals("N/A")) {
+                        	Log.i(TAG,"DIDN'T FIND TICKER");
+                        } else {
+                        	EquityPricingInformation information = new EquityPricingInformation(ticker, ticker,
+                        			new BigDecimal(parts[1]), null, new Date(), new BigDecimal(parts[2]),
+                        			null, new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
 
-                        Log.i(TAG, "Change: " + parts[6] + "," + parts[7]);
-                        float priceChange = Float.parseFloat(parts[6]);
-//                        companyDetail.setTodaysPriceChange(priceChange);
-                        StringBuffer s = new StringBuffer(parts[7].replace("\"", ""));
+                        	Log.i(TAG, "Change: " + parts[6] + "," + parts[7]);
+                        	float priceChange = Float.parseFloat(parts[6]);
+                        	//                        companyDetail.setTodaysPriceChange(priceChange);
+                        	StringBuffer s = new StringBuffer(parts[7].replace("\"", ""));
 
-                        s.setLength(s.length() - 1); // chop last char: %
-                        Log.i(TAG, "Percent: " + s);
+                        	s.setLength(s.length() - 1); // chop last char: %
+                        	Log.i(TAG, "Percent: " + s);
 
-                        float percentChange = Float.parseFloat(s.toString());
-//                        Log.i(TAG, "Object not NULL?" + information);
-                        information.setPriceChange(priceChange);
-                        information.setPercentChange(percentChange);
+                        	float percentChange = Float.parseFloat(s.toString());
+                        	//                        Log.i(TAG, "Object not NULL?" + information);
+                        	information.setPriceChange(priceChange);
+                        	information.setPercentChange(percentChange);
 
-                        setOfEquityPricingInformation.add(information);
+                        	setOfEquityPricingInformation.add(information);
+                        }
                     }
                     Log.i(TAG, "Notifying everyone");
                     notifyObservers(setOfEquityPricingInformation);
