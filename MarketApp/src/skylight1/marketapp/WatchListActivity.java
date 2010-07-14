@@ -4,17 +4,24 @@ import java.util.*;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.*;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.*;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import roboguice.activity.GuiceListActivity;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
+import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
+import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.inject.Inject;
@@ -23,10 +30,10 @@ public class WatchListActivity extends GuiceListActivity {
 
     EquityFeedObserver equityFeedObserver;
     private Set<String> watchListTickers;
+    private static Hashtable <String,String> ht = new Hashtable();
 
     private static class EfficientAdapter extends ArrayAdapter<EquityPricingInformation> {
         private LayoutInflater mInflater;
-
 
         public EfficientAdapter(Context context, List<EquityPricingInformation> anEquityPricingInformationList) {
 
@@ -72,7 +79,7 @@ public class WatchListActivity extends GuiceListActivity {
             avgPriceTextView.setText(item.getLastPrice().toString());
             numberOfSharesTextView.setText(Float.toString(item.getPriceChange())); // TODO: format properly
             currentPriceTextView.setText(Float.toString(item.getPercentChange()) + "%"); // TODO: format properly
-
+            ht.put(Integer.toString(position),item.getTicker());
 
             return convertView;
         }
@@ -100,6 +107,8 @@ public class WatchListActivity extends GuiceListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.watchlist);
+        registerForContextMenu(getListView());
+
         dbView = (ListView) this.findViewById(R.layout.epidb);
 
         aa = new EfficientAdapter(this, new ArrayList<EquityPricingInformation>());
@@ -290,5 +299,80 @@ public class WatchListActivity extends GuiceListActivity {
         inflater.inflate(R.menu.watch_list_menu, menu);
 
         return true;
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("WatchList Item Menu");
+        menu.add(1, 1, 1, "Delete Ticker");
+        menu.add(2, 2, 2, "Company Detail");
+    }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	final Context context = this.getBaseContext();
+      AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      Long l = info.id;
+      View v = info.targetView;
+      switch (item.getItemId()) {
+      case 1:{
+    	  MarketDatabase marketDatabase2 = new MarketDatabase(context);
+          String whereArgs[] = new String[1];
+          whereArgs[0] = (String) ht.get(Long.toString(info.id).trim());
+          marketDatabase2.open();
+          marketDatabase2.delete(MarketDatabase.CONTENT_URI,
+                  MarketDatabase.KEY_SYMBOL,
+                  whereArgs,
+                  MarketDatabase.WATCHLIST_TABLE, context);
+          marketDatabase2.cleanup();
+          return true;
+      }
+      case 2:{
+    	  onListItemClick(null, v, l.intValue(), -1);
+    	  return true;
+      }
+      case 3:
+        return true;
+      default:
+        return super.onContextItemSelected(item);
+      }
+    } 
+    
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+    	if(l != null && id > -1)
+    	{
+    		super.onListItemClick(l, v, position, id);
+    	}
+        TextView ticker = (TextView) v.findViewById(R.id.ticker);
+        YahooEquityPricingInformationFeed ef = new YahooEquityPricingInformationFeed();
+
+        CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());
+
+        Log.i(TAG, "CompanyDetail:" + cd.toString());
+
+        SharedPreferences settings = PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext());
+        Editor edit = settings.edit();
+
+        edit.putInt(PortfolioActivity.ITEM_ID, position);
+        edit.putString(PortfolioActivity.TICKER, cd.getTicker());
+        edit.putString(PortfolioActivity.NAME, cd.getName());
+        edit.putString(PortfolioActivity.PRICE, Float.toString(cd.getPrice()));
+        edit.putString(PortfolioActivity.ASKSIZE, cd.getAskSize());
+        edit.putString(PortfolioActivity.TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
+        edit.putString(PortfolioActivity.TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
+        edit.putString(PortfolioActivity.VOLUME, Long.toString(cd.getVolume()));
+        edit.putString(PortfolioActivity.EXCHANGE, cd.getExchange());
+        edit.putString(PortfolioActivity.MAVG50, Float.toString(cd.getMavg50()));
+        edit.putString(PortfolioActivity.MAVG200, Float.toString(cd.getMavg200()));
+        edit.putString(PortfolioActivity.EBITDA, cd.getEbita());
+        edit.putString(PortfolioActivity.PEGRATIO, cd.getPegRatio());
+        edit.putString(PortfolioActivity.PERATIO, Float.toString(cd.getPeRatio()));
+        edit.putString(PortfolioActivity.BIDSIZE, cd.getBidSize());
+        edit.commit();
+        Intent i = new Intent(this, CompanyDetailActivity.class);
+        startActivity(i);
+      //  sendBroadcast(i);
     }
 }	

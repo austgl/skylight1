@@ -22,7 +22,7 @@ public class MarketDatabase extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://skylight1.marketapp/EquityPricingInformation");
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "market.db";
-    private static final String WATCHLIST_TABLE = "watchlist"; // Don't put word table in the name
+    static final String WATCHLIST_TABLE = "watchlist"; // Don't put word table in the name
     static final String PORTFOLIO_TABLE = "portfolio";
     // Column Names
     public static final String KEY_ID = "_id";
