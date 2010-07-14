@@ -83,12 +83,13 @@ public class MarketDatabase extends ContentProvider {
         try{
         	if(whereArgs.length >0){       		
         		wherebuf = new StringBuffer();
-        		wherebuf.append(where).append("=").append(whereArgs[0]);
+        		wherebuf.append(where).append("=\'").append(whereArgs[0]).append("\'");
         		for(int i = 1; i < whereArgs.length; i++){        			
         			wherebuf.append(" or ")
         				.append(where)
-        				.append("=")
-        				.append(whereArgs[i]);
+        				.append("=\'")
+        				.append(whereArgs[i])
+        				.append("\'");
         		}    
         		count = marketDB.delete(tablename, wherebuf.toString() , null); 
         		context.getContentResolver().notifyChange(uri, null);

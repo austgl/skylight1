@@ -18,6 +18,8 @@ import android.view.View.OnTouchListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+
 import com.google.inject.Inject;
 import roboguice.activity.GuiceListActivity;
 import skylight1.marketapp.feed.EquityFeedObserver;
@@ -63,15 +65,46 @@ public class PortfolioActivity extends GuiceListActivity {
     private MarketDatabase marketDatabase;
 
     private EfficientAdapter aa;
+    
+    private static Hashtable ht = new Hashtable();
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Context Menu");
-        menu.add(0, v.getId(), 0, "Action 1");
-        menu.add(0, v.getId(), 0, "Action 2");
-        menu.add(0, v.getId(), 0, "Action 3");
+        menu.setHeaderTitle("Portfolio Item Menu");
+        menu.add(1, 1, 1, "Delete Ticker");
+        menu.add(2, 2, 2, "Company Detail");
+        menu.add(3, 3, 3, "Candlestick");
     }
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+    	final Context context = this.getBaseContext();
+      AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      Long l = info.id;
+      View v = info.targetView;
+      switch (item.getItemId()) {
+      case 1:{
+    	  MarketDatabase marketDatabase2 = new MarketDatabase(context);
+          String whereArgs[] = new String[1];
+          whereArgs[0] = (String) ht.get(Long.toString(info.id).trim());
+          marketDatabase2.open();
+          marketDatabase2.delete(MarketDatabase.CONTENT_URI,
+                  MarketDatabase.KEY_SYMBOL,
+                  whereArgs,
+                  MarketDatabase.PORTFOLIO_TABLE, context);
+          marketDatabase2.cleanup();
+          return true;
+      }
+      case 2:{
+    	  onListItemClick(null, v, l.intValue(), -1);
+    	  return true;
+      }
+      case 3:
+        return true;
+      default:
+        return super.onContextItemSelected(item);
+      }
+    } 
 
     static List<PortfolioItem> portfolioItems = new ArrayList<PortfolioItem>();
 
@@ -82,13 +115,15 @@ public class PortfolioActivity extends GuiceListActivity {
         // setContentView(R.layout.portfolio);
         Log.i(TAG, "Fetching prices");
 //        initPortfolioList();
+        registerForContextMenu(getListView());
         marketDatabase = new MarketDatabase(this);
         aa = new EfficientAdapter(this);
         setListAdapter(aa);
-
+        
     }
+    
 
-    private static class EfficientAdapter extends BaseAdapter implements OnTouchListener {
+    private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         private String dbId;
         private String tickerMsg;
@@ -131,6 +166,7 @@ public class PortfolioActivity extends GuiceListActivity {
             return position;
         }
 
+        
         /**
          * Make a view to hold each row.
          *
@@ -183,7 +219,9 @@ public class PortfolioActivity extends GuiceListActivity {
             holder.currentPriceTextView.setText(item.getCurrentPriceStr());
             holder.currentPnlTextView.setText("" + item.getPnL());
             dbId = item.getId();
-            convertView.setOnTouchListener(this);
+            ht.put(Integer.toString(position),dbId);
+            
+        //    convertView.setOnTouchListener(this);
             tickerMsg = item.getTicker();
             return convertView;
         }
@@ -205,40 +243,6 @@ public class PortfolioActivity extends GuiceListActivity {
 //			return false;
 //		}
 
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-
-            final Context context = this.mInflater.getContext();
-
-            AlertDialog.Builder b = new AlertDialog.Builder(this.mInflater.getContext());
-            b.setTitle("Delete Ticker");
-            b.setMessage("Ticker " + tickerMsg.toUpperCase() + " will be deleted");
-            b.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.i(TAG, "Deleting Ticker DB_ID =" + dbId);
-                    MarketDatabase marketDatabase2 = new MarketDatabase(context);
-                    String whereArgs[] = new String[1];
-                    whereArgs[0] = dbId;
-                    marketDatabase2.open();
-                    marketDatabase2.delete(MarketDatabase.CONTENT_URI,
-                            MarketDatabase.KEY_ID,
-                            whereArgs,
-                            MarketDatabase.PORTFOLIO_TABLE, context);
-                    marketDatabase2.cleanup();
-                }
-            });
-
-            b.setNegativeButton("Cancel-det", new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    // TODO Auto-generated method stub
-                }
-            });
-            b.setCancelable(true);
-            b.show();
-            return false;
-        }
     }
 
     /*
@@ -308,8 +312,6 @@ public class PortfolioActivity extends GuiceListActivity {
                     position.getAveragePrice(),
                     position.getNumberOfShares(),
                     position.getAveragePrice(), position.getTicker());
-
-
             portfolioItems.add(p);
             portfolioItemTickerMap.put(position.getTicker(), p);
         }
@@ -384,10 +386,12 @@ public class PortfolioActivity extends GuiceListActivity {
         }
         return true;
     }
-
-
+    @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    	if(l != null && id > -1)
+    	{
+    		super.onListItemClick(l, v, position, id);
+    	}
         TextView ticker = (TextView) v.findViewById(R.id.ticker);
         YahooEquityPricingInformationFeed ef = new YahooEquityPricingInformationFeed();
 
