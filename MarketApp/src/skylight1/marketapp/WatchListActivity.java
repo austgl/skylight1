@@ -350,29 +350,24 @@ public class WatchListActivity extends GuiceListActivity {
         CompanyDetail cd = ef.getCompanyDetail(ticker.getText().toString());
 
         Log.i(TAG, "CompanyDetail:" + cd.toString());
-
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
-        Editor edit = settings.edit();
-
-        edit.putInt(PortfolioActivity.ITEM_ID, position);
-        edit.putString(PortfolioActivity.TICKER, cd.getTicker());
-        edit.putString(PortfolioActivity.NAME, cd.getName());
-        edit.putString(PortfolioActivity.PRICE, Float.toString(cd.getPrice()));
-        edit.putString(PortfolioActivity.ASKSIZE, cd.getAskSize());
-        edit.putString(PortfolioActivity.TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
-        edit.putString(PortfolioActivity.TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
-        edit.putString(PortfolioActivity.VOLUME, Long.toString(cd.getVolume()));
-        edit.putString(PortfolioActivity.EXCHANGE, cd.getExchange());
-        edit.putString(PortfolioActivity.MAVG50, Float.toString(cd.getMavg50()));
-        edit.putString(PortfolioActivity.MAVG200, Float.toString(cd.getMavg200()));
-        edit.putString(PortfolioActivity.EBITDA, cd.getEbita());
-        edit.putString(PortfolioActivity.PEGRATIO, cd.getPegRatio());
-        edit.putString(PortfolioActivity.PERATIO, Float.toString(cd.getPeRatio()));
-        edit.putString(PortfolioActivity.BIDSIZE, cd.getBidSize());
-        edit.commit();
-        Intent i = new Intent(this, CompanyDetailActivity.class);
-        startActivity(i);
-      //  sendBroadcast(i);
+        
+        Intent tickerinfo = new Intent(this, CompanyDetailActivity.class);
+        
+        tickerinfo.putExtra(PortfolioActivity.ITEM_ID, position);
+        tickerinfo.putExtra(PortfolioActivity.TICKER, cd.getTicker());
+        tickerinfo.putExtra(PortfolioActivity.NAME, cd.getName());
+        tickerinfo.putExtra(PortfolioActivity.PRICE, Float.toString(cd.getPrice()));
+        tickerinfo.putExtra(PortfolioActivity.ASKSIZE, cd.getAskSize());
+        tickerinfo.putExtra(PortfolioActivity.TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
+        tickerinfo.putExtra(PortfolioActivity.TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
+        tickerinfo.putExtra(PortfolioActivity.VOLUME, Long.toString(cd.getVolume()));
+        tickerinfo.putExtra(PortfolioActivity.EXCHANGE, cd.getExchange());
+        tickerinfo.putExtra(PortfolioActivity.MAVG50, Float.toString(cd.getMavg50()));
+        tickerinfo.putExtra(PortfolioActivity.MAVG200, Float.toString(cd.getMavg200()));
+        tickerinfo.putExtra(PortfolioActivity.EBITDA, cd.getEbita());
+        tickerinfo.putExtra(PortfolioActivity.PEGRATIO, cd.getPegRatio());
+        tickerinfo.putExtra(PortfolioActivity.PERATIO, Float.toString(cd.getPeRatio()));
+        tickerinfo.putExtra(PortfolioActivity.BIDSIZE, cd.getBidSize());
+        startActivity(tickerinfo);
     }
 }	

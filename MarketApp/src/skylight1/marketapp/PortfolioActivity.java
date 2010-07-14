@@ -399,28 +399,25 @@ public class PortfolioActivity extends GuiceListActivity {
 
         Log.i(TAG, "CompanyDetail:" + cd.toString());
 
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext());
-        Editor edit = settings.edit();
+        Intent tickerinfo = new Intent(this, CompanyDetailActivity.class);
+        
+        tickerinfo.putExtra(ITEM_ID, position);
+        tickerinfo.putExtra(TICKER, cd.getTicker());
+        tickerinfo.putExtra(NAME, cd.getName());
+        tickerinfo.putExtra(PRICE, Float.toString(cd.getPrice()));
+        tickerinfo.putExtra(ASKSIZE, cd.getAskSize());
+        tickerinfo.putExtra(TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
+        tickerinfo.putExtra(TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
+        tickerinfo.putExtra(VOLUME, Long.toString(cd.getVolume()));
+        tickerinfo.putExtra(EXCHANGE, cd.getExchange());
+        tickerinfo.putExtra(MAVG50, Float.toString(cd.getMavg50()));
+        tickerinfo.putExtra(MAVG200, Float.toString(cd.getMavg200()));
+        tickerinfo.putExtra(EBITDA, cd.getEbita());
+        tickerinfo.putExtra(PEGRATIO, cd.getPegRatio());
+        tickerinfo.putExtra(PERATIO, Float.toString(cd.getPeRatio()));
+        tickerinfo.putExtra(BIDSIZE, cd.getBidSize());
 
-        edit.putInt(ITEM_ID, position);
-        edit.putString(TICKER, cd.getTicker());
-        edit.putString(NAME, cd.getName());
-        edit.putString(PRICE, Float.toString(cd.getPrice()));
-        edit.putString(ASKSIZE, cd.getAskSize());
-        edit.putString(TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
-        edit.putString(TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
-        edit.putString(VOLUME, Long.toString(cd.getVolume()));
-        edit.putString(EXCHANGE, cd.getExchange());
-        edit.putString(MAVG50, Float.toString(cd.getMavg50()));
-        edit.putString(MAVG200, Float.toString(cd.getMavg200()));
-        edit.putString(EBITDA, cd.getEbita());
-        edit.putString(PEGRATIO, cd.getPegRatio());
-        edit.putString(PERATIO, Float.toString(cd.getPeRatio()));
-        edit.putString(BIDSIZE, cd.getBidSize());
-        edit.commit();
-        Intent i = new Intent(this, CompanyDetailActivity.class);
-        startActivity(i);
+        startActivity(tickerinfo);
       //  sendBroadcast(i);
     }
 
