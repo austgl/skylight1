@@ -2,4 +2,6 @@
 <resources>
     <string name="hello">Hello World, MarketAppHome!</string>
     <string name="app_name">MarketApp</string>
+    <string name="adwhirl_id"></string> <!-- add dummy to view layout -->
+    <string name="test2">test 2</string>
 </resources>

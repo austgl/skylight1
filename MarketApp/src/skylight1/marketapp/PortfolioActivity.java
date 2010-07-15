@@ -16,7 +16,9 @@ import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnTouchListener;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -24,6 +26,9 @@ import com.google.inject.Inject;
 import roboguice.activity.GuiceListActivity;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
+import com.admob.android.ads.AdManager;
+import com.adwhirl.AdWhirlLayout;
+
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
@@ -112,16 +117,36 @@ public class PortfolioActivity extends GuiceListActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.portfolio);
+        setContentView(R.layout.portfolio);
         Log.i(TAG, "Fetching prices");
 //        initPortfolioList();
         registerForContextMenu(getListView());
         marketDatabase = new MarketDatabase(this);
         aa = new EfficientAdapter(this);
         setListAdapter(aa);
-        
-    }
-    
+//        RelativeLayout aLayout = (RelativeLayout) getResources().getLayout(R.layout.portfolio);
+//        AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, "fb61380198e84b59b03c46cdf49b7a0b");
+//    	RelativeLayout.LayoutParams adWhirlLayoutParams = new RelativeLayout.LayoutParams(320, 52);
+//    	aLayout.addView(adWhirlLayout, adWhirlLayoutParams);
+    	
+    	try{
+    		//admob: don't show ads in emulator
+            AdManager.setTestDevices( new String[] { AdManager.TEST_EMULATOR
+            //,"your_debugging_phone_id_here" // add phone id if debugging on phone
+            });
+            
+            String adwhirl_id = getResources().getString(R.string.adwhirl_id);
+            if(adwhirl_id!=null && adwhirl_id.length()>0) {
+	            LinearLayout layout = (LinearLayout)findViewById(R.id.layout_ad);
+	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
+	            Display d = this.getWindowManager().getDefaultDisplay();
+	            RelativeLayout.LayoutParams adWhirlLayoutParams = new RelativeLayout.LayoutParams(d.getWidth(), 48);
+	            layout.addView(adWhirlLayout, adWhirlLayoutParams);
+            }
+        } catch(Exception e){
+            Log.e(TAG, "Unable to create AdWhirlLayout", e);
+        }
+    }        
 
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
