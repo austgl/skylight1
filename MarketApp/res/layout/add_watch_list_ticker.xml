@@ -8,10 +8,13 @@
 	<EditText android:layout_height="wrap_content"
 		android:layout_width="200dip" android:id="@+id/add_watch_list_ticker_text"
 		android:layout_below="@id/add_watch_list_ticker_label"
-		android:layout_alignParentLeft="true" />
+		android:layout_alignParentLeft="true"
+		android:singleLine="true"
+		android:nextFocusUp="@+id/add_watch_list_ticker_add_button" />
 	<Button android:layout_height="wrap_content"
 		android:layout_width="wrap_content" android:text="Add"
 		android:id="@+id/add_watch_list_ticker_add_button"
-		android:layout_alignParentRight="true" android:layout_toRightOf="@+id/add_watch_list_ticker_text"
+		android:layout_alignParentRight="true" 
+		android:layout_toRightOf="@+id/add_watch_list_ticker_text"
 		android:layout_alignTop="@+id/add_watch_list_ticker_text" />
 </RelativeLayout>
