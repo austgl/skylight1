@@ -19,6 +19,7 @@ import android.view.View;
 import java.io.*;
 
 import skylight1.marketapp.EquityTimeSeries;
+import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -242,8 +243,31 @@ public class CandleDrawView extends View{
         	myDate.append(new SimpleDateFormat("MMM,yyyy").format(candleStick.getDate()));
         	canvas.drawText(myDate.toString(),candleStick.getX() ,newRect.top-MARGIN2+10, mDrawable.getPaint());
         }
-    	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-2 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
-    	}
+        if (candleStickList.size()<15){
+        	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
+        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+        }else if ((candleStickList.size()>14)&&(candleStickList.size()<30)){
+        	if (i%3==0){
+        	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
+            
+        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+        	}
+        }else if (candleStickList.size()<50){
+          	if (i%4==0){
+          		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());       
+            	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+            	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+            }
+        }else {
+        	if (i%5==0){
+        		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+5,mDrawable.getPaint());    
+            	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-5,mDrawable.getPaint());
+            	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+            }
+        }
+        }
     }
     
     /* (non-Javadoc)
@@ -252,7 +276,8 @@ public class CandleDrawView extends View{
     protected void onDraw(Canvas canvas) {
     	ShapeDrawable  mDrawable;
     	Rect rect = canvas.getClipBounds();
-    	List<EquityTimeSeries> candleDataList=EquityTimeSeries.dummyData();
+    	//List<EquityTimeSeries> candleDataList=EquityTimeSeries.dummyData();
+    	List<EquityTimeSeries> candleDataList=YahooEquityPricingInformationFeed.getPriceHistoryForTickerList("IBM");
     	Rect newRect=getNewRect(canvas);
     	List<CandleStick> candleStickList=getCandleSticks(candleDataList, newRect);
     	drawEnclosure(canvas, newRect);
