@@ -307,6 +307,7 @@ public class WatchListActivity extends GuiceListActivity {
         menu.setHeaderTitle("WatchList Item Menu");
         menu.add(1, 1, 1, "Delete Ticker");
         menu.add(2, 2, 2, "Company Detail");
+        menu.add(3, 3, 3, "Candlesticks");
     }
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -331,8 +332,13 @@ public class WatchListActivity extends GuiceListActivity {
     	  onListItemClick(null, v, l.intValue(), -1);
     	  return true;
       }
-      case 3:
-        return true;
+      case 3:{
+    	  
+    	  //will start receive ticker after CandleSticksActivity set  a to start receiving tickets
+    	  Intent intent = new Intent(this, CandleSticksActivity.class);
+          startActivity(intent);
+          return true;
+      }
       default:
         return super.onContextItemSelected(item);
       }
