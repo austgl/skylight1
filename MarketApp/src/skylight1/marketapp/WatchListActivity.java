@@ -335,8 +335,9 @@ public class WatchListActivity extends GuiceListActivity {
       case 3:{
     	  
     	  //will start receive ticker after CandleSticksActivity set  a to start receiving tickets
-    	  Intent intent = new Intent(this, CandleSticksActivity.class);
-          startActivity(intent);
+    	  Intent candlesticks = new Intent(this, CandleSticksActivity.class);
+          candlesticks.putExtra(PortfolioActivity.TICKER, (String) ht.get(Long.toString(info.id).trim()));
+          startActivity(candlesticks);
           return true;
       }
       default:

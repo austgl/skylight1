@@ -71,7 +71,7 @@ public class PortfolioActivity extends GuiceListActivity {
 
     private EfficientAdapter aa;
     
-    private static Hashtable ht = new Hashtable();
+    private static Hashtable <String,String> ht = new Hashtable();
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
@@ -104,11 +104,11 @@ public class PortfolioActivity extends GuiceListActivity {
     	  onListItemClick(null, v, l.intValue(), -1);
     	  return true;
       }
-      case 3:{
-    	  
+      case 3:{    	  
     	  //will start receive ticker after CandleSticksActivity set  a to start receiving tickets
-    	  Intent intent = new Intent(this, CandleSticksActivity.class);
-          startActivity(intent);
+    	  Intent candlesticks = new Intent(this, CandleSticksActivity.class);
+          candlesticks.putExtra(TICKER, (String) ht.get(Long.toString(info.id).trim()));
+          startActivity(candlesticks);
           return true;
       }
         
