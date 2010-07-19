@@ -27,6 +27,8 @@ import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
  */
 public class CandleDrawView extends View{
 	
+	String ticker;
+	
 	/** The max high. */
 	double maxHigh;
 	
@@ -53,8 +55,9 @@ public class CandleDrawView extends View{
      * 
      * @param context the context
      */
-    public CandleDrawView(Context context) {
+    public CandleDrawView(Context context,String ticker) {
         super(context);
+        this.ticker=ticker;
     }
     
     /**
@@ -242,6 +245,7 @@ public class CandleDrawView extends View{
         	StringBuffer myDate= new StringBuffer();
         	myDate.append(new SimpleDateFormat("MMM,yyyy").format(candleStick.getDate()));
         	canvas.drawText(myDate.toString(),candleStick.getX() ,newRect.top-MARGIN2+10, mDrawable.getPaint());
+        	canvas.drawText(this.ticker,candleStick.getX()-50 ,newRect.top-MARGIN2+10, mDrawable.getPaint());
         }
         if (candleStickList.size()<15){
         	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
@@ -277,14 +281,14 @@ public class CandleDrawView extends View{
     	ShapeDrawable  mDrawable;
     	Rect rect = canvas.getClipBounds();
     	//List<EquityTimeSeries> candleDataList=EquityTimeSeries.dummyData();
-    	List<EquityTimeSeries> candleDataList=YahooEquityPricingInformationFeed.getPriceHistoryForTickerList("IBM");
+    	List<EquityTimeSeries> candleDataList=YahooEquityPricingInformationFeed.getCandleStickDataForTicker(ticker);
     	Rect newRect=getNewRect(canvas);
     	List<CandleStick> candleStickList=getCandleSticks(candleDataList, newRect);
     	drawEnclosure(canvas, newRect);
     	drawCandles(canvas, candleStickList, newRect );
     
     }
-    
+  
     /**
      * The Class highSort.
      */

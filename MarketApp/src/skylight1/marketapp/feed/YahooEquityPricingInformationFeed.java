@@ -299,6 +299,56 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
     }
 
     /*
+    *
+    *
+    */
+    public static List<EquityTimeSeries> getCandleStickDataForTicker(String aTicker) {
+        List<EquityTimeSeries> aList = new ArrayList<EquityTimeSeries>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH,-1 );
+        int year1 = cal.get(Calendar.YEAR);  
+        int month1 = cal.get(Calendar.MONTH);
+        int day1 = cal.get(Calendar.DAY_OF_MONTH); 
+        String reqStr = "&a="+month1+"&b="+day1+"&c="+year1;
+        String url = "http://ichart.finance.yahoo.com/table.csv?s=" + aTicker + reqStr;
+        //"&a=6&b=18&c=2010&d=07&e=18&f=2010&g=d";
+        System.out.println(url);
+
+        try {
+
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            InputStream is = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            //
+            // Loop over Yahoo response and extract pricing information
+
+            line = reader.readLine(); // skip first line
+
+            while ((line = reader.readLine()) != null) {
+
+                // AAPL",245.29,245.10,124.55,272.46,+12.76
+                String[] parts = line.split(",");
+//                System.out.println(parts[0] + "," + parts[1]);
+                double open = Double.parseDouble(parts[1]);
+                double high = Double.parseDouble(parts[2]);
+                double low = Double.parseDouble(parts[3]);
+                double close = Double.parseDouble(parts[4]);
+                int volume = Integer.parseInt(parts[5]);
+
+                aList.add(new EquityTimeSeries(parts[0], open, high, low, close, volume));
+              
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Collections.reverse(aList);
+        return aList;
+    }
+
+    
+    /*
      * Helper routine for getPriceHistoryForTicker()
      */
     public void showPrices(List<EquityTimeSeries> aList) {

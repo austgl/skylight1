@@ -14,7 +14,7 @@ public class CandleSticksActivity extends Activity {
 	        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
 	                                         WindowManager.LayoutParams.FLAG_FULLSCREEN);
 	        requestWindowFeature(Window.FEATURE_NO_TITLE);
-	        CandleDrawView customView = new CandleDrawView(this);
+	        CandleDrawView customView = new CandleDrawView(this,"GOOG");
 	        setContentView(customView);
 	        customView.requestFocus();
 	    }
