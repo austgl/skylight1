@@ -21,7 +21,7 @@
 
         <provider android:name=".MarketDatabase" android:authorities="skylight1.marketapp"/>
         <activity android:name=".CompanyDetailActivity" android:label="CompanyDetails"/>
-        <activity android:name=".CandleSticksActivity" android:label="CandleSticks"/>
+        <activity android:name=".CandleSticksActivity" android:label="CandleSticks" android:screenOrientation="landscape"/>
         <activity android:name=".CompanyDetailActivity0" android:label="Detail"/>
         <activity android:name=".HelpActivity" android:label="Help"/>
         <activity android:name=".Preferences" android:label="Preferences"/>

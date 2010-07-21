@@ -9,12 +9,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
+import android.view.Surface;
 import android.view.View;
 import java.io.*;
 
@@ -204,13 +208,13 @@ public class CandleDrawView extends View{
     	int incr = newRect.height()/NUMPRICE;
     	
     	/*Draw prices */
-    	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+5,newRect.top, mDrawable1.getPaint());
-    	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+5,newRect.bottom, mDrawable1.getPaint());
+    	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+8,newRect.top, mDrawable1.getPaint());
+    	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+8,newRect.bottom, mDrawable1.getPaint());
     	for (int i=0;i<=NUMPRICE;i++){
     		canvas.drawLine(newRect.right+MARGIN2,newRect.top+incr*i, newRect.right+MARGIN2-2,newRect.top+incr*i,mDrawable1.getPaint());
     		if (i>0 &&i<NUMPRICE& (i%2==0)){
     			double price=getMaxHigh() - (getMaxHigh()-getMinLow())*i/NUMPRICE;
-    			canvas.drawText(nf.format(price),newRect.right-MARGIN3+5 ,newRect.top+incr*i, mDrawable1.getPaint());
+    			canvas.drawText(nf.format(price),newRect.right-MARGIN3+8 ,newRect.top+incr*i, mDrawable1.getPaint());
     		}
     	}
     }
@@ -247,18 +251,18 @@ public class CandleDrawView extends View{
         	canvas.drawText(myDate.toString(),candleStick.getX() ,newRect.top-MARGIN2+10, mDrawable.getPaint());
         	canvas.drawText(this.ticker,candleStick.getX()-50 ,newRect.top-MARGIN2+10, mDrawable.getPaint());
         }
-        if (candleStickList.size()<15){
+        if (candleStickList.size()<31){
         	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
         	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
         	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
-        }else if ((candleStickList.size()>14)&&(candleStickList.size()<30)){
+        }else if ((candleStickList.size()>30)&&(candleStickList.size()<50)){
         	if (i%3==0){
         	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
         	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
             
         	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
         	}
-        }else if (candleStickList.size()<50){
+        }else if (candleStickList.size()<100){
           	if (i%4==0){
           		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());       
             	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
@@ -278,6 +282,13 @@ public class CandleDrawView extends View{
      * @see android.view.View#onDraw(android.graphics.Canvas)
      */
     protected void onDraw(Canvas canvas) {
+    	if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+    	    // The following message is only displayed once.
+    		
+    		//ActivityManager am = ActivityManager..getDefault();
+    		Surface.setOrientation(0, 2);
+    	   // this..setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    	}
     	ShapeDrawable  mDrawable;
     	Rect rect = canvas.getClipBounds();
     	//List<EquityTimeSeries> candleDataList=EquityTimeSeries.dummyData();
