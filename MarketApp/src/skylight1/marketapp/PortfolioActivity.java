@@ -98,6 +98,7 @@ public class PortfolioActivity extends GuiceListActivity {
                   whereArgs,
                   MarketDatabase.PORTFOLIO_TABLE, context);
           marketDatabase2.cleanup();
+          this.onResume();
           return true;
       }
       case 2:{

@@ -292,6 +292,7 @@ public class WatchListActivity extends GuiceListActivity {
                   MarketDatabase.WATCHLIST_TABLE, context);
           marketDatabase2.cleanup();
           aa.notifyDataSetChanged(); 
+          this.onResume();
           return true;
       }
       case 2:{
