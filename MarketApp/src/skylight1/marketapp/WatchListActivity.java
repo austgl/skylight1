@@ -1,30 +1,28 @@
 package skylight1.marketapp;
 
-import java.util.*;
-
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.*;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.google.inject.Inject;
 import roboguice.activity.GuiceListActivity;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.SharedPreferences.Editor;
-import android.database.Cursor;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.google.inject.Inject;
+import java.util.*;
 
 public class WatchListActivity extends GuiceListActivity {
 
@@ -115,11 +113,6 @@ public class WatchListActivity extends GuiceListActivity {
 
         setListAdapter(aa);
 
-
-        // melling's DB
-
-//        PortDbAdapter mDbHelper = new PortDbAdapter(this);
-//        mDbHelper.open();
         marketDatabase = new MarketDatabase(this);
         marketDatabase.open();
 
@@ -140,30 +133,6 @@ public class WatchListActivity extends GuiceListActivity {
     }
 
 
-    /*
-    * Get tickers from melling's DB.
-    */
-/*
-    private Set<String> loadTickersFromDatabase() {
-        Set<String> tickerSet = new HashSet<String>();
-
-        mDbHelper.open();
-        Cursor portfolioCursor = mDbHelper.fetchAllPorts();
-        startManagingCursor(portfolioCursor);
-
-        //   portfolioCursor.moveToFirst();
-        while (portfolioCursor.moveToNext()) {
-            int id = portfolioCursor.getInt(0);
-            String ticker = portfolioCursor.getString(1);
-            Log.i(TAG, id + "- " + ticker);
-            tickerSet.add(ticker);
-        }
-        mDbHelper.close();
-
-        return tickerSet;
-    }
-*/
-
 
     /*
      * Get tickers from Juan's DB.
@@ -182,7 +151,6 @@ public class WatchListActivity extends GuiceListActivity {
             Log.i(TAG, "Ticker: " + id + "==> " + ticker);
             tickerSet.add(ticker);
         }
-//        marketDatabase.cleanup();
         return tickerSet;
     }
 
@@ -239,9 +207,6 @@ public class WatchListActivity extends GuiceListActivity {
             }
         };
 
-//        final Set<String> watchListTickers = loadTickersFromDatabase();
-//        final Set<String> watchListTickers2 = marketDatabase.getWatchListTickers();
-//        final Set<String> watchListTickers = loadTickersFromMarketDB();
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver, watchListTickers);
     }
 
@@ -319,13 +284,14 @@ public class WatchListActivity extends GuiceListActivity {
       case 1:{
     	  MarketDatabase marketDatabase2 = new MarketDatabase(context);
           String whereArgs[] = new String[1];
-          whereArgs[0] = (String) ht.get(Long.toString(info.id).trim());
+          whereArgs[0] =  ht.get(Long.toString(info.id).trim());
           marketDatabase2.open();
           marketDatabase2.delete(MarketDatabase.CONTENT_URI,
                   MarketDatabase.KEY_SYMBOL,
                   whereArgs,
                   MarketDatabase.WATCHLIST_TABLE, context);
           marketDatabase2.cleanup();
+          aa.notifyDataSetChanged(); 
           return true;
       }
       case 2:{
@@ -336,7 +302,7 @@ public class WatchListActivity extends GuiceListActivity {
     	  
     	  //will start receive ticker after CandleSticksActivity set  a to start receiving tickets
     	  Intent candlesticks = new Intent(this, CandleSticksActivity.class);
-          candlesticks.putExtra(PortfolioActivity.TICKER, (String) ht.get(Long.toString(info.id).trim()));
+          candlesticks.putExtra(PortfolioActivity.TICKER, ht.get(Long.toString(info.id).trim()));
           startActivity(candlesticks);
           return true;
       }
@@ -358,23 +324,23 @@ public class WatchListActivity extends GuiceListActivity {
 
         Log.i(TAG, "CompanyDetail:" + cd.toString());
         
-        Intent tickerinfo = new Intent(this, CompanyDetailActivity.class);
+        Intent tickerInfo = new Intent(this, CompanyDetailActivity.class);
         
-        tickerinfo.putExtra(PortfolioActivity.ITEM_ID, position);
-        tickerinfo.putExtra(PortfolioActivity.TICKER, cd.getTicker());
-        tickerinfo.putExtra(PortfolioActivity.NAME, cd.getName());
-        tickerinfo.putExtra(PortfolioActivity.PRICE, Float.toString(cd.getPrice()));
-        tickerinfo.putExtra(PortfolioActivity.ASKSIZE, cd.getAskSize());
-        tickerinfo.putExtra(PortfolioActivity.TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
-        tickerinfo.putExtra(PortfolioActivity.TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
-        tickerinfo.putExtra(PortfolioActivity.VOLUME, Long.toString(cd.getVolume()));
-        tickerinfo.putExtra(PortfolioActivity.EXCHANGE, cd.getExchange());
-        tickerinfo.putExtra(PortfolioActivity.MAVG50, Float.toString(cd.getMavg50()));
-        tickerinfo.putExtra(PortfolioActivity.MAVG200, Float.toString(cd.getMavg200()));
-        tickerinfo.putExtra(PortfolioActivity.EBITDA, cd.getEbita());
-        tickerinfo.putExtra(PortfolioActivity.PEGRATIO, cd.getPegRatio());
-        tickerinfo.putExtra(PortfolioActivity.PERATIO, Float.toString(cd.getPeRatio()));
-        tickerinfo.putExtra(PortfolioActivity.BIDSIZE, cd.getBidSize());
-        startActivity(tickerinfo);
+        tickerInfo.putExtra(PortfolioActivity.ITEM_ID, position);
+        tickerInfo.putExtra(PortfolioActivity.TICKER, cd.getTicker());
+        tickerInfo.putExtra(PortfolioActivity.NAME, cd.getName());
+        tickerInfo.putExtra(PortfolioActivity.PRICE, Float.toString(cd.getPrice()));
+        tickerInfo.putExtra(PortfolioActivity.ASKSIZE, cd.getAskSize());
+        tickerInfo.putExtra(PortfolioActivity.TODAYSPRICECHANGE, Float.toString(cd.getTodaysPriceChange()));
+        tickerInfo.putExtra(PortfolioActivity.TODAYPERCENTCHANGE, Float.toString(cd.getTodaysPercentChange()));
+        tickerInfo.putExtra(PortfolioActivity.VOLUME, Long.toString(cd.getVolume()));
+        tickerInfo.putExtra(PortfolioActivity.EXCHANGE, cd.getExchange());
+        tickerInfo.putExtra(PortfolioActivity.MAVG50, Float.toString(cd.getMavg50()));
+        tickerInfo.putExtra(PortfolioActivity.MAVG200, Float.toString(cd.getMavg200()));
+        tickerInfo.putExtra(PortfolioActivity.EBITDA, cd.getEbita());
+        tickerInfo.putExtra(PortfolioActivity.PEGRATIO, cd.getPegRatio());
+        tickerInfo.putExtra(PortfolioActivity.PERATIO, Float.toString(cd.getPeRatio()));
+        tickerInfo.putExtra(PortfolioActivity.BIDSIZE, cd.getBidSize());
+        startActivity(tickerInfo);
     }
 }	
