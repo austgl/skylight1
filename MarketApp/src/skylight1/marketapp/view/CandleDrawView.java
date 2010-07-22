@@ -208,13 +208,13 @@ public class CandleDrawView extends View{
     	int incr = newRect.height()/NUMPRICE;
     	
     	/*Draw prices */
-    	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+8,newRect.top, mDrawable1.getPaint());
-    	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+8,newRect.bottom, mDrawable1.getPaint());
+    	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+10,newRect.top, mDrawable1.getPaint());
+    	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+10,newRect.bottom, mDrawable1.getPaint());
     	for (int i=0;i<=NUMPRICE;i++){
     		canvas.drawLine(newRect.right+MARGIN2,newRect.top+incr*i, newRect.right+MARGIN2-2,newRect.top+incr*i,mDrawable1.getPaint());
     		if (i>0 &&i<NUMPRICE& (i%2==0)){
     			double price=getMaxHigh() - (getMaxHigh()-getMinLow())*i/NUMPRICE;
-    			canvas.drawText(nf.format(price),newRect.right-MARGIN3+8 ,newRect.top+incr*i, mDrawable1.getPaint());
+    			canvas.drawText(nf.format(price),newRect.right-MARGIN3+10 ,newRect.top+incr*i, mDrawable1.getPaint());
     		}
     	}
     }
@@ -230,54 +230,57 @@ public class CandleDrawView extends View{
     	ShapeDrawable  mDrawable;
     	Iterator itr = candleStickList.iterator(); 
     	int i=0;
-    	int num=candleStickList.size()/2;
+    	//	int num=candleStickList.size()/2;
     	while(itr.hasNext()) {
     		mDrawable = new ShapeDrawable();
-           i++;
+    		i++;
     		CandleStick candleStick = (CandleStick)itr.next();
     		mDrawable.getPaint().setColor(candleStick.getColor());
     		mDrawable.setBounds(candleStick.getTopLeftX(), candleStick.getTopLeftY(), 
     				candleStick.getBotRightX(), candleStick.getBotRightY());
 
     		mDrawable.draw(canvas);
-    	
-        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom(),mDrawable.getPaint());
-    
-        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-2,mDrawable.getPaint());
-        
-        if ((i%(num+1))==0){
-        	StringBuffer myDate= new StringBuffer();
-        	myDate.append(new SimpleDateFormat("MMM,yyyy").format(candleStick.getDate()));
-        	canvas.drawText(myDate.toString(),candleStick.getX() ,newRect.top-MARGIN2+10, mDrawable.getPaint());
-        	canvas.drawText(this.ticker,candleStick.getX()-50 ,newRect.top-MARGIN2+10, mDrawable.getPaint());
-        }
-        if (candleStickList.size()<31){
-        	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
-        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
-        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
-        }else if ((candleStickList.size()>30)&&(candleStickList.size()<50)){
-        	if (i%3==0){
-        	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
-        	canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
-            
-        	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
-        	}
-        }else if (candleStickList.size()<100){
-          	if (i%4==0){
-          		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());       
-            	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
-            	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
-            }
-        }else {
-        	if (i%5==0){
-        		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+5,mDrawable.getPaint());    
-            	canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-5,mDrawable.getPaint());
-            	canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
-            }
-        }
-        }
+
+    		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom(),mDrawable.getPaint());
+
+    		canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-2,mDrawable.getPaint());
+
+    		/* if ((i%(num+1))==0){
+        	canvas.drawText(this.ticker,newRect.centerX() ,newRect.top-MARGIN2-5, mDrawable.getPaint());
+        }*/
+    		if (i==(candleStickList.size())){
+    			StringBuffer myDate= new StringBuffer();
+    			myDate.append(new SimpleDateFormat("dd,MMM,yyyy").format(candleStick.getDate()));
+    			//canvas.drawText(" Quote Ending "+ myDate.toString(),newRect.centerX()-20,newRect.top-MARGIN2+10, mDrawable.getPaint());
+    			canvas.drawText(this.ticker+" Quote Ending "+ myDate.toString(),newRect.centerX()-70,newRect.top-MARGIN2+10, mDrawable.getPaint());
+    		}
+    		if (candleStickList.size()<31){
+    			canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+    			canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
+    			canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+    		}else if ((candleStickList.size()>30)&&(candleStickList.size()<50)){
+    			if (i%3==0){
+    				canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+    				canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());
+
+    				canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+    			}
+    		}else if (candleStickList.size()<100){
+    			if (i%4==0){
+    				canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+7,mDrawable.getPaint());       
+    				canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-7,mDrawable.getPaint());
+    				canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+    			}
+    		}else {
+    			if (i%5==0){
+    				canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom()+5,mDrawable.getPaint());    
+    				canvas.drawLine(candleStick.getX(),newRect.bottom+MARGIN2, candleStick.getX(),newRect.bottom+MARGIN2-5,mDrawable.getPaint());
+    				canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
+    			}
+    		}
+    	}
     }
-    
+
     /* (non-Javadoc)
      * @see android.view.View#onDraw(android.graphics.Canvas)
      */
