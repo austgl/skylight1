@@ -9,7 +9,6 @@ import com.google.inject.Inject;
 import roboguice.activity.GuiceActivity;
 import roboguice.inject.InjectView;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
-import skylight1.marketapp.model.PortDbAdapter;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -53,11 +52,6 @@ public class AddWatchListTickerActivity extends GuiceActivity {
                     marketDatabase.addWatchListTicker(newTicker);   // TODO: Remove
                     marketDatabase.cleanup();
 
-                    // melling's Database
-                    PortDbAdapter mDbHelper = new PortDbAdapter(AddWatchListTickerActivity.this);
-                    mDbHelper.open();
-                    mDbHelper.createPort(newTicker);
-                    mDbHelper.close();
             	}
 
                 // Now clear the field for next ticker

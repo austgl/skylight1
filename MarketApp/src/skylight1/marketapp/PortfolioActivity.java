@@ -268,13 +268,6 @@ public class PortfolioActivity extends GuiceListActivity {
         }
 
 
-//		@Override
-//		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-//				int arg2, long arg3) {
-//			// TODO Auto-generated method stub
-//			return false;
-//		}
-
     }
 
     /*
@@ -391,12 +384,6 @@ public class PortfolioActivity extends GuiceListActivity {
         equityPricingInformationFeed.addEquityFeedObserver(equityFeedObserver, portfolioTickerSet);
     }
 
-/*
-    private void initPortfolioList() {
-        portfolioItems.add(new PortfolioItem("AAPL", 202.0f, 1000, 250.10f));
-        portfolioItems.add(new PortfolioItem("GOOG", 20.0f, 10000, 50.10f));
-    }
-*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

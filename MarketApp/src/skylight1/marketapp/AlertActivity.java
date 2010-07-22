@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import skylight1.marketapp.model.PortDbAdapter;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,16 +15,12 @@ public class AlertActivity extends Activity {
 
     private static final String TAG = AlertActivity.class.getSimpleName();
 
-    private PortDbAdapter mDbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alert);
 
-        mDbHelper = new PortDbAdapter(this);
-
-        mDbHelper.open();
 
 
         findViewById(R.id.saveTickersButton).setOnClickListener(new View.OnClickListener() {
@@ -46,7 +41,6 @@ public class AlertActivity extends Activity {
 
     public void addTicker(String aTicker) {
         Log.i(TAG, "Adding ticker: " + aTicker);
-        mDbHelper.createPort(aTicker);
     }
 
     public void removeTicker(String aTicker) {
