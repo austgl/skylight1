@@ -252,7 +252,7 @@ public class CandleDrawView extends View{
     			StringBuffer myDate= new StringBuffer();
     			myDate.append(new SimpleDateFormat("dd,MMM,yyyy").format(candleStick.getDate()));
     			//canvas.drawText(" Quote Ending "+ myDate.toString(),newRect.centerX()-20,newRect.top-MARGIN2+10, mDrawable.getPaint());
-    			canvas.drawText(this.ticker+" Quote Ending "+ myDate.toString(),newRect.centerX()-70,newRect.top-MARGIN2+10, mDrawable.getPaint());
+    			canvas.drawText(this.ticker+" Daily Quote Ending "+ myDate.toString(),newRect.centerX()-80,newRect.top-MARGIN2+10, mDrawable.getPaint());
     		}
     		if (candleStickList.size()<31){
     			canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
