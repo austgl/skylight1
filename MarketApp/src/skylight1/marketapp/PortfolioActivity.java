@@ -1,34 +1,21 @@
 package skylight1.marketapp;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnTouchListener;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-
+import android.widget.*;
+import com.admob.android.ads.AdManager;
+import com.adwhirl.AdWhirlLayout;
 import com.google.inject.Inject;
 import roboguice.activity.GuiceListActivity;
 import skylight1.marketapp.feed.EquityFeedObserver;
 import skylight1.marketapp.feed.EquityPricingInformationFeed;
-import com.admob.android.ads.AdManager;
-import com.adwhirl.AdWhirlLayout;
-
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
@@ -91,7 +78,7 @@ public class PortfolioActivity extends GuiceListActivity {
       case 1:{
     	  MarketDatabase marketDatabase2 = new MarketDatabase(context);
           String whereArgs[] = new String[1];
-          whereArgs[0] = (String) ht.get(Long.toString(info.id).trim());
+          whereArgs[0] =  ht.get(Long.toString(info.id).trim());
           marketDatabase2.open();
           marketDatabase2.delete(MarketDatabase.CONTENT_URI,
                   MarketDatabase.KEY_SYMBOL,
@@ -108,7 +95,7 @@ public class PortfolioActivity extends GuiceListActivity {
       case 3:{    	  
     	  //will start receive ticker after CandleSticksActivity set  a to start receiving tickets
     	  Intent candlesticks = new Intent(this, CandleSticksActivity.class);
-          candlesticks.putExtra(TICKER, (String) ht.get(Long.toString(info.id).trim()));
+          candlesticks.putExtra(TICKER, ht.get(Long.toString(info.id).trim()));
           startActivity(candlesticks);
           return true;
       }
@@ -158,7 +145,7 @@ public class PortfolioActivity extends GuiceListActivity {
     private static class EfficientAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         private String dbId;
-        private String tickerMsg;
+//        private String tickerMsg;
 
         public EfficientAdapter(Context context) {
             // Cache the LayoutInflate to avoid asking for a new one each time.
@@ -254,7 +241,7 @@ public class PortfolioActivity extends GuiceListActivity {
             ht.put(Integer.toString(position),dbId);
             
         //    convertView.setOnTouchListener(this);
-            tickerMsg = item.getTicker();
+//            tickerMsg = item.getTicker();
             return convertView;
         }
 

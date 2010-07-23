@@ -188,7 +188,6 @@ public class WatchListActivity extends GuiceListActivity {
                     public void run() {
                         Log.i(TAG, "Updating watchList UI on UI Thread!!!");
                         SortedSet<EquityPricingInformation> sortedPrices = new TreeSet<EquityPricingInformation>(aSetOfEquityPricingInformation);
-//                        for (EquityPricingInformation equityPricingInformation : aSetOfEquityPricingInformation) {
                         for (EquityPricingInformation equityPricingInformation : sortedPrices) {
                             final String ticker = equityPricingInformation.getTicker();
                             Log.i(TAG, "Displaying: " + ticker);

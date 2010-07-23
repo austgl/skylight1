@@ -67,6 +67,9 @@ public class YahooEquityPricingInformationFeed extends AbstractEquityPricingInfo
         }
     }
 
+    private void initTickerPrices() {
+        
+    }
     /*
      *
      */
