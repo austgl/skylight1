@@ -327,6 +327,9 @@ public class PortfolioActivity extends GuiceListActivity {
         }
         Log.i(TAG, pnl + "," + portfolioValue);
 
+        TextView pnlText = (TextView)findViewById(R.id.TextView01);
+        pnlText.setText("PNL: "+pnl); //TODO move label to resource
+        
         final SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
         portfolioTickerSet = new TreeSet<String>();
 
