@@ -314,8 +314,8 @@ public class PortfolioActivity extends GuiceListActivity {
         }
         Log.i(TAG, pnl + "," + portfolioValue);
 
-        TextView pnlText = (TextView)findViewById(R.id.TextView01);
-        pnlText.setText("PNL: "+pnl); //TODO move label to resource
+        ((TextView)findViewById(R.id.TextView01)).setText(String.format("PNL: %.2f", pnl)); //TODO move label to resource
+        ((TextView)findViewById(R.id.TextView02)).setText(String.format("Portfolio Value: %.2f", portfolioValue)); //TODO move label to resource
         
         final SortedSet<PortfolioItem> sortedPositions = new TreeSet<PortfolioItem>(positions);
         portfolioTickerSet = new TreeSet<String>();
