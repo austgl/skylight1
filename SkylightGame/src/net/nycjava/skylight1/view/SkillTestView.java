@@ -20,6 +20,7 @@ import android.graphics.Canvas.EdgeType;
 import android.graphics.Paint.Style;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -130,54 +131,69 @@ final public class SkillTestView extends View {
 
 	private Canvas tempCanvasForMakingBitmapTransparent = new Canvas();
 
+	private int retries;
+	private final int MAX_RETRIES=3;
+	
 	public SkillTestView(Context c, AttributeSet anAttributeSet) {
 		super(c, anAttributeSet);
 	}
 
-	private void initialize() {
-		glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
-		glassBitmapWidth = glassBitmap.getWidth();
-		glassBitmapHeight = glassBitmap.getHeight();
-
-		levelGlassFullBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass);
-		levelGlassEmptyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass_empty);
-		levelGlassWidth = levelGlassFullBitmap.getWidth();
-		levelGlassHeight = levelGlassFullBitmap.getHeight();
-
-		timeRemainingRectangleLeft = SCREEN_MARGIN - 1;
-		timeRemainingRectangleTop = SCREEN_MARGIN - 1;
-		timeRemainingRectangleRight = SCREEN_MARGIN + levelGlassHeight + 1;
-		timeRemainingRectangleBottom = SCREEN_MARGIN + levelGlassHeight + 1;
-		timeRemainingRect = new RectF(0, 0, levelGlassHeight, levelGlassHeight);
-		timeRemainingBitmap = Bitmap.createBitmap((int) timeRemainingRect.width(), (int) timeRemainingRect.height(),
-				glassBitmap.getConfig());
-		spareTimeRemainingBitmap = Bitmap.createBitmap((int) timeRemainingRect.width(), (int) timeRemainingRect
-				.height(), glassBitmap.getConfig());
-		timeRemainingCanvas = new Canvas();
-
-		// load the type face
-		face = Typeface.createFromAsset(getContext().getAssets(), "skylight.ttf");
-
-		// initialize the paint for level
-		levelPaint.setTextSize(30);
-		levelPaint.setTypeface(face);
-		levelPaint.setAntiAlias(true);
-		levelPaint.setTextAlign(Paint.Align.CENTER);
-
-		// initialize the two paints for time remaining
-		timePaint.setTextSize(30);
-		timePaint.setTypeface(face);
-		timePaint.setAntiAlias(true);
-		timePaint.setTextAlign(Paint.Align.CENTER);
-		arcPaint.setAntiAlias(true);
-		arcPaint.setStrokeWidth(2);
+	private boolean initialize() {
+		try {
+			glassBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.theglass);
+			glassBitmapWidth = glassBitmap.getWidth();
+			glassBitmapHeight = glassBitmap.getHeight();
+	
+			levelGlassFullBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass);
+			levelGlassEmptyBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.level_glass_empty);
+			levelGlassWidth = levelGlassFullBitmap.getWidth();
+			levelGlassHeight = levelGlassFullBitmap.getHeight();
+	
+			timeRemainingRectangleLeft = SCREEN_MARGIN - 1;
+			timeRemainingRectangleTop = SCREEN_MARGIN - 1;
+			timeRemainingRectangleRight = SCREEN_MARGIN + levelGlassHeight + 1;
+			timeRemainingRectangleBottom = SCREEN_MARGIN + levelGlassHeight + 1;
+			timeRemainingRect = new RectF(0, 0, levelGlassHeight, levelGlassHeight);
+			timeRemainingBitmap = Bitmap.createBitmap((int) timeRemainingRect.width(), (int) timeRemainingRect.height(),
+					glassBitmap.getConfig());
+			spareTimeRemainingBitmap = Bitmap.createBitmap((int) timeRemainingRect.width(), (int) timeRemainingRect
+					.height(), glassBitmap.getConfig());
+			timeRemainingCanvas = new Canvas();
+	
+			// load the type face
+			face = Typeface.createFromAsset(getContext().getAssets(), "skylight.ttf");
+	
+			// initialize the paint for level
+			levelPaint.setTextSize(30);
+			levelPaint.setTypeface(face);
+			levelPaint.setAntiAlias(true);
+			levelPaint.setTextAlign(Paint.Align.CENTER);
+	
+			// initialize the two paints for time remaining
+			timePaint.setTextSize(30);
+			timePaint.setTypeface(face);
+			timePaint.setAntiAlias(true);
+			timePaint.setTextAlign(Paint.Align.CENTER);
+			arcPaint.setAntiAlias(true);
+			arcPaint.setStrokeWidth(2);
+		} catch(OutOfMemoryError oome) {
+			System.gc();
+			if(retries++<MAX_RETRIES) {
+				return false;
+			} else {
+				retries = 0;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	protected void onAttachedToWindow() {
 		super.onAttachedToWindow();
 
-		initialize();
+		while(!initialize()) {
+			SystemClock.sleep(300);
+		}
 
 		frames = 0;
 		timeStartedCountingFrames = 0;
@@ -366,24 +382,36 @@ final public class SkillTestView extends View {
 		height = getHeight();
 
 		updateGlassRectangle(0, 0);
-
-		setBackground();
+		while(!setBackground()) {
+			SystemClock.sleep(300);
+		}
+;
 	}
 
-	private void setBackground() {
+	private boolean setBackground() {
 		// set the background
-		final int backgroundResourceIndex = Arrays.binarySearch(backgroundsSpacing, difficultyLevel);
-
-		final int adjustedBackgroundResourceIndex = backgroundResourceIndex < 0 ? -1 - backgroundResourceIndex
-				: backgroundResourceIndex;
-
-		final int backgroundResourceId = backgrounds[Math.min(Math.abs(adjustedBackgroundResourceIndex),
-				backgrounds.length - 1)];
-
-		final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
-		final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
-		final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap);
-		setBackgroundDrawable(backgroundDrawable);
+		try {
+			final int backgroundResourceIndex = Arrays.binarySearch(backgroundsSpacing, difficultyLevel);
+	
+			final int adjustedBackgroundResourceIndex = backgroundResourceIndex < 0 ? -1 - backgroundResourceIndex
+					: backgroundResourceIndex;
+	
+			final int backgroundResourceId = backgrounds[Math.min(Math.abs(adjustedBackgroundResourceIndex),
+					backgrounds.length - 1)];
+	
+			final Bitmap backgroundBitmap = BitmapFactory.decodeResource(getResources(), backgroundResourceId);
+			final Bitmap scaledBackgroundBitmap = Bitmap.createScaledBitmap(backgroundBitmap, width, height, false);
+			final BitmapDrawable backgroundDrawable = new BitmapDrawable(scaledBackgroundBitmap);
+			setBackgroundDrawable(backgroundDrawable);
+		} catch(OutOfMemoryError oome) {
+			System.gc();
+			if(retries++<MAX_RETRIES) {
+				return false;
+			} else {
+				retries = 0;
+			}
+		}
+		return true;
 	}
 
 	@Override
