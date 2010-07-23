@@ -24,7 +24,7 @@
 		android:layout_width="wrap_content" android:layout_height="wrap_content"
 		android:layout_above="@id/layout_ad"/>
 
-	<ListView android:id="@id/android:list" android:layout_width="wrap_content"
+	<ListView android:id="@+id/android:list" android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/TextView02" android:layout_above="@id/Button01"
 		android:layout_alignParentLeft="true" android:layout_alignParentRight="true">
