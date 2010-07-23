@@ -1,6 +1,8 @@
 package net.nycjava.skylight1.service.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -81,14 +83,15 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private void notifyObservers() {
 		if(isServiceRunning) {
-			final int balancedObjectObserversSize = balancedObjectObservers.size();
-			for (int i = 0; i < balancedObjectObserversSize; i++) {
-				final BalancedObjectObserver observer = balancedObjectObservers.get(i);
+			//Fix IndexOutOfBoundsException by copying the list before iterating over it.
+			//This protects us from any changes that happen during the iteration.
+			List<BalancedObjectObserver> balancedObjectObserversSnapshot = 
+				new LinkedList<BalancedObjectObserver>(balancedObjectObservers);			
+			for (final BalancedObjectObserver observer : balancedObjectObserversSnapshot) {
 				observer.balancedObjectNotification(positionX, positionY);
 			}
 			if ( positionX < -1f || positionX > 1f || positionY < -1f || positionY > 1f) {
-				for (int i = 0; i < balancedObjectObserversSize; i++) {
-					final BalancedObjectObserver observer = balancedObjectObservers.get(i);
+				for (final BalancedObjectObserver observer : balancedObjectObserversSnapshot) {
 					observer.fallenOverNotification();
 				}
 			}
