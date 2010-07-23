@@ -2,30 +2,33 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/RelativeLayout01" android:layout_width="fill_parent"
-	android:orientation="vertical"
-	android:layout_height="wrap_content">
+	android:orientation="vertical" android:layout_height="fill_parent">
 	<ImageView android:id="@+id/ImageView01"
-		android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon"></ImageView>
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:src="@drawable/icon"></ImageView>
 	<TextView android:text="@+id/TextView01"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"
 		android:id="@+id/TextView01" android:layout_centerHorizontal="true"></TextView>
-	<TextView android:id="@+id/TextView02"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:layout_toRightOf="@id/TextView01" android:text="@string/test2" android:layout_below="@+id/ImageView01" android:layout_centerHorizontal="true"></TextView>
+	<TextView android:id="@+id/TextView02" android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:layout_toRightOf="@id/TextView01"
+		android:text="@string/test2" android:layout_below="@+id/ImageView01"
+		android:layout_centerHorizontal="true"></TextView>
 
-		<ListView android:id="@id/android:list"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:background="#f00" android:layout_below="@id/TextView02"
-			android:layout_alignParentLeft="true" android:layout_alignParentRight="true"
-			android:gravity="center">
-		</ListView>
-	
-	<Button android:text="@+id/Button01" android:id="@+id/Button01"
-		android:layout_width="wrap_content" android:layout_height="wrap_content"
-		android:layout_below="@id/android:list"
-		android:layout_alignParentBottom="false"></Button>
 
 	<LinearLayout android:orientation="vertical"
-        android:layout_width="fill_parent" android:layout_height="52dip"
-        android:id="@+id/layout_ad" android:layout_below="@id/Button01" android:gravity="bottom" />
+		android:layout_width="fill_parent" android:layout_height="52dip"
+		android:id="@+id/layout_ad" android:layout_alignParentBottom="true" />
+	<Button android:text="@+id/Button01" android:id="@+id/Button01"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_above="@id/layout_ad"></Button>
+
+	<ListView android:id="@id/android:list" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:background="#f00"
+		android:layout_below="@id/TextView02" 
+		android:layout_above="@id/Button01"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentRight="true">
+	</ListView>
+
+
 </RelativeLayout>
