@@ -148,8 +148,7 @@ public class PortfolioActivity extends GuiceListActivity {
 	            LinearLayout layout = (LinearLayout)findViewById(R.id.layout_ad);
 	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
 	            Display d = this.getWindowManager().getDefaultDisplay();
-	            RelativeLayout.LayoutParams adWhirlLayoutParams = new RelativeLayout.LayoutParams(d.getWidth(), 48);
-	            layout.addView(adWhirlLayout, adWhirlLayoutParams);
+	            layout.addView(adWhirlLayout);
             }
         } catch(Exception e){
             Log.e(TAG, "Unable to create AdWhirlLayout", e);
