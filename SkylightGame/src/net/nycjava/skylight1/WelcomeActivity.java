@@ -210,14 +210,6 @@ public class WelcomeActivity extends SkylightActivity {
 	protected void onResume() {
 		super.onResume();
 
-		// this next bit isn't doing what i want it to do... hide the caption to suppress the background that gets
-		// rendered just as the video is starting :o(
-		final TextView captionTextView = (TextView) contentView.findViewById(R.id.videoText);
-		captionTextView.setBackgroundColor(Color.TRANSPARENT);
-		captionTextView.setDrawingCacheBackgroundColor(Color.TRANSPARENT);
-		captionTextView.setDrawingCacheEnabled(false);
-		captionTextView.setVisibility(View.GONE);
-
 		buttonsAnimation = new Animation() {
 			@Override
 			protected void applyTransformation(float interpolatedTime, Transformation t) {
