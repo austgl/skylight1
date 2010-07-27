@@ -6,7 +6,7 @@
 	android:background="@drawable/welcome_background">
 
 	<VideoView android:id="@+id/videoview" android:orientation="vertical"
-		android:layout_height="288px" android:layout_width="384px"
+		android:layout_height="180px" android:layout_width="fill_parent"
 		android:focusable="false" android:layout_centerHorizontal="true"
 		android:layout_alignParentTop="true" />
 

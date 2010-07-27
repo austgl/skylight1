@@ -29,6 +29,7 @@ import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class WelcomeActivity extends SkylightActivity {
@@ -132,7 +133,7 @@ public class WelcomeActivity extends SkylightActivity {
 	}
 
 	@Dependency
-	private LinearLayout contentView;
+	private RelativeLayout contentView;
 
 	private SurfaceView preview;
 
@@ -151,8 +152,8 @@ public class WelcomeActivity extends SkylightActivity {
 	private int focusedColor;
 
 	protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory) {
-		aDependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout) getLayoutInflater().inflate(R.layout.welcome, null));
+		aDependencyInjectingObjectFactory.registerImplementationObject(RelativeLayout.class,
+				(RelativeLayout) getLayoutInflater().inflate(R.layout.welcome, null));
 	}
 
 	/** Called when the activity is first created. */
