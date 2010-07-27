@@ -40,7 +40,7 @@ public class CandleDrawView extends View{
 	double minLow;
 	
 	/** The Constant CFACTOR. */
-	static final double CFACTOR =0.7;  
+	static final double CFACTOR =0.75;  
 	
 	/** The Constant MARGIN1. */
 	static final int MARGIN1=40;
@@ -155,11 +155,15 @@ public class CandleDrawView extends View{
 		bot= (int)(((candleData.getLow()-min)*height)/(min-max)+ rect.bottom);
 		
 		if (botRightY>topLeftY){
-			candleStick.setTopLeftY(topLeftY);
-			candleStick.setBotRightY(botRightY);
-		}else{
 			candleStick.setTopLeftY(botRightY);
 			candleStick.setBotRightY(topLeftY);
+			/*candleStick.setTopLeftY(topLeftY);
+			candleStick.setBotRightY(botRightY);*/
+		}else{
+			candleStick.setTopLeftY(topLeftY);
+			candleStick.setBotRightY(botRightY);
+			/*candleStick.setTopLeftY(botRightY);
+			candleStick.setBotRightY(topLeftY);*/
 		}
 		candleStick.setTop(top);
 		candleStick.setBottom(bot);
@@ -200,7 +204,7 @@ public class CandleDrawView extends View{
     	NumberFormat nf= NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
     	ShapeDrawable mDrawable1 = new ShapeDrawable();
-    	mDrawable1.getPaint().setColor(Color.BLUE);
+    	mDrawable1.getPaint().setColor(Color.MAGENTA);
      	canvas.drawLine(newRect.left-MARGIN2,newRect.bottom+MARGIN2,newRect.right+MARGIN2,newRect.bottom+MARGIN2,mDrawable1.getPaint());
     	canvas.drawLine(newRect.left-MARGIN2,newRect.bottom+MARGIN2,newRect.left-MARGIN2,newRect.top-MARGIN2,mDrawable1.getPaint());
     	canvas.drawLine(newRect.left-MARGIN2,newRect.top-MARGIN2,newRect.right+MARGIN2,newRect.top-MARGIN2,mDrawable1.getPaint());
@@ -211,7 +215,7 @@ public class CandleDrawView extends View{
     	canvas.drawText(Double.toString(getMaxHigh()),newRect.right-MARGIN3+10,newRect.top, mDrawable1.getPaint());
     	canvas.drawText(Double.toString(getMinLow()),newRect.right-MARGIN3+10,newRect.bottom, mDrawable1.getPaint());
     	for (int i=0;i<=NUMPRICE;i++){
-    		canvas.drawLine(newRect.right+MARGIN2,newRect.top+incr*i, newRect.right+MARGIN2-2,newRect.top+incr*i,mDrawable1.getPaint());
+    		canvas.drawLine(newRect.right+MARGIN2,newRect.top+incr*i, newRect.right+MARGIN2-5,newRect.top+incr*i,mDrawable1.getPaint());
     		if (i>0 &&i<NUMPRICE& (i%2==0)){
     			double price=getMaxHigh() - (getMaxHigh()-getMinLow())*i/NUMPRICE;
     			canvas.drawText(nf.format(price),newRect.right-MARGIN3+10 ,newRect.top+incr*i, mDrawable1.getPaint());
@@ -236,10 +240,13 @@ public class CandleDrawView extends View{
     		i++;
     		CandleStick candleStick = (CandleStick)itr.next();
     		mDrawable.getPaint().setColor(candleStick.getColor());
-    		mDrawable.setBounds(candleStick.getTopLeftX(), candleStick.getTopLeftY(), 
+    		if (Math.abs((candleStick.getBotRightY()-candleStick.getTopLeftY()))>0){
+    			mDrawable.setBounds(candleStick.getTopLeftX(), candleStick.getTopLeftY(), 
     				candleStick.getBotRightX(), candleStick.getBotRightY());
-
-    		mDrawable.draw(canvas);
+    			mDrawable.draw(canvas);
+    		}else{
+    			canvas.drawLine(candleStick.getTopLeftX(),candleStick.getTopLeftY(), candleStick.getBotRightX(),candleStick.getBotRightY(),mDrawable.getPaint());
+    		}
 
     		canvas.drawLine(candleStick.getX(),candleStick.getTop(), candleStick.getX(),candleStick.getBottom(),mDrawable.getPaint());
 
@@ -252,7 +259,7 @@ public class CandleDrawView extends View{
     			StringBuffer myDate= new StringBuffer();
     			myDate.append(new SimpleDateFormat("dd,MMM,yyyy").format(candleStick.getDate()));
     			//canvas.drawText(" Quote Ending "+ myDate.toString(),newRect.centerX()-20,newRect.top-MARGIN2+10, mDrawable.getPaint());
-    			canvas.drawText(this.ticker+" Daily Quote Ending "+ myDate.toString(),newRect.centerX()-80,newRect.top-MARGIN2+10, mDrawable.getPaint());
+    			canvas.drawText(this.ticker+" Daily Chart Ending "+ myDate.toString(),newRect.centerX()-80,newRect.top-MARGIN2+10, mDrawable.getPaint());
     		}
     		if (candleStickList.size()<31){
     			canvas.drawText(new Integer(candleStick.getDate().getDate()).toString(),candleStick.getX()-5 ,newRect.bottom+MARGIN2-5, mDrawable.getPaint());
