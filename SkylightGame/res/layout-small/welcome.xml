@@ -6,9 +6,12 @@
 	android:background="@drawable/welcome_background">
 
 	<VideoView android:id="@+id/videoview" android:orientation="vertical"
-		android:layout_height="180px" android:layout_width="fill_parent"
+		android:layout_height="250px" android:layout_width="fill_parent"
 		android:focusable="false" android:layout_centerHorizontal="true"
-		android:layout_alignParentTop="true" />
+		android:layout_alignParentTop="true" 
+		android:layout_marginLeft="-144px"
+		android:layout_marginTop="-70px"
+		/>
 
 	<net.nycjava.skylight1.view.TypeFaceTextView
 		android:id="@+id/welcome_text" android:layout_width="fill_parent"
