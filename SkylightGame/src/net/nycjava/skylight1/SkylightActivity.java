@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -54,6 +55,8 @@ public abstract class SkylightActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// adjust media volume (After the glass crash instead of ring volume)
+		 this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 				WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
