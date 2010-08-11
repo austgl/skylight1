@@ -48,10 +48,15 @@ public class MarketDatabase extends ContentProvider {
      * opened/created
      *
      * @param ctx the Context within which to work
+     * 
+     * This establishes marketDB as an instance of  SQLiteDatabase through
+     * MarketDatabaseHelper.
+     * dbHelper=new MarketDatabaseHelper(ctx, null, DATABASE_NAME, DATABASE_VERSION)
      */
     public MarketDatabase(Context ctx) {
         this.mContext = ctx;
-    }
+        dbHelper=new MarketDatabaseHelper(ctx, null, DATABASE_NAME, DATABASE_VERSION);
+        }
 
 
     /*
@@ -259,9 +264,8 @@ public class MarketDatabase extends ContentProvider {
                         + "avg_price  float "
                         + ");";
 
-        public MarketDatabaseHelper(Context context, String name,
-                                    CursorFactory factory, int version) {
-            super(context, name, factory, version);
+        public MarketDatabaseHelper(Context context,String str,String str1,Integer i){
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         /*
