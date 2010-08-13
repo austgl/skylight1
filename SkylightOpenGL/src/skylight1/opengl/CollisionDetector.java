@@ -6,38 +6,78 @@ import java.util.List;
 import android.opengl.Visibility;
 
 public class CollisionDetector {
+	private static final int DEFAULT_INITIAL_CAPACITY = 50;
+
 	public static interface CollisionObserver {
 		void collisionOccurred(OpenGLGeometry anOpenGLGeometry);
 	}
 
 	private static final int NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE = 4;
 
-	private List<OpenGLGeometry> listOfGeometries = new ArrayList<OpenGLGeometry>();
+	private final List<OpenGLGeometry> listOfGeometries;
 
 	private float[] boundingSpheres;
 
 	private int[] collisionIndices;
 
-	private List<CollisionObserver> collisionObservers = new ArrayList<CollisionObserver>();
+	private final List<CollisionObserver> collisionObservers = new ArrayList<CollisionObserver>();
+
+	private int usedLengthOfArray;
+
+	public CollisionDetector(int anInitialCapacityForGeometries) {
+		boundingSpheres = new float[anInitialCapacityForGeometries * NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
+		collisionIndices = new int[anInitialCapacityForGeometries];
+		listOfGeometries = new ArrayList<OpenGLGeometry>(anInitialCapacityForGeometries);
+	}
+
+	public CollisionDetector() {
+		this(DEFAULT_INITIAL_CAPACITY);
+	}
 
 	public void addCollisionObserver(CollisionObserver aCollisionObserver) {
 		collisionObservers.add(aCollisionObserver);
 	}
 
 	public void addGeometry(OpenGLGeometry anOpenGLGeometry) {
+		// TODO (TF) this would be a good place to consider not recreating the array again and again...
+		// possibly use varargs!
+
 		listOfGeometries.add(anOpenGLGeometry);
-		if (boundingSpheres == null) {
-			boundingSpheres = new float[NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
-		} else {
+		// if there is not any existing space left (from an earlier remove?) then enlarge the
+		// bounding sphere array
+		if (usedLengthOfArray < boundingSpheres.length) {
 			final float[] enlargedBoundingSpheres = new float[boundingSpheres.length + NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
 			System.arraycopy(boundingSpheres, 0, enlargedBoundingSpheres, 0, boundingSpheres.length);
 			boundingSpheres = enlargedBoundingSpheres;
+			collisionIndices = new int[listOfGeometries.size()];
 		}
 
+		// put the new bounding sphere into the geometry
 		float[] addedBoundingSphere = anOpenGLGeometry.getBoundingSphere();
-		collisionIndices = new int[boundingSpheres.length / NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
+		System.arraycopy(addedBoundingSphere, 0, boundingSpheres, usedLengthOfArray, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
+		usedLengthOfArray += NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
+	}
+
+	public void removeGeometry(OpenGLGeometry anOpenGLGeometry) {
+		// find the index of the geometry in the list
+		final int indexOfGeometry = listOfGeometries.indexOf(anOpenGLGeometry);
+
+		// TODO can we remove this for optimization
+		if (indexOfGeometry == -1) {
+			throw new IllegalArgumentException("geometry was not in the collision detector");
+		}
+
+		// find the index of the last item
+		final int indexOfLastItem = listOfGeometries.size() - 1;
+		
+		// move the last item to the position of the one being removed
+		listOfGeometries.set(indexOfGeometry, listOfGeometries.get(indexOfLastItem));
+		listOfGeometries.remove(indexOfLastItem);
+		
+		// move the last bounding sphere in the array to the newly opened up spot
+		usedLengthOfArray -= NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
 		System
-				.arraycopy(addedBoundingSphere, 0, boundingSpheres, boundingSpheres.length - NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
+				.arraycopy(boundingSpheres, usedLengthOfArray, boundingSpheres, indexOfGeometry * NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
 	}
 
 	public void addGeometries(List<OpenGLGeometry> aListOfOpenGLGeometries) {
@@ -49,7 +89,7 @@ public class CollisionDetector {
 	public void detectCollisions(float[] aBoundingBox) {
 		// find the indices of all of the collisions
 		int numberOfCollisions =
-				Visibility.frustumCullSpheres(aBoundingBox, 0, boundingSpheres, 0, collisionIndices.length, collisionIndices, 0, collisionIndices.length);
+				Visibility.frustumCullSpheres(aBoundingBox, 0, boundingSpheres, 0, listOfGeometries.size(), collisionIndices, 0, collisionIndices.length);
 
 		// notify the observers of any collisions
 		for (int collisionIndicesIndex = 0; collisionIndicesIndex < numberOfCollisions; collisionIndicesIndex++) {
