@@ -5,7 +5,7 @@
 	<application android:icon="@drawable/icon"
 		android:label="@string/app_name" android:debuggable="true">
 
-		<activity android:name=".WelcomeActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:launchMode="singleInstance" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".WelcomeActivity" android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleInstance" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -17,12 +17,12 @@
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".SuccessActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".SuccessActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>
 
-		<activity android:name=".FailActivity" android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
+		<activity android:name=".FailActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait" android:clearTaskOnLaunch="true" android:finishOnTaskLaunch="true" android:allowTaskReparenting="true">
 			<intent-filter>
 			</intent-filter>
 		</activity>

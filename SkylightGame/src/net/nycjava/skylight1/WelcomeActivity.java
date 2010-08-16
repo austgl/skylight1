@@ -46,7 +46,7 @@ public class WelcomeActivity extends SkylightActivity {
 		public void surfaceCreated(SurfaceHolder holder) {
 			List<String> listOfMovies = new ArrayList<String>(2);
 //			if (!demoOnly) {
-				listOfMovies.add("intro.3gp");
+				listOfMovies.add("intro.mp4");
 //			}
 //			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
 //			if (sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1) < 0 || demoOnly) {
