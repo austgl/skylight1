@@ -442,6 +442,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * Floats.
 	 */
 	private IntBuffer createBuffer(final int[] anInts) {
+		// TODO remove this
 		// create a direct byte buffer in native byte order
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(anInts.length * Float.SIZE / Byte.SIZE);
 		byteBuffer.order(ByteOrder.nativeOrder());

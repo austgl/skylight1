@@ -142,9 +142,8 @@ public class ObjFileLoader {
 		}
 	}
 
-	public OpenGLGeometry createGeometry(
-			final OpenGLGeometryBuilder<GeometryBuilder.TexturableTriangle3D<GeometryBuilder.NormalizableTriangle3D<Object>>, GeometryBuilder.TexturableRectangle2D<Object>> anOpenGLGeometryBuilder) {
-		anOpenGLGeometryBuilder.startGeometry();
+	public void createGeometry(
+			final GeometryBuilder<GeometryBuilder.TexturableTriangle3D<GeometryBuilder.NormalizableTriangle3D<Object>>, GeometryBuilder.TexturableRectangle2D<Object>> anOpenGLGeometryBuilder) {
 
 		for (int f = 0; f < faces.size(); f++) {
 			Face face = faces.get(f);
@@ -169,7 +168,5 @@ public class ObjFileLoader {
 					v3TextureCoordinates.v).setNormal(v1Normal.x, v1Normal.y, v1Normal.z, v2Normal.x, v2Normal.y,
 					v2Normal.z, v3Normal.x, v3Normal.y, v3Normal.z);
 		}
-
-		return anOpenGLGeometryBuilder.endGeometry();
 	}
 }
