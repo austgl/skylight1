@@ -7,31 +7,77 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.graphics.drawable.AnimationDrawable;
-import android.widget.ImageView;
-import skylight1.toast.view.MediaPlayerHelper;
-import skylight1.toast.view.MediaPlayerHelper.VideoStartListener;
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.vending.licensing.AESObfuscator;
+import com.android.vending.licensing.LicenseChecker;
+import com.android.vending.licensing.LicenseCheckerCallback;
+import com.android.vending.licensing.ServerManagedPolicy;
 
 public class ToastActivity extends Activity implements TiltDetector.TiltListener {
 
 	public static final boolean LOG = false;
 
+    private static final String LICENSING_BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvWkIEwKpdCv9mIMjUSImVCwLXVVwUiwHW8WqUwpaWB0ebs5eI/IeYSwjrQ0Uy6Qws6y/aw+BEoilE45I0eo5yENkGxJ1TvNSuU/JifAcX31wXcBPzOjz1Erd8/NbpV88/Mt07STZYZ6wjOTSXWF8NLgmwdbvefXDI1WBTKV5Hrca644fQ0WQYdMlrvvP1m5eWZ+kBTJa8YrySh8PDVtzW0DAQzoN5MWdIzN8kLJNkF/HVh4o0HUfUvRjjJe9pnvICzDAOnZTWRhyqW7Ww7kFj8CW8kxyH83d+P5SWY+2/X/7MJqZkG1ejCshVo0R5SiWsVJvpzQAJ4oeN9tINP7NswIDAQAB";
+	
+    private static final byte[] LICENSING_SALT = new byte[] {
+        -46, 61, 30, -18, -113, -47, 84, -34, 21, 78, -92,
+        -40, 76, -107, -36, -113, -11, 32, -64, 89
+        };
+    
+    private class MyLicenseCheckerCallback implements LicenseCheckerCallback {
+        public void allow() {
+            if (isFinishing()) {
+                // Don't update UI if Activity is finishing.
+                return;
+            }
+            Toast.makeText(ToastActivity.this, 
+            		"Thank you for downloading from Google Market!", 
+            		Toast.LENGTH_LONG);
+        }
+
+        public void dontAllow() {
+            if (isFinishing()) {
+                // Don't update UI if Activity is finishing.
+                return;
+            }
+            Toast.makeText(ToastActivity.this, "You pirate, you!", Toast.LENGTH_LONG);
+        }
+
+        public void applicationError(ApplicationErrorCode errorCode) {
+            if (isFinishing()) {
+                // Don't update UI if Activity is finishing.
+                return;
+            }
+            Toast.makeText(ToastActivity.this, 
+            		"Something's broken!" + errorCode, Toast.LENGTH_LONG);
+
+        }
+    }
+
+    
+    private String deviceSpecificId;
+
+    private LicenseChecker mChecker;
+    
 	private static final String LOG_TAG = ToastActivity.class.getSimpleName();
 
 	private TiltDetector mTiltDetector;
@@ -67,6 +113,19 @@ public class ToastActivity extends Activity implements TiltDetector.TiltListener
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		deviceSpecificId = Secure.getString(getContentResolver(), "android_id");
+		if ( null == deviceSpecificId ) {
+			deviceSpecificId = "ALL_EMULATORS_CAN_SHARE_OH_NO";
+		}
+	    // Construct the LicenseChecker with a Policy.
+	    mChecker = new LicenseChecker(
+	        this, new ServerManagedPolicy(this,
+	            new AESObfuscator(LICENSING_SALT, getPackageName(), deviceSpecificId)),
+	        LICENSING_BASE64_PUBLIC_KEY
+	        );
+
+        mChecker.checkAccess(new MyLicenseCheckerCallback());
+		
 		message="Toasts go here";
     	// Load up toasts in array
     	loadToasts();
