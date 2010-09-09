@@ -1,6 +1,8 @@
 package net.nycjava.skylight1.service.impl;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,8 +92,11 @@ public class CountdownPublicationServiceImpl implements CountdownPublicationServ
 	}
 
 	private void notifyObservers(int aRemainingTime) {
-
-		for (CountdownObserver countdownObserver : countdownObservers) {
+		//Fix ConcurrentModificationException by copying the list before iterating over it.
+		//This protects us from any changes that happen during the iteration.
+		List<CountdownObserver> countdownObserversSnapshot = 
+			new LinkedList<CountdownObserver>(countdownObservers);			
+		for (final CountdownObserver countdownObserver : countdownObserversSnapshot) {
 			countdownObserver.countdownNotification(aRemainingTime);
 		}
 	}
