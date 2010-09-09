@@ -102,7 +102,7 @@ public class SkillTestActivity extends SkylightActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		Log.i(SkillTestActivity.class.getName(),"onResume() ******");
 		if (previouslyPaused) {
 			goToLoseActivity();
 		}

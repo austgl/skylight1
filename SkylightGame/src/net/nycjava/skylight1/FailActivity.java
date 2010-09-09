@@ -12,6 +12,11 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.Executors;
 
+import skylight1.util.Assets;
+
+import com.admob.android.ads.AdManager;
+import com.adwhirl.AdWhirlLayout;
+
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
@@ -25,28 +30,25 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-/** AD BANNER DEPENDENCY - to be added by specific game's build script
- import android.view.Gravity;
- import android.view.ViewGroup.LayoutParams;
- import com.admob.android.ads.AdView;
- */
+import android.widget.RelativeLayout;
 
 /**
  * reporting unsteady hand; report acknowledged; reporting slow hand; report acknowledged; go to welcome
  */
 public class FailActivity extends SkylightActivity {
 
-	private static final String HIGH_SCORES_SERVER = "balancethebeer.appspot.com/stats";
-
+	private String highscores_server;
+	private static final String TAG = FailActivity.class.getName();
+	private int globalBestLevel;
+	
 	@Dependency
-	private LinearLayout view;
+	private RelativeLayout view;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
 
-		dependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout) getLayoutInflater().inflate(R.layout.failmsg, null));
+		dependencyInjectingObjectFactory.registerImplementationObject(RelativeLayout.class,
+				(RelativeLayout) getLayoutInflater().inflate(R.layout.failmsg, null));
 	}
 
 	/** Called when the activity is first created. */
@@ -60,50 +62,63 @@ public class FailActivity extends SkylightActivity {
 
 		ImageView imageView = new ImageView(this);
 		imageView.setImageResource(R.drawable.icon_2);
-		view.addView(imageView);
-
-		/** AD BANNER DEPENDENCY - to be added by specific game's build script
-         AdView adView = new AdView(this);
-		 LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-		 adView.setLayoutParams(layoutParams); adView.setKeywords(getString(R.string.keywords));
-		 adView.setGravity(Gravity.BOTTOM); view.addView(adView);
-		 */
+		LinearLayout linearLayout =  (LinearLayout)view.getChildAt(0);
+		linearLayout.addView(imageView);
+		view.requestLayout();
+		
+    	try{
+    		//admob: don't show ads in emulator
+            AdManager.setTestDevices( new String[] { AdManager.TEST_EMULATOR
+            //,"your_debugging_phone_id_here" // add phone id if debugging on phone
+            });
+            String adwhirl_id = Assets.getString("adwhirl_id",this);
+            if(adwhirl_id!=null && adwhirl_id.length()>0) {
+	            LinearLayout layout = (LinearLayout)view.findViewById(R.id.layout_ad);
+	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
+	            layout.addView(adWhirlLayout);
+            }
+        } catch(Exception e){
+            Log.e(TAG, "Unable to create AdWhirlLayout", e);
+        }
 
 		setContentView(view);
 
 		MediaPlayer.create(getBaseContext(), R.raw.failed).start();
 
+		highscores_server = Assets.getString("highscores_server", this);
+		
 		Executors.defaultThreadFactory().newThread(new Runnable() {
 			@Override
 			public void run() {
 				final int failedLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL, 0);
 				try {
-					final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
-					messageDigest.update(androidId.getBytes());
-					final String hashedPhoneId = Arrays.toString(messageDigest.digest()).replace(" ", "").replace("[",
-							"").replace("]", "");// could be nicer
-					final String locale = Locale.getDefault().toString();
-					final int azimuthVariance = calculateAzimuth();
-					final int signature = 0;
-					final URL statisticsURL = new URL(String.format(
-							"http://%s?id=%s&level=%d&azimuth=%d&locale=%s&sig=%d", HIGH_SCORES_SERVER, hashedPhoneId,
-							failedLevel, azimuthVariance, locale, signature));
-					final HttpURLConnection httpURLConnection = (HttpURLConnection) statisticsURL.openConnection();
-					final InputStream inputStream = httpURLConnection.getInputStream();
-					final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-					final String globalBestLevelString = br.readLine();
-					final int globalBestLevel = Integer.parseInt(globalBestLevelString);
-
+					if(highscores_server.length()>0) {
+						final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
+						messageDigest.update(androidId.getBytes());
+						final String hashedPhoneId = Arrays.toString(messageDigest.digest()).replace(" ", "").replace("[",
+								"").replace("]", "");// could be nicer
+						final String locale = Locale.getDefault().toString();
+						final int azimuthVariance = calculateAzimuth();
+						final int signature = 0;
+						final URL statisticsURL = new URL(String.format(
+								"http://%s?id=%s&level=%d&azimuth=%d&locale=%s&sig=%d", highscores_server, hashedPhoneId,
+								failedLevel, azimuthVariance, locale, signature));
+						final HttpURLConnection httpURLConnection = (HttpURLConnection) statisticsURL.openConnection();
+						final InputStream inputStream = httpURLConnection.getInputStream();
+						final BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+						final String globalBestLevelString = br.readLine();
+						globalBestLevel = Integer.parseInt(globalBestLevelString);
+					}
 					// save the global best level
 					SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
 					SharedPreferences.Editor editor = sharedPreferences.edit();
 					editor.putInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, globalBestLevel);
 					editor.commit();
 
-					Log.i(FailActivity.class.getName(), String.format("Highest Level Reached: %d",
+					Log.i(TAG, String.format("Highest Level Reached: %d",
 							globalBestLevel));
 				} catch (Exception e) {
-					Log.e(FailActivity.class.getName(), "Failed to contact server for high scores", e);
+					Log.e(TAG, "Failed to contact server for high scores", e);
 					return;
 				}
 			}
@@ -113,7 +128,7 @@ public class FailActivity extends SkylightActivity {
 
 				// need at least two readings to get a variance
 				if (compassReadings.length < 2) {
-					Log.i(FailActivity.class.getName(), "returning az = 0");
+					Log.i(TAG, "returning az = 0");
 					return 0;
 				}
 
@@ -132,7 +147,7 @@ public class FailActivity extends SkylightActivity {
 
 				final int standardDeviation = (int) Math.sqrt(variance);
 
-				Log.i(FailActivity.class.getName(), format("az sd is %d", standardDeviation));
+				Log.i(TAG, format("az sd is %d", standardDeviation));
 				return standardDeviation;
 			}
 		}).start();

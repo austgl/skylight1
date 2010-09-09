@@ -1,22 +1,23 @@
 package net.nycjava.skylight1;
 
+import skylight1.util.Assets;
+
+import com.admob.android.ads.AdManager;
+import com.adwhirl.AdWhirlLayout;
+
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-/** AD BANNER DEPENDENCY - to be added by specific game's build script
-import com.admob.android.ads.AdView;
-*/
+import android.widget.RelativeLayout;
 
 /**
  * reporting success; report acknowledged; go to get ready
@@ -24,19 +25,20 @@ import com.admob.android.ads.AdView;
 public class SuccessActivity extends SkylightActivity {
 
 	protected static final int DIFFICULTY_LEVEL_INCREMENT = 1;
+	private static final String TAG = SuccessActivity.class.getName();
 
 	@Dependency
-	private LinearLayout contentView;
+	private RelativeLayout contentView;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
-		dependencyInjectingObjectFactory.registerImplementationObject(LinearLayout.class,
-				(LinearLayout) getLayoutInflater().inflate(R.layout.successmsg, null));
+		dependencyInjectingObjectFactory.registerImplementationObject(RelativeLayout.class,
+				(RelativeLayout) getLayoutInflater().inflate(R.layout.successmsg, null));
 	}
 
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Hide the window title.
@@ -45,16 +47,25 @@ public class SuccessActivity extends SkylightActivity {
 
 		ImageView imageView = new ImageView(this);
 		imageView.setImageResource(R.drawable.icon);
-		contentView.addView(imageView);
+		LinearLayout linearLayout =  (LinearLayout)contentView.getChildAt(0);
+		linearLayout.addView(imageView);
+		contentView.requestLayout();
 		
-		/** AD BANNER DEPENDENCY - to be added by specific game's build script
-		AdView adView = new AdView(this);
-		LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
-		adView.setLayoutParams(layoutParams);
-		adView.setKeywords("Android application");
-		adView.setGravity(Gravity.BOTTOM);
-		contentView.addView(adView);
-		 */
+    	try{
+    		//admob: don't show ads in emulator
+            AdManager.setTestDevices( new String[] { AdManager.TEST_EMULATOR
+            //,"your_debugging_phone_id_here" // add phone id if debugging on phone
+            });
+            String adwhirl_id = Assets.getString("adwhirl_id",this);
+            if(adwhirl_id!=null && adwhirl_id.length()>0) {
+	            LinearLayout layout = (LinearLayout)contentView.findViewById(R.id.layout_ad);
+	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
+	            layout.addView(adWhirlLayout);
+            }
+        } catch(Exception e){
+            Log.e(TAG, "Unable to create AdWhirlLayout", e);
+        }
+
 		setContentView(contentView);
 
 		MediaPlayer.create(getBaseContext(), R.raw.succeeded).start();
