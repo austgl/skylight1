@@ -93,6 +93,7 @@ public class CollisionDetector {
 
 		// notify the observers of any collisions
 		for (int collisionIndicesIndex = 0; collisionIndicesIndex < numberOfCollisions; collisionIndicesIndex++) {
+			// FIXME if a remove is called by the observer, then the indices are all out, and the next line causes an arrayoutofboundsexception
 			final int indexOfCollidedGeometry = collisionIndices[collisionIndicesIndex];
 			final OpenGLGeometry collidedGeometry = listOfGeometries.get(indexOfCollidedGeometry);
 			for (int observerIndex = 0; observerIndex < collisionObservers.size(); observerIndex++) {
