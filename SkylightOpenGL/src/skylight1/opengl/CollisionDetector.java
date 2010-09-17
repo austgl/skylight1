@@ -1,7 +1,9 @@
 package skylight1.opengl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.opengl.Visibility;
 
@@ -20,7 +22,7 @@ public class CollisionDetector {
 
 	private int[] collisionIndices;
 
-	private final List<CollisionObserver> collisionObservers = new ArrayList<CollisionObserver>();
+	private final Map<OpenGLGeometry, CollisionObserver> collisionObservers = new HashMap<OpenGLGeometry, CollisionObserver>();
 
 	private int usedLengthOfArray;
 
@@ -34,11 +36,7 @@ public class CollisionDetector {
 		this(DEFAULT_INITIAL_CAPACITY);
 	}
 
-	public void addCollisionObserver(CollisionObserver aCollisionObserver) {
-		collisionObservers.add(aCollisionObserver);
-	}
-
-	public void addGeometry(OpenGLGeometry anOpenGLGeometry) {
+	public void addGeometry(OpenGLGeometry anOpenGLGeometry, CollisionObserver aCollisionObserver) {
 		// TODO (TF) this would be a good place to consider not recreating the array again and again...
 		// possibly use varargs!
 
@@ -56,6 +54,9 @@ public class CollisionDetector {
 		float[] addedBoundingSphere = anOpenGLGeometry.getBoundingSphere();
 		System.arraycopy(addedBoundingSphere, 0, boundingSpheres, usedLengthOfArray, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
 		usedLengthOfArray += NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
+
+		// add the collision observer
+		collisionObservers.put(anOpenGLGeometry, aCollisionObserver);
 	}
 
 	public void removeGeometry(OpenGLGeometry anOpenGLGeometry) {
@@ -69,20 +70,20 @@ public class CollisionDetector {
 
 		// find the index of the last item
 		final int indexOfLastItem = listOfGeometries.size() - 1;
-		
+
 		// move the last item to the position of the one being removed
 		listOfGeometries.set(indexOfGeometry, listOfGeometries.get(indexOfLastItem));
 		listOfGeometries.remove(indexOfLastItem);
-		
+
 		// move the last bounding sphere in the array to the newly opened up spot
 		usedLengthOfArray -= NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
 		System
 				.arraycopy(boundingSpheres, usedLengthOfArray, boundingSpheres, indexOfGeometry * NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
 	}
 
-	public void addGeometries(List<OpenGLGeometry> aListOfOpenGLGeometries) {
-		for (OpenGLGeometry openGLGeometry : aListOfOpenGLGeometries) {
-			addGeometry(openGLGeometry);
+	public void addGeometries(Map<OpenGLGeometry, CollisionObserver> aMapOfOpenGLGeometriesToObservers) {
+		for (Map.Entry<OpenGLGeometry, CollisionObserver> openGLGeometryAndItsObserver : aMapOfOpenGLGeometriesToObservers.entrySet()) {
+			addGeometry(openGLGeometryAndItsObserver.getKey(), openGLGeometryAndItsObserver.getValue());
 		}
 	}
 
@@ -93,13 +94,12 @@ public class CollisionDetector {
 
 		// notify the observers of any collisions
 		for (int collisionIndicesIndex = 0; collisionIndicesIndex < numberOfCollisions; collisionIndicesIndex++) {
-			// FIXME if a remove is called by the observer, then the indices are all out, and the next line causes an arrayoutofboundsexception
+			// FIXME if a remove is called by the observer, then the indices are all out, and the next line causes an
+			// arrayoutofboundsexception
 			final int indexOfCollidedGeometry = collisionIndices[collisionIndicesIndex];
 			final OpenGLGeometry collidedGeometry = listOfGeometries.get(indexOfCollidedGeometry);
-			for (int observerIndex = 0; observerIndex < collisionObservers.size(); observerIndex++) {
-				final CollisionObserver collisionObserver = collisionObservers.get(observerIndex);
-				collisionObserver.collisionOccurred(collidedGeometry);
-			}
+			final CollisionObserver collisionObserver = collisionObservers.get(collidedGeometry);
+			collisionObserver.collisionOccurred(collidedGeometry);
 		}
 	}
 }
