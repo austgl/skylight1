@@ -21,8 +21,7 @@ public class Welcome extends Activity {
         setContentView(R.layout.main);
  
         Button map0 = (Button)findViewById(R.id.Button01);
-//        final String goMap = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=101509637019979626548.00048f4bd84c82a876629&ll=40.736292,-73.993446&spn=0.068027,0.169086&z=13";
-        final String goMap = "http://maps.google.com/maps/api/directions/json?origin=Adelaide,SA&destination=Adelaide,SA&waypoints=optimize:true|Barossa+Valley,SA|Clare,SA|Connawarra,SA|McLaren+Vale,SA&sensor=false";
+        final String goMap = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=101509637019979626548.00048f4bd84c82a876629&ll=40.736292,-73.993446&spn=0.068027,0.169086&z=13";
 		final Uri url = Uri.parse(goMap);
 		map0.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
