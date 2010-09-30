@@ -43,6 +43,7 @@ public class FailActivity extends SkylightActivity {
 	
 	@Dependency
 	private RelativeLayout view;
+	private MediaPlayer mp;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
@@ -83,7 +84,10 @@ public class FailActivity extends SkylightActivity {
 
 		setContentView(view);
 
-		MediaPlayer.create(getBaseContext(), R.raw.failed).start();
+		mp = MediaPlayer.create(getBaseContext(), R.raw.failed);
+		if(mp!=null) {
+			mp.start();
+		}
 
 		highscores_server = Assets.getString("highscores_server", this);
 		
@@ -151,6 +155,16 @@ public class FailActivity extends SkylightActivity {
 				return standardDeviation;
 			}
 		}).start();
+	}
+
+	@Override
+	protected void onDestroy() {
+		if(mp!=null) {
+			mp.stop();
+			mp.release();
+			mp = null;
+			System.gc();
+		}
 	}
 
 	void nextLevel() {

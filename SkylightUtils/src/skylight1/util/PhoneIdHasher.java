@@ -3,6 +3,9 @@ package skylight1.util;
 import java.security.MessageDigest;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.provider.Settings.Secure;
 import android.util.Log;
 

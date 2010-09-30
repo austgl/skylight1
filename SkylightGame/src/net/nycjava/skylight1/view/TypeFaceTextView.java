@@ -1,11 +1,12 @@
 package net.nycjava.skylight1.view;
 
+import skylight1.util.BuildInfo;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Typeface;
-import android.graphics.PorterDuff.Mode;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -16,6 +17,12 @@ public class TypeFaceTextView extends TextView {
 		BLACK_BORDER_PAINT.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
 	}
 
+	@Override
+	public void setText(CharSequence text, BufferType type) {
+		
+		super.setText(String.format(text.toString(), BuildInfo.getVersionName(getContext())), type);
+	}
+	
 	private static final int BORDER_WIDTH = 1;
 
 	private Typeface typeface;

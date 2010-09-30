@@ -29,6 +29,7 @@ public class SuccessActivity extends SkylightActivity {
 
 	@Dependency
 	private RelativeLayout contentView;
+	private MediaPlayer mp;
 
 	@Override
 	protected void addDependencies(DependencyInjectingObjectFactory dependencyInjectingObjectFactory) {
@@ -68,7 +69,20 @@ public class SuccessActivity extends SkylightActivity {
 
 		setContentView(contentView);
 
-		MediaPlayer.create(getBaseContext(), R.raw.succeeded).start();
+		mp = MediaPlayer.create(getBaseContext(), R.raw.succeeded);
+		if(mp!=null) {
+			mp.start();
+		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if(mp!=null) {
+			mp.stop();
+			mp.release();
+			mp = null;
+			System.gc();
+		}
 	}
 
 	void nextLevel() {
