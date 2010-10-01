@@ -77,6 +77,7 @@ public class SuccessActivity extends SkylightActivity {
 	
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		if(mp!=null) {
 			mp.stop();
 			mp.release();
