@@ -19,11 +19,9 @@ public class BuildInfo {
 		}
 		return "";
 	}
-	public static String getBuildInfo() {
-		final String buildInfo = String.format(
-				"AndroidVersion= %s Product= %s ID= %s Manufacturer= %s Model= %s CpuAbi= %s",
-				android.os.Build.VERSION.RELEASE, android.os.Build.PRODUCT, android.os.Build.ID,
-				android.os.Build.MANUFACTURER, android.os.Build.MODEL, android.os.Build.CPU_ABI);
+	public static String getBuildInfo() { // minimal info for 1.5 support
+		final String buildInfo = String.format("AndroidVersion= %s Product= %s ID= %s Model= %s",
+				android.os.Build.VERSION.RELEASE, android.os.Build.PRODUCT, android.os.Build.ID, android.os.Build.MODEL);
 		return buildInfo;
 	}
 }

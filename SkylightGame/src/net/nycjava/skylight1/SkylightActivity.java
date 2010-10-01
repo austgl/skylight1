@@ -2,6 +2,7 @@ package net.nycjava.skylight1;
 
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
+import skylight1.util.BuildInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -143,6 +144,8 @@ public abstract class SkylightActivity extends Activity {
 		case DIALOG_ABOUT_ID:
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 			layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_root));
+			TextView version = (TextView) layout.findViewById(R.id.about_text);
+			version.setText(String.format(version.getText().toString(), BuildInfo.getVersionName(this)));
 
 			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.about)
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

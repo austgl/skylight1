@@ -17,11 +17,11 @@ public class TypeFaceTextView extends TextView {
 		BLACK_BORDER_PAINT.setXfermode(new PorterDuffXfermode(Mode.DST_OUT));
 	}
 
-	@Override
-	public void setText(CharSequence text, BufferType type) {
-		
-		super.setText(String.format(text.toString(), BuildInfo.getVersionName(getContext())), type);
-	}
+//	@Override // not working in 1.5
+//	public void setText(CharSequence text, BufferType type) {
+//		
+//		super.setText(String.format(text.toString(), BuildInfo.getVersionName(getContext())), type);
+//	}
 	
 	private static final int BORDER_WIDTH = 1;
 
