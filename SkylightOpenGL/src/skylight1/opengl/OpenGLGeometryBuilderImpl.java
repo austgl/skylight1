@@ -327,7 +327,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	}
 
 	private int[] extend(int[] anArray) {
-		final int[] newArray = new int[anArray.length * 4];
+		final int[] newArray = new int[anArray.length * 2];
 		System.arraycopy(anArray, 0, newArray, 0, anArray.length);
 		return newArray;
 	}

@@ -20,9 +20,11 @@ import android.content.Context;
  * 
  */
 public class ObjFileLoader {
-	private static final String FLOAT = "(-?\\d+\\.\\d+)";
+	private static final String NON_CAPTURING_FLOAT = "-?\\d+\\.\\d+";
 
-	private static final String INTEGER = "(\\d+)";
+	private static final String CAPTURING_FLOAT = "(" + NON_CAPTURING_FLOAT + ")";
+
+	private static final String CAPTURING_INTEGER = "(\\d+)";
 
 	// some inner classes to model the data in the obj file
 	private static class ModelCoordinates {
@@ -107,9 +109,9 @@ public class ObjFileLoader {
 		BufferedReader br = new BufferedReader(new InputStreamReader(anInputStream));
 		String line;
 		Pattern pattern = Pattern.compile(String.format(
-				"^(?:v %s %s %s|vt %s %s|vn %s %s %s|f %s/%s/%s %s/%s/%s %s/%s/%s)$", FLOAT, FLOAT, FLOAT, FLOAT,
-				FLOAT, FLOAT, FLOAT, FLOAT, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER, INTEGER,
-				INTEGER));
+				"^(?:v\\s+%s\\s+%s\\s+%s|vt\\s+%s\\s+%s(?:\\s+%s)?|vn\\s+%s\\s+%s\\s+%s|f\\s+%s/%s/%s\\s+%s/%s/%s\\s+%s/%s/%s(?:\\s+%s/%s/%s)?)\\s*$", CAPTURING_FLOAT, CAPTURING_FLOAT, CAPTURING_FLOAT, CAPTURING_FLOAT,
+				CAPTURING_FLOAT, NON_CAPTURING_FLOAT, CAPTURING_FLOAT, CAPTURING_FLOAT, CAPTURING_FLOAT, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER,
+				CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER, CAPTURING_INTEGER));
 		Matcher matcher = pattern.matcher("");
 		while ((line = br.readLine()) != null) {
 			matcher.reset(line);
@@ -138,6 +140,12 @@ public class ObjFileLoader {
 						texturesCoordinates.get(parseInteger(matcher.group(16)) - 1), normals
 								.get(parseInteger(matcher.group(17)) - 1));
 				faces.add(new Face(v1, v2, v3));
+				if (matcher.group(18) != null) {
+					final Vertex v4 = new Vertex(modelCoordinates.get(parseInteger(matcher.group(18)) - 1),
+						texturesCoordinates.get(parseInteger(matcher.group(19)) - 1), normals
+								.get(parseInteger(matcher.group(20)) - 1));
+					faces.add(new Face(v1, v3, v4));
+				}
 			}
 		}
 	}
