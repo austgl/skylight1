@@ -12,7 +12,6 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,15 +22,17 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 public abstract class SkylightActivity extends Activity {
-//	private static final int MENU_ITEM_0 = 0;
 	private static final int MENU_ITEM_0 = 0;
 	private static final int MENU_ITEM_1 = 1;
 
-	public static final String DIFFICULTY_LEVEL = SkylightActivity.class.getPackage().getName() + ".difficultyLevel";
+	public static final String DIFFICULTY_LEVEL = SkylightActivity.class
+			.getPackage().getName() + ".difficultyLevel";
 
-	public static final String COMPASS_READINGS = SkylightActivity.class.getPackage().getName() + ".compassReadings";
+	public static final String COMPASS_READINGS = SkylightActivity.class
+			.getPackage().getName() + ".compassReadings";
 
-	public static final String DISPLAY_DEMO = SkylightActivity.class.getPackage().getName() + ".displayDemo";
+	public static final String DISPLAY_DEMO = SkylightActivity.class
+			.getPackage().getName() + ".displayDemo";
 
 	public static final String HIGH_SCORE_PREFERENCE_NAME = "highLevel";
 	public static final String GLOBAL_HIGH_SCORE_PREFERENCE_NAME = "globalHighLevel";
@@ -43,6 +44,7 @@ public abstract class SkylightActivity extends Activity {
 	public static final int HARD_DIFFICULTY_LEVEL = 10;
 
 	public static String androidId;
+	public static boolean isDebug;
 
 	protected static final String SKYLIGHT_PREFS_FILE = "SkylightPrefsFile";
 
@@ -57,7 +59,7 @@ public abstract class SkylightActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// adjust media volume (After the glass crash instead of ring volume)
-		 this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
 				WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -65,37 +67,36 @@ public abstract class SkylightActivity extends Activity {
 		dependencyInjectingObjectFactory = new DependencyInjectingObjectFactory();
 		addDependencies(dependencyInjectingObjectFactory);
 
-		// since activities are instantiated by the framework, use the dependency injector directly to inject any
+		// since activities are instantiated by the framework, use the
+		// dependency injector directly to inject any
 		// dependencies this activity may have
-		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(this);
+		new DependencyInjector(dependencyInjectingObjectFactory)
+				.injectDependenciesForClassHierarchy(this);
 
-		androidId = Secure.getString(getContentResolver(), Secure.ANDROID_ID);
-		if(androidId==null) {
-			androidId=String.format("EMULATOR-%d",System.currentTimeMillis());
+		androidId = BuildInfo.getAndroidID(this);
+		if (androidId == null) {
+			androidId = String
+					.format("EMULATOR-%d", System.currentTimeMillis());
 		}
-		Log.println(Log.DEBUG, this.getLocalClassName(), "androidId = "+androidId);
+		isDebug = BuildInfo.isDebuggable(this);
+		if (isDebug) {
+			Log.println(Log.DEBUG, this.getLocalClassName(), "androidId = "
+					+ androidId);
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean supRetVal = super.onCreateOptionsMenu(menu);
-
-//		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.instructions));
 		menu.add(0, MENU_ITEM_0, Menu.NONE, getString(R.string.levelreached));
 		menu.add(0, MENU_ITEM_1, Menu.NONE, getString(R.string.about));
-//		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_help);
 		menu.getItem(MENU_ITEM_0).setIcon(android.R.drawable.ic_menu_view);
-		menu.getItem(MENU_ITEM_1).setIcon(android.R.drawable.ic_menu_info_details);
+		menu.getItem(MENU_ITEM_1).setIcon(
+				android.R.drawable.ic_menu_info_details);
 		return supRetVal;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-//		case 0:
-//			final Intent welcomeActivityIntent = new Intent();
-//			welcomeActivityIntent.putExtra(DISPLAY_DEMO, true);
-//			welcomeActivityIntent.setClass(SkylightActivity.this, WelcomeActivity.class);
-//			startActivity(welcomeActivityIntent);
-//			return true;
 		case MENU_ITEM_0:
 			showDialog(DIALOG_SHOW_LEVEL_ID);
 			return true;
@@ -103,7 +104,8 @@ public abstract class SkylightActivity extends Activity {
 			showDialog(DIALOG_ABOUT_ID);
 			return true;
 		case 3:
-			final Intent visitWebSiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.websiteurl)));
+			final Intent visitWebSiteIntent = new Intent(Intent.ACTION_VIEW,
+					Uri.parse(getString(R.string.websiteurl)));
 			startActivity(visitWebSiteIntent);
 			return true;
 		default:
@@ -118,41 +120,56 @@ public abstract class SkylightActivity extends Activity {
 		View layout = null;
 		switch (id) {
 		case DIALOG_SHOW_LEVEL_ID:
-			SharedPreferences sharedPreferences = getSharedPreferences(SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-			int bestLevelCompleted = sharedPreferences.getInt(HIGH_SCORE_PREFERENCE_NAME, -1);
-			int globalBestLevelCompleted = sharedPreferences.getInt(GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
+			SharedPreferences sharedPreferences = getSharedPreferences(
+					SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
+			int bestLevelCompleted = sharedPreferences.getInt(
+					HIGH_SCORE_PREFERENCE_NAME, -1);
+			int globalBestLevelCompleted = sharedPreferences.getInt(
+					GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
 
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-			layout = inflater.inflate(R.layout.level_dialog, (ViewGroup) findViewById(R.id.layout_root));
+			layout = inflater.inflate(R.layout.level_dialog,
+					(ViewGroup) findViewById(R.id.layout_root));
 
-			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.levelreached)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							removeDialog(DIALOG_SHOW_LEVEL_ID);
-						}
-					}).setView(layout).create();
+			dialog = new AlertDialog.Builder(this)
+					.setIcon(R.drawable.icon_small)
+					.setTitle(R.string.levelreached)
+					.setPositiveButton(R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									removeDialog(DIALOG_SHOW_LEVEL_ID);
+								}
+							}).setView(layout).create();
 
-			final TextView highestLevelText = (TextView) layout.findViewById(R.id.highest_level);
-			highestLevelText.setText(String.format("%d", bestLevelCompleted + 1));
+			final TextView highestLevelText = (TextView) layout
+					.findViewById(R.id.highest_level);
+			highestLevelText.setText(String
+					.format("%d", bestLevelCompleted + 1));
 
-			final TextView globalHighestLevelText = (TextView) layout.findViewById(R.id.global_highest_level);
-			if(globalBestLevelCompleted>0) {
-				globalHighestLevelText.setText(String.format("%d", globalBestLevelCompleted));
+			final TextView globalHighestLevelText = (TextView) layout
+					.findViewById(R.id.global_highest_level);
+			if (globalBestLevelCompleted > 0) {
+				globalHighestLevelText.setText(String.format("%d",
+						globalBestLevelCompleted));
 			}
 			break;
 
 		case DIALOG_ABOUT_ID:
 			inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-			layout = inflater.inflate(R.layout.about_dialog, (ViewGroup) findViewById(R.id.about_root));
-			TextView version = (TextView) layout.findViewById(R.id.about_text);
-			version.setText(String.format(version.getText().toString(), BuildInfo.getVersionName(this)));
+			layout = inflater.inflate(R.layout.about_dialog,
+					(ViewGroup) findViewById(R.id.about_root));
 
-			dialog = new AlertDialog.Builder(this).setIcon(R.drawable.icon_small).setTitle(R.string.about)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							removeDialog(DIALOG_ABOUT_ID);
-						}
-					}).setView(layout).create();
+			dialog = new AlertDialog.Builder(this)
+					.setIcon(R.drawable.icon_small)
+					.setTitle(R.string.about)
+					.setPositiveButton(R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									removeDialog(DIALOG_ABOUT_ID);
+								}
+							}).setView(layout).create();
 
 			break;
 
@@ -162,5 +179,6 @@ public abstract class SkylightActivity extends Activity {
 		return dialog;
 	}
 
-	abstract protected void addDependencies(DependencyInjectingObjectFactory aDependencyInjectingObjectFactory);
+	abstract protected void addDependencies(
+			DependencyInjectingObjectFactory aDependencyInjectingObjectFactory);
 }
