@@ -41,7 +41,7 @@ public class Preview extends SurfaceView {
 				// Surface will be destroyed when we return, so stop the preview.
 				// Because the CameraDevice object is not a shared resource, it's very
 				// important to release it when the activity is paused.
-				camera.stopPreview();
+				camera.release();
 			}
 
 			public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
