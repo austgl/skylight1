@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Build;
-import android.provider.Settings.Secure;
 import android.util.Log;
 
 /**
@@ -99,13 +98,14 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 	public void uncaughtException(Thread aThread, Throwable aThrowable) {
 
 		Date date = new Date();
-
+		PhoneIdHasher pih = new PhoneIdHasher();
+		
 		final String message = String.format(XML_FORMAT, getPackageName(), getVersionNumber(), getVersionName(),
-				getThreadName(aThread), getTimeAsString(date), getHashedPhoneId(), getdeviceInformation(),
+				getThreadName(aThread), getTimeAsString(date), pih.getHashedPhoneId(context), getdeviceInformation(),
 				getConfiguration(), getStackTrace(aThrowable), getContextString(), getLog());
 
 		final String simplerMessage = String.format(SIMPLE_FORMAT_NOTIME, getPackageName(), getVersionNumber(), getVersionName(),
-				getThreadName(aThread), getHashedPhoneId(), getdeviceInformation(),
+				getThreadName(aThread), pih.getHashedPhoneId(context), getdeviceInformation(),
 				getConfiguration(), getStackTrace(aThrowable), getContextString(), getLog());
 
 		// don't log duplicates exceptions within 1 second
@@ -181,37 +181,6 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 			final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 			simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 			return simpleDateFormat.format(date);
-		} catch (Exception e) {
-			Log.e(LoggingExceptionHandler.class.getName(), "Unable to get phone id", e);
-			return "Not Available";
-		}
-	}
-
-	private String getHashedPhoneId() {
-		try {
-			// get the phone's unique id
-			final String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-
-			// if there is none, then it must be an emulator, which is interesting of itself
-			if (androidId == null) {
-				return "EMULATOR";
-			}
-
-			// otherwise hash the id using the package name, so as to make it possible to track exceptions from the same
-			// device across many apps in the same package, but practically impossible to determine anything about the
-			// identity of the user across packages
-			final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
-			messageDigest.update(androidId.getBytes());
-			messageDigest.update(context.getPackageName().getBytes());
-
-			// format as a string of hexadecimal digits
-			final StringBuilder stringBuilder = new StringBuilder();
-			for (byte b : messageDigest.digest()) {
-				stringBuilder.append(String.format("%02X", b));
-			}
-
-			// return the result
-			return stringBuilder.toString();
 		} catch (Exception e) {
 			Log.e(LoggingExceptionHandler.class.getName(), "Unable to get phone id", e);
 			return "Not Available";

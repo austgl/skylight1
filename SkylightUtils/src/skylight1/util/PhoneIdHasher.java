@@ -12,7 +12,7 @@ public class PhoneIdHasher {
 	public String getHashedPhoneId(Context aContext) {
 		if (hashedPhoneId == null) {
 			// get the phone's unique id
-			final String androidId = Secure.getString(aContext.getContentResolver(), Secure.ANDROID_ID);
+			final String androidId = BuildInfo.getAndroidID(aContext);
 
 			// if there is none, then it must be an emulator, which is interesting of itself
 			if (androidId == null) {
@@ -20,12 +20,8 @@ public class PhoneIdHasher {
 
 			} else {
 
-				// otherwise hash the id using the package name, so as to make it possible to track exceptions from
-				// the
-				// same
-				// device across many apps in the same package, but practically impossible to determine anything
-				// about
-				// the
+				// otherwise hash the id using the package name, so as to make it possible to track exceptions from the same
+				// device across many apps in the same package, but practically impossible to determine anything about the
 				// identity of the user across packages
 				try {
 					final MessageDigest messageDigest = MessageDigest.getInstance("SHA");
