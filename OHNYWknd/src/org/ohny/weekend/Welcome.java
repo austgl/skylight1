@@ -1,0 +1,124 @@
+package org.ohny.weekend;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+public class Welcome extends Activity {
+   
+	static final String TAG = "OHNY Weekend";
+	static final int ABOUT = 0;
+	static final int GREET_DIALOG = 1;
+	static final int ITS_OVER_DIALOG = 2;
+	static final String INTENT_CATAGORY_TYPE = "android.intent.category.LAUNCHER";
+	static final String MAP_COMPONENT_NAME = "com.google.android.apps.maps/com.google.android.maps.MapsActivity";
+
+	// Google My Maps url/uri strings
+//	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=101509637019979626548.00048f4bd84c82a876629&ll=40.736292,-73.993446&spn=0.068027,0.169086&z=13";
+//	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&ll=40.748037,-73.997211&spn=0.068015,0.169086&z=13&iwloc=00049173d61f6f468c6bf&msid=101509637019979626548.00049173d46d78e78cce8";
+    static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f6895efdb759aa6&ll=40.741014,-73.988457&spn=0.122518,0.3368&z=12";
+    static final String BROOKLYN = "";
+    static final String BRONX = "";
+    static final String QUEENS = "";
+    static final String STATEN_ISLAND = "";
+    
+	Uri uriManhattan1;
+	Uri uriBrooklyn;
+	Uri uriBronx;
+	Uri uriQueens;
+	Uri uriStatenIsland;
+	
+	/** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        
+        // transform strings into URI format
+        uriManhattan1 = Uri.parse(MANHATTAN1);
+        
+        Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+        endDate.set(2010, Calendar.OCTOBER, 11);
+        Date dueDate = endDate.getTime();
+        Date today = new Date();
+        // show dialog
+        if(today.after(dueDate)) {
+        	showDialog(ITS_OVER_DIALOG);
+        } else {
+        	showDialog(GREET_DIALOG);
+        }
+        
+        // setup main screen buttons
+        Button m0 = (Button)findViewById(R.id.Button01);
+        m0.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent("android.intent.action.VIEW");
+				intent.setComponent(ComponentName.unflattenFromString("com.google.android.apps.maps/com.google.android.maps.MapsActivity"));
+				intent.addCategory(INTENT_CATAGORY_TYPE);
+				intent.setData(uriManhattan1);
+				startActivity(intent);				
+			}
+        	
+        });
+    }
+    
+    /* create menu items */
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	menu.add(0, ABOUT, 0, "About").setIcon(android.R.drawable.ic_menu_info_details);
+    	return true;
+    }
+    
+    /* Handles item selections */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case ABOUT:
+        	final Intent intent_about = new Intent(Welcome.this, About.class);
+    		startActivity(intent_about);
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public Dialog onCreateDialog(int anId) {
+    	String buttonString = "OK";
+    	AlertDialog.Builder messageDialog = new AlertDialog.Builder(this);
+    	messageDialog.setTitle("OHNY Weekend");
+    	messageDialog.setNegativeButton(buttonString, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				
+			}
+  
+    	});
+    	switch(anId) {
+    	case (GREET_DIALOG): 
+    		messageDialog.setMessage("Welcome to the OHNY Weekend 2010 Android App. Please check your specific site for Open House hours. Not all sites are available on both days.");
+    	    return messageDialog.create();
+    	case (ITS_OVER_DIALOG):
+    		messageDialog.setMessage("OHNY Weekend 2010 is now over. Thanks for particpating!");
+    		return messageDialog.create();
+    	}	
+    	return null;
+    }
+    
+    
+}

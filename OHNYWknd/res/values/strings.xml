@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Tap on a Borough to go to the Map</string>
+    <string name="app_name">OHNY Weekend</string>
+    <string name="about_name">About OHNY Weekend</string>
+    <string name="credits">Credits go here.</string>
+</resources>
