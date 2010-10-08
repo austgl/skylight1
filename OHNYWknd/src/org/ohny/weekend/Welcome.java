@@ -32,8 +32,6 @@ public class Welcome extends Activity implements OnClickListener{
 	static final String MAP_COMPONENT_NAME = "com.google.android.apps.maps/com.google.android.maps.MapsActivity";
 
 	// Google My Maps url/uri strings
-//	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=101509637019979626548.00048f4bd84c82a876629&ll=40.736292,-73.993446&spn=0.068027,0.169086&z=13";
-//	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&ll=40.748037,-73.997211&spn=0.068015,0.169086&z=13&iwloc=00049173d61f6f468c6bf&msid=101509637019979626548.00049173d46d78e78cce8";
     static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f6895efdb759aa6&ll=40.741014,-73.988457&spn=0.122518,0.3368&z=12";
     static final String BROOKLYN = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f6860af50e49126&z=12";
     static final String BRONX = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491e73fb408760dd9d&z=12";
@@ -50,7 +48,6 @@ public class Welcome extends Activity implements OnClickListener{
 	private GoogleAnalyticsTracker tracker;
 	private String ga_id;
 	private String flurry_id;
-	private boolean flurry_good;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -68,7 +65,6 @@ public class Welcome extends Activity implements OnClickListener{
         if(flurry_id.length()>0) {
         	//start tracker can be started with a dispatch interval (in seconds).
         	FlurryAgent.onStartSession(this, flurry_id);
-        	flurry_good=true;
         }
        
         setContentView(R.layout.main);
@@ -106,21 +102,31 @@ public class Welcome extends Activity implements OnClickListener{
         
         View donateButton =  findViewById(R.id.DonateButton);	
         donateButton.setOnClickListener(new OnClickListener() {
-	
-	    @Override
-	    public void onClick(View v) {
-	    Intent i = new Intent(Intent.ACTION_VIEW);
-	    i.setData(Uri.parse(DONATE));
-		if(tracker!=null) {
-			tracker.trackPageView("/donate");
-			tracker.dispatch();
-		}
-	    startActivity(i);
-	    }
-	
+
+        	@Override
+        	public void onClick(View v) {
+        		Intent i = new Intent(Intent.ACTION_VIEW);
+        		i.setData(Uri.parse(DONATE));
+        		if(tracker!=null) {
+        			tracker.trackPageView("/donate");
+        			tracker.dispatch();
+        		}
+        		FlurryAgent.onEvent("donate", null);
+        		startActivity(i);
+        	}
         });
     }
 
+    @Override
+    public void onResume() {
+    	super.onResume();
+    }
+    
+    @Override
+    public void onPause() {
+    	super.onPause();
+    }
+    
 	@Override
 	public void onClick(View v) {
 		Intent intent = new Intent("android.intent.action.VIEW");
@@ -187,6 +193,7 @@ public class Welcome extends Activity implements OnClickListener{
     			tracker.trackPageView("/about");
     			tracker.dispatch();
     		}
+    		FlurryAgent.onEvent("about", null);
     		startActivity(intent_about);
             return true;
         }

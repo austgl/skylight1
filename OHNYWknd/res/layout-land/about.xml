@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/about_root"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:padding="10dp">
+
+	<TextView android:id="@+id/about_text_view"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about_text"
+		android:textSize="18sp"		
+		/>
+
+	<TextView android:id="@+id/attrib_text_view"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/attrib"
+		android:textSize="18sp"		
+		/>
+		
+	<TextView android:id="@+id/about_url_view"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about_url"
+		android:autoLink="web"
+		android:textSize="18sp"/>
+
+	<TextView android:id="@+id/about_ohny_url_view"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about_ohny_url"
+		android:autoLink="web"
+		android:textSize="18sp"/>
+
+</LinearLayout>

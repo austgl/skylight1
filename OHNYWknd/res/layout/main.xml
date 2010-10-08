@@ -17,14 +17,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 <TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
 	<ImageView
 android:id="@+id/Button01" android:scaleType="fitXY" android:layout_width="110dip"
 android:layout_height="110dip"
 android:background="@drawable/bronx"></ImageView>   
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip">
 	<ImageView
 android:id="@+id/Button02" android:scaleType="fitXY" android:layout_width="110dip"
 android:layout_height="110dip"
 android:background="@drawable/queens"></ImageView>
+</LinearLayout>
 </TableRow>
 
 <TableRow android:gravity="center_horizontal">
@@ -44,14 +48,18 @@ android:background="@drawable/queens"></ImageView>
 
 
 <TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
 	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
 android:layout_height="110dip"
 android:id="@+id/Button03" 
-android:background="@drawable/manhattan"></ImageView> 
+android:background="@drawable/manhattan"></ImageView>
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip"> 
 	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
 android:layout_height="110dip"
 android:id="@+id/Button04" 
 android:background="@drawable/brooklyn"></ImageView>
+</LinearLayout>
 </TableRow>
 
 <TableRow android:gravity="center_horizontal">
@@ -69,15 +77,19 @@ android:background="@drawable/brooklyn"></ImageView>
     /> 
 </TableRow>
 <TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
 <ImageView android:scaleType="fitXY" android:layout_width="110dip"
 android:layout_height="110dip"
 android:id="@+id/Button05" 
 android:background="@drawable/staten_island"></ImageView>
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip">
 <ImageView  android:layout_width="110dip"
 android:layout_height="110dip"
 android:id="@+id/DonateButton" 
 android:src="@drawable/donate"
 ></ImageView>
+</LinearLayout>
 </TableRow>
 <TableRow android:gravity="center_horizontal">
 <TextView android:gravity="center_horizontal"
