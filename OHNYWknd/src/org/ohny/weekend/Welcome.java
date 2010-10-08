@@ -77,7 +77,7 @@ public class Welcome extends Activity {
         }
         
         // setup main screen buttons
-        Button m0 = (Button)findViewById(R.id.Button01);
+        View m0 = findViewById(R.id.Button01);
         m0.setOnClickListener(new OnClickListener() {
 
 			@Override
