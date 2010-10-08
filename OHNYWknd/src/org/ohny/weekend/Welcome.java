@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,6 +103,7 @@ public class Welcome extends Activity implements OnClickListener{
 	    i.setData(Uri.parse(DONATE));
 		if(tracker!=null) {
 			tracker.trackPageView("/donate");
+			tracker.dispatch();
 		}
 	    startActivity(i);
 	    }
@@ -120,30 +122,35 @@ public class Welcome extends Activity implements OnClickListener{
 			intent.setData(uriBronx);
 			if(tracker!=null) {
 				tracker.trackPageView("/bronx");
+				tracker.dispatch();
 			}
 			break;
 		case R.id.Button02:
 			intent.setData(uriQueens);
 			if(tracker!=null) {
 				tracker.trackPageView("/Queens");
+				tracker.dispatch();
 			}
 			break;
 		case R.id.Button03:
 			intent.setData(uriManhattan1);
 			if(tracker!=null) {
 				tracker.trackPageView("/manhattan1");
+				tracker.dispatch();
 			}
 			break;
 		case R.id.Button04:
 			intent.setData(uriBrooklyn);
 			if(tracker!=null) {
 				tracker.trackPageView("/brooklyn");
+				tracker.dispatch();
 			}
 			break;
 		case R.id.Button05:
 			intent.setData(uriStatenIsland);
 			if(tracker!=null) {
 				tracker.trackPageView("/statenisland");
+				tracker.dispatch();
 			}
 			break;
 	}
@@ -163,6 +170,7 @@ public class Welcome extends Activity implements OnClickListener{
         	final Intent intent_about = new Intent(Welcome.this, About.class);
     		if(tracker!=null) {
     			tracker.trackPageView("/about");
+    			tracker.dispatch();
     		}
     		startActivity(intent_about);
             return true;
