@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.flurry.android.FlurryAgent;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class Welcome extends Activity implements OnClickListener{
@@ -48,6 +49,8 @@ public class Welcome extends Activity implements OnClickListener{
 	
 	private GoogleAnalyticsTracker tracker;
 	private String ga_id;
+	private String flurry_id;
+	private boolean flurry_good;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -61,6 +64,13 @@ public class Welcome extends Activity implements OnClickListener{
             tracker.start(ga_id, this);
         }
         
+        flurry_id = Assets.getString("flurry_id",this);
+        if(flurry_id.length()>0) {
+        	//start tracker can be started with a dispatch interval (in seconds).
+        	FlurryAgent.onStartSession(this, flurry_id);
+        	flurry_good=true;
+        }
+       
         setContentView(R.layout.main);
         
         // transform strings into URI format
@@ -124,6 +134,7 @@ public class Welcome extends Activity implements OnClickListener{
 				tracker.trackPageView("/bronx");
 				tracker.dispatch();
 			}
+			FlurryAgent.onEvent("Bronx", null);
 			break;
 		case R.id.Button02:
 			intent.setData(uriQueens);
@@ -131,6 +142,7 @@ public class Welcome extends Activity implements OnClickListener{
 				tracker.trackPageView("/Queens");
 				tracker.dispatch();
 			}
+			FlurryAgent.onEvent("Queens", null);
 			break;
 		case R.id.Button03:
 			intent.setData(uriManhattan1);
@@ -138,6 +150,7 @@ public class Welcome extends Activity implements OnClickListener{
 				tracker.trackPageView("/manhattan1");
 				tracker.dispatch();
 			}
+			FlurryAgent.onEvent("Manhattan1", null);
 			break;
 		case R.id.Button04:
 			intent.setData(uriBrooklyn);
@@ -145,6 +158,7 @@ public class Welcome extends Activity implements OnClickListener{
 				tracker.trackPageView("/brooklyn");
 				tracker.dispatch();
 			}
+			FlurryAgent.onEvent("Brooklyn", null);
 			break;
 		case R.id.Button05:
 			intent.setData(uriStatenIsland);
@@ -152,6 +166,7 @@ public class Welcome extends Activity implements OnClickListener{
 				tracker.trackPageView("/statenisland");
 				tracker.dispatch();
 			}
+			FlurryAgent.onEvent("Staten_Island", null);
 			break;
 	}
 		startActivity(intent);	
@@ -209,6 +224,9 @@ public class Welcome extends Activity implements OnClickListener{
       if(tracker!=null){
     	  tracker.dispatch();
     	  tracker.stop();
+      }
+      if(flurry_id.length()>0) {
+    	  FlurryAgent.onEndSession(this);
       }
     }
 }
