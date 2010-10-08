@@ -17,11 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
-public class Welcome extends Activity {
+public class Welcome extends Activity implements OnClickListener{
    
 	static final String TAG = "OHNY Weekend";
 	static final int ABOUT = 0;
@@ -78,22 +77,16 @@ public class Welcome extends Activity {
         }
         
         // setup main screen buttons
-        View m0 = findViewById(R.id.Button01);
-        m0.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent("android.intent.action.VIEW");
-				intent.setComponent(ComponentName.unflattenFromString("com.google.android.apps.maps/com.google.android.maps.MapsActivity"));
-				intent.addCategory(INTENT_CATAGORY_TYPE);
-				intent.setData(uriManhattan1);
-				startActivity(intent);	
-				if(tracker!=null) {
-					tracker.trackPageView("/manhattan1");
-				}
-			}
-        	
-        });
+        View m1 = findViewById(R.id.Button01);
+        m1.setOnClickListener(this);  	
+        View m2 = findViewById(R.id.Button02);
+        m2.setOnClickListener(this);  	
+        View m3 = findViewById(R.id.Button03);
+        m3.setOnClickListener(this);  	
+        View m4 = findViewById(R.id.Button04);
+        m4.setOnClickListener(this);  	
+        View m5 = findViewById(R.id.Button05);
+        m5.setOnClickListener(this);
         
         View donateButton =  findViewById(R.id.DonateButton);	
         donateButton.setOnClickListener(new OnClickListener() {
@@ -102,11 +95,55 @@ public class Welcome extends Activity {
 	    public void onClick(View v) {
 	    Intent i = new Intent(Intent.ACTION_VIEW);
 	    i.setData(Uri.parse(DONATE));
+		if(tracker!=null) {
+			tracker.trackPageView("/donate");
+		}
 	    startActivity(i);
 	    }
 	
         });
     }
+
+	@Override
+	public void onClick(View v) {
+		Intent intent = new Intent("android.intent.action.VIEW");
+		intent.setComponent(ComponentName.unflattenFromString("com.google.android.apps.maps/com.google.android.maps.MapsActivity"));
+		intent.addCategory(INTENT_CATAGORY_TYPE);
+		
+		switch(v.getId()) {
+		case R.id.Button01:
+			intent.setData(uriBronx);
+			if(tracker!=null) {
+				tracker.trackPageView("/bronx");
+			}
+			return;
+		case R.id.Button02:
+			intent.setData(uriQueens);
+			if(tracker!=null) {
+				tracker.trackPageView("/Queens");
+			}
+			return;
+		case R.id.Button03:
+			intent.setData(uriManhattan1);
+			if(tracker!=null) {
+				tracker.trackPageView("/manhattan1");
+			}
+			return;
+		case R.id.Button04:
+			intent.setData(uriBrooklyn);
+			if(tracker!=null) {
+				tracker.trackPageView("/brooklyn");
+			}
+			return;
+		case R.id.Button05:
+			intent.setData(uriStatenIsland);
+			if(tracker!=null) {
+				tracker.trackPageView("/statenisland");
+			}
+			return;
+	}
+		startActivity(intent);	
+	}
     
     /* create menu items */
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,6 +156,9 @@ public class Welcome extends Activity {
         switch (item.getItemId()) {
         case ABOUT:
         	final Intent intent_about = new Intent(Welcome.this, About.class);
+    		if(tracker!=null) {
+    			tracker.trackPageView("/about");
+    		}
     		startActivity(intent_about);
             return true;
         }
