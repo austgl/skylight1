@@ -33,10 +33,10 @@ public class Welcome extends Activity implements OnClickListener{
 //	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=101509637019979626548.00048f4bd84c82a876629&ll=40.736292,-73.993446&spn=0.068027,0.169086&z=13";
 //	static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&ll=40.748037,-73.997211&spn=0.068015,0.169086&z=13&iwloc=00049173d61f6f468c6bf&msid=101509637019979626548.00049173d46d78e78cce8";
     static final String MANHATTAN1 = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f6895efdb759aa6&ll=40.741014,-73.988457&spn=0.122518,0.3368&z=12";
-    static final String BROOKLYN = "";
-    static final String BRONX = "";
-    static final String QUEENS = "";
-    static final String STATEN_ISLAND = "";
+    static final String BROOKLYN = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f6860af50e49126&z=12";
+    static final String BRONX = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491e73fb408760dd9d&z=12";
+    static final String QUEENS = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491e674b4dd8302095&ll=40.67959,-73.868219&spn=0.245262,0.438766&z=11";
+    static final String STATEN_ISLAND = "http://maps.google.com/maps/ms?ie=UTF8&hl=en&msa=0&msid=116931521422408434103.000491f687f9695df8688&z=11";
     static final String DONATE = "http://www.nycharities.org/donate/c_donate.asp?CharityCode=1114";
     
 	Uri uriManhattan1;
@@ -64,7 +64,12 @@ public class Welcome extends Activity implements OnClickListener{
         
         // transform strings into URI format
         uriManhattan1 = Uri.parse(MANHATTAN1);
-        
+        uriBrooklyn = Uri.parse(BROOKLYN);
+    	uriBronx = Uri.parse(BRONX);
+    	uriQueens = Uri.parse(QUEENS);
+    	uriStatenIsland = Uri.parse(STATEN_ISLAND);
+    	
+    	
         Calendar endDate = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
         endDate.set(2010, Calendar.OCTOBER, 11);
         Date dueDate = endDate.getTime();
