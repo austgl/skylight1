@@ -18,12 +18,12 @@
     android:layout_height="fill_parent">
 <TableRow android:gravity="center_horizontal">
 	<ImageView
-android:id="@+id/Button01" android:scaleType="fitXY" android:layout_width="110dip"
-android:layout_height="110dip"
+android:id="@+id/Button01" android:scaleType="fitXY" android:layout_width="140dip"
+android:layout_height="140dip"
 android:background="@drawable/bronx"></ImageView>   
 	<ImageView
-android:id="@+id/Button02" android:scaleType="fitXY" android:layout_width="110dip"
-android:layout_height="110dip"
+android:id="@+id/Button02" android:scaleType="fitXY" android:layout_width="140dip"
+android:layout_height="140dip"
 android:background="@drawable/queens"></ImageView>
 </TableRow>
 
@@ -44,12 +44,12 @@ android:background="@drawable/queens"></ImageView>
 
 
 <TableRow android:gravity="center_horizontal">
-	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
-android:layout_height="110dip"
+	<ImageView android:scaleType="fitXY" android:layout_width="140dip"
+android:layout_height="140dip"
 android:id="@+id/Button03" 
 android:background="@drawable/manhattan"></ImageView> 
-	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
-android:layout_height="110dip"
+	<ImageView android:scaleType="fitXY" android:layout_width="140dip"
+android:layout_height="140dip"
 android:id="@+id/Button04" 
 android:background="@drawable/brooklyn"></ImageView>
 </TableRow>
@@ -69,12 +69,12 @@ android:background="@drawable/brooklyn"></ImageView>
     /> 
 </TableRow>
 <TableRow android:gravity="center_horizontal">
-<ImageView android:scaleType="fitXY" android:layout_width="110dip"
-android:layout_height="110dip"
+<ImageView android:scaleType="fitXY" android:layout_width="140dip"
+android:layout_height="140dip"
 android:id="@+id/Button05" 
 android:background="@drawable/staten_island"></ImageView>
-<ImageView  android:layout_width="110dip"
-android:layout_height="110dip"
+<ImageView  android:layout_width="140dip"
+android:layout_height="140dip"
 android:id="@+id/DonateButton" 
 android:src="@drawable/donate"
 ></ImageView>

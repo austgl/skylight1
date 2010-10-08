@@ -38,6 +38,7 @@ public class Welcome extends Activity {
     static final String BRONX = "";
     static final String QUEENS = "";
     static final String STATEN_ISLAND = "";
+    static final String DONATE = "http://www.nycharities.org/donate/c_donate.asp?CharityCode=1114";
     
 	Uri uriManhattan1;
 	Uri uriBrooklyn;
@@ -92,6 +93,18 @@ public class Welcome extends Activity {
 				}
 			}
         	
+        });
+        
+        View donateButton =  findViewById(R.id.DonateButton);	
+        donateButton.setOnClickListener(new OnClickListener() {
+	
+	    @Override
+	    public void onClick(View v) {
+	    Intent i = new Intent(Intent.ACTION_VIEW);
+	    i.setData(Uri.parse(DONATE));
+	    startActivity(i);
+	    }
+	
         });
     }
     
