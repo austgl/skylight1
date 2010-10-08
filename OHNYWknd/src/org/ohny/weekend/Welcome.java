@@ -116,31 +116,31 @@ public class Welcome extends Activity implements OnClickListener{
 			if(tracker!=null) {
 				tracker.trackPageView("/bronx");
 			}
-			return;
+			break;
 		case R.id.Button02:
 			intent.setData(uriQueens);
 			if(tracker!=null) {
 				tracker.trackPageView("/Queens");
 			}
-			return;
+			break;
 		case R.id.Button03:
 			intent.setData(uriManhattan1);
 			if(tracker!=null) {
 				tracker.trackPageView("/manhattan1");
 			}
-			return;
+			break;
 		case R.id.Button04:
 			intent.setData(uriBrooklyn);
 			if(tracker!=null) {
 				tracker.trackPageView("/brooklyn");
 			}
-			return;
+			break;
 		case R.id.Button05:
 			intent.setData(uriStatenIsland);
 			if(tracker!=null) {
 				tracker.trackPageView("/statenisland");
 			}
-			return;
+			break;
 	}
 		startActivity(intent);	
 	}
