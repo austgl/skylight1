@@ -58,7 +58,7 @@ public class Welcome extends Activity implements OnClickListener{
         if(ga_id.length()>0) {
         	//start tracker can be started with a dispatch interval (in seconds).
             tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.start(ga_id, 20, this);
+            tracker.start(ga_id, this);
         }
         
         setContentView(R.layout.main);
@@ -207,6 +207,7 @@ public class Welcome extends Activity implements OnClickListener{
     protected void onDestroy() {
       super.onDestroy();
       if(tracker!=null){
+    	  tracker.dispatch();
     	  tracker.stop();
       }
     }
