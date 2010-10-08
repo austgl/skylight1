@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import skylight1.util.Assets;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public class Welcome extends Activity {
    
@@ -42,10 +45,21 @@ public class Welcome extends Activity {
 	Uri uriQueens;
 	Uri uriStatenIsland;
 	
+	private GoogleAnalyticsTracker tracker;
+	private String ga_id;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        ga_id = Assets.getString("ga_id",this);
+        if(ga_id.length()>0) {
+        	//start tracker can be started with a dispatch interval (in seconds).
+            tracker = GoogleAnalyticsTracker.getInstance();
+            tracker.start(ga_id, 20, this);
+        }
+        
         setContentView(R.layout.main);
         
         // transform strings into URI format
@@ -72,7 +86,10 @@ public class Welcome extends Activity {
 				intent.setComponent(ComponentName.unflattenFromString("com.google.android.apps.maps/com.google.android.maps.MapsActivity"));
 				intent.addCategory(INTENT_CATAGORY_TYPE);
 				intent.setData(uriManhattan1);
-				startActivity(intent);				
+				startActivity(intent);	
+				if(tracker!=null) {
+					tracker.trackPageView("/manhattan1");
+				}
 			}
         	
         });
@@ -120,5 +137,11 @@ public class Welcome extends Activity {
     	return null;
     }
     
-    
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      if(tracker!=null){
+    	  tracker.stop();
+      }
+    }
 }
