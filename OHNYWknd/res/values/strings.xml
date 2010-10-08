@@ -6,5 +6,6 @@
     <string name="credits">Credits go here.</string>
     <string name="about_text">OHNY Weekend for Android is a production of Skylight1 along with OpenHouseNewYork.\n\nOHNY icon and content property of OpenHouseNewYork.</string>
     <string name="attrib">\nIcons based off of illustrations by TheEmirr\n</string>
-    <string name="about_url">http://skylight1.nycjava.net</string>
+    <string name="about_url">\nhttp://skylight1.nycjava.net\n\n</string>
+    <string name="about_ohny_url">http://www.ohny.org</string>
 </resources>

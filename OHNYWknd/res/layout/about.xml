@@ -27,4 +27,11 @@
 		android:autoLink="web"
 		android:textSize="20sp"/>
 
+	<TextView android:id="@+id/about_ohny_url_view"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about_ohny_url"
+		android:autoLink="web"
+		android:textSize="20sp"/>
+
 </LinearLayout>
