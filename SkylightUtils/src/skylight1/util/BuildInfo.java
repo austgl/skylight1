@@ -44,7 +44,7 @@ public class BuildInfo {
 		if(id!=null) {
 			PackageManager pm = context.getPackageManager();
 			if(PackageManager.PERMISSION_GRANTED ==
-				    pm.checkPermission(android.Manifest.permission.ACCESS_NETWORK_STATE, context.getPackageName())) {
+				    pm.checkPermission(android.Manifest.permission.ACCESS_WIFI_STATE, context.getPackageName())) {
 				WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 				if(wm!=null) {
 					id = String.format("%s-%s", id, wm.getConnectionInfo().getMacAddress());
