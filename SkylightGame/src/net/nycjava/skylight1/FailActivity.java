@@ -103,6 +103,11 @@ public class FailActivity extends SkylightActivity {
 								"").replace("]", "");// could be nicer
 						final String locale = Locale.getDefault().toString();
 						final int azimuthVariance = calculateAzimuth();
+			    		if(tracker!=null) {
+			    			tracker.trackEvent("fail", "hashedPhoneId", hashedPhoneId, 0); //TODO: review
+			    			tracker.trackEvent("fail", "locale", locale, 0); //TODO: review
+			    			tracker.trackEvent("fail", "azimuthVariance", Integer.toString(azimuthVariance),azimuthVariance);
+			    		}
 						final int signature = 0;
 						final URL statisticsURL = new URL(String.format(
 								"http://%s?id=%s&level=%d&azimuth=%d&locale=%s&sig=%d", highscores_server, hashedPhoneId,

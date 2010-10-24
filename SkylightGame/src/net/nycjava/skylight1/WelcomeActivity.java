@@ -126,6 +126,10 @@ public class WelcomeActivity extends SkylightActivity {
 				mp = null;
 			}
 
+    		if(tracker!=null) {
+    			tracker.trackPageView(String.format("/level%d",difficulty));
+    		}
+
 			final Intent intent = new Intent(WelcomeActivity.this, SkillTestActivity.class);
 			intent.putExtra(SkylightActivity.DIFFICULTY_LEVEL, difficulty);
 			startActivity(intent);

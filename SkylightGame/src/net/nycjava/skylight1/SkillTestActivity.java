@@ -146,6 +146,9 @@ public class SkillTestActivity extends SkylightActivity {
 					final Intent intent = new Intent(SkillTestActivity.this, SuccessActivity.class);
 					addCompassReading(intent);
 					intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
+					if(tracker!=null) {
+						tracker.trackPageView(String.format("/success%d",difficultyLevel));
+					}
 					finish();
 					startActivity(intent);
 				}
@@ -182,6 +185,9 @@ public class SkillTestActivity extends SkylightActivity {
 		addCompassReading(intent);
 		intent.putExtra(DIFFICULTY_LEVEL, difficultyLevel);
 		balanceObjPublicationService.stopService();
+		if(tracker!=null) {
+			tracker.trackPageView(String.format("/fail%d",difficultyLevel));
+		}
 		finish();
 		startActivity(intent);
 	}
