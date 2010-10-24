@@ -4,7 +4,7 @@
     <string name="normal">Normale</string>
     <string name="easy">Sobrio</string>
     <string name="app_name">Equilibrare la Birra</string>
-    <string name="welcome">Tenere livello e selezionare un livello di</string>
+    <string name="welcome">Tenere in piano e selezionare un livello</string>
     <string name="successmsg">Buono!\nGiocatore successivo tap per iniziare</string>
     <string name="failmsg">Si Perde!!\nAcquistare bevande\nToccare per riawiare</string>
 	<string name="instructions">Istruzioni</string>
@@ -17,6 +17,6 @@
     <string name="levelmessage">\nIl più alto livello è complete</string>
     <string name="aboutmessage">\nBalance the Beer\n Versione 1.3\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
 	<string name="keywords">beer game bar pub drink</string>
-	<string name="locallevelreached">Su questo telefono</string>
-	<string name="globallevelreached">Su qualsiasi telefono di questa settimana</string>
+	<string name="locallevelreached">Su questo dispositivo</string>
+	<string name="globallevelreached">Su qualsiasi dispositivo di questo giorno passato</string>
 </resources>

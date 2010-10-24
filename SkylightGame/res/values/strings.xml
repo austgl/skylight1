@@ -4,7 +4,7 @@
     <string name="normal">Buzzed</string>
     <string name="easy">Sober</string>
     <string name="app_name">Balance The Beer</string>
-    <string name="welcome">Hold the Phone Flat and Select a Level</string>
+    <string name="welcome">Hold Flat and Select a Level</string>
     <string name="successmsg">Well done!\nNext player tap to begin</string>
     <string name="failmsg">Oops!! You Lose!!\nDrinks on you\nTap to restart</string>
 	<string name="instructions">How to Play</string>
@@ -18,5 +18,5 @@
     <string name="aboutmessage">\nBalance the Beer\n Version %s\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
 	<string name="keywords">beer game bar pub drink</string>
 	<string name="locallevelreached">On this phone</string>
-	<string name="globallevelreached">On any phone this week</string>
+	<string name="globallevelreached">On any phone this past day</string>
 </resources>
