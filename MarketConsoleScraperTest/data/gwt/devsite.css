@@ -1,0 +1,901 @@
+/* Copyright 2009 Google, Inc. All Rights Reserved */
+
+.signupPageHeader {
+  color: #a5c739;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.signupContainer {
+  margin: 10px 10px 20px 20px;
+}
+
+body {
+  background: #fff url("images/cut-slice-market-top.png") repeat-x;
+  font: normal .8em Arial, sans-serif;
+  color: #555;
+  margin: 3px 10px 10px 10px;
+  max-width: 960px;
+}
+body a, body a:visited {color: #006699;}
+
+img
+{
+  border-style:none;
+}
+
+.gwt-CheckBox label {
+  max-width:90%;
+  vertical-align: bottom;
+}
+.gwt-CheckBox-disabled label {
+  text-decoration:line-through;
+}
+.gwt-CheckBox-disabled+a {
+  text-decoration:line-through;
+}
+input[type="checkbox"] {
+  vertical-align:baseline;
+}
+.gwt-RadioButton label {
+  max-width:90%;
+  display:inline-block;
+}
+input[type="radio"] {
+  vertical-align:top;
+}
+
+#gbar {
+  font-size:13px;
+  color: #7fa9b5;
+  padding-top:1px;
+  float: right;
+}
+#gbar a {color: #7fa9b5;}
+#gbar .username {font-weight: bold;}
+#logo {
+  margin: 8px 0px 0px 0px;
+  float: left;
+}
+.divider {
+  margin: .8em 0px .8em -.8em;
+  width: 100%;
+}
+
+.merchantSignupHint {
+  font-size: .85em;
+  font-weight: normal;
+}
+
+.appUploadMerchantSignupHint {
+  margin-left: 2em;
+  font-size: .85em;
+  font-weight: normal;
+}
+
+.developerEmail {
+  float: none;
+  display: block;
+}
+
+.pageHeader {
+  margin-left: .6em;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.pageContent {
+  margin: .8em 1em 2em .8em;
+}
+
+.editProfile {
+  margin-left: 1.1em;
+  font-size: .85em;
+  font-weight: normal;
+}
+
+.header {
+  color: #a5c739;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin:.6em 0 .3em 0;
+  float: left;
+}
+
+.headerTOS {
+  color: #a5c739;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin:.3em;
+}
+
+.tableheader {
+  color: #a5c739;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin: .4em;
+}
+
+.headerHelp {
+  color: #555;
+  font-size:.8em;
+  font-weight: normal;
+}
+
+.headerFee {
+  color: #a5c739;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top:1em;
+}
+
+#sortby {float: right;}
+
+.listingTable {
+  margin: 0 .8em;
+}
+
+.listingRow {
+  background: #eee;
+  border: #dadada 1px solid;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: .4em .8em .4em .8em;
+  margin: .8 0 0 0;
+  clear: both;
+}
+
+#accountInfo .listingRow, #categories .listingRow {
+  background:#FFFFFF none repeat scroll 0 0;
+}
+
+.listingRating {
+  float: left;
+  width: 15%;
+  white-space: nowrap;
+}
+
+/* Make a little space for the feedback link when it's displayed */
+
+.listingAction {
+  float: right;
+  text-align: right;
+  font-weight: bold;
+}
+
+.listingTable hr, .feedbackTable hr {
+  clear:both;
+  display:block;
+  visibility:hidden;
+  margin: 0;
+  padding: 0;
+}
+
+img.gwt-Image.star
+{
+  width: 17px;
+  height: 16px;
+  margin: 1px 0px 1px 0px;
+  vertical-align: text-bottom;
+  float:none;
+}
+
+img.buttonLogo
+{
+  background-image: url("images/btn_strip_normal.9.png");
+  background-position: center;
+}
+
+img.bannerLogo
+{
+  background-image: url("images/title_bar_med_market_portrait.9.png");
+}
+
+.listingUpload
+{
+  background: #d7efff;
+  float: right;
+  border: 4px #d7efff solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 1em 0 0 0;
+  padding: 8px 5px 8px 40px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: 0px center;
+  background-image: url("images/icon-upload-02.png");
+}
+
+.listingUpload a {text-decoration: none;}
+
+.listingUpload a:hover {text-decoration: underline;}
+
+
+.iconUpload
+{
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+  margin: 0 .5em 0 .5em ;
+}
+
+.iconPublish
+{
+  vertical-align: top;
+  width: 14px;
+  height: 14px;
+  margin: 0px 3px;
+}
+
+.editAppTable {
+  margin: .8em 1em 2em .8em;
+  padding-bottom: 1em;
+  border: #dadada 1px solid;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.editAppRow {
+  width: 90%;
+  margin-top: 1em;
+}
+
+.editAppHeader {
+  text-align: right;
+  font-weight: bold;
+  font-size: 100%;
+  width: 22%;
+  float: left;
+}
+
+.editAppField {
+  text-align: left;
+  width: 75%;
+  font-size: 100%;
+  float: right;
+}
+
+.editAppCounter {
+  text-align: right;
+  width: 20em;
+  margin-bottom: .5em;
+}
+
+.editAppConsentRow {
+  margin: 1em;
+}
+
+.consentCheckBox label {
+  margin-left: .5em;
+}
+
+.consentCheckBox input[type="checkbox"] {
+  vertical-align: top;
+}
+
+
+.editAppRadio {
+  margin: 0 0 .5em 0;
+}
+
+.langlisthelp {
+  margin-bottom: .5em;
+}
+
+.langlistbutton {
+  margin-top: .5em;
+}
+
+.locationslist {
+  margin-bottom: 1em;
+}
+
+.langlist {
+  border-radius:3px;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  background-color:#EEEEEE;
+  border:1px solid #333333;
+  margin:1em 0;
+  padding:.4em;
+  display:block;
+}
+
+.locationmixed {
+  border-radius:1px;
+  -moz-border-radius:1px;
+  -webkit-border-radius:1px;
+  background-color:#EEEEEE;
+  border:1px solid #333333;
+  text-align:center;
+  margin-right:.5em;
+}
+
+.localcarrier{
+  margin-left: 2em;
+}
+
+.countriesleft{
+  width:45%;
+  float:left;
+}
+
+.countriesright{
+  width:45%;
+  float:right;
+}
+
+.link {
+  color:#006699;
+  text-decoration:underline;
+}
+
+.link:hover {
+  cursor:pointer;
+  text-decoration:underline;
+}
+
+.currentlang {
+  font-weight:bold;
+}
+
+.close {
+  border-radius:2px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border:1px solid #006699;
+  color:#006699;
+  font-weight:bold;
+  padding:0 2px 1px;
+  margin-right:.5em;
+}
+
+.close:hover {
+  cursor:pointer;
+}
+
+.listingForm {
+  height:100%;
+  width:100%;
+}
+
+.buttons {
+  margin:2em 1em 0 1em;
+}
+
+.buttons button {
+  border-radius:3px;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  color:#0022FF;
+  padding:.8em;
+  font-size:120%;
+  font-weight:bold;
+}
+
+button.listingNext {
+  background:#D7EFFF none repeat scroll 0 0;
+  border:4px solid #D7EFFF;
+  float:left;
+  padding:.8em;
+  margin-right: .6em;
+}
+
+button.listingNext:hover {
+  cursor:pointer;
+}
+
+button.listingSaveDraft {
+  background:#FFFFFF none repeat scroll 0 0;
+  border:1px solid #DDDDDD;
+  float:left;
+  padding:1em;
+  margin-right:.6em;
+}
+
+button.listingSaveDraft:hover {
+  cursor:pointer;
+}
+
+.apkborder {
+  border-radius:3px;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  background-color:#555555;
+  color:#FFFFFF;
+  display:inline-block;
+  margin:4px;
+  padding:4px;
+}
+
+.ddaversionlink {
+  text-align: right;
+  margin-right: 20%;
+  float: right
+}
+
+.nolisting {
+  font-size:1em;
+  padding-bottom:2em;
+  padding-top:2em;
+  text-align:center;
+  width:100%;
+}
+
+#footer {
+  margin:5em 0em 3em 0em;
+  padding:3em;
+  text-align: center;
+  clear: both;
+}
+.gwt-Hyperlink
+{
+  display:inline;
+}
+
+img.gwt-Image
+{
+  float:left;
+}
+
+#messagebox
+{
+  border-radius:5px;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  margin:1em;
+  padding:1em;
+  text-align:center;
+  width:70%;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#messagebox .header
+{
+  float:none;
+  font-size:120%;
+}
+
+.successMessage
+{
+  display:none;
+  background-color:#E9FCD9;
+}
+
+.successMessage .header
+{
+  color:#85A719;
+}
+
+.infoMessage
+{
+  background-color:#FFFFDD;
+}
+
+.infoMessage .header
+{
+  color:#333333;
+}
+
+.errorMessage
+{
+  background-color:#FFDDDD;
+}
+
+.errorMessage .header
+{
+  color:#990000;
+}
+
+.errorbox-bad
+{
+  color:#990000;
+  padding:4px;
+  border:1px solid #900;
+}
+
+.errorbox-messages {
+  color:#990000;
+}
+
+.errorbox-warning-messages {
+  color:#000;
+  background-color:#FF9;
+  padding:4px;
+}
+
+.listingForm select
+{
+  width:100%;
+}
+
+.signupNext {
+  background: #d7efff;
+  float: left;
+  border: 4px #d7efff solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 25px 0px 0px 0px;
+  font-weight: bold;
+  font-size: 120%;
+  padding: 10px;
+}
+
+.signupSkip {
+  background: #fdd;
+  float: right;
+  border: 4px #fdd solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 25px 0px 0px 0px;
+  font-weight: bold;
+  font-size: 120%;
+  padding: 10px;
+}
+
+.signupSaveDraft {
+  float: right;
+  border: 1px #ddd solid;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin: 25px 0px 0px 0px;
+  font-weight: bold;
+  font-size: 120%;
+  padding: 14px;
+}
+
+#readTOS {
+  height: 15em;
+  width:80%;
+  overflow: auto;
+  margin-top: 1em;
+  text-align: left;
+  border: 1px solid #ddd;
+  padding: 5px;
+  margin-left: 10px;
+  margin-bottom: 2em
+}
+
+.promotext {
+  width: 40%;
+  float: left;
+  margin: 10px;
+}
+
+.promotext .header {
+  float:none;
+  margin:0px;
+}
+
+.header a, a:visited {
+  color:  #a5c739;
+  text-decoration: none;
+}
+
+.header a:hover {
+  color:  #a5c739;
+  text-decoration: underline;
+}
+
+.statusicon
+{
+  margin: 1pt 1pt 2pt 1pt;
+  vertical-align: middle;
+}
+
+#catInventoryBox{
+  width: 48%;
+  float: left
+}
+
+
+#catLiveBox{
+  width: 48%;
+  float: right
+}
+
+/* alt chrome: 005580 and a3becc */
+
+.catAppBox{
+  -moz-border-radius-topleft: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topright:5px;
+  -webkit-border-top-right-radius:5px;
+  border-radius-top-left: 5px;
+  border-radius-top-right: 5px;
+  border: 2px solid #738b8c;
+  margin: .3em .8em 2em .8em;
+}
+
+.catAppBoxHeader
+{
+  background-color:#738b8c;
+  font-weight: bold;
+  text-align: left;
+  font-size: 1.2em;
+  color: #fff;
+  padding: .3em;
+}
+
+.catAppBoxFooter
+{
+  background-color:#dae5e5;
+  font-weight: bold;
+  text-align: left;
+  color: #000;
+  padding: .3em;
+}
+
+.catAppBoxSubhead
+{
+  background-color:#dae5e5;
+  font-weight: bold;
+  text-align: left;
+  color: #000;
+  padding: .3em;
+  margin-bottom: -1px;
+  padding-bottom: 3px;
+}
+
+
+.catAppBoxOption, .catAppBoxOption a, .catAppBoxOption a:visited {
+  color: #fff;
+  font-size: 90%;
+  float: right;
+  text-align: right;
+  border: 1px;
+}
+
+.catAppBoxName
+{
+  float: left;
+  width: 65%;
+}
+
+.catAppWidgetBox{
+  border-top: 1px dotted #333;
+  padding: .3em;
+}
+
+.dragdrop-movable-panel .catAppWidgetBox {
+  border: 1px dotted #333;
+}
+
+.catAppWidgetSelector{
+  margin: .3em .3em .3em 0em;
+  vertical-align: middle;
+  float: left;
+  display:block;
+}
+
+.catAppWidgetName {
+  width: 50%; float: left
+}
+
+.catAppWidgetStatus {
+  width: 35%;
+  float: right;
+  text-align: right}
+
+.appName {
+  font-weight: bold;
+}
+
+.catBoxHeader{
+  margin-top: 1em;
+  font-size: 1.4em;
+  font-weight: bold;
+  text-align: center;
+  color:#333;
+  margin-bottom:.4em;
+}
+
+.catOverflow {
+  overflow: auto;
+  min-height: 10em;
+  max-height: 27em;
+}
+
+.appExpired {
+  color: #990000;
+}
+
+#searchResults {
+  margin-left: -1em;
+}
+
+.buttonleft {
+  float: left;
+  width: 50%;
+}
+
+.buttonright {
+  text-align: right;
+}
+
+.gwt-ProgressBar-shell {
+  background-color: #dadada;
+  height: 8pt;
+  width: 100%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.gwt-ProgressBar-bar {
+  background-color: #ff9900;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.gwt-ProgressBar-text-firstHalf {
+  display: none;
+}
+
+.gwt-ProgressBar-text-secondHalf {
+  display: none;
+}
+
+.screenshotThumbnail {
+  margin: 0.5em;
+}
+
+.gwt-DecoratedStackPanel {
+  font-size: 1.1em;
+}
+
+.gwt-DecoratedStackPanel-disabled {
+  color: #CCCCCC;
+  font-style:italic;
+}
+
+.gwt-DecoratedStackPanel .gwt-StackPanelItem {
+  cursor: pointer;
+  cursor: hand;
+  padding: 0.25em;
+  border: 1px solid #AAAAAA;
+  background-color: #EEEEEE;
+}
+
+.gwt-DecoratedStackPanel .gwt-StackPanelItem-selected, .gwt-StackPanelContent {
+  font-weight: bold;
+  border: 2px solid #999999;
+}
+
+.gwt-DecoratedStackPanel .gwt-StackPanelItem-selected {
+  background-color: #A5C739;
+  border-bottom: 0px;
+}
+
+.gwt-DecoratedStackPanel .gwt-StackPanelContent {
+  border-top: 0px;
+}
+
+.inlineSpinner {
+  font-size: 1.0em;
+  font-weight:bold;
+  font-style:italic;
+  color:#A5C739;
+  line-height: 2em;
+}
+
+.inlineSpinnerImage {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+/* Market customization of paging scroll table styles. */
+.pagingTable .pagingTableNoData {
+  font-size: 1em;
+  font-style: italic;
+  text-align: center;
+  width: 100%;
+}
+
+.pagingTable .headerTable {
+  font-weight: bold;
+  font-size: 1.1em;
+  padding-bottom: 1.5em;
+}
+
+.pagingTable .headerTable .clickable {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.pagingTable .dataTable tr.highlighted {
+  background: #ecfecf;
+}
+
+.pagingTable .dataTable {
+  font-size: 1em;
+}
+
+.pagingTable .dataTable div {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+/* Android Feedback pages */
+
+.feedbackTable {
+  margin: 0 .8em;
+  padding: 0;
+  border: #dadada 1px solid;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.feedbackPageHeader {
+  margin: .1em 0 .6em .6em;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.gwt-SuggestBox {
+  padding: 2px;
+}
+.gwt-SuggestBoxPopup {
+  margin-left: 3px;
+  border: #dadada 1px solid;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.gwt-SuggestBoxPopup .item {
+  padding: 2px 6px;
+  color: #424242;
+  cursor: default;
+}
+.gwt-SuggestBoxPopup .item-selected {
+  background: #cdcdcd;
+}
+.gwt-SuggestBoxPopup .suggestPopupContent {
+  background: white;
+}
+
+#loadingBox {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#loadingBox .loadingMsg {
+  margin-top: 10px;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
+.headerMessage {
+  display:block;
+  background-color:#E9FCD9;
+  width:70%;
+  margin-left:auto;
+  margin-right:auto;
+  padding: 1em;
+  text-align: center;
+  -moz-border-radius: 5px;
+}
+
+
+.headerMessage .title {
+  text-align: center;
+  color:#85A719;
+  font-family:Arial,sans-serif;
+  font-size:120%;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:bold;
+  margin:0.6em 0 0.3em;
+  text-align:center;
+}
+
