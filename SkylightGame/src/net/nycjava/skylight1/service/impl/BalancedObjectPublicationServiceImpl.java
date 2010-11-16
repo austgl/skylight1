@@ -28,15 +28,11 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 
 	private Timer timer;
 
-	public BalancedObjectPublicationServiceImpl() {
-		super();
-	}
-
 	private static final float FRICTION_COEFF = 0.3f;
 
 	private static final long PERIOD_IN_MILLISECONDS = 16; // seems to be a bug by a factor of 10??? only in emulator???
 
-	public void applyForce(float anXForce, float aYForce, long duration) {
+	public synchronized void applyForce(float anXForce, float aYForce, long duration) {
 
 		// as long as X Y forces imply less than 45 deg angle
 		if (difficultyLevel < 5 && (anXForce < 6.8) && (aYForce < 6.8)) {
@@ -49,7 +45,10 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 		// Log.d(TAG,Float.toString(velocityX) + " " + Float.toString(velocityY));
 	}
 
-	public void addObserver(BalancedObjectObserver anObserver) {
+	public synchronized void addObserver(final BalancedObjectObserver anObserver) {
+		if (null == anObserver) {
+			return;
+		}
 		if (!balancedObjectObservers.contains(anObserver)) {
 			balancedObjectObservers.add(anObserver);
 		}
@@ -57,11 +56,7 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 			TimerTask timerTask = new TimerTask() {
 				@Override
 				public void run() {
-					// update the position by the velocity
-					positionX += velocityX / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
-					positionY += velocityY / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
-
-					notifyObservers();
+					update();
 				}
 			};
 
@@ -71,17 +66,12 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 			timer.scheduleAtFixedRate(timerTask, 0, PERIOD_IN_MILLISECONDS);
 		}
 	}
+	
+	private synchronized void update() {
+		// update the position by the velocity
+		positionX += velocityX / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
+		positionY += velocityY / (NUMBER_OF_MILLISECONDS_IN_A_SECOND / PERIOD_IN_MILLISECONDS);
 
-	public boolean removeObserver(BalancedObjectObserver anObserver) {
-		final boolean existed = balancedObjectObservers.remove(anObserver);
-		if (balancedObjectObservers.isEmpty()) {
-			timer.cancel();
-			timer = null;
-		}
-		return existed;
-	}
-
-	private void notifyObservers() {
 		if(isServiceRunning) {
 			//Fix IndexOutOfBoundsException by copying the list before iterating over it.
 			//This protects us from any changes that happen during the iteration.
@@ -95,18 +85,30 @@ public class BalancedObjectPublicationServiceImpl implements BalancedObjectPubli
 					observer.fallenOverNotification();
 				}
 			}
-		}
+		}	
 	}
 
-	public void setDifficultyLevel(int aDifficulty) {
+	public synchronized boolean removeObserver(final BalancedObjectObserver anObserver) {
+		if (null == anObserver) {
+			return false;
+		}
+		final boolean existed = balancedObjectObservers.remove(anObserver);
+		if (balancedObjectObservers.isEmpty()) {
+			timer.cancel();
+			timer = null;
+		}
+		return existed;
+	}
+
+	public synchronized void setDifficultyLevel(int aDifficulty) {
 		difficultyLevel = aDifficulty;
 	}
 
-	public void startService() {
+	public synchronized void startService() {
 		isServiceRunning = true;
 	}
 
-	public void stopService() {
+	public synchronized void stopService() {
 		isServiceRunning = false;
 	}
 }
