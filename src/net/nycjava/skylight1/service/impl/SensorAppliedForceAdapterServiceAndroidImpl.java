@@ -9,15 +9,20 @@ import android.util.Log;
 
 public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorAppliedForceAdapter {
 
+	private static final int Z_AXIS = 2;
+	
 	private static final int Y_AXIS = 1;
 
 	private static final int X_AXIS = 0;
 
 	private static final float FORCE_FACTOR = 1.0f;
 
-	private static final int CALIBRATE_MAX_COUNT = 10;
+	private static final int CALIBRATE_MAX_COUNT = 15;
+	
+	private static final boolean START_FLAT = false;
 
-	private static final String TAG = "SensorAppliedForceAdapterServiceAndroidImpl";
+//	private static final String TAG = "SensorAppliedForceAdapterServiceAndroidImpl";
+	private static final String TAG = "SkylightSensor";
 
 	@Dependency
 	BalancedObjectPublicationService balancedPublicationService;
@@ -30,6 +35,8 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private double sumX;
 
 	private double sumY;
+	
+	private double sumZ;
 
 	private int countXY;
 
@@ -44,14 +51,22 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private float lowY;
 
 	private float highY;
+	
+	private float lowZ;
+	private float highZ;
+	
+	
+	private double origAngleSum;
+	private float originalAngle;	
 
 	private final SensorListener mListener = new SensorListener() {
 		public void onSensorChanged(int sensor, float[] values) {
 			final long thisTime = System.currentTimeMillis();
 			float x = values[X_AXIS];
 			float y = values[Y_AXIS];
+			float z = values[Z_AXIS];
 			if (calibrateDone == false) {
-				if (Math.abs(x) > 2.5 || Math.abs(y) > 2.5) {
+				if ((Math.abs(x) > 2.5 || Math.abs(y) > 2.5) && START_FLAT) {
 					// User is holding the phone vertically (or at least > 15 deg)
 					// so put some 'good' defaults into range and let glass drop
 					lowX = -0.005f;
@@ -67,13 +82,19 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 						// do calibration of x,y
 						setXRange(x);
 						setYRange(y);
+						setZRange(z);
 						sumX += x;
 						sumY += y;
+						sumZ += z;
 						countXY++;
 						calibrateCount++;
 					} else {
-//						Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " +highY);
+						Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " + highY + " lowZ " + lowZ + " highZ " + highZ);
 						calibrateDone = true;
+						double avgZ = sumZ / countXY;
+						double avgY = sumY / countXY;
+						originalAngle = (float) Math.toDegrees(Math.atan(avgZ/avgY));
+						Log.d(TAG,"calibrateAngle:" + originalAngle);
 					}
 				}
 			} else {
@@ -142,6 +163,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		}
 		if ((y > highY) || (highY == -999)) {
 			highY = y;
+		}
+	}
+	
+	private void setZRange(float z) {
+		if ((z < lowZ) || (lowZ == 999)) {
+			lowZ = z;
+		}
+		if ((z > highZ) || (highZ == -999)) {
+			highZ = z;
 		}
 	}
 }
