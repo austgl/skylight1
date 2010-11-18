@@ -15,7 +15,7 @@
 	<string name="websiteurl">http://balancethebeer.com</string>
 	<string name="levelreached">Mejor Nivel</string>
     <string name="levelmessage">\nEl mas alto Nivel alcanzado es</string>
-    <string name="aboutmessage">\nBalance the Beer\n Version 1.3\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
+    <string name="aboutmessage">\nBalance the Beer\n Version %s\n(c) 2009 Skylight1\n\nhttp://balancethebeer.com\n</string>
 	<string name="keywords">beer game bar pub drink</string>
 	<string name="locallevelreached">En este dispositivo</string>
 	<string name="globallevelreached">En cualquier dispositivo de este día pasado</string>
