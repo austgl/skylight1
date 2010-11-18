@@ -1,9 +1,13 @@
 package net.nycjava.skylight1.service.impl;
 
+import java.util.List;
+
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.service.BalancedObjectPublicationService;
 import net.nycjava.skylight1.service.SensorAppliedForceAdapter;
-import android.hardware.SensorListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
@@ -59,8 +63,10 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private double origAngleSum;
 	private float originalAngle;	
 
-	private final SensorListener mListener = new SensorListener() {
-		public void onSensorChanged(int sensor, float[] values) {
+	private final SensorEventListener mListener = new SensorEventListener() {
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			float[] values = event.values;
 			final long thisTime = System.currentTimeMillis();
 			float x = values[X_AXIS];
 			float y = values[Y_AXIS];
@@ -117,13 +123,17 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 					x = x * FORCE_FACTOR;
 					y = y * FORCE_FACTOR;
 				}
-				balancedPublicationService.applyForce(x, -y, (thisTime - lastTime));
+				balancedPublicationService.applyForce(-x, y, (thisTime - lastTime));
 			}
 			lastTime = thisTime;
 		}
 
-		public void onAccuracyChanged(int sensor, int accuracy) {
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			// TODO Auto-generated method stub
+			
 		}
+
 	};
 
 	public void start() {
@@ -139,7 +149,12 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		highY = -999;
 		calibrateCount = 0;
 		calibrateDone = false;
-		mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_GAME);
+		List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+		if(sensorList.size() < 1) {
+			//log an error since there are no accelerometers on device
+			Log.d(TAG,"NO Accelerometer Sensor Found");
+		}
+		mSensorManager.registerListener(mListener, sensorList.get(0), SensorManager.SENSOR_DELAY_GAME);
 		Log.d(TAG, "start");
 	}
 
