@@ -40,19 +40,19 @@ final public class SkillTestView extends View {
 		                                              46, 47, 48, 49, 50, 51 };
 
 	private final static int backgrounds[] = {
-		    R.drawable.seafoam2, R.drawable.wood, R.drawable.tiles, R.drawable.water, R.drawable.dionysios,
-		    R.drawable.marble, R.drawable.largewoodgrain, R.drawable.fish, R.drawable.orbit, R.drawable.skulls,
-		    R.drawable.seafoam, R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.earth,
+		    R.drawable.seafoam, R.drawable.dionysios, R.drawable.tiles, R.drawable.water, R.drawable.marble,
+		    R.drawable.wood, R.drawable.largewoodgrain, R.drawable.fish, R.drawable.seafoam2, R.drawable.skulls,
+		    R.drawable.orbit, R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.wood,
 			R.drawable.background_table,
-			R.drawable.seafoam2, R.drawable.wood, R.drawable.galaxy, R.drawable.fish, R.drawable.earth,
-			R.drawable.water, R.drawable.marble, R.drawable.tiles, R.drawable.largewoodgrain, R.drawable.seafoam,
-			R.drawable.background_table, R.drawable.orbit, R.drawable.ice, R.drawable.space1, R.drawable.dionysios,
+			R.drawable.seafoam2, R.drawable.seafoam, R.drawable.galaxy, R.drawable.earth, R.drawable.intro,
+			R.drawable.water, R.drawable.marble, R.drawable.tiles, R.drawable.largewoodgrain, R.drawable.seafoam2,
+			R.drawable.background_table, R.drawable.orbit, R.drawable.ice, R.drawable.success, R.drawable.dionysios,
 			R.drawable.skulls,
 			R.drawable.seafoam2, R.drawable.wood, R.drawable.largewoodgrain, R.drawable.water, R.drawable.marble,
-		    R.drawable.tiles, R.drawable.fish, R.drawable.orbit, R.drawable.skulls, R.drawable.seafoam,
+		    R.drawable.tiles, R.drawable.fish, R.drawable.failed, R.drawable.skulls, R.drawable.seafoam,
 		    R.drawable.ice, R.drawable.space1, R.drawable.galaxy, R.drawable.dionysios, R.drawable.earth,
-			R.drawable.background_table,
-			R.drawable.ice, R.drawable.fish, R.drawable.icon_2, R.drawable.hard };
+			R.drawable.intro, 
+			R.drawable.orbit, R.drawable.icon, R.drawable.hard };
 
 	@Dependency
 	private BalancedObjectPublicationService balancedObjectPublicationService;

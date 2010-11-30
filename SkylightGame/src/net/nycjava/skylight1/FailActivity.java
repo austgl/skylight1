@@ -62,7 +62,7 @@ public class FailActivity extends SkylightActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		ImageView imageView = new ImageView(this);
-		imageView.setImageResource(R.drawable.icon_2);
+		imageView.setImageResource(R.drawable.failed);
 		LinearLayout linearLayout =  (LinearLayout)view.getChildAt(0);
 		linearLayout.addView(imageView);
 		view.requestLayout();
