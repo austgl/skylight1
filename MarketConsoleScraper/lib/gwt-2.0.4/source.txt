@@ -1,2 +1,0 @@
-Google Web Toolkit 2.0.4
-http://google-web-toolkit.googlecode.com/files/gwt-2.0.4.zip

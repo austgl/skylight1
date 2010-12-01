@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<layer-list>
-	<item>
-		<nine-patch xmlns:android="http://schemas.android.com/apk/res/android"
-			android:src="@drawable/panel_picture_frame_bg_pressed_blue"
-			android:dither="true" />
-	</item>
-</layer-list>
