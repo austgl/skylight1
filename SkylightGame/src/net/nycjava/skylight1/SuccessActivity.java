@@ -94,13 +94,16 @@ public class SuccessActivity extends SkylightActivity {
 
 		SharedPreferences sharedPreferences = getSharedPreferences(
 				SKYLIGHT_PREFS_FILE, MODE_PRIVATE);
-		int globalBestLevelCompleted = sharedPreferences.getInt(
+		final int globalBestLevelCompleted = sharedPreferences.getInt(
 				GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
+		final int localBestLevelCompleted = sharedPreferences.getInt(
+				HIGH_SCORE_PREFERENCE_NAME, -1);
 
-		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putInt(HIGH_SCORE_PREFERENCE_NAME, bestLevelCompleted);
-		editor.commit();
-
+		if(bestLevelCompleted>localBestLevelCompleted) {
+    		SharedPreferences.Editor editor = sharedPreferences.edit();
+    		editor.putInt(HIGH_SCORE_PREFERENCE_NAME, bestLevelCompleted);
+    		editor.commit();
+		}
 		if(globalBestLevelCompleted>0 && bestLevelCompleted > globalBestLevelCompleted) {
 			
 			globalBestLevel = bestLevelCompleted;
