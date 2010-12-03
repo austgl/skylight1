@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 /*
@@ -15,10 +15,10 @@ public class Assets {
 	 * get a String from a text file (whole file returned)\n
 	 * e.g. from onCreate(): String userAgreement = getString(eula, this);
 	 */
-	public static String getString(String asset, Activity activity) {
+	public static String getString(String asset, Context context) {
 		BufferedReader in = null;
 		try {
-			in = new BufferedReader(new InputStreamReader(activity.getAssets()
+			in = new BufferedReader(new InputStreamReader(context.getAssets()
 					.open(asset)));
 			String line;
 			StringBuilder buffer = new StringBuilder();

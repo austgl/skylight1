@@ -3,11 +3,10 @@ package skylight1.util;
 import java.security.MessageDigest;
 
 import android.content.Context;
-import android.provider.Settings.Secure;
 import android.util.Log;
 
 public class PhoneIdHasher {
-	static String hashedPhoneId;
+	private static String hashedPhoneId;
 
 	public String getHashedPhoneId(Context aContext) {
 		if (hashedPhoneId == null) {
