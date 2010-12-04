@@ -170,23 +170,30 @@ public class Texture {
 			// only one pixel along its shortest dimension
 			float scale = 1;
 			int level = 0;
-			Bitmap scaledBitmap;
+			int scaledBitmapWidth;
+			int scaledBitmapHeight;
 			// TODO not sure falling back to RGB_565 is the best answer... don't really understand why some bitmaps
 			// don't have a config
 			final Config config = aBitmap.getConfig() == null ? Bitmap.Config.RGB_565 : aBitmap.getConfig();
 			do {
-				scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
+				Bitmap scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
 				final Canvas canvas = new Canvas(scaledBitmap);
 				canvas.scale(scale, scale);
 				canvas.drawBitmap(aBitmap, 0, 0, null);
 				GLUtils.texImage2D(GL10.GL_TEXTURE_2D, level, scaledBitmap, 0);
+
+				// Recycle the scaled bitmap we just created, but keep track of how big it was.
+				scaledBitmapWidth = scaledBitmap.getWidth();
+				scaledBitmapHeight = scaledBitmap.getHeight();
+				scaledBitmap.recycle();
+				scaledBitmap = null;
 
 				// halve for each new level
 				scale = scale / 2f;
 				level++;
 
 				// keep going until one side of the texture reaches one pixel
-			} while (scaledBitmap.getWidth() > 1 && scaledBitmap.getHeight() > 1);
+			} while (scaledBitmapWidth > 1 && scaledBitmapHeight > 1);
 		}
 
 		// check for an error
