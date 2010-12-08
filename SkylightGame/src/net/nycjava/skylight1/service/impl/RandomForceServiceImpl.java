@@ -62,14 +62,16 @@ public class RandomForceServiceImpl implements RandomForceService {
 		// TODO stop potential race condition between this method and stop()
 		final double minimumMillisecondsBetweenForcesGivenDifficulty = MINIMUM_MILLISECONDS_BETWEEN_FORCES - Math.min(MINIMUM_MILLISECONDS_BETWEEN_FORCES, difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL);
 		final double maximumMillisecondsBetweenForcesGivenDifficulty = MAXIMUM_MILLISECONDS_BETWEEN_FORCES - Math.min(MAXIMUM_MILLISECONDS_BETWEEN_FORCES, difficultyLevel * NUMBER_OF_MILLISECONDS_FASTER_PER_DIFFICULTY_LEVEL);
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				balancedObjectPublicationService.applyForce(adjRandom(),adjRandom(),50);
-				applyForceAtRandomTime();
-			}
-		}, (long) (minimumMillisecondsBetweenForcesGivenDifficulty + Math.random()
-				* (maximumMillisecondsBetweenForcesGivenDifficulty - minimumMillisecondsBetweenForcesGivenDifficulty)));
+		if(timer != null){
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					balancedObjectPublicationService.applyForce(adjRandom(),adjRandom(),50);
+					applyForceAtRandomTime();
+				}
+			}, (long) (minimumMillisecondsBetweenForcesGivenDifficulty + Math.random()
+					* (maximumMillisecondsBetweenForcesGivenDifficulty - minimumMillisecondsBetweenForcesGivenDifficulty)));
+		}
 	}
 
 	@Override
