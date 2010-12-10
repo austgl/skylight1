@@ -1,14 +1,19 @@
 package net.nycjava.skylight1.service.impl;
 
+import java.util.List;
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.service.BalancedObjectPublicationService;
 import net.nycjava.skylight1.service.SensorAppliedForceAdapter;
-import android.hardware.SensorListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
 public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorAppliedForceAdapter {
 
+	private static final int Z_AXIS = 2;
+	
 	private static final int Y_AXIS = 1;
 
 	private static final int X_AXIS = 0;
@@ -28,8 +33,8 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private long lastTime;
 
 	private double sumX;
-
 	private double sumY;
+	private double sumZ;
 
 	private int countXY;
 
@@ -38,18 +43,20 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 	private int calibrateCount;
 
 	private float lowX;
-
 	private float highX;
 
 	private float lowY;
-
 	private float highY;
+	
+	private float lowZ;
+	private float highZ;
 
-	private final SensorListener mListener = new SensorListener() {
-		public void onSensorChanged(int sensor, float[] values) {
+	private final SensorEventListener mListener = new SensorEventListener() {
+		public void onSensorChanged(SensorEvent event) {
 			final long thisTime = System.currentTimeMillis();
-			float x = values[X_AXIS];
-			float y = values[Y_AXIS];
+			float x = event.values[X_AXIS];
+			float y = event.values[Y_AXIS];
+			float z = event.values[Z_AXIS];
 			if (calibrateDone == false) {
 				if (Math.abs(x) > 2.5 || Math.abs(y) > 2.5) {
 					// User is holding the phone vertically (or at least > 15 deg)
@@ -67,13 +74,19 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 						// do calibration of x,y
 						setXRange(x);
 						setYRange(y);
+						setZRange(z);
 						sumX += x;
 						sumY += y;
+						sumZ += z;
 						countXY++;
 						calibrateCount++;
 					} else {
 //						Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " +highY);
 						calibrateDone = true;
+						double avgZ = sumZ / countXY;
+						double avgY = sumY / countXY;
+						float calibrateAngle = (float) Math.toDegrees(Math.atan(avgZ/avgY));
+//						Log.d(TAG,"calibrateAngle:" + calibrateAngle);
 					}
 				}
 			} else {
@@ -96,12 +109,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 					x = x * FORCE_FACTOR;
 					y = y * FORCE_FACTOR;
 				}
-				balancedPublicationService.applyForce(x, -y, (thisTime - lastTime));
+				balancedPublicationService.applyForce(-x, y, (thisTime - lastTime));
 			}
 			lastTime = thisTime;
 		}
 
-		public void onAccuracyChanged(int sensor, int accuracy) {
+		@Override
+		public void onAccuracyChanged(Sensor arg0, int arg1) {
+			// TODO Auto-generated method stub
+			
 		}
 	};
 
@@ -116,9 +132,16 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		highX = -999;
 		lowY = 999;
 		highY = -999;
+		lowZ = 999;
+		highZ = -999;
 		calibrateCount = 0;
 		calibrateDone = false;
-		mSensorManager.registerListener(mListener, mask, SensorManager.SENSOR_DELAY_GAME);
+		List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER);
+		if(sensorList.size() < 1) {
+			//log an error since there are no accelerometers on device
+			Log.e(TAG,"NO Accelerometer Sensor Found");
+		}
+		mSensorManager.registerListener(mListener, sensorList.get(0), SensorManager.SENSOR_DELAY_GAME);
 		Log.d(TAG, "start");
 	}
 
@@ -142,6 +165,15 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		}
 		if ((y > highY) || (highY == -999)) {
 			highY = y;
+		}
+	}
+	
+	private void setZRange(float z) {
+		if ((z < lowZ) || (lowZ == 999)) {
+			lowZ = z;
+		}
+		if ((z > highZ) || (highZ == -999)) {
+			highZ = z;
 		}
 	}
 }
