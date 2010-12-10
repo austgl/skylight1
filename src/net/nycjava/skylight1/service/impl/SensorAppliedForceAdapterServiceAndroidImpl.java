@@ -1,7 +1,6 @@
 package net.nycjava.skylight1.service.impl;
 
 import java.util.List;
-
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.service.BalancedObjectPublicationService;
 import net.nycjava.skylight1.service.SensorAppliedForceAdapter;
@@ -130,8 +129,7 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub			
 		}
 
 	};
