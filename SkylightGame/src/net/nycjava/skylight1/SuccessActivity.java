@@ -76,7 +76,7 @@ public class SuccessActivity extends SkylightActivity {
 
 		final int bestLevelCompleted = getIntent().getIntExtra(DIFFICULTY_LEVEL, 0);
 
-		new HighScoreService().recordScore(bestLevelCompleted, this);
+		new HighScoreService().recordScore(bestLevelCompleted, true, this);
 	}
 	
 	@Override
