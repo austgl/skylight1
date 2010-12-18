@@ -1,2 +1,0 @@
-Spring Framework 2.5.6.SEC02
-http://s3.amazonaws.com/dist.springframework.org/release/SPR/spring-framework-2.5.6.SEC02-with-docs.zip

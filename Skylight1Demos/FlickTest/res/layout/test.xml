@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<Gallery android:id="@+id/Gallery01" xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="fill_parent" android:layout_width="fill_parent"
-	android:fadingEdge="none" android:background="#0000e0"
-	android:unselectedAlpha="1" android:clipToPadding="false"
-	android:clipChildren="false" android:spacing="-30px"></Gallery>
