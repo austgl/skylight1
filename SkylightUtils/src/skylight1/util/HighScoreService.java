@@ -21,20 +21,24 @@ public class HighScoreService {
 
 	private static final String TAG = HighScoreService.class.getName();
 	
-	public void recordScore(final int aScore, final Context aContext) {
+	public void recordScore(final int aScore, final boolean success, final Context aContext) {
+		
 		SharedPreferences sharedPreferences = aContext.getSharedPreferences(
 				SKYLIGHT_PREFS_FILE, Context.MODE_PRIVATE);
 		final int globalBestLevelCompleted = sharedPreferences.getInt(
 				GLOBAL_HIGH_SCORE_PREFERENCE_NAME, -1);
-		final int localBestLevelCompleted = sharedPreferences.getInt(
-				HIGH_SCORE_PREFERENCE_NAME, -1);
 
-		if(aScore>localBestLevelCompleted) {
-    		SharedPreferences.Editor editor = sharedPreferences.edit();
-    		editor.putInt(HIGH_SCORE_PREFERENCE_NAME, aScore);
-    		editor.commit();
+		if(success) {
+    		final int localBestLevelCompleted = sharedPreferences.getInt(
+    				HIGH_SCORE_PREFERENCE_NAME, -1);
+    
+    		if(aScore>localBestLevelCompleted) {
+        		SharedPreferences.Editor editor = sharedPreferences.edit();
+        		editor.putInt(HIGH_SCORE_PREFERENCE_NAME, aScore);
+        		editor.commit();
+    		}
 		}
-		if(globalBestLevelCompleted>0 && aScore > globalBestLevelCompleted) {
+		if(!success || globalBestLevelCompleted>0 && aScore > globalBestLevelCompleted) {
 			
     		final String highscores_server = Assets.getString("highscores_server", aContext);
     		
