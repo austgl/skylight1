@@ -140,8 +140,9 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 		if(sensorList.size() < 1) {
 			//log an error since there are no accelerometers on device
 			Log.e(TAG,"NO Accelerometer Sensor Found");
+		} else {
+			mSensorManager.registerListener(mListener, sensorList.get(0), SensorManager.SENSOR_DELAY_GAME);
 		}
-		mSensorManager.registerListener(mListener, sensorList.get(0), SensorManager.SENSOR_DELAY_GAME);
 		Log.d(TAG, "start");
 	}
 
