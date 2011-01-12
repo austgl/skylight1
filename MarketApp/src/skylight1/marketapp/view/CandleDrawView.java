@@ -5,24 +5,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.view.Surface;
 import android.view.View;
-import java.io.*;
 
-import skylight1.marketapp.EquityTimeSeries;
+import skylight1.marketapp.model.EquityTimeSeries;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 
 // TODO: Auto-generated Javadoc

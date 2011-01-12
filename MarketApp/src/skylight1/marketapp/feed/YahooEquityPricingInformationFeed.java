@@ -1,7 +1,7 @@
 package skylight1.marketapp.feed;
 
 import android.util.Log;
-import skylight1.marketapp.EquityTimeSeries;
+import skylight1.marketapp.model.EquityTimeSeries;
 import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
 

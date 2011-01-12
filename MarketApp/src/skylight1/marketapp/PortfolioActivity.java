@@ -19,7 +19,7 @@ import skylight1.marketapp.feed.EquityPricingInformationFeed;
 import skylight1.marketapp.feed.YahooEquityPricingInformationFeed;
 import skylight1.marketapp.model.CompanyDetail;
 import skylight1.marketapp.model.EquityPricingInformation;
-import skylight1.util.Assets;
+//import skylight1.util.Assets;
 
 import java.util.*;
 
@@ -121,7 +121,7 @@ public class PortfolioActivity extends GuiceListActivity {
         setListAdapter(aa);
     	
     	try{
-    		//admob: don't show ads in emulator
+    	/*	//admob: don't show ads in emulator
             AdManager.setTestDevices( new String[] { AdManager.TEST_EMULATOR
             //,"your_debugging_phone_id_here" // add phone id if debugging on phone
             });
@@ -130,7 +130,7 @@ public class PortfolioActivity extends GuiceListActivity {
 	            LinearLayout layout = (LinearLayout)findViewById(R.id.layout_ad);
 	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
 	            layout.addView(adWhirlLayout);
-            }
+            }*/
         } catch(Exception e){
             Log.e(TAG, "Unable to create AdWhirlLayout", e);
         }
