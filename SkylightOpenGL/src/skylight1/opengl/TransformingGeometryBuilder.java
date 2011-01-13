@@ -17,7 +17,7 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 		}
 
 		public X setTextureCoordinates(float aU1, float aV1, float aU2, float aV2, float aU3, float aV3) {
-			if (null != coordinateTransform) {
+			if (null != textureTransform) {
 				// copy coordinates into input vectors
 				inputMatrix[0] = aU1;
 				inputMatrix[1] = aV1;
