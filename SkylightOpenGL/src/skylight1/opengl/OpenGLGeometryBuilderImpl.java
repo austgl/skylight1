@@ -8,6 +8,7 @@ import java.util.Stack;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 /**
  * Encapsulates the construction of OpenGLGeometry objects.
@@ -313,6 +314,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private void updateArraySizesIfNecessary() {
 		if (modelCoordinates.length < vertexOffsetOfNextGeometry * MODEL_COORDINATES_PER_VERTEX) {
+			Log.i(OpenGLGeometryBuilderImpl.class.getName(), String.format("increasing beyond %d vertices", vertexOffsetOfNextGeometry));
 			modelCoordinates = extend(modelCoordinates);
 			if (usesTextureCoordinates) {
 				textureCoordinates = extend(textureCoordinates);
@@ -327,7 +329,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	}
 
 	private int[] extend(int[] anArray) {
-		final int[] newArray = new int[anArray.length * 2];
+		final int[] newArray = new int[anArray.length + 1000];
 		System.arraycopy(anArray, 0, newArray, 0, anArray.length);
 		return newArray;
 	}
@@ -416,6 +418,8 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
+		Log.i(OpenGLGeometryBuilderImpl.class.getName(), "number of vertices is " + vertexOffsetOfNextGeometry + ", create with this number of vertices to avoid extending arrays");
+		
 		modelCoordinatesAsBuffer = createBuffer(modelCoordinates);
 		modelCoordinates = null;
 
