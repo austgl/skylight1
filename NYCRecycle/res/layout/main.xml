@@ -9,4 +9,99 @@
     android:layout_height="wrap_content" 
     android:text="@string/hello"
     />
+    <TableLayout    
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
+	<ImageView
+android:id="@+id/Button01" android:scaleType="fitXY" android:layout_width="110dip"
+android:layout_height="110dip"
+android:background="@drawable/bronx"></ImageView>   
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip">
+	<ImageView
+android:id="@+id/Button02" android:scaleType="fitXY" android:layout_width="110dip"
+android:layout_height="110dip"
+android:background="@drawable/queens"></ImageView>
+</LinearLayout>
+</TableRow>
+
+<TableRow android:gravity="center_horizontal">
+<TextView  android:gravity="center_horizontal"
+    android:id="@+id/textlabel01"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Bronx"
+    />
+<TextView  android:gravity="center_horizontal"
+    android:id="@+id/textlabel02"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Queens"
+    /> 
+</TableRow>
+
+
+<TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
+	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
+android:layout_height="110dip"
+android:id="@+id/Button03" 
+android:background="@drawable/manhattan"></ImageView>
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip"> 
+	<ImageView android:scaleType="fitXY" android:layout_width="110dip"
+android:layout_height="110dip"
+android:id="@+id/Button04" 
+android:background="@drawable/brooklyn"></ImageView>
+</LinearLayout>
+</TableRow>
+
+<TableRow android:gravity="center_horizontal">
+<TextView  android:gravity="center_horizontal"
+    android:id="@+id/textlabel03"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Manhattan"
+    />
+<TextView  android:gravity="center_horizontal"
+    android:id="@+id/textlabel04"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Brooklyn"
+    /> 
+</TableRow>
+<TableRow android:gravity="center_horizontal">
+<LinearLayout android:gravity="center" android:layout_width="150dip">
+<ImageView android:scaleType="fitXY" android:layout_width="110dip"
+android:layout_height="110dip"
+android:id="@+id/Button05" 
+android:background="@drawable/staten_island"></ImageView>
+</LinearLayout>
+<LinearLayout android:gravity="center" android:layout_width="150dip">
+<ImageView  android:layout_width="110dip"
+android:layout_height="110dip"
+android:id="@+id/DonateButton" 
+android:src="@drawable/donate"
+></ImageView>
+</LinearLayout>
+</TableRow>
+<TableRow android:gravity="center_horizontal">
+<TextView android:gravity="center_horizontal"
+    android:id="@+id/textlabel05"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Staten Island"
+    />
+<TextView android:scaleType="fitXY" 
+    android:gravity="center_horizontal"
+    android:id="@+id/DonateButtonText"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Donate to OHNY"
+    /> 
+</TableRow>
+</TableLayout>
 </LinearLayout>
