@@ -81,11 +81,7 @@ android:id="@+id/Button05"
 android:background="@drawable/staten_island"></ImageView>
 </LinearLayout>
 <LinearLayout android:gravity="center" android:layout_width="150dip">
-<ImageView  android:layout_width="110dip"
-android:layout_height="110dip"
-android:id="@+id/DonateButton" 
-android:src="@drawable/donate"
-></ImageView>
+
 </LinearLayout>
 </TableRow>
 <TableRow android:gravity="center_horizontal">
@@ -100,7 +96,7 @@ android:src="@drawable/donate"
     android:id="@+id/DonateButtonText"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="Donate to OHNY"
+    android:text="Recycle!"
     /> 
 </TableRow>
 </TableLayout>
