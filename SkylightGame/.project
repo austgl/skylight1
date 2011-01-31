@@ -30,4 +30,21 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>SkylightDI_src</name>
+			<type>2</type>
+			<locationURI>_android_SkylightDI_500297fa/src</locationURI>
+		</link>
+		<link>
+			<name>SkylightDI_test</name>
+			<type>2</type>
+			<locationURI>_android_SkylightDI_500297fa/test</locationURI>
+		</link>
+		<link>
+			<name>SkylightUtils_src</name>
+			<type>2</type>
+			<locationURI>_android_SkylightUtils_ded860fc/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
