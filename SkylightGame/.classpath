@@ -6,7 +6,7 @@
 	<classpathentry exported="true" kind="lib" path="libs/admob-sdk-android.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/AdWhirlSDK_Android_2.5.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/libGoogleAnalytics.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SkylightDI"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SkylightUtils"/>
+	<classpathentry kind="src" path="SkylightDI_src"/>
+	<classpathentry kind="src" path="SkylightUtils_src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
