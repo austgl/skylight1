@@ -19,7 +19,11 @@ public class TypeFaceTextView extends TextView {
 
 	@Override
 	public void setText(CharSequence text, BufferType type) {
-		super.setText(String.format(text.toString(), BuildInfo.getVersionName(getContext())), type);
+		String versionName = "X.XX";
+		if(!isInEditMode()) { // workaround to view layouts in graphical layout editor
+			versionName = BuildInfo.getVersionName(getContext());
+		}
+		super.setText(String.format(text.toString(), versionName), type);
 	}
 	
 	private static final int BORDER_WIDTH = 1;

@@ -16,7 +16,8 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 			delegate = aDelegate;
 		}
 
-		public X setTextureCoordinates(float aU1, float aV1, float aU2, float aV2, float aU3, float aV3) {
+		@SuppressWarnings("unchecked")
+        public X setTextureCoordinates(float aU1, float aV1, float aU2, float aV2, float aU3, float aV3) {
 			if (null != textureTransform) {
 				// copy coordinates into input vectors
 				inputMatrix[0] = aU1;
@@ -46,13 +47,13 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 				delegate = ((TexturableTriangle3D<X>) delegate).setTextureCoordinates(aU1, aV1, aU2, aV2, aU3, aV3);
 			}
 
-			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
 
 			return typeSafeThis;
 		}
 
-		public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2, float aNormalZ2, float aNormalX3,
+		@SuppressWarnings("unchecked")
+        public X setNormal(float aNormalX1, float aNormalY1, float aNormalZ1, float aNormalX2, float aNormalY2, float aNormalZ2, float aNormalX3,
 				float aNormalY3, float aNormalZ3) {
 			if (null != coordinateTransform) {
 				// copy coordinates into input vectors
@@ -93,16 +94,15 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 								.setNormal(aNormalX1, aNormalY1, aNormalZ1, aNormalX2, aNormalY2, aNormalZ2, aNormalX3, aNormalY3, aNormalZ3);
 			}
 
-			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
 
 			return typeSafeThis;
 		}
 
-		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2, float aRed3, float aGreen3, float aBlue3) {
+		@SuppressWarnings("unchecked")
+        public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2, float aRed3, float aGreen3, float aBlue3) {
 			delegate = ((ColourableTriangle3D<X>) delegate).setColour(aRed1, aGreen1, aBlue1, aRed2, aGreen2, aBlue2, aRed3, aGreen3, aBlue3);
 
-			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
 
 			return typeSafeThis;
@@ -119,7 +119,8 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 			delegate = aDelegate;
 		}
 
-		public X setTextureCoordinates(float aU, float aV, float aUWidth, float aVHeight) {
+		@SuppressWarnings("unchecked")
+        public X setTextureCoordinates(float aU, float aV, float aUWidth, float aVHeight) {
 			if (null != textureTransform) {
 				// copy coordinates into input vectors
 				inputMatrix[0] = aU;
@@ -144,29 +145,26 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 				delegate = ((TexturableRectangle2D<X>) delegate).setTextureCoordinates(aU, aV, aUWidth, aVHeight);
 			}
 
-			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
 
 			return typeSafeThis;
 		}
 
-		public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2, float aRed3, float aGreen3, float aBlue3,
+		@SuppressWarnings("unchecked")
+        public X setColour(float aRed1, float aGreen1, float aBlue1, float aRed2, float aGreen2, float aBlue2, float aRed3, float aGreen3, float aBlue3,
 				float aRed4, float aGreen4, float aBlue4) {
 			delegate =
 					((ColourableRectangle2D<X>) delegate)
 							.setColour(aRed1, aGreen1, aBlue1, aRed2, aGreen2, aBlue2, aRed3, aGreen3, aBlue3, aRed4, aGreen4, aBlue4);
 
-			@SuppressWarnings("unchecked")
 			X typeSafeThis = (X) this;
 
 			return typeSafeThis;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private final Triangle3D<Object> triangle3D = new Triangle3D<Object>();
 
-	@SuppressWarnings("unchecked")
 	private final Rectangle2D<Object> rectangle2D = new Rectangle2D<Object>();
 
 	private GeometryBuilder<T, R> openGLGeometryBuilder;
@@ -199,7 +197,8 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 	 * @return A Triangle3D, which permits adding textures, colour and normalComponents as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public T add3DTriangle(final float anX1, final float aY1, final float aZ1, final float anX2, final float aY2, final float aZ2, final float anX3,
 			final float aY3, final float aZ3) {
 
@@ -248,7 +247,8 @@ public class TransformingGeometryBuilder<T, R> implements GeometryBuilder<T, R> 
 	 * @return A Rectangle2D, which permits adding textures and colour as per the configuration of the
 	 *         OpenGLGeometryBuilder
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public R add2DRectangle(float anX, float aY, float aWidth, float aHeight) {
 
 		if (null != coordinateTransform) {

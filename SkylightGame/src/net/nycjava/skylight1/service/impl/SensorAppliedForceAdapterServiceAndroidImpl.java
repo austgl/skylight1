@@ -83,9 +83,9 @@ public class SensorAppliedForceAdapterServiceAndroidImpl implements SensorApplie
 					} else {
 //						Log.d(TAG,"lowX " + lowX + " lowY " + lowY + " highX " + highX + " highY " +highY);
 						calibrateDone = true;
-						double avgZ = sumZ / countXY;
-						double avgY = sumY / countXY;
-						float calibrateAngle = (float) Math.toDegrees(Math.atan(avgZ/avgY));
+//						double avgZ = sumZ / countXY;
+//						double avgY = sumY / countXY;
+//						float calibrateAngle = (float) Math.toDegrees(Math.atan(avgZ/avgY));
 //						Log.d(TAG,"calibrateAngle:" + calibrateAngle);
 					}
 				}

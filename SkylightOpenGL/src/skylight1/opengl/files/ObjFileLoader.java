@@ -11,8 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import skylight1.opengl.GeometryBuilder;
-import skylight1.opengl.OpenGLGeometry;
-import skylight1.opengl.OpenGLGeometryBuilder;
 import android.content.Context;
 
 /**

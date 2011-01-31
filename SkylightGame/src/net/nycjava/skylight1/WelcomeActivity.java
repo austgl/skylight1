@@ -23,12 +23,10 @@ import android.view.SurfaceHolder.Callback;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.Transformation;
 import android.view.animation.Animation.AnimationListener;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,11 +34,11 @@ public class WelcomeActivity extends SkylightActivity {
 	private static final int BUTTON_FLASH_PERIOD = 700;
 
 	private final class HolderCallback implements Callback {
-		private boolean demoOnly;
+//		private boolean demoOnly;
 
-		public HolderCallback(boolean aDemoOnly) {
-			demoOnly = aDemoOnly;
-		}
+//		public HolderCallback(boolean aDemoOnly) {
+//			demoOnly = aDemoOnly;
+//		}
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
@@ -192,11 +190,11 @@ public class WelcomeActivity extends SkylightActivity {
 		normalButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 		hardButton.setOnFocusChangeListener(new HighlightTextFocusChangeListener());
 
-		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
+//		boolean demoOnly = getIntent().getBooleanExtra(DISPLAY_DEMO, false);
 
 		preview = (SurfaceView) contentView.findViewById(R.id.videoview);
 		holder = preview.getHolder();
-		holder.addCallback(new HolderCallback(demoOnly));
+		holder.addCallback(new HolderCallback());
 
 		unfocusedColor = getResources().getColor(R.color.button_font_color);
 		focusedColor = getResources().getColor(R.color.button_font_color_focused);

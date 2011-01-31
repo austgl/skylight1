@@ -11,7 +11,6 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -153,10 +152,10 @@ public class LoggingExceptionHandler implements UncaughtExceptionHandler {
 		return aThread.getName();
 	}
 
-	private String escapeXMLString(final String anUnescapedString) {
-		// TODO escape entities
-		return anUnescapedString;
-	}
+//	private String escapeXMLString(final String anUnescapedString) {
+//		// TODO escape entities
+//		return anUnescapedString;
+//	}
 
 	private String getConfiguration() {
 		return context.getResources().getConfiguration().toString();
