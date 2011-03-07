@@ -1,5 +1,6 @@
 package net.nycjava.skylight1;
 
+import java.util.Random;
 import java.util.concurrent.Future;
 
 import net.nycjava.skylight1.dependencyinjection.Dependency;
@@ -23,9 +24,15 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 public class SkillTestActivity extends SkylightActivity {
+	// How often the fog appears. E.g. a value of 4 means 1 in 4 times.
+	private static final int FOG_RARITY = 4;
+
+	// What difficulty is required to get fog. No fog will be shown below this.
+	private static final int MIN_DIFFICULTY_FOR_FOG = 12;
+
 	public final static int REMAINING_TIME = 15; // TODO make configurable?
 
 	public final static float MIN_DISTANCE = 0.1f; // TODO make configurable?
@@ -80,7 +87,7 @@ public class SkillTestActivity extends SkylightActivity {
 		aDependencyInjectingObjectFactory.registerImplementationClass(CompassService.class,
 				CompassServiceAndroidImp.class);
 
-		aDependencyInjectingObjectFactory.registerImplementationObject(View.class, (LinearLayout) getLayoutInflater()
+		aDependencyInjectingObjectFactory.registerImplementationObject(View.class, getLayoutInflater()
 				.inflate(R.layout.skilltest, null));
 
 		aDependencyInjectingObjectFactory.registerImplementationObject(Integer.class, difficultyLevel);
@@ -160,7 +167,13 @@ public class SkillTestActivity extends SkylightActivity {
 		View skillTestView = (View) contentView.findViewById(R.id.skillTestView);
 		new DependencyInjector(dependencyInjectingObjectFactory).injectDependenciesForClassHierarchy(skillTestView);
 		setContentView(contentView);
-
+		
+		if ( difficultyLevel >= MIN_DIFFICULTY_FOR_FOG && 0 == new Random().nextInt(FOG_RARITY) ) {
+			ImageView fogOverlayImage = (ImageView) findViewById(R.id.fogOverlayImage);
+			fogOverlayImage.getDrawable().setDither(true);
+			fogOverlayImage.setVisibility(View.VISIBLE);
+		}
+		
 		sensorAppliedForceAdapter.start();
 		randomForceService.start();
 		countdownPublicationService.startCountdown();
