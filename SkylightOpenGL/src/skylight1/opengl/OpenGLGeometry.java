@@ -15,6 +15,8 @@ public class OpenGLGeometry {
 	final int numberOfVerticies;
 
 	private OpenGLGeometryBuilderImpl<?, ?> openGLGeometryBuilderImpl;
+	
+	private final Texture texture;
 
 	private final int modelPositionInBuffer;
 
@@ -27,12 +29,14 @@ public class OpenGLGeometry {
 	private final float[] boundingSphere;
 
 	public OpenGLGeometry(final int aMode, final int aFirst, final int aNumberOfVerticies,
-			OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl, final float[] aBoundingSphere) {
+			final OpenGLGeometryBuilderImpl<?, ?> anOpenGLGeometryBuilderImpl, final float[] aBoundingSphere,
+			final Texture aTexture) {
 		mode = aMode;
 		first = aFirst;
 		numberOfVerticies = aNumberOfVerticies;
 		openGLGeometryBuilderImpl = anOpenGLGeometryBuilderImpl;
 		boundingSphere = aBoundingSphere;
+		texture = aTexture;
 		
 		// To reduce calculations in the draw method, pre-calculate some offets
 		modelPositionInBuffer = first * FastGeometryBuilderImpl.MODEL_COORDINATES_PER_VERTEX;
@@ -46,6 +50,7 @@ public class OpenGLGeometry {
 	 * then the results are unpredictable.
 	 */
 	public void draw(GL10 aGL10) {
+		texture.activate();
 		aGL10.glDrawArrays(mode, first, numberOfVerticies);
 	}
 
@@ -98,8 +103,7 @@ public class OpenGLGeometry {
 	 */
 	public void updateColours(FastGeometryBuilder<?, ?> aFastGeometryBuilder) {
 		if (!openGLGeometryBuilderImpl.complete) {
-			throw new IllegalStateException(
-					"Updates are not permitted until after the first time the geometry builder has been enabled.");
+			throw new IllegalStateException("Updates are not permitted until after the first time the geometry builder has been enabled.");
 		}
 		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
 		coloursAsBuffer.position(coloursPositionInBuffer);

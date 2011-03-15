@@ -13,7 +13,13 @@ public interface OpenGLGeometryBuilder<T, R> extends GeometryBuilder<T, R> {
 	 * matching pair of startGeometry/endGeometry will belong to the single OpenGLGeometry object returned by
 	 * endGeometry. Geometries may be nested, so two calls to startGeometry may be followed by two calls to endGeometry.
 	 */
-	void startGeometry();
+	void startGeometry(Texture aTexture);
+
+	/**
+	 * Returns true if all startGeometry calls have been matched with endGeometry calls.  Zero calls to both methods
+	 * are considered to match;
+	 */
+	boolean isBuildingGeometry();
 
 	/**
 	 * @see OpenGLGeometryBuilder#startGeometry()

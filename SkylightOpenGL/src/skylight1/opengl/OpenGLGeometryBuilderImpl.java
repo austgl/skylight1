@@ -176,6 +176,8 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private static int currentMode = NO_MODE;
 
+	private Texture currentTexture;
+
 	private final Stack<Integer> geometryStartVertexStack = new Stack<Integer>();
 
 	@SuppressWarnings("unchecked")
@@ -341,9 +343,20 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	 * matching pair of startGeometry/endGeometry will belong to the single OpenGLGeometry object returned by
 	 * endGeometry. Geometries may be nested, so two calls to startGeometry may be followed by two calls to endGeometry.
 	 */
-	public void startGeometry() {
+	public void startGeometry(final Texture aTexture) {
 		if (complete) {
 			throw new IllegalStateException("Cannot start geometry after complete");
+		}
+
+		// nested geometries must use the same texture as their parent
+		if (!geometryStartVertexStack.isEmpty()) {
+			if (!currentTexture.equals(aTexture)) {
+				throw new IllegalStateException(String.format("Cannnot start a nested geometry with a different texture than its parent: %s, %s", currentTexture, aTexture));
+			}
+		} else {
+			if (geometryStartVertexStack.isEmpty()) {
+				currentTexture = aTexture;
+			}
 		}
 
 		int firstVertexOffset = vertexOffsetOfNextGeometry;
@@ -363,18 +376,18 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		int firstVertexOffset = geometryStartVertexStack.pop();
 		final int numberOfVertices = vertexOffsetOfNextGeometry - firstVertexOffset;
 		final float[] sphere = calculateBoundingSphere(modelCoordinates, firstVertexOffset, numberOfVertices);
-		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this, sphere);
+		final OpenGLGeometry openGLGeometry = new OpenGLGeometry(currentMode, firstVertexOffset, numberOfVertices, this, sphere, currentTexture);
 
 		// if the stack is empty, then clear the current mode: the next geometry can use a different mode
 		if (geometryStartVertexStack.isEmpty()) {
 			currentMode = NO_MODE;
+			currentTexture = null;
 		}
 
 		return openGLGeometry;
 	}
 
-	private float[] calculateBoundingSphere(int[] aModelCoordinates,
-			int aFirstVertexOffset, int aNumberOfVertices) {
+	private float[] calculateBoundingSphere(int[] aModelCoordinates, int aFirstVertexOffset, int aNumberOfVertices) {
 		int coordinateIndex = aFirstVertexOffset * MODEL_COORDINATES_PER_VERTEX;
 		float minX = aModelCoordinates[coordinateIndex++];
 		float minY = aModelCoordinates[coordinateIndex++];
@@ -402,7 +415,8 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		float dX = maxX - minX;
 		float dY = maxY - minY;
 		float dZ = maxZ - minZ;
-		return new float[] {(minX + maxX)/2, (minY + maxY)/2, (minZ + maxZ)/2, FloatMath.sqrt(dX*dX + dY*dY + dZ*dZ)/2};
+		return new float[] { (minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2,
+				FloatMath.sqrt(dX * dX + dY * dY + dZ * dZ) / 2 };
 	}
 
 	/**
@@ -418,8 +432,9 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			throw new IllegalStateException("Cannot complete until all started geometries are ended");
 		}
 
-		Log.i(OpenGLGeometryBuilderImpl.class.getName(), "number of vertices is " + vertexOffsetOfNextGeometry + ", create with this number of vertices to avoid extending arrays");
-		
+		Log.i(OpenGLGeometryBuilderImpl.class.getName(), "number of vertices is " + vertexOffsetOfNextGeometry
+				+ ", create with this number of vertices to avoid extending arrays");
+
 		modelCoordinatesAsBuffer = createBuffer(modelCoordinates);
 		modelCoordinates = null;
 
@@ -495,8 +510,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 		}
 
 		if (geometryStartVertexStack.isEmpty()) {
-			throw new IllegalStateException(
-					"Adding points, lines, and shapes may only be made between matched calls to startGeometry and endGeometry");
+			throw new IllegalStateException("Adding points, lines, and shapes may only be made between matched calls to startGeometry and endGeometry");
 		}
 
 		// if no mode has been set yet (i.e., this is the first triangle, line, etc. for this geometry), then use the
@@ -505,11 +519,12 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 			currentMode = aMode;
 		} else if (currentMode != aMode) {
 			// TODO show textual values for modes
-			throw new IllegalStateException(
-					String
-							.format(
-									"Cannot change the mode (point, line, triangle, triangle strip, or triangle fan) within a geometry; current is %d, new is %d",
-									currentMode, aMode));
+			throw new IllegalStateException(String.format("Cannot change the mode (point, line, triangle, triangle strip, or triangle fan) within a geometry; current is %d, new is %d", currentMode, aMode));
 		}
+	}
+
+	@Override
+	public boolean isBuildingGeometry() {
+		return ! geometryStartVertexStack.isEmpty();
 	}
 }

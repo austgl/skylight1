@@ -21,6 +21,10 @@ import android.util.Log;
  * impact to rendering performance.
  */
 public class Texture {
+	private final boolean usesMipMap;
+	private final int textureResource;
+	private final Context context;
+	
 	private int textureId;
 
 	private GL10 gL10;
@@ -30,45 +34,52 @@ public class Texture {
 	/**
 	 * Load a texture from a bitmap. Use a mip map.
 	 */
-	public Texture(final GL10 aGL10, final Bitmap aBitmap) {
-		this(aGL10, aBitmap, true);
-	}
+//	public Texture(final GL10 aGL10, final Bitmap aBitmap) {
+//		this(aGL10, aBitmap, true);
+//	}
 
 	/**
 	 * Load a texture from a bitmap.
 	 */
-	public Texture(final GL10 aGL10, final Bitmap aBitmap, final boolean aUseMipMap) {
-		loadBitmap(aGL10, aBitmap, aUseMipMap);
-	}
+//	public Texture(final GL10 aGL10, final Bitmap aBitmap, final boolean aUsesMipMap) {
+//		usesMipMap = aUsesMipMap;
+//		loadBitmap(aGL10, aBitmap);
+//	}
 
-	/**
-	 * Load a texture from an input stream. Use a mip map.
-	 */
-	public Texture(final GL10 aGL10, final InputStream anInputStream) {
-		this(aGL10, anInputStream, true);
-	}
+//	/**
+//	 * Load a texture from an input stream. Use a mip map.
+//	 */
+//	public Texture(final GL10 aGL10, final InputStream anInputStream) {
+//		this(aGL10, anInputStream, true);
+//	}
 
-	/**
-	 * Load a texture from an input stream.
-	 */
-	public Texture(final GL10 aGL10, final InputStream anInputStream, final boolean aUseMipMap) {
-		loadBitmap(aGL10, anInputStream, aUseMipMap);
-	}
+//	/**
+//	 * Load a texture from an input stream.
+//	 */
+//	public Texture(final GL10 aGL10, final InputStream anInputStream, final boolean aUsesMipMap) {
+//		loadBitmap(aGL10, anInputStream, aUsesMipMap);
+//	}
 
 	/**
 	 * Load a texture from a resource. Use a mip map.
 	 */
-	public Texture(final GL10 aGL10, final Context aContext, final int aTextureDrawable) {
-		this(aGL10, aContext, aTextureDrawable, true);
+	public Texture(final Context aContext, final int aTextureResource) {
+		this(aContext, aTextureResource, true);
 	}
 
 	/**
 	 * Load a texture from a resource.
 	 */
-	public Texture(final GL10 aGL10, final Context aContext, final int aTextureDrawable, final boolean aUseMipMap) {
-		final InputStream inputStream = aContext.getResources().openRawResource(aTextureDrawable);
+	public Texture(final Context aContext, final int aTextureResource, final boolean aUsesMipMap) {
+		context = aContext;
+		usesMipMap = aUsesMipMap;
+		textureResource = aTextureResource;
+	}
+	
+	public void load(final GL10 aGL10) {
+		final InputStream inputStream = context.getResources().openRawResource(textureResource);
 		try {
-			loadBitmap(aGL10, inputStream, aUseMipMap);
+			loadBitmap(aGL10, inputStream);
 		} finally {
 			try {
 				inputStream.close();
@@ -82,7 +93,7 @@ public class Texture {
 	 * Activate this texture. This is <b>not</b> required if the texture was the last texture loaded, as loading a
 	 * texture automatically activates it.
 	 */
-	public void activateTexture() {
+	public void activate() {
 		gL10.glEnable(GL10.GL_TEXTURE_2D);
 		gL10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
 	}
@@ -90,7 +101,7 @@ public class Texture {
 	/**
 	 * Deactivate this texture. Only required if the next rendering requires that no texture be active.
 	 */
-	public void deactivateTexture() {
+	public void deactivate() {
 		// TODO is this method really needed!!!? OpenGL seems to push out the LRU texture anyway
 		gL10.glDisable(GL10.GL_TEXTURE_2D);
 	}
@@ -98,7 +109,7 @@ public class Texture {
 	/**
 	 * Free this texture. Only required if the texture must be deleted from OpenGL sooner than this object being GC'd.
 	 */
-	public void freeTexture() {
+	public void free() {
 		// release the texture
 		if (textureAllocated) {
 			try {
@@ -116,24 +127,24 @@ public class Texture {
 
 	@Override
 	protected void finalize() throws Throwable {
-		freeTexture();
+		free();
 
 		// allow the super class to finalize too
 		super.finalize();
 	}
 
-	private void loadBitmap(final GL10 aGL10, final InputStream anInputStream, final boolean aUseMipMap) {
+	private void loadBitmap(final GL10 aGL10, final InputStream anInputStream) {
 		// create the bitmap
 		final Bitmap bitmap = BitmapFactory.decodeStream(anInputStream);
 		try {
-			loadBitmap(aGL10, bitmap, aUseMipMap);
+			loadBitmap(aGL10, bitmap);
 		} finally {
 			// free up the bitmap
 			bitmap.recycle();
 		}
 	}
 
-	private void loadBitmap(final GL10 aGL10, final Bitmap aBitmap, final boolean aUseMipMap) {
+	private void loadBitmap(final GL10 aGL10, final Bitmap aBitmap) {
 		// save for later
 		gL10 = aGL10;
 
@@ -144,7 +155,7 @@ public class Texture {
 		textureAllocated = true;
 
 		// bind and activate the texture
-		activateTexture();
+		activate();
 		
 		int results[] = new int[2];
 		aGL10.glGetIntegerv(GL10.GL_MAX_TEXTURE_UNITS, results, 0);
@@ -155,7 +166,7 @@ public class Texture {
 		// TODO does this need to be decided by the client?
 		// TODO does this belong to the texture or the geometry?
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-				aUseMipMap ? GL10.GL_LINEAR_MIPMAP_NEAREST : GL10.GL_NEAREST);
+				usesMipMap ? GL10.GL_LINEAR_MIPMAP_NEAREST : GL10.GL_NEAREST);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
 		aGL10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
@@ -163,7 +174,7 @@ public class Texture {
 		// TODO check that bitmap is a power of two
 
 		// if not use mip map, then the bitmap is passed to OpenGL just the once
-		if (!aUseMipMap) {
+		if (!usesMipMap) {
 			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, aBitmap, 0);
 		} else {
 			// otherwise (use mip map), the bitmap is passed repeatedly, each time halved along each side, until it is
@@ -202,5 +213,10 @@ public class Texture {
 			throw new RuntimeException(format("Error loading bitmap as texture =%d: %s", error, aGL10
 					.glGetString(error)));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s: texture id = %d", super.toString(), textureId);
 	}
 }
