@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 import net.nycjava.skylight1.dependencyinjection.Dependency;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
+import skylight1.util.Adverts;
 import skylight1.util.Assets;
 import skylight1.util.HighScoreService;
 import skylight1.util.PhoneIdHasher;
@@ -14,14 +15,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import com.admob.android.ads.AdManager;
-import com.adwhirl.AdWhirlLayout;
 
 /**
  * reporting unsteady hand; report acknowledged; reporting slow hand; report acknowledged; go to welcome
@@ -56,20 +55,8 @@ public class FailActivity extends SkylightActivity {
 		linearLayout.addView(imageView);
 		view.requestLayout();
 		
-    	try{
-    		//admob: don't show ads in emulator
-            AdManager.setTestDevices( new String[] { AdManager.TEST_EMULATOR
-            //,"your_debugging_phone_id_here" // add phone id if debugging on phone
-            });
-            String adwhirl_id = Assets.getString("adwhirl_id",this);
-            if(adwhirl_id!=null && adwhirl_id.length()>0) {
-	            LinearLayout layout = (LinearLayout)view.findViewById(R.id.layout_ad);
-	            AdWhirlLayout adWhirlLayout = new AdWhirlLayout(this, adwhirl_id);
-	            layout.addView(adWhirlLayout);
-            }
-        } catch(Exception e){
-            Log.e(TAG, "Unable to create AdWhirlLayout", e);
-        }
+        ViewGroup layout = (ViewGroup)view.findViewById(R.id.layout_ad);
+		Adverts.insertAdBanner(this,layout);
 
 		setContentView(view);
 

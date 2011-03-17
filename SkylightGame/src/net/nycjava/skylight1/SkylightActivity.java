@@ -2,11 +2,13 @@ package net.nycjava.skylight1;
 
 import net.nycjava.skylight1.dependencyinjection.DependencyInjectingObjectFactory;
 import net.nycjava.skylight1.dependencyinjection.DependencyInjector;
+import skylight1.util.Analytics;
 import skylight1.util.Assets;
 import skylight1.util.BuildInfo;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,8 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
-
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 public abstract class SkylightActivity extends Activity {
 	private static final int MENU_ITEM_0 = 0;
@@ -57,20 +57,17 @@ public abstract class SkylightActivity extends Activity {
 
 	protected DependencyInjectingObjectFactory dependencyInjectingObjectFactory;
 
-	protected GoogleAnalyticsTracker tracker;
-	private String ga_id;
+	protected Analytics tracker;
 	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-        ga_id = Assets.getString("ga_id",this);
-        if(ga_id.length()>0) {
-        	//start tracker can be started with a dispatch interval (in seconds).
-            tracker = GoogleAnalyticsTracker.getInstance();
-            tracker.setProductVersion("BTB", BuildInfo.getVersionName(this));
-            tracker.start(ga_id, this);
+        tracker = Analytics.getInstance(this,"BTB", BuildInfo.getVersionName(this));
+        if(tracker!=null) {
+        	//note: start tracker can be started with a dispatch interval (in seconds).
+        	tracker.start(this);
         }
 
 		// adjust media volume (After the glass crash instead of ring volume)
