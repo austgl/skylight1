@@ -68,17 +68,12 @@ public class CollisionDetector {
 			throw new IllegalArgumentException("geometry was not in the collision detector");
 		}
 
-		// find the index of the last item
-		final int indexOfLastItem = listOfGeometries.size() - 1;
+		// null out the geometry from the list of geometries
+		listOfGeometries.set(indexOfGeometry, null);
 
-		// move the last item to the position of the one being removed
-		listOfGeometries.set(indexOfGeometry, listOfGeometries.get(indexOfLastItem));
-		listOfGeometries.remove(indexOfLastItem);
-
-		// move the last bounding sphere in the array to the newly opened up spot
-		usedLengthOfArray -= NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
-		System
-				.arraycopy(boundingSpheres, usedLengthOfArray, boundingSpheres, indexOfGeometry * NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
+		// note, the bounding sphere is still in the list, but that's no slower
+		// than it already was and it will be ignored when collisions with it are
+		// detected
 	}
 
 	public void addGeometries(Map<OpenGLGeometry, CollisionObserver> aMapOfOpenGLGeometriesToObservers) {
@@ -94,12 +89,14 @@ public class CollisionDetector {
 
 		// notify the observers of any collisions
 		for (int collisionIndicesIndex = 0; collisionIndicesIndex < numberOfCollisions; collisionIndicesIndex++) {
-			// FIXME if a remove is called by the observer, then the indices are all out, and the next line causes an
-			// arrayoutofboundsexception
 			final int indexOfCollidedGeometry = collisionIndices[collisionIndicesIndex];
 			final OpenGLGeometry collidedGeometry = listOfGeometries.get(indexOfCollidedGeometry);
-			final CollisionObserver collisionObserver = collisionObservers.get(collidedGeometry);
-			collisionObserver.collisionOccurred(collidedGeometry);
+			
+			// if a geometry was found (i.e., not previously removed), then invoke its collision observer 
+			if (collidedGeometry != null) {
+				final CollisionObserver collisionObserver = collisionObservers.get(collidedGeometry);
+				collisionObserver.collisionOccurred(collidedGeometry);
+			}
 		}
 	}
 }
