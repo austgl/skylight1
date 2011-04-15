@@ -11,91 +11,79 @@ public class CollisionDetector {
 	private static final int DEFAULT_INITIAL_CAPACITY = 50;
 
 	public static interface CollisionObserver {
-		void collisionOccurred(OpenGLGeometry anOpenGLGeometry);
+		void collisionOccurred(float[] aBoundingSphere);
 	}
 
 	private static final int NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE = 4;
 
-	private final List<OpenGLGeometry> listOfGeometries;
+	private final List<float[]> listOfBoundingSpheres;
 
-	private float[] boundingSpheres;
+	private float[] boundingSpheres = new float[0];
 
 	private int[] collisionIndices;
 
-	private final Map<OpenGLGeometry, CollisionObserver> collisionObservers = new HashMap<OpenGLGeometry, CollisionObserver>();
-
-	private int usedLengthOfArray;
+	private final Map<float[], CollisionObserver> collisionObservers = new HashMap<float[], CollisionObserver>();
 
 	public CollisionDetector(int anInitialCapacityForGeometries) {
-		boundingSpheres = new float[anInitialCapacityForGeometries * NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
-		collisionIndices = new int[anInitialCapacityForGeometries];
-		listOfGeometries = new ArrayList<OpenGLGeometry>(anInitialCapacityForGeometries);
+		listOfBoundingSpheres = new ArrayList<float[]>(anInitialCapacityForGeometries);
 	}
 
 	public CollisionDetector() {
 		this(DEFAULT_INITIAL_CAPACITY);
 	}
 
-	public void addGeometry(OpenGLGeometry anOpenGLGeometry, CollisionObserver aCollisionObserver) {
+	public void addBoundingSphere(float[] aBoundingSphere, CollisionObserver aCollisionObserver) {
 		// TODO (TF) this would be a good place to consider not recreating the array again and again...
 		// possibly use varargs!
 
-		listOfGeometries.add(anOpenGLGeometry);
-		// if there is not any existing space left (from an earlier remove?) then enlarge the
-		// bounding sphere array
-		if (usedLengthOfArray < boundingSpheres.length) {
-			final float[] enlargedBoundingSpheres = new float[boundingSpheres.length + NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
-			System.arraycopy(boundingSpheres, 0, enlargedBoundingSpheres, 0, boundingSpheres.length);
-			boundingSpheres = enlargedBoundingSpheres;
-			collisionIndices = new int[listOfGeometries.size()];
-		}
+		listOfBoundingSpheres.add(aBoundingSphere);
 
-		// put the new bounding sphere into the geometry
-		float[] addedBoundingSphere = anOpenGLGeometry.getBoundingSphere();
-		System.arraycopy(addedBoundingSphere, 0, boundingSpheres, usedLengthOfArray, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
-		usedLengthOfArray += NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE;
+		// enlarge the bounding sphere array
+		final float[] enlargedBoundingSpheres = new float[boundingSpheres.length + NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE];
+		System.arraycopy(boundingSpheres, 0, enlargedBoundingSpheres, 0, boundingSpheres.length);
+
+		// put the new bounding sphere into the array of bounding spheres
+		System.arraycopy(aBoundingSphere, 0, enlargedBoundingSpheres, boundingSpheres.length, NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE);
+
+		// swap to the new one
+		boundingSpheres = enlargedBoundingSpheres;
+		collisionIndices = new int[listOfBoundingSpheres.size()];
 
 		// add the collision observer
-		collisionObservers.put(anOpenGLGeometry, aCollisionObserver);
+		collisionObservers.put(aBoundingSphere, aCollisionObserver);
 	}
-
-	public void removeGeometry(OpenGLGeometry anOpenGLGeometry) {
+	
+	public void removeBoundingSphere(float[] aBoundingSphere) {
 		// find the index of the geometry in the list
-		final int indexOfGeometry = listOfGeometries.indexOf(anOpenGLGeometry);
+		final int indexOfBoundingSphere = listOfBoundingSpheres.indexOf(aBoundingSphere);
 
 		// TODO can we remove this for optimization
-		if (indexOfGeometry == -1) {
-			throw new IllegalArgumentException("geometry was not in the collision detector");
+		if (indexOfBoundingSphere == -1) {
+			throw new IllegalArgumentException("bounding sphere was not in the collision detector");
 		}
 
-		// null out the geometry from the list of geometries
-		listOfGeometries.set(indexOfGeometry, null);
+		// null out the geometry from the list of bounding sphere
+		listOfBoundingSpheres.set(indexOfBoundingSphere, null);
 
 		// note, the bounding sphere is still in the list, but that's no slower
 		// than it already was and it will be ignored when collisions with it are
 		// detected
 	}
 
-	public void addGeometries(Map<OpenGLGeometry, CollisionObserver> aMapOfOpenGLGeometriesToObservers) {
-		for (Map.Entry<OpenGLGeometry, CollisionObserver> openGLGeometryAndItsObserver : aMapOfOpenGLGeometriesToObservers.entrySet()) {
-			addGeometry(openGLGeometryAndItsObserver.getKey(), openGLGeometryAndItsObserver.getValue());
-		}
-	}
-
 	public void detectCollisions(float[] aBoundingBox) {
 		// find the indices of all of the collisions
 		int numberOfCollisions =
-				Visibility.frustumCullSpheres(aBoundingBox, 0, boundingSpheres, 0, listOfGeometries.size(), collisionIndices, 0, collisionIndices.length);
+				Visibility.frustumCullSpheres(aBoundingBox, 0, boundingSpheres, 0, listOfBoundingSpheres.size(), collisionIndices, 0, collisionIndices.length);
 
 		// notify the observers of any collisions
 		for (int collisionIndicesIndex = 0; collisionIndicesIndex < numberOfCollisions; collisionIndicesIndex++) {
-			final int indexOfCollidedGeometry = collisionIndices[collisionIndicesIndex];
-			final OpenGLGeometry collidedGeometry = listOfGeometries.get(indexOfCollidedGeometry);
+			final int indexOfCollidedBoundingSphere = collisionIndices[collisionIndicesIndex];
+			final float[] collidedBoundingSphere = listOfBoundingSpheres.get(indexOfCollidedBoundingSphere);
 			
-			// if a geometry was found (i.e., not previously removed), then invoke its collision observer 
-			if (collidedGeometry != null) {
-				final CollisionObserver collisionObserver = collisionObservers.get(collidedGeometry);
-				collisionObserver.collisionOccurred(collidedGeometry);
+			// if a bounding sphere was found (i.e., not previously removed), then invoke its collision observer 
+			if (collidedBoundingSphere != null) {
+				final CollisionObserver collisionObserver = collisionObservers.get(collidedBoundingSphere);
+				collisionObserver.collisionOccurred(collidedBoundingSphere);
 			}
 		}
 	}
