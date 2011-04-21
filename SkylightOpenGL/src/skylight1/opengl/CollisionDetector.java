@@ -20,7 +20,7 @@ public class CollisionDetector {
 
 	private float[] boundingSpheres = new float[0];
 
-	private int[] collisionIndices;
+	private int[] collisionIndices = new int[0];
 
 	private final Map<float[], CollisionObserver> collisionObservers = new HashMap<float[], CollisionObserver>();
 
