@@ -1,6 +1,8 @@
 package skylight1.opengl.files;
 
-import static skylight1.opengl.files.QuickParseUtil.*;
+import static skylight1.opengl.files.QuickParseUtil.parseFloat;
+import static skylight1.opengl.files.QuickParseUtil.parseInteger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
