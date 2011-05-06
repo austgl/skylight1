@@ -69,6 +69,7 @@ public class OpenGLGeometry {
 		final IntBuffer modelCoordinatesAsBuffer = openGLGeometryBuilderImpl.modelCoordinatesAsBuffer;
 		modelCoordinatesAsBuffer.position(modelPositionInBuffer);
 		modelCoordinatesAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).modelCoordinates);
+		modelCoordinatesAsBuffer.position(0);
 	}
 
 	/**
@@ -96,6 +97,7 @@ public class OpenGLGeometry {
 		final IntBuffer normalAsBuffer = openGLGeometryBuilderImpl.normalsAsBuffer;
 		normalAsBuffer.position(normalsPositionInBuffer);
 		normalAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).normalComponents);
+		normalAsBuffer.position(0);
 	}
 
 	/**
@@ -108,5 +110,6 @@ public class OpenGLGeometry {
 		final IntBuffer coloursAsBuffer = openGLGeometryBuilderImpl.coloursAsBuffer;
 		coloursAsBuffer.position(coloursPositionInBuffer);
 		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);
+		coloursAsBuffer.position(0);
 	}
 }
