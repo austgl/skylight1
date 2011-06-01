@@ -11,7 +11,10 @@ public class CollisionDetector {
 	private static final int DEFAULT_INITIAL_CAPACITY = 50;
 
 	public static interface CollisionObserver {
-		void collisionOccurred(float[] aBoundingSphere);
+		/**
+		 * Return true to indicate that future collisions with the object should not be reported.
+		 */
+		boolean collisionOccurred(float[] aBoundingSphere);
 	}
 
 	private static final int NUMBER_OF_FLOATS_PER_BOUNDING_SPHERE = 4;
@@ -83,7 +86,10 @@ public class CollisionDetector {
 			// if a bounding sphere was found (i.e., not previously removed), then invoke its collision observer 
 			if (collidedBoundingSphere != null) {
 				final CollisionObserver collisionObserver = collisionObservers.get(collidedBoundingSphere);
-				collisionObserver.collisionOccurred(collidedBoundingSphere);
+				final boolean suppressFutureCollisions  = collisionObserver.collisionOccurred(collidedBoundingSphere);
+				if (suppressFutureCollisions) {
+					removeBoundingSphere(collidedBoundingSphere);
+				}
 			}
 		}
 	}

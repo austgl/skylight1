@@ -12,7 +12,7 @@ public class OpenGLGeometry {
 
 	private final int first;
 
-	final int numberOfVerticies;
+	private final int numberOfVerticies;
 
 	private OpenGLGeometryBuilderImpl<?, ?> openGLGeometryBuilderImpl;
 	
@@ -111,5 +111,9 @@ public class OpenGLGeometry {
 		coloursAsBuffer.position(coloursPositionInBuffer);
 		coloursAsBuffer.put(((FastGeometryBuilderImpl<?, ?>) aFastGeometryBuilder).colours);
 		coloursAsBuffer.position(0);
+	}
+
+	public int getNumberOfVerticies() {
+		return numberOfVerticies;
 	}
 }
