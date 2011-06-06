@@ -64,6 +64,30 @@ public class TankedGLRenderer implements Renderer {
 	}
 
 	public void onSurfaceCreated(final GL10 gl, final EGLConfig config) {
+	}
+
+	public void onSurfaceChanged(GL10 gl, int w, int h) {
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glViewport(0, 0, w, h);
+		float ratio = (float) h / (float) w;
+		GLU.gluOrtho2D(gl, 0, 1, 0, +ratio);
+
+		groundTexture = new Texture(context, R.drawable.grass);
+		// TODO get this into the texture
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+		groundTexture.load(gl);
+
+		tankTexture = new Texture(context, R.drawable.tank);
+		// TODO get this into the texture
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
+		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
+		tankTexture.load(gl);
+
 		openGLGeometryBuilder = OpenGLGeometryBuilderFactory.createTexturable();
 		createGeometry();
 		openGLGeometryBuilder.enable(gl);
@@ -74,49 +98,26 @@ public class TankedGLRenderer implements Renderer {
 		gl.glEnable(GL10.GL_BLEND);
 		gl.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glClearColor(1, 0, 0, 1.0f);
-	}
-
-	public void onSurfaceChanged(GL10 gl, int w, int h) {
-		gl.glMatrixMode(GL10.GL_PROJECTION);
-		gl.glViewport(0, 0, w, h);
-		float ratio = (float) h / (float) w;
-		GLU.gluOrtho2D(gl, 0, 1, 0, +ratio);
-
-		groundTexture = new Texture(gl, context, R.drawable.grass);
-		// TODO get this into the texture
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-
-		tankTexture = new Texture(gl, context, R.drawable.tank);
-		// TODO get this into the texture
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_REPEAT);
-		gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_REPEAT);
-
-		textureChangingGeometryBuilder.reset();
+		
 		updateTankRotation();
 		updateEnemyTankRotation();
-		bothTanksGeometry.updateTexture(textureChangingGeometryBuilder);
 
 		fPSLogger = new FPSLogger(TankedActivity.class.getName(), FRAMES_BETWEEN_LOGGING_FPS);
 	}
 
 	private void createGeometry() {
-		openGLGeometryBuilder.startGeometry();
+		openGLGeometryBuilder.startGeometry(groundTexture);
 		openGLGeometryBuilder.add2DRectangle(0, 0, 1, 1).setTextureCoordinates(0, 0, 5, 5);
 		groundGeometry = openGLGeometryBuilder.endGeometry();
 
-		openGLGeometryBuilder.startGeometry();
+		openGLGeometryBuilder.startGeometry(tankTexture);
 
-		openGLGeometryBuilder.startGeometry();
+		openGLGeometryBuilder.startGeometry(tankTexture);
 		createTankImageLayer(0.5f, 0.5f, 110 / SCALE, 91 / SCALE);
 		createTankImageLayer(0.5f, 0.5f, 160 / SCALE, 112 / SCALE);
 		tankGeometry = openGLGeometryBuilder.endGeometry();
 
-		openGLGeometryBuilder.startGeometry();
+		openGLGeometryBuilder.startGeometry(tankTexture);
 		createTankImageLayer(0.25f, 0.75f, 110 / SCALE, 91 / SCALE);
 		createTankImageLayer(0.25f, 0.75f, 160 / SCALE, 112 / SCALE);
 		enemyTankGeometry = openGLGeometryBuilder.endGeometry();
@@ -173,15 +174,12 @@ public class TankedGLRenderer implements Renderer {
 
 		gl.glColor4f(1, 1, 1, 1);
 
-		groundTexture.activateTexture();
 		groundGeometry.draw(gl);
 
 		textureChangingGeometryBuilder.reset();
 		updateTankRotation();
 		updateEnemyTankRotation();
 		bothTanksGeometry.updateTexture(textureChangingGeometryBuilder);
-
-		tankTexture.activateTexture();
 
 		tankGeometry.draw(gl);
 		gl.glColor4f(0.5f, 0.5f, 1f, 1f);

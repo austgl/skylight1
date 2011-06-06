@@ -30,4 +30,16 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>SkylightOpenGL_src</name>
+			<type>2</type>
+			<locationURI>_android_SkylightOpenGL_f1bc7dc4/src</locationURI>
+		</link>
+		<link>
+			<name>SkylightUtils_src</name>
+			<type>2</type>
+			<locationURI>_android_SkylightUtils_ded860fc/src</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
