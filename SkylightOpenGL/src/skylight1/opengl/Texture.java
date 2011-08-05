@@ -189,11 +189,22 @@ public class Texture {
 			do {
 				// try three times to create a bitmap
 				Bitmap scaledBitmap = null;
-				for (int attempt = 0; attempt < 3 && scaledBitmap == null; attempt++) {
+				for (int attempt = 0; scaledBitmap == null; attempt++) {
 					try {
 						scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
 					} catch (OutOfMemoryError e) {
+						// if three attempt, then give up
+						if (attempt == 3) {
+							throw e;
+						}
+
+						// otherwise suggest a gc and wait a little
 						System.gc();
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e1) {
+							throw new RuntimeException(e1);
+						}
 					}
 				}
 				final Canvas canvas = new Canvas(scaledBitmap);
@@ -222,7 +233,7 @@ public class Texture {
 					.glGetString(error)));
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return String.format("%s: texture id = %d", super.toString(), textureId);
