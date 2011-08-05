@@ -187,7 +187,15 @@ public class Texture {
 			// don't have a config
 			final Config config = aBitmap.getConfig() == null ? Bitmap.Config.RGB_565 : aBitmap.getConfig();
 			do {
-				Bitmap scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
+				// try three times to create a bitmap
+				Bitmap scaledBitmap = null;
+				for (int attempt = 0; attempt < 3 && scaledBitmap == null; attempt++) {
+					try {
+						scaledBitmap = Bitmap.createBitmap(aBitmap.getWidth() >>> level, aBitmap.getHeight() >>> level, config);
+					} catch (OutOfMemoryError e) {
+						System.gc();
+					}
+				}
 				final Canvas canvas = new Canvas(scaledBitmap);
 				canvas.scale(scale, scale);
 				canvas.drawBitmap(aBitmap, 0, 0, null);
