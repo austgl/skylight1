@@ -178,13 +178,11 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 
 	private Texture currentTexture;
 
-	private final Stack<Integer> geometryStartVertexStack = new Stack<Integer>();
+	private Stack<Integer> geometryStartVertexStack;
 
-	@SuppressWarnings("unchecked")
-	private final T triangle3D = (T) new Triangle3D<Object>();
+	private T triangle3D;
 
-	@SuppressWarnings("unchecked")
-	private final R rectangle2D = (R) new Rectangle2D<Object>();
+	private R rectangle2D;
 
 	int vertexOffsetOfCurrentGeometry;
 
@@ -199,6 +197,10 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	IntBuffer coloursAsBuffer;
 
 	boolean complete;
+	
+	{
+		init();
+	}
 
 	/**
 	 * @param aUsesTexturesCoordinates
@@ -211,7 +213,7 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	public OpenGLGeometryBuilderImpl(final boolean aUsesTexturesCoordinates, final boolean aUsesNormals,
 			final boolean aUsesColours, int aNumberOfVertices) {
 		super(aUsesTexturesCoordinates, aUsesNormals, aUsesColours);
-		
+				
 		modelCoordinatesAsBuffer = createDirectIntBuffer(aNumberOfVertices, MODEL_COORDINATES_PER_VERTEX);
 
 		if (aUsesTexturesCoordinates) {
@@ -477,5 +479,29 @@ class OpenGLGeometryBuilderImpl<T, R> extends GeometryBuilderImpl<T, R> implemen
 	@Override
 	public boolean isBuildingGeometry() {
 		return ! geometryStartVertexStack.isEmpty();
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void init() {
+
+		currentTexture = null;
+
+		geometryStartVertexStack = new Stack<Integer>();
+
+		triangle3D = (T) new Triangle3D<Object>();
+
+		rectangle2D = (R) new Rectangle2D<Object>();
+
+		vertexOffsetOfCurrentGeometry = 0;
+
+		vertexOffsetOfNextGeometry = 0;
+
+		complete = false;
+	}
+
+	@Override
+	public void reset() {
+		currentMode = NO_MODE;
+		init();
 	}
 }
