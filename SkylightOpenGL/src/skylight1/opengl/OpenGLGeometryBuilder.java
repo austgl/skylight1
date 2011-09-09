@@ -32,4 +32,11 @@ public interface OpenGLGeometryBuilder<T, R> extends GeometryBuilder<T, R> {
 	 * Enables all of the features necessary to render any of the geometries created by this builder.
 	 */
 	void enable(GL10 aGL10);
+
+	/**
+	 * Resets the builder to as if it were just created. 
+	 * This should only be used if it is known previously created geometries will never be used again.
+	 * Using reset instead of creating a new instance reuses the large memory buffers.
+	 */
+	void reset();
 }
