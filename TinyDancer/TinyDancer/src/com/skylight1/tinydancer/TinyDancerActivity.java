@@ -16,10 +16,10 @@ public class TinyDancerActivity extends Activity {
 		@Override
 		public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform,
 				int samplingRate) {
-//			for (int i : waveform) {
-//				int j = (int)i & 0xFF;
-//				Log.i(TAG, "hey! " + TWO_FIFTY_SIX_ASTERISKS.substring(j));
-//			}
+			for (int i : waveform) {
+				int j = (int)i & 0xFF;
+				Log.i(TAG, "hey! " + TWO_FIFTY_SIX_ASTERISKS.substring(j));
+			}
 		}
 
 		@Override
