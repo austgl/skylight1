@@ -6,25 +6,32 @@ import android.media.audiofx.Visualizer;
 import android.media.audiofx.Visualizer.OnDataCaptureListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 public class TinyDancerActivity extends Activity {
+	
+	private ProgressBar  progressBar;
 	static final String TAG = TinyDancerActivity.class.getName();
 	Visualizer mvisualizer;
     private final class DataCaptureListener implements OnDataCaptureListener {
 		private static final String TWO_FIFTY_SIX_ASTERISKS = "****************************************************************************************************************************************************************************************************************************************************************";
 
-		@Override
 		public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform,
 				int samplingRate) {
 			for (int i : waveform) {
+				
+				
 				int j = (int)i & 0xFF;
-				Log.i(TAG, "hey! " + TWO_FIFTY_SIX_ASTERISKS.substring(j));
+				progressBar.setProgress(j);
+				try{
+					Thread.sleep(1);
+				}catch(InterruptedException e){e.printStackTrace();}
+				//Log.i(TAG, "hey! " + TWO_FIFTY_SIX_ASTERISKS.substring(j));
 			}
+			
 		}
 
-		@Override
-		public void onFftDataCapture(Visualizer visualizer, byte[] fft,
-				int samplingRate) {
+		public void onFftDataCapture(Visualizer visualizer,byte[] fft,int samplingRate){
 			Log.i(TAG, "yeah! " + fft.length);
 		}
 	}
@@ -34,7 +41,7 @@ public class TinyDancerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+        progressBar=(ProgressBar)findViewById(R.id.progressBar1);
         final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.music);
         mediaPlayer.start();
         System.out.println("what the ?" + mediaPlayer.isPlaying());
