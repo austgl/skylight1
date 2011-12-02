@@ -30,7 +30,7 @@ public class TinyDancerActivity extends Activity {
 			Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(new Runnable() {
 				@Override
 				public void run() {
-					if (savedWaveform != null && offset >= dataLength) {
+					if (savedWaveform == null || offset >= dataLength) {
 						return;
 					}
 					int j = (int)savedWaveform[offset++] & 0xFF;
@@ -62,7 +62,7 @@ public class TinyDancerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         progressBar=(ProgressBar)findViewById(R.id.progressBar1);
-        mediaPlayer = MediaPlayer.create(this, R.raw.music);
+        mediaPlayer = MediaPlayer.create(this, R.raw.beeps);
         System.out.println("what the ?" + mediaPlayer.isPlaying());
         // int audioSessionId = mediaPlayer.getAudioSessionId();
         
