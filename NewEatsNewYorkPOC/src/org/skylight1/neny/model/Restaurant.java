@@ -21,8 +21,10 @@ public class Restaurant {
 
 	private Date gradeDate;
 
+	private Date inspectionDate;
+
 	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough, Address aAddress, String aPhone, String aCuisineCode, Grade aCurrentGrade,
-			Date aGradeDate) {
+			Date aGradeDate, Date anInspectionDate) {
 		camis = aCamis;
 		doingBusinessAs = aDoingBusinessAs;
 		borough = aBorough;
@@ -31,6 +33,7 @@ public class Restaurant {
 		cuisineCode = aCuisineCode;
 		currentGrade = aCurrentGrade;
 		gradeDate = aGradeDate;
+		inspectionDate = anInspectionDate;
 	}
 
 	public String getCamis() {
@@ -97,9 +100,18 @@ public class Restaurant {
 		gradeDate = aGradeDate;
 	}
 
+	public Date getInpectionDate() {
+		return inspectionDate;
+	}
+
+	public void setInpectionDate(Date aInpectionDate) {
+		inspectionDate = aInpectionDate;
+	}
+
 	@Override
 	public String toString() {
-		return format("%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF]", getClass().getSimpleName(), camis, doingBusinessAs, borough, address, phone, cuisineCode, currentGrade, gradeDate);
+		return format("%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF,inspectionDate=%tF]", getClass()
+				.getSimpleName(), camis, doingBusinessAs, borough, address, phone, cuisineCode, currentGrade, gradeDate, inspectionDate);
 	}
 
 	@Override
@@ -114,6 +126,7 @@ public class Restaurant {
 		result = prime * result + ((doingBusinessAs == null) ? 0 : doingBusinessAs.hashCode());
 		result = prime * result + ((gradeDate == null) ? 0 : gradeDate.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		result = prime * result + ((inspectionDate == null) ? 0 : inspectionDate.hashCode());
 		return result;
 	}
 
@@ -165,6 +178,11 @@ public class Restaurant {
 			if (other.phone != null)
 				return false;
 		} else if (!phone.equals(other.phone))
+			return false;
+		if (inspectionDate == null) {
+			if (other.inspectionDate != null)
+				return false;
+		} else if (!inspectionDate.equals(other.inspectionDate))
 			return false;
 		return true;
 	}

@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,8 +26,8 @@ import org.skylight1.neny.model.Borough;
 import org.skylight1.neny.model.Grade;
 import org.skylight1.neny.model.Restaurant;
 
-public class InspectionResultsFetcher {
-	private static final Logger LOGGER = Logger.getLogger(InspectionResultsFetcher.class.getName());
+public class SingleFileInspectionResultsFetcher {
+	private static final Logger LOGGER = Logger.getLogger(SingleFileInspectionResultsFetcher.class.getName());
 
 	private final static String EXPECTED_HEADER_FOR_WEB_EXTRACT =
 			"\"CAMIS\",\"DBA\",\"BORO\",\"BUILDING\",\"STREET\",\"ZIPCODE\",\"PHONE\",\"CUISINECODE\",\"INSPDATE\",\"ACTION\",\"VIOLCODE\",\"SCORE\",\"CURRENTGRADE\",\"GRADEDATE\",\"RECORDDATE\"";
@@ -34,10 +35,11 @@ public class InspectionResultsFetcher {
 	private final static Pattern PATTERN =
 			Pattern.compile("\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\",\"((?:[^\"]|\"(?!,))*)\"");
 
-	public Map<String, Restaurant> processFile(String aURLString) throws MalformedURLException, IOException {
+	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+	public Map<String, Restaurant> processFile(String aURLString, Date aCutoffDate) throws MalformedURLException, IOException {
 		LOGGER.info(format("Starting to process URL %s", aURLString));
 
-		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		final Map<String, Restaurant> result = new HashMap<>();
 		final long startTime = System.currentTimeMillis();
 		final URL url = new URL(aURLString);
@@ -66,16 +68,12 @@ public class InspectionResultsFetcher {
 
 							final String camis = matcher.group(1);
 							final Date gradeDate;
-							final String gradeDateAtString = matcher.group(14);
-							if (gradeDateAtString.isEmpty()) {
-								gradeDate = null;
-							} else {
-								gradeDate = simpleDateFormat.parse(gradeDateAtString);
-							}
+							gradeDate = convertStringToDate(matcher.group(14));
 
-							// if this restaurant is not in the result yet, or else is, but this has a more recent
+							// if this restaurant is not in the result yet, or else is, but this has a less recent
 							// grade, then store it
-							if (!result.containsKey(camis) || isLaterThan(gradeDate, result.get(camis).getGradeDate())) {
+							// TODO probably should be looking at the inspection date, not the grade date
+							if (!result.containsKey(camis) || !isLaterThan(gradeDate, result.get(camis).getGradeDate())) {
 								final String doingBusinessAs = matcher.group(2).trim();
 								final Borough borough = Borough.findByCode(Integer.parseInt(matcher.group(3)));
 								final String building = matcher.group(4).trim();
@@ -83,9 +81,10 @@ public class InspectionResultsFetcher {
 								final String zipCode = matcher.group(6);
 								final String phoneNumber = matcher.group(7);
 								final String cuisine = matcher.group(8);
+								final Date inspectionDate = convertStringToDate(matcher.group(9));
 								final Grade currentGrade = Grade.findByCode(matcher.group(13));
 								final Restaurant restaurant =
-										new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, gradeDate, null);
+										new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, gradeDate, inspectionDate);
 								result.put(camis, restaurant);
 							}
 						} catch (Exception e) {
@@ -102,6 +101,16 @@ public class InspectionResultsFetcher {
 		LOGGER.info(format("Finished processing URL %s in %,d ms", aURLString, (endTime - startTime)));
 
 		return result;
+	}
+
+	private Date convertStringToDate(final String aDateString) throws ParseException {
+		final Date gradeDate;
+		if (aDateString.isEmpty()) {
+			gradeDate = null;
+		} else {
+			gradeDate = simpleDateFormat.parse(aDateString);
+		}
+		return gradeDate;
 	}
 
 	private boolean isLaterThan(final Date aNewDate, final Date anOldDate) {
