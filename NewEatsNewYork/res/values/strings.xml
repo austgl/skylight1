@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, NewEatsNewYorkActivity!</string>
     <string name="app_name">NewEatsNewYork</string>
-
+    <string name="cloud_server">http://neweatsnewyork.appspot.com/newRestaurants</string>
+	<string name="server">http://10.0.2.2:8888/newRestaurants</string>
 </resources>

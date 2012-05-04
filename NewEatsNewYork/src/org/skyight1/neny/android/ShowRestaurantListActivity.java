@@ -22,7 +22,8 @@ public class ShowRestaurantListActivity extends ListActivity {
 		protected List<String> doInBackground(String... urls) {
 			final List<String> result = new ArrayList<String>();
 			try {
-				final URL url = new URL("http://neweatsnewyork.appspot.com/newRestaurants");
+
+				final URL url = new URL(getResources().getString(R.string.server));
 				final StringBuilder stringBuilder = new StringBuilder();
 				final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 				try {
