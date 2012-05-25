@@ -16,6 +16,14 @@ public class NewEatsNewYorkActivity extends Activity {
 
 	public void showRestaurants(final View aButton) {
 		final Intent showRestaurantsIntent = new Intent(this, ShowRestaurantListActivity.class);
+		
 		startActivity(showRestaurantsIntent);
 	}
+	
+	public void showTimeChoices(final View aButton) {
+		final Intent showTimeIntent = new Intent(this, ShowTimeChoices.class);
+		
+		startActivity(showTimeIntent);
+	}
+	
 }
