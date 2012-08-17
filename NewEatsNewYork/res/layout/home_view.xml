@@ -6,28 +6,28 @@
 
     <Button
         android:id="@+id/chooseCuisinesButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectCuisines"
         android:text="Choose Cuisines" />
 
     <Button
         android:id="@+id/chooseNeighborhoodsButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectNeighborhoods"
         android:text="Choose Neighborhoods" />
 
     <Button
         android:id="@+id/chooseDiningTimesButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectDiningTimes"
         android:text="Choose Times" />
 
     <Button
         android:id="@+id/showRestuarantsButton"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="showRestaurants"
         android:text="Show Restaurants" />

@@ -11,7 +11,6 @@ public class NewEatsNewYorkActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-
 	}
 
 	public void showRestaurants(final View aButton) {
