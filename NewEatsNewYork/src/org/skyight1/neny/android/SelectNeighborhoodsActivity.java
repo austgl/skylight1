@@ -6,7 +6,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -29,18 +32,22 @@ public class SelectNeighborhoodsActivity extends Activity {
 			listOfSelectedNeighborhoods = aListOfSelectedNeighborhoods;
 		}
 
+		@Override
 		public int getCount() {
 			return listOfResourceIds.size();
 		}
 
+		@Override
 		public Object getItem(int position) {
 			return listOfResourceIds.get(position);
 		}
 
+		@Override
 		public long getItemId(int position) {
 			return position;
 		}
 
+		@Override
 		public View getView(final int position, final View convertView, final ViewGroup parent) {
 			final ImageView imageView;
 			if (convertView == null) {
@@ -52,7 +59,11 @@ public class SelectNeighborhoodsActivity extends Activity {
 			imageView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View aV) {
-					listOfSelectedNeighborhoods.set(position, !listOfSelectedNeighborhoods.get(position));
+					final boolean newState = !listOfSelectedNeighborhoods.get(position);
+					listOfSelectedNeighborhoods.set(position, newState);
+					final Editor edit = preferences.edit();
+					edit.putBoolean(String.valueOf(position), newState);
+					edit.commit();
 					imageView.setAlpha(listOfSelectedNeighborhoods.get(position) ? 255 : 64);
 				}
 			});
@@ -64,9 +75,13 @@ public class SelectNeighborhoodsActivity extends Activity {
 
 	private List<Boolean> listOfSelectedNeighborhoods = new ArrayList<Boolean>();
 
+	private SharedPreferences preferences;
+
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
+
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 		setContentView(R.layout.neighborhoods_view);
 
@@ -76,6 +91,13 @@ public class SelectNeighborhoodsActivity extends Activity {
 		for (final int dummy : neighborhoodImageResources) {
 			listOfSelectedNeighborhoods.add(false);
 		}
+
+		// load preferences
+		listOfSelectedNeighborhoods = new ArrayList<Boolean>();
+		for (int i = 0; i < neighborhoodImageResources.size(); i++) {
+			listOfSelectedNeighborhoods.add(preferences.getBoolean(String.valueOf(i), true));
+		}
+
 		grid.setAdapter(new ImageAdapter(this, neighborhoodImageResources, listOfSelectedNeighborhoods));
 	}
 }
