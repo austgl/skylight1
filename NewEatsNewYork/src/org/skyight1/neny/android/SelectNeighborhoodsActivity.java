@@ -22,24 +22,28 @@ public class SelectNeighborhoodsActivity extends Activity {
 
 		private final Context context;
 
-		private final List<Integer> listOfResourceIds;
+		private final List<Integer> listOfActiveResourceIds;
+
+		private List<Integer> listOfInactiveResourceIds;
 
 		private final List<Boolean> listOfSelectedNeighborhoods;
 
-		public ImageAdapter(final Context aContext, final List<Integer> aListOfResourceIds, List<Boolean> aListOfSelectedNeighborhoods) {
+		public ImageAdapter(final Context aContext, final List<Integer> aListOfActiveResourceIds, final List<Boolean> aListOfSelectedNeighborhoods,
+				List<Integer> aListOfInactiveResiourceIds) {
 			context = aContext;
-			listOfResourceIds = aListOfResourceIds;
+			listOfActiveResourceIds = aListOfActiveResourceIds;
+			listOfInactiveResourceIds = aListOfInactiveResiourceIds;
 			listOfSelectedNeighborhoods = aListOfSelectedNeighborhoods;
 		}
 
 		@Override
 		public int getCount() {
-			return listOfResourceIds.size();
+			return listOfActiveResourceIds.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return listOfResourceIds.get(position);
+			return listOfActiveResourceIds.get(position);
 		}
 
 		@Override
@@ -64,11 +68,12 @@ public class SelectNeighborhoodsActivity extends Activity {
 					final Editor edit = preferences.edit();
 					edit.putBoolean(String.valueOf(position), newState);
 					edit.commit();
-					imageView.setAlpha(listOfSelectedNeighborhoods.get(position) ? 255 : 64);
+					imageView.setImageResource(listOfSelectedNeighborhoods.get(position) ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
+							.get(position));
 				}
 			});
-			imageView.setAlpha(listOfSelectedNeighborhoods.get(position) ? 255 : 64);
-			imageView.setImageResource(listOfResourceIds.get(position));
+			imageView.setImageResource(listOfSelectedNeighborhoods.get(position) ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
+					.get(position));
 			return imageView;
 		}
 	}
@@ -86,18 +91,20 @@ public class SelectNeighborhoodsActivity extends Activity {
 		setContentView(R.layout.neighborhoods_view);
 
 		final GridView grid = (GridView) findViewById(R.id.neighbourhoodGrid);
-		final List<Integer> neighborhoodImageResources =
-				Arrays.asList(R.drawable.chelsea, R.drawable.east_harlem, R.drawable.harlem, R.drawable.gramercy, R.drawable.inwood, R.drawable.lower_eastside, R.drawable.upper_eastside, R.drawable.uws, R.drawable.wall_st);
-		for (final int dummy : neighborhoodImageResources) {
+		final List<Integer> neighborhoodActiveImageResources =
+				Arrays.asList(R.drawable.n_inwood_active, R.drawable.n_harlem_active, R.drawable.n_east_harlem_active, R.drawable.n_uws_active, R.drawable.n_ues_active, R.drawable.n_chelsea_active, R.drawable.n_gramercy_active, R.drawable.n_greenwich_soho_active, R.drawable.n_les_active, R.drawable.n_east_village_active, R.drawable.n_wall_st_active);
+		final List<Integer> neighborhoodInactiveImageResources =
+				Arrays.asList(R.drawable.n_inwood_inactive, R.drawable.n_harlem_inactive, R.drawable.n_east_harlem_inactive, R.drawable.n_uws_inactive, R.drawable.n_ues_inactive, R.drawable.n_chelsea_inactive, R.drawable.n_gramercy_inactive, R.drawable.n_greenwich_soho_inactive, R.drawable.n_les_inactive, R.drawable.n_east_village_inactive, R.drawable.n_wall_st_inactive);
+		for (final int dummy : neighborhoodActiveImageResources) {
 			listOfSelectedNeighborhoods.add(false);
 		}
 
 		// load preferences
 		listOfSelectedNeighborhoods = new ArrayList<Boolean>();
-		for (int i = 0; i < neighborhoodImageResources.size(); i++) {
+		for (int i = 0; i < neighborhoodActiveImageResources.size(); i++) {
 			listOfSelectedNeighborhoods.add(preferences.getBoolean(String.valueOf(i), true));
 		}
 
-		grid.setAdapter(new ImageAdapter(this, neighborhoodImageResources, listOfSelectedNeighborhoods));
+		grid.setAdapter(new ImageAdapter(this, neighborhoodActiveImageResources, listOfSelectedNeighborhoods, neighborhoodInactiveImageResources));
 	}
 }
