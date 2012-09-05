@@ -1,35 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    >
 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_alignParentTop="true"
+    
+     >
+    
     <Button
         android:id="@+id/chooseCuisinesButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectCuisines"
-        android:text="Choose Cuisines" />
+        android:text="@string/choose_cuisines" />
 
     <Button
         android:id="@+id/chooseNeighborhoodsButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectNeighborhoods"
-        android:text="Choose Neighborhoods" />
+        android:text="@string/choose_neighborhoods" />
 
     <Button
         android:id="@+id/chooseDiningTimesButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="selectDiningTimes"
-        android:text="Choose Times" />
+        android:text="@string/choose_times" />
 
     <Button
         android:id="@+id/showRestuarantsButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="showRestaurants"
-        android:text="Show Restaurants" />
-
+        android:text="@string/show_restaurants" />
+    
 </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvLastUpdateDate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true" />
+    
+    <Button
+        android:id="@+id/updateRestaurantList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="updateRestaurantList"
+        android:text="@string/update_restaurant_list"
+        android:layout_above="@+id/tvLastUpdateDate" />
+    
+</RelativeLayout>
