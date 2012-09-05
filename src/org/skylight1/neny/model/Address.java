@@ -1,7 +1,10 @@
 package org.skylight1.neny.model;
 
 import static java.lang.String.format;
+import javax.persistence.Embeddable;
 
+// MS - added Embeddable tag so that Address object in Restaurant object can be persisted
+@Embeddable
 public class Address {
 	private String building;
 
