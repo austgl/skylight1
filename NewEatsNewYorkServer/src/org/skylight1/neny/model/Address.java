@@ -1,7 +1,9 @@
 package org.skylight1.neny.model;
 
 import static java.lang.String.format;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Address {
 	private String building;
 
