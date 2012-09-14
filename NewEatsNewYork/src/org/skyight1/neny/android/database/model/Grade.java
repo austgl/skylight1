@@ -23,4 +23,20 @@ public enum Grade {
 		}
 		return null;
 	}
+
+	/**
+	 * Returns the grade associated with the name, or else null if the name is not that of a valid grade.
+	 * 
+	 * @param sName
+	 * @return
+	 */
+     public static Grade findByName(final String sName)	{
+    	 for (final Grade grade : values()) {
+    		 if (grade.name().equals(sName)) {
+    			 return grade;
+    		 }
+    	 }
+    	 return null;
+     }	
+
 }

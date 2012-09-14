@@ -23,4 +23,22 @@ public enum Borough {
 		}
 		return null;
 	}
+	
+	/**
+	 * Returns the borough associated with the string, or else null if the string is not that of a valid borough, e.g., "Westchester".
+	 * 
+	 * @param sBorough
+	 * @return
+	 */
+	public static Borough findByName(final String sBorough) {
+		
+		for (final Borough borough : values()) {
+			if (borough.name().equals(sBorough)) {
+				return borough;
+			}
+		}
+		return null;
+	}
+	
+	
 }
