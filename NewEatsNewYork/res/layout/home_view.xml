@@ -12,6 +12,7 @@
         android:background="@drawable/button"
         android:onClick="selectCuisines"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:text="@string/choose_cuisines" />
 
     <Button
@@ -21,6 +22,7 @@
         android:background="@drawable/button"
         android:onClick="selectNeighborhoods"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:text="@string/choose_neighborhoods" />
 
     <Button
@@ -30,6 +32,7 @@
         android:background="@drawable/button"
         android:onClick="selectDiningTimes"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:text="@string/choose_times" />
 
     <Button
@@ -39,6 +42,7 @@
         android:background="@drawable/button"
         android:onClick="showRestaurants"
         android:textSize="30sp"
+        android:textStyle="bold"
         android:text="@string/show_restaurants" />
 
 </LinearLayout>
