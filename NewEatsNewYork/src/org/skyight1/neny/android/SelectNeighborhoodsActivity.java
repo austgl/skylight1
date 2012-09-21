@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -86,7 +85,7 @@ public class SelectNeighborhoodsActivity extends Activity {
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
 
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		preferences = getSharedPreferences("neighborhoods", MODE_PRIVATE);
 
 		setContentView(R.layout.neighborhoods_view);
 
