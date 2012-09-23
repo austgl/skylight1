@@ -71,8 +71,7 @@ public class SelectCuisinesActivity extends Activity {
 							.get(position));
 				}
 			});
-			imageView.setImageResource(listOfSelectedCuisines.get(position) ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
-					.get(position));
+			imageView.setImageResource(listOfSelectedCuisines.get(position) ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds.get(position));
 			return imageView;
 		}
 	}
@@ -91,9 +90,9 @@ public class SelectCuisinesActivity extends Activity {
 
 		final GridView grid = (GridView) findViewById(R.id.cuisinesGrid);
 		final List<Integer> cuisinesActiveImageResources =
-				Arrays.asList(R.drawable.china_active, R.drawable.africa_active, R.drawable.italian_active);
+				Arrays.asList(R.drawable.china_active, R.drawable.africa_active, R.drawable.italian_active, R.drawable.mayan_active);
 		final List<Integer> cuisinesInactiveImageResources =
-				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive);
+				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive, R.drawable.mayan_inactive);
 		for (final int dummy : cuisinesActiveImageResources) {
 			listOfSelectedCuisines.add(false);
 		}
