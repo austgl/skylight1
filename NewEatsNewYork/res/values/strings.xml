@@ -4,12 +4,22 @@
     <string name="hello">Hello World, NewEatsNewYorkActivity!</string>
     <string name="app_name">NewEatsNewYork</string>
     <string name="server">http://neweatsnewyork.appspot.com/newRestaurants</string>
-	<string name="emu_server">http://10.0.2.2:8888/newRestaurants</string>
-	<string name="home_server">http://192.168.1.4:8888/newRestaurants</string>
-	<string name="update_restaurant_list">Update Restaurant List</string>
-	<string name="choose_cuisines">Cuisines</string>
-	<string name="choose_neighborhoods">Neighborhoods</string>
-	<string name="choose_times">Dining Times</string>
-	<string name="show_restaurants">Show Restaurants</string>
-	
+    <string name="emu_server">http://10.0.2.2:8888/newRestaurants</string>
+    <string name="home_server">http://192.168.1.4:8888/newRestaurants</string>
+    <string name="update_restaurant_list">Update Restaurant List</string>
+    <string name="choose_cuisines">Cuisines</string>
+    <string name="choose_neighborhoods">Neighborhoods</string>
+    <string name="choose_times">Dining Times</string>
+    <string name="show_restaurants">Show Restaurants</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="dinner">Dinner</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="checkbox">CheckBox</string>
+    <string name="lunch">Lunch</string>
+
 </resources>
