@@ -5,161 +5,218 @@
     android:orientation="vertical" >
 
 
-
+	<LinearLayout 
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+	  >
+	    <TextView 
+	        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            style="@style/CodeFont"
+            android:text="@string/lunch"
+		/>
+	    <TextView 
+	        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:text="@string/day"
+            style="@style/CodeFont"
+		/>
+	    <TextView 
+	        android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.17"
+            android:text="@string/dinner"
+            style="@style/CodeFont"
+		/>
+	</LinearLayout>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-
-         <CheckBox
-             android:id="@+id/checkBox11"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_weight="0.17"
-             android:text="@string/sunday" />
              
               <CheckBox
+                android:id="@+id/checkBox11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                />
+              <TextView 
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="0.17"
+            	android:text="@string/sunday"
+            	style="@style/CodeFont"
+                  />
+               <CheckBox
                 android:id="@+id/checkBox12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.13"
-                android:visibility="invisible"
-                android:text="@string/lunch" />
-               <CheckBox
-                android:id="@+id/checkBox13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:visibility="invisible"
-                android:layout_weight="0.13"
-                android:text="@string/dinner" />
+                 />
     </LinearLayout>
-    
-
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <CheckBox
+             
+              <CheckBox
                 android:id="@+id/checkBox21"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.13"
-                android:text="@string/monday" />
-             
-              <CheckBox
+                />
+              <TextView 
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="0.17"
+            	android:text="@string/monday"
+            	style="@style/CodeFont"
+                  />
+               <CheckBox
                 android:id="@+id/checkBox22"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.13"
-                 android:visibility="invisible"
-                android:text="@string/lunch" />
-               <CheckBox
-                android:id="@+id/checkBox23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:layout_weight="0.13"
-                android:text="@string/dinner" />
+                 />
     </LinearLayout>
-
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-
-
-
-        <CheckBox
-            android:id="@+id/checkBox31"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.08"
-            android:text="@string/thursday" />
              
               <CheckBox
+                android:id="@+id/checkBox31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                />
+
+              <TextView
+                  style="@style/CodeFont"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0.15"
+                  android:text="@string/tuesday" />
+
+               <CheckBox
                 android:id="@+id/checkBox32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:visibility="invisible"
                 android:layout_weight="0.13"
-                android:text="@string/lunch" />
-               <CheckBox
-                android:id="@+id/checkBox33"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:visibility="invisible"
-                android:layout_weight="0.13"
-                android:text="@string/dinner" />
+                 />
     </LinearLayout>
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-
-
-        <CheckBox
-            android:id="@+id/checkBox41"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:text="@string/friday" />
              
               <CheckBox
+                android:id="@+id/checkBox41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                />
+
+              <TextView
+                  style="@style/CodeFont"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0.12"
+                  android:text="@string/wednesday" />
+
+               <CheckBox
                 android:id="@+id/checkBox42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:visibility="invisible"
                 android:layout_weight="0.13"
-                android:text="@string/lunch" />
-               <CheckBox
-                android:id="@+id/checkBox43"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:layout_weight="0.13"
-                android:text="@string/dinner" />
+                 />
     </LinearLayout>
-
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-
-        <CheckBox
-            android:id="@+id/checkBox51"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.12"
-            android:text="@string/saturday" />
              
               <CheckBox
+                android:id="@+id/checkBox51"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                />
+
+              <TextView
+                  style="@style/CodeFont"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0.13"
+                  android:text="@string/thursday" />
+
+               <CheckBox
                 android:id="@+id/checkBox52"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
                 android:layout_weight="0.13"
-                android:text="@string/lunch" />
-               <CheckBox
-                android:id="@+id/checkBox53"
+                 />
+    </LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+             
+              <CheckBox
+                android:id="@+id/checkBox61"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
                 android:layout_weight="0.13"
-                android:text="@string/dinner" />
+                />
+
+              <TextView
+                  style="@style/CodeFont"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_weight="0.13"
+                  android:text="@string/friday" />
+
+               <CheckBox
+                android:id="@+id/checkBox62"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                 />
     </LinearLayout>
-    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+             
+              <CheckBox
+                android:id="@+id/checkBox71"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                />
+              <TextView 
+                android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_weight="0.17"
+            	android:text="@string/saturday"
+            	style="@style/CodeFont"
+                  />
+               <CheckBox
+                android:id="@+id/checkBox72"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                 />
+    </LinearLayout>
 </LinearLayout>

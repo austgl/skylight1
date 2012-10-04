@@ -12,18 +12,28 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 public class RestaurantNotifier extends BroadcastReceiver {
 
+	private SharedPreferences preferences;
 	@Override
-	public void onReceive(Context aContext, Intent aArg1) {
+	public void onReceive(Context aContext, Intent anIntent) {
 		final NotificationManager notificationManager = (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
 		final Notification notification = new Notification(R.drawable.nyne_logo2, "Feed Me!", System.currentTimeMillis());
 
 		final Intent showRestaurantsIntent = new Intent(aContext, ShowRestaurantListActivity.class);
 		final PendingIntent broadcast = PendingIntent.getActivity(aContext, 0, showRestaurantsIntent, 0);
 
-		notification.setLatestEventInfo(aContext, "Feed me", "Feed me", broadcast);
-		notificationManager.notify(1, notification);
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		preferences = aContext.getSharedPreferences("dining_times",Context.MODE_PRIVATE);
+		if(preferences.getBoolean(String.valueOf(day), false)){
+			// TODO use meal time to decide if the user is interested in eating now 
+			final int mealTime = anIntent.getIntExtra(NewEatsNewYorkApplication.MEAL_TIME_EXTRA_NAME, 0);
+			notification.setLatestEventInfo(aContext, "Feed me", "Feed me", broadcast);
+			notificationManager.notify(1, notification);
+		}
+		
 	}
 }

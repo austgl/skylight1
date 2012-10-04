@@ -11,6 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 
 public class NewEatsNewYorkApplication extends Application {
+	public static final String MEAL_TIME_EXTRA_NAME = "mealTime";
+	public static final int LUNCH = 1;
+	public static final int DINNER = 2;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -21,22 +25,24 @@ public class NewEatsNewYorkApplication extends Application {
 		
 		final AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		
-		// ONCE A DAY
-		//int REPEAT_CYCLE = 1000 * 60 * 60 * 24;
-		
-		// ONCE A MINUTE
-		int REPEAT_CYCLE = 1000 * 60;
-		
-		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, REPEAT_CYCLE, pendingIntent);
-		
-		// final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, AlarmManager.INTERVAL_DAY, pendingIntent);
 
-		// final Intent intent = new Intent(this, RestaurantNotifier.class);
-		// final PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, intent, 0);
-		// alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, 60000, broadcast);
-
-		// final Intent refreshIntent = new Intent(this, RefreshDatabaseService.class);
-		// final PendingIntent refreshPendingIntent = PendingIntent.getService(this, 0, refreshIntent, 0);
-		// alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), AlarmManager.INTERVAL_DAY, refreshPendingIntent);
+		setAlarmForHour(alarmManager, 11, LUNCH);
+		setAlarmForHour(alarmManager, 17, DINNER);
+		
+	}
+	
+	private void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, int aMealTimeIndicator) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, anHour);
+		if (calendar.before(Calendar.getInstance())) {
+			calendar.add(Calendar.DATE, 1);
+		}
+		final long msToElevenAm = calendar.getTime().getTime() - System.currentTimeMillis();
+		
+		final Intent intent = new Intent(this, RestaurantNotifier.class);
+		intent.putExtra(MEAL_TIME_EXTRA_NAME, aMealTimeIndicator);
+		final PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, intent, 0);
+		anAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, msToElevenAm, AlarmManager.INTERVAL_DAY, broadcast);
 	}
 }
