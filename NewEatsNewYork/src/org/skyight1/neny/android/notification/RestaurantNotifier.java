@@ -13,10 +13,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class RestaurantNotifier extends BroadcastReceiver {
 
 	private SharedPreferences preferences;
+
 	@Override
 	public void onReceive(Context aContext, Intent anIntent) {
 		final NotificationManager notificationManager = (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -28,9 +30,8 @@ public class RestaurantNotifier extends BroadcastReceiver {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK);
 		preferences = aContext.getSharedPreferences("dining_times",Context.MODE_PRIVATE);
-		if(preferences.getBoolean(String.valueOf(day), false)){
-			// TODO use meal time to decide if the user is interested in eating now 
-			final int mealTime = anIntent.getIntExtra(NewEatsNewYorkApplication.MEAL_TIME_EXTRA_NAME, 0);
+		final int mealTime = anIntent.getIntExtra(NewEatsNewYorkApplication.MEAL_TIME_EXTRA_NAME, 0);
+		if(preferences.getBoolean(String.valueOf(day)+String.valueOf(mealTime), false)){
 			notification.setLatestEventInfo(aContext, "Feed me", "Feed me", broadcast);
 			notificationManager.notify(1, notification);
 		}
