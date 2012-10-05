@@ -13,6 +13,7 @@
         android:onClick="selectCuisines"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="@string/choose_cuisines" />
 
     <Button
@@ -23,6 +24,7 @@
         android:onClick="selectNeighborhoods"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="@string/choose_neighborhoods" />
 
     <Button
@@ -33,6 +35,7 @@
         android:onClick="selectDiningTimes"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="@string/choose_times" />
 
     <Button
@@ -43,6 +46,7 @@
         android:onClick="showRestaurants"
         android:textSize="30sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:text="@string/show_restaurants" />
 
 </LinearLayout>
