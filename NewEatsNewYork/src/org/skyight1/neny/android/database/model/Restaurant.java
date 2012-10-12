@@ -20,9 +20,28 @@ public class Restaurant {
 	private Grade currentGrade;
 
 	private Date gradeDate;
+	
+	public String getMajorCuisine() {
+		return majorCuisine;
+	}
+
+	public void setMajorCuisine(String majorCuisine) {
+		this.majorCuisine = majorCuisine;
+	}
+
+	public String getNeighborhood() {
+		return neighborhood;
+	}
+
+	public void setNeighborhood(String neighborhood) {
+		this.neighborhood = neighborhood;
+	}
+
+	private String majorCuisine;
+	private String neighborhood;
 
 	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough, Address aAddress, String aPhone, String aCuisineCode, Grade aCurrentGrade,
-			Date aGradeDate) {
+			Date aGradeDate, String majorCuisine, String neighborhood) {
 		camis = aCamis;
 		doingBusinessAs = aDoingBusinessAs;
 		borough = aBorough;
@@ -31,6 +50,8 @@ public class Restaurant {
 		cuisineCode = aCuisineCode;
 		currentGrade = aCurrentGrade;
 		gradeDate = aGradeDate;
+		this.majorCuisine = majorCuisine;
+		this.neighborhood = neighborhood;
 	}
 
 	public String getCamis() {

@@ -43,11 +43,17 @@ public class RestaurantArrayAdapter extends ArrayAdapter<Restaurant> {
 		TextView tvAddress = (TextView) v.findViewById(R.id.tv_restaurant_address);
 		TextView tvGrade = (TextView) v.findViewById(R.id.tv_restaurant_grade);
 		
+		TextView tvCuisine = (TextView) v.findViewById(R.id.tv_restaurant_cuisine);
+		TextView tvNeighborhood = (TextView) v.findViewById(R.id.tv_restaurant_neighborhood);
+		
 		Restaurant restaurant = restaurants.get(position);
 		
 		tvName.setText(restaurant.getDoingBusinessAs());
 		tvPhone.setText(restaurant.getPhone());
 		tvAddress.setText(restaurant.getAddress().getStreet());
+		
+		tvCuisine.setText(restaurant.getMajorCuisine());
+		tvNeighborhood.setText(restaurant.getNeighborhood());
 		
 		// a little kludgy
 		tvGrade.setText(restaurant.getCurrentGrade().toString());

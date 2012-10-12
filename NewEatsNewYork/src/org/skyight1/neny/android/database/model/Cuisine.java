@@ -1,6 +1,7 @@
 package org.skyight1.neny.android.database.model;
 
 public enum Cuisine {
+	
 	AFRICAN("African"),
 	ASIAN("Asian"),
 	CENTRAL_AND_SOUTH_AMERICAN("South American"),

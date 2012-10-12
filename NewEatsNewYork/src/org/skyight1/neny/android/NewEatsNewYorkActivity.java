@@ -33,14 +33,21 @@ public class NewEatsNewYorkActivity extends Activity {
 	}
 
 	public void selectNeighborhoods(final View aButton) {
-		final Intent showTimeIntent = new Intent(this, SelectNeighborhoodsActivity.class);
+		final Intent showNeighborhoodIntent = new Intent(this, SelectNeighborhoodsActivity.class);
 
-		startActivity(showTimeIntent);
+		startActivity(showNeighborhoodIntent);
 	}
 
 	public void selectCuisines(final View aButton) {
-		final Intent showTimeIntent = new Intent(this, SelectCuisinesActivity.class);
+		final Intent showCuisineIntent = new Intent(this, SelectCuisinesActivity.class);
 
-		startActivity(showTimeIntent);
+		startActivity(showCuisineIntent);
 	}	
+	
+	public void refreshRestaurantList(final View v) {
+		
+		new GetNewRestaurantsTask(this).execute((String[]) null);
+			
+	}
+	
 }

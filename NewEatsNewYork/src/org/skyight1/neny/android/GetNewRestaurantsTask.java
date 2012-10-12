@@ -20,9 +20,10 @@ import org.skyight1.neny.android.database.model.Restaurant;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
-				
+
 	private final Context context;
 	private List<Restaurant> aRestaurants = new ArrayList<Restaurant>();
 
@@ -32,114 +33,154 @@ class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 	GetNewRestaurantsTask(final Context aContext) {
 		context = aContext;
 	}
-	
+
+	protected void onPreExecute() {
+		// super.onPreExecute();
+
+		Toast.makeText(context, "Starting restaurant list retrieve...",
+				Toast.LENGTH_SHORT).show();
+
+	}
+
 	protected String doInBackground(final String... urls) {
-		
-		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss a");
+
+		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				"MMM dd, yyyy HH:mm:ss a");
 		final List<String> result = new ArrayList<String>();
-		
-	    String status = "Connecting...";
-		
+
+		String status = "Connecting...";
+		String camis = "";
+
 		try {
 
-			final URL url = new URL(context.getResources().getString(R.string.server));
-			
+			final URL url = new URL(context.getResources().getString(
+					R.string.server));
+
 			final StringBuilder stringBuilder = new StringBuilder();
-			
-			final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			
+
+			final HttpURLConnection urlConnection = (HttpURLConnection) url
+					.openConnection();
+
 			try {
 
-				final BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				final BufferedReader reader = new BufferedReader(
+						new InputStreamReader(urlConnection.getInputStream()));
 
 				String line;
 				while ((line = reader.readLine()) != null) {
 					stringBuilder.append(line);
 				}
 
-				final JSONTokener tokener = new JSONTokener(stringBuilder.toString());
-				final JSONArray arrayOfRestaurants = (JSONArray) tokener.nextValue();
+				final String testString = stringBuilder.toString();
+
+				final JSONTokener tokener = new JSONTokener(
+						stringBuilder.toString());
+				final JSONArray arrayOfRestaurants = (JSONArray) tokener
+						.nextValue();
 				for (int i = 0; i < arrayOfRestaurants.length(); i++) {
-					
-					final JSONObject restaurant = arrayOfRestaurants.getJSONObject(i);
-					
+
+					final JSONObject restaurant = arrayOfRestaurants
+							.getJSONObject(i);
+
 					// camis
 					// doingBusinessAs
 					// borough
-					
-					/*  part of address object */
+
+					/* part of address object */
 					// building
 					// street
 					// zipCode
-					
+
 					// phone
 					// cuisineCode
 					// currentGrade
 					// gradeDate
-					
-					final String camis = restaurant.getString("camis");
-					final String restaurantName = restaurant.getString("doingBusinessAs");
-				
+
+					camis = restaurant.getString("camis");
+					final String restaurantName = restaurant
+							.getString("doingBusinessAs");
+
 					final String sBorough = restaurant.getString("borough");
-				
+
 					// NOT findByCode
 					final Borough borough = Borough.findByName(sBorough);
-					
+
 					// The address is an embedded JSON object
 					final String address = restaurant.getString("address");
-					
+
 					final JSONTokener addrTokener = new JSONTokener(address);
-					final JSONObject oAddress = (JSONObject) addrTokener.nextValue();
-					
+					final JSONObject oAddress = (JSONObject) addrTokener
+							.nextValue();
+
 					final String building = oAddress.getString("building");
 					final String street = oAddress.getString("street");
 					final String zipCode = oAddress.getString("zipCode");
-					
+
 					// back to our restaurants
 					final String phone = restaurant.getString("phone");
-					final String cuisineCode = restaurant.getString("cuisineCode");
-					final String gradeName = restaurant.getString("currentGrade");
+					
+					final String cuisineCode = restaurant
+							.getString("cuisineCode");
+					
+					String gradeName = "NOT_YET_GRADED";
+					
+					if(restaurant.has("currentGrade")) {
+						gradeName = restaurant.getString("currentGrade");
+					}
 					
 					// NOT findByCode
 					final Grade currentGrade = Grade.findByName(gradeName);
-					
+
 					final Date gradeDate;
-					
-					final String dateString = restaurant.getString("gradeDate");
-					
+					String dateString = "";
+
+					if (restaurant.has("gradeDate")) {
+						dateString = restaurant.getString("gradeDate");
+					}
+
 					if (dateString == null || dateString == "") {
 						gradeDate = null;
 					} else {
-						
+
 						// Sample date format:
 						// Aug 30, 2012 9:12:15 AM
 						gradeDate = simpleDateFormat.parse(dateString);
-						
+
 					}
-					
-					aRestaurants.add(new Restaurant(camis, restaurantName, borough, new Address(building, street, zipCode), phone, cuisineCode, currentGrade, gradeDate ));
-											
+
+					aRestaurants.add(new Restaurant(camis, restaurantName,
+							borough, new Address(building, street, zipCode),
+							phone, cuisineCode, currentGrade, gradeDate, "", ""));
+
 					result.add(restaurantName);
 				}
 			} finally {
-				
+
 				urlConnection.disconnect();
-				
+
 				if (aRestaurants.size() > 0) {
-					
-				    new RestaurantDatabase(context).saveRestaurants(aRestaurants);
-				    status = aRestaurants.size() + " restaurants retrieved.";
+
+					new RestaurantDatabase(context)
+							.saveRestaurants(aRestaurants);
+					status = aRestaurants.size() + " restaurants retrieved.";
 				}
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
-			status = "Error retrieving restaurants: " + e.getMessage();
-			
+
+			status = "Error retrieving restaurants: " + e.getMessage() + " camis:" + camis;
+
 		}
 
 		return status;
-	}		
+	}
+
+	protected void onPostExecute(String result) {
+
+		Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+
+	}
+
 }

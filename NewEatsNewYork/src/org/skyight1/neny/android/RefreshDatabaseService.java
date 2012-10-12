@@ -114,7 +114,7 @@ public class RefreshDatabaseService extends IntentService {
 						}
 
 						aRestaurants
-								.add(new Restaurant(camis, restaurantName, borough, new Address(building, street, zipCode), phone, cuisineCode, currentGrade, gradeDate));
+								.add(new Restaurant(camis, restaurantName, borough, new Address(building, street, zipCode), phone, cuisineCode, currentGrade, gradeDate, "", ""));
 
 						result.add(restaurantName);
 					}
