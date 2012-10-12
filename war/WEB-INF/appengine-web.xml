@@ -3,6 +3,7 @@
   <application>neweatsnewyork</application>
   <version>1</version>
 
+  <threadsafe>true</threadsafe>
   <!--
     By default, App Engine sends requests serially to a given web server.
     To allow App Engine to send multiple requests in parallel specify:
