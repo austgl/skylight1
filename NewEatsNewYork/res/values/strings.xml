@@ -29,16 +29,16 @@
 	    <item>East Village</item>
 	    <item>Wall Street</item>
 	</string-array>	
-   <string name="saturday">Saturday</string>
-    <string name="sunday">Sunday</string>
-    <string name="dinner">Dinner</string>
-    <string name="monday">Monday</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="checkbox">CheckBox</string>
     <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="sunday">SUN</string>
+    <string name="monday">MON</string>
+    <string name="tuesday">TUE</string>
+    <string name="wednesday">WED</string>
+    <string name="thursday">THU</string>
+    <string name="friday">FRI</string>
+   <string name="saturday">SAT</string>
+    <string name="checkbox">CheckBox</string>
     <string name="day">Day</string>
 
 </resources>

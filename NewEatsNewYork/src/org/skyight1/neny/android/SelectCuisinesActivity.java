@@ -90,11 +90,11 @@ public class SelectCuisinesActivity extends Activity {
 
 		final GridView grid = (GridView) findViewById(R.id.cuisinesGrid);
 		final List<Integer> cuisinesActiveImageResources =
-				Arrays.asList(R.drawable.china_active, R.drawable.africa_active, R.drawable.italian_active, R.drawable.mayan_active, R.drawable.comfort_active, R.drawable.eclectic_active, R.drawable.eu_active, R.drawable.indian_active, R.drawable.middle_eastern_active, R.drawable.north_america_active, R.drawable.pacifica_active
+				Arrays.asList(R.drawable.china_active, R.drawable.africa_active, R.drawable.italian_active, R.drawable.mayan_active, R.drawable.comfort_active, R.drawable.eclectic_active, R.drawable.eu_active, R.drawable.indian_active, R.drawable.middle_eastern_active, R.drawable.north_america_active, R.drawable.pacifica_active, R.drawable.vege_active
 
 				);
 		final List<Integer> cuisinesInactiveImageResources =
-				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive, R.drawable.mayan_inactive, R.drawable.comfort_inactive, R.drawable.eclectic_inactive, R.drawable.eu_inactive, R.drawable.indian_inactive, R.drawable.middle_eastern_inactive, R.drawable.north_america_inactive, R.drawable.pacifica_inactive);
+				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive, R.drawable.mayan_inactive, R.drawable.comfort_inactive, R.drawable.eclectic_inactive, R.drawable.eu_inactive, R.drawable.indian_inactive, R.drawable.middle_eastern_inactive, R.drawable.north_america_inactive, R.drawable.pacifica_inactive, R.drawable.vege_inactive);
 		for (final int dummy : cuisinesActiveImageResources) {
 			listOfSelectedCuisines.add(false);
 		}
