@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.skyight1.neny.android.database.model.Address;
-import org.skyight1.neny.android.database.model.Borough;
-import org.skyight1.neny.android.database.model.Grade;
-import org.skyight1.neny.android.database.model.Restaurant;
+import org.skylight1.neny.android.database.model.Address;
+import org.skylight1.neny.android.database.model.Borough;
+import org.skylight1.neny.android.database.model.Grade;
+import org.skylight1.neny.android.database.model.Restaurant;
 
 import android.content.ContentValues;
 import android.content.Context;

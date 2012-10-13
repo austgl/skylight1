@@ -1,4 +1,4 @@
-package org.skyight1.neny.android.database.model;
+package org.skylight1.neny.android.database.model;
 
 public enum Grade {
 	GRADE_A("A"), GRADE_B("B"), GRADE_C("C"), GRADE_PENDING("Z"), NOT_YET_GRADED("");

@@ -2,7 +2,7 @@ package org.skylight1.neny.android;
 
 import java.util.ArrayList;
 
-import org.skyight1.neny.android.database.model.Restaurant;
+import org.skylight1.neny.android.database.model.Restaurant;
 
 import android.content.Context;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package org.skyight1.neny.android.database.model;
+package org.skylight1.neny.android.database.model;
 
 public enum Borough {
 	MANHATTAN(1), THE_BRONX(2), BROOKLYN(3), QUEENS(4), STATEN_ISLAND(5);
