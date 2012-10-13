@@ -1,10 +1,10 @@
-package org.skyight1.neny.android.notification;
+package org.skylight1.neny.android.notification;
 
 import java.util.Calendar;
 
-import org.skyight1.neny.android.NewEatsNewYorkApplication;
-import org.skyight1.neny.android.R;
-import org.skyight1.neny.android.ShowRestaurantListActivity;
+import org.skylight1.neny.android.NewEatsNewYorkApplication;
+import org.skylight1.neny.android.R;
+import org.skylight1.neny.android.ShowRestaurantListActivity;
 
 import android.app.Notification;
 import android.app.NotificationManager;

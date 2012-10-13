@@ -1,4 +1,4 @@
-package org.skyight1.neny.android.database;
+package org.skylight1.neny.android.database;
 
 import static java.lang.String.format;
 

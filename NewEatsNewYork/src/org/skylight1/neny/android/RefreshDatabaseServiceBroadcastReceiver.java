@@ -1,4 +1,4 @@
-package org.skyight1.neny.android;
+package org.skylight1.neny.android;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package org.skyight1.neny.android;
+package org.skylight1.neny.android;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,11 +12,11 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.skyight1.neny.android.database.RestaurantDatabase;
 import org.skyight1.neny.android.database.model.Address;
 import org.skyight1.neny.android.database.model.Borough;
 import org.skyight1.neny.android.database.model.Grade;
 import org.skyight1.neny.android.database.model.Restaurant;
+import org.skylight1.neny.android.database.RestaurantDatabase;
 
 import android.app.IntentService;
 import android.content.Intent;

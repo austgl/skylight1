@@ -1,7 +1,7 @@
-package org.skyight1.neny.android;
+package org.skylight1.neny.android;
 
 
-import org.skyight1.neny.android.database.RestaurantDatabase;
+import org.skylight1.neny.android.database.RestaurantDatabase;
 
 import android.app.Activity;
 import android.content.Intent;
