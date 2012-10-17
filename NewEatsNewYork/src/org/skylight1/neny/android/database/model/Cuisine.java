@@ -12,7 +12,8 @@ public enum Cuisine {
 	US_NORTH_AMERICAN("North American"),
 	INDIAN_SUBCONTINENT("Indian"),
 	ECLECTIC("Eclectic"),
-	PACIFICA("Pacifica");
+	PACIFICA("Pacifica"),
+	VEGETARIAN("Vegetarian");
 
 	private final String label;
 

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.skyight1.neny.android.database.dao.CuisinePreferences;
+import org.skyight1.neny.android.database.dao.PreferencesDao;
+import org.skylight1.neny.android.database.model.Cuisine;
+import org.skylight1.neny.android.database.model.Neighborhood;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -64,9 +69,7 @@ public class SelectCuisinesActivity extends Activity {
 				public void onClick(View aV) {
 					final boolean newState = !listOfSelectedCuisines.get(position);
 					listOfSelectedCuisines.set(position, newState);
-					final Editor edit = preferences.edit();
-					edit.putBoolean(String.valueOf(position), newState);
-					edit.commit();
+					preferencesDao.setPreferences(SelectCuisinesActivity.mapImagePositionsToEnums(position).getLabel(), newState);
 					imageView.setImageResource(listOfSelectedCuisines.get(position) ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
 							.get(position));
 				}
@@ -78,13 +81,14 @@ public class SelectCuisinesActivity extends Activity {
 
 	private List<Boolean> listOfSelectedCuisines = new ArrayList<Boolean>();
 
-	private SharedPreferences preferences;
+	//private SharedPreferences preferences;
+	private PreferencesDao preferencesDao;
 
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
 
-		preferences = getSharedPreferences("cuisines", MODE_PRIVATE);
+		preferencesDao = new CuisinePreferences(this);
 
 		setContentView(R.layout.cuisines_view);
 
@@ -94,7 +98,8 @@ public class SelectCuisinesActivity extends Activity {
 
 				);
 		final List<Integer> cuisinesInactiveImageResources =
-				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive, R.drawable.mayan_inactive, R.drawable.comfort_inactive, R.drawable.eclectic_inactive, R.drawable.eu_inactive, R.drawable.indian_inactive, R.drawable.middle_eastern_inactive, R.drawable.north_america_inactive, R.drawable.pacifica_inactive, R.drawable.vege_inactive);
+				Arrays.asList(R.drawable.china_inactive, R.drawable.africa_inactive, R.drawable.italian_inactive, R.drawable.mayan_inactive, R.drawable.comfort_inactive, 
+						R.drawable.eclectic_inactive, R.drawable.eu_inactive, R.drawable.indian_inactive, R.drawable.middle_eastern_inactive, R.drawable.north_america_inactive, R.drawable.pacifica_inactive, R.drawable.vege_inactive);
 		for (final int dummy : cuisinesActiveImageResources) {
 			listOfSelectedCuisines.add(false);
 		}
@@ -102,9 +107,28 @@ public class SelectCuisinesActivity extends Activity {
 		// load preferences
 		listOfSelectedCuisines = new ArrayList<Boolean>();
 		for (int i = 0; i < cuisinesActiveImageResources.size(); i++) {
-			listOfSelectedCuisines.add(preferences.getBoolean(String.valueOf(i), true));
+			listOfSelectedCuisines.add(preferencesDao.getPreference(mapImagePositionsToEnums(i).getLabel(), true));
 		}
 
 		grid.setAdapter(new ImageAdapter(this, cuisinesActiveImageResources, listOfSelectedCuisines, cuisinesInactiveImageResources));
+	}
+	
+	public static Cuisine mapImagePositionsToEnums(int position) {
+		Cuisine cuisine = null;
+		switch(position){
+		case 0 :{ cuisine = Cuisine.ASIAN;break;}
+		case 1 :{ cuisine = Cuisine.AFRICAN;break;}
+		case 2 :{ cuisine = Cuisine.ITALIAN;break;}
+		case 3 :{ cuisine = Cuisine.CENTRAL_AND_SOUTH_AMERICAN;break;}
+		case 4 :{ cuisine = Cuisine.COMFORT_AND_SNACKS;break;}
+		case 5 :{ cuisine = Cuisine.ECLECTIC;break;}
+		case 6 :{ cuisine = Cuisine.EUROPEAN;break;}
+		case 7 :{ cuisine = Cuisine.INDIAN_SUBCONTINENT;break;}
+		case 8 :{ cuisine = Cuisine.MIDDLE_EASTERN;break;}
+		case 9 :{ cuisine = Cuisine.US_NORTH_AMERICAN;break;}
+		case 10:{ cuisine = Cuisine.PACIFICA;break;}
+		case 11:{ cuisine = Cuisine.VEGETARIAN;break;}
+		}
+		return cuisine;
 	}
 }

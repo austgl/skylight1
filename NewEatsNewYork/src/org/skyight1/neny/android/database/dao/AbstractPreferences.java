@@ -1,5 +1,6 @@
 package org.skyight1.neny.android.database.dao;
 
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
 public abstract class AbstractPreferences implements PreferencesDao {
@@ -12,12 +13,8 @@ public abstract class AbstractPreferences implements PreferencesDao {
 		return edit.commit();
 	}
 
-//	@Override
-//	public boolean getPreference(String value, boolean defaultValue) {
-//		final Editor edit = getEditor();
-//		return ed
-//	}
-	
 	public abstract Editor getEditor();
+	
+	protected SharedPreferences preferences;
 
 }
