@@ -7,14 +7,17 @@ public abstract class AbstractPreferences implements PreferencesDao {
 
 	@Override
 	public boolean setPreferences(String value, boolean isSelected) {
-		final Editor edit = getEditor();
+		final Editor edit = preferences.edit();
 		
 		edit.putBoolean(value, isSelected);
 		return edit.commit();
 	}
-
-	public abstract Editor getEditor();
 	
+	@Override
+	public boolean getPreference(String key, boolean defaultValue) {
+		return preferences.getBoolean(key, defaultValue);
+	}
+
 	protected SharedPreferences preferences;
 
 }
