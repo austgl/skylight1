@@ -16,6 +16,10 @@ public class NeighborhoodPreferences extends AbstractPreferences {
 	public Editor getEditor() {
 		return preferences.edit();
 	}
+	@Override
+	public boolean getPreference(String value, boolean defaultValue) {
+		return preferences.getBoolean(value, defaultValue);
+	}
 	
 
 

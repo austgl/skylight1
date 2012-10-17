@@ -12,11 +12,11 @@ public abstract class AbstractPreferences implements PreferencesDao {
 		return edit.commit();
 	}
 
-	@Override
-	public boolean getPreference(String value) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+//	@Override
+//	public boolean getPreference(String value, boolean defaultValue) {
+//		final Editor edit = getEditor();
+//		return ed
+//	}
 	
 	public abstract Editor getEditor();
 
