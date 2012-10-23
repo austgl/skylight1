@@ -26,6 +26,7 @@
         <activity android:name=".SelectNeighborhoodsActivity" />
         <activity android:name=".SelectCuisinesActivity" />
         <activity android:name=".ShowRestaurantDetailActivity" />
+        <activity android:name=".SelectMealTimesActivity" />
 		<receiver android:name=".notification.RestaurantNotifier"></receiver>
 		<receiver android:name=".RestaurantDataDownloadReceiver"></receiver>
     </application>
