@@ -27,8 +27,8 @@ public class NewEatsNewYorkActivity extends Activity {
 
 	
 	public void selectDiningTimes(final View aButton) {
-		final Intent showTimeIntent = new Intent(this, SelectDiningTimesActivity.class);
-
+		//final Intent showTimeIntent = new Intent(this, SelectDiningTimesActivity.class);
+		final Intent showTimeIntent = new Intent(this, SelectMealTimesActivity.class);
 		startActivity(showTimeIntent);
 	}
 
