@@ -26,5 +26,14 @@ public enum DayAndTime {
 	public int getCode() {
 		return code;
 	}
+	
+	public static DayAndTime findByCode(int code){
+		for (final DayAndTime dayAndtime : values()) {
+			if (dayAndtime.code == code) {
+				return dayAndtime;
+			}
+		}
+		return null;
+	}
 
 }
