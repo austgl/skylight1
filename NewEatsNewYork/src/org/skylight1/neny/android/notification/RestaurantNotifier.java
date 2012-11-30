@@ -2,11 +2,11 @@ package org.skylight1.neny.android.notification;
 
 import java.util.Calendar;
 
-import org.skyight1.neny.android.database.dao.MealTimePreferences;
-import org.skyight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.NewEatsNewYorkApplication;
 import org.skylight1.neny.android.R;
 import org.skylight1.neny.android.ShowRestaurantListActivity;
+import org.skylight1.neny.android.database.dao.MealTimePreferences;
+import org.skylight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.database.model.DayAndTime;
 
 import android.app.Notification;
