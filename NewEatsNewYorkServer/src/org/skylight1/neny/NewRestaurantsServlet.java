@@ -20,6 +20,7 @@ public class NewRestaurantsServlet extends HttpServlet {
 		try {
 			LOGGER.info("starting");
 
+			// TODO should use a date or duration from the client to limit the newness of restaurants returned
 			resp.setContentType("application/json");
 			new Gson().toJson(new RestaurantDAO().getListOfRestaurants(), resp.getWriter());
 

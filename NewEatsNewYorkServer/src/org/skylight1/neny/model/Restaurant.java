@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Restaurant {
+	
 	@Id
 	private String camis;
 
@@ -37,7 +38,7 @@ public class Restaurant {
 		currentGrade = aCurrentGrade;
 		gradeDate = aGradeDate;
 	}
-
+	
 	public String getCamis() {
 		return camis;
 	}
@@ -173,5 +174,4 @@ public class Restaurant {
 			return false;
 		return true;
 	}
-
 }
