@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
 
 import org.skylight1.neny.model.Restaurant;
 
 public class InspectionResultsFetcherTest {
-	private static final Logger LOGGER = Logger.getLogger(InspectionResultsFetcherTest.class.getName());
+	
+	// private static final Logger LOGGER = Logger.getLogger(InspectionResultsFetcherTest.class.getName());
 
 	/**
 	 * @param args
