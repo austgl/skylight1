@@ -8,8 +8,8 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp" >
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
 
         <TextView
             android:id="@+id/tv_restaurant_name"
@@ -32,8 +32,8 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp" >
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
 
         <TextView
             android:id="@+id/tv_restaurant_address"
@@ -51,5 +51,27 @@
             android:gravity="right"
             android:textColor="@android:color/black" />
     </TableRow>
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" >
 
+        <TextView
+            android:id="@+id/tv_restaurant_cuisine"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="left"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/tv_restaurant_neighborhood"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="right"
+            android:textColor="@android:color/black" />
+    </TableRow>
+    
 </TableLayout>
