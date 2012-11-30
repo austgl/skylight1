@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.skyight1.neny.android.database.dao.CuisinePreferences;
-import org.skyight1.neny.android.database.dao.PreferencesDao;
+import org.skylight1.neny.android.database.dao.CuisinePreferences;
+import org.skylight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.database.model.Cuisine;
 import org.skylight1.neny.android.database.model.Neighborhood;
 

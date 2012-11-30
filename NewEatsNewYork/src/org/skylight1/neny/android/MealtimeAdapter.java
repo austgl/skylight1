@@ -1,6 +1,6 @@
 package org.skylight1.neny.android;
 
-import org.skyight1.neny.android.database.dao.PreferencesDao;
+import org.skylight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.database.model.DayAndTime;
 import org.skylight1.neny.android.database.model.MealDayTime;
 
