@@ -280,6 +280,34 @@ public class RestaurantDatabase {
 		return result;
 	}
 
+	public int getStoredRestaurantCount() {
+		
+		final SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();
+		
+		int count = 0;
+		
+		String sql = "select count(camis) as restaurantCount from vw_restaurant";
+		
+		try {
+			
+			Cursor mCursor = database.rawQuery(sql, null);
+		    mCursor.moveToFirst();
+		    
+		    count = mCursor.getInt(0);
+			
+		    mCursor.close();
+			
+		} finally {
+			if (database != null) {
+				database.close();
+			}
+		}
+		
+		return count;
+		
+	}
+	
+	
 	public void saveRestaurants(final List<Restaurant> aListOfRestaurants) {
 
 		final SQLiteDatabase database = sqLiteOpenHelper.getWritableDatabase();
