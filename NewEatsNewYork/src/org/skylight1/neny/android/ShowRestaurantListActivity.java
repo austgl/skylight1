@@ -1,30 +1,49 @@
 package org.skylight1.neny.android;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.skylight1.neny.android.database.RestaurantDatabase;
+import org.skylight1.neny.android.database.dao.CuisinePreferences;
+import org.skylight1.neny.android.database.dao.NeighborhoodPreferences;
+import org.skylight1.neny.android.database.dao.PreferencesDao;
+import org.skylight1.neny.android.database.model.Cuisine;
+import org.skylight1.neny.android.database.model.Neighborhood;
 import org.skylight1.neny.android.database.model.Restaurant;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
 public class ShowRestaurantListActivity extends ListActivity {
 	
+	private static final String TAG = ShowRestaurantListActivity.class.getSimpleName();
 	ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
 	
 	private class LoadLocalRestaurantsTask extends AsyncTask<String, Integer, String> {
 		
+		private final List<Neighborhood> neighborhoods;
+		private final List<Cuisine> cuisines;
+		
+		public LoadLocalRestaurantsTask(Context aContext){
+			neighborhoods = new NeighborhoodPreferences(aContext).getAllUserSelectedNeighborhoods();
+			cuisines = new CuisinePreferences(aContext).getAllUserSelectedCuisines();
+			
+		}
 		protected String doInBackground(String... unused) {
 					
 			String status = "retrieving restaurants from local database...";
 			
 			try {
-				
-				restaurants = new RestaurantDatabase(ShowRestaurantListActivity.this).getRestaurants();
+				Log.d(TAG, neighborhoods.toString());
+				Log.d(TAG,cuisines.toString());
+				restaurants = new RestaurantDatabase(ShowRestaurantListActivity.this).getRestaurantsByUserPrefs(neighborhoods, cuisines);
 				
 				status = restaurants.size() + " restaurants retrieved";
 				
@@ -56,7 +75,7 @@ public class ShowRestaurantListActivity extends ListActivity {
 
 		setContentView(R.layout.restaurant_list_view);
 
-		new LoadLocalRestaurantsTask().execute((String[]) null);
+		new LoadLocalRestaurantsTask(this).execute((String[]) null);
 		
 	}
 	

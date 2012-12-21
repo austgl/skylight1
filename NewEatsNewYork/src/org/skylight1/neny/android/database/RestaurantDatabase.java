@@ -5,21 +5,27 @@ import static java.lang.String.format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import org.skylight1.neny.android.database.model.Address;
 import org.skylight1.neny.android.database.model.Borough;
+import org.skylight1.neny.android.database.model.Cuisine;
 import org.skylight1.neny.android.database.model.Grade;
+import org.skylight1.neny.android.database.model.Neighborhood;
 import org.skylight1.neny.android.database.model.Restaurant;
+import org.skylight1.neny.database.utils.DatabaseQueryUtils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class RestaurantDatabase {
+	private static final String TAG = RestaurantDatabase.class.getSimpleName();
 	private static final int CURRENT_DATABASE_VERSION = 1;
 
 	private static final int COL_CAMIS = 0;
@@ -150,9 +156,9 @@ public class RestaurantDatabase {
 				
 				// Greenwich / Soho
 				// 10012, 10013, 10014
-				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10012','Greenwich / Soho');");
-				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10013','Greenwich / Soho');");
-				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10014', 'Greenwich / Soho');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10012','Greenwich/Soho');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10013','Greenwich/Soho');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10014', 'Greenwich/Soho');");
 				
 				// Harlem -- 10026, 10027, 10030, 10037, 10039
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10026', 'Harlem');");
@@ -279,6 +285,42 @@ public class RestaurantDatabase {
 		}
 		return result;
 	}
+	
+	public ArrayList<Restaurant> getRestaurantsByUserPrefs(List<Neighborhood> neighborhoods,List<Cuisine> cuisines){
+		final ArrayList<Restaurant> result = new ArrayList<Restaurant>();
+		final SQLiteDatabase database = sqLiteOpenHelper.getReadableDatabase();
+		
+		final String selection =  DatabaseQueryUtils.buildSelectionString("major_cuisine_name",cuisines.size()) + " and " + 
+		DatabaseQueryUtils.buildSelectionString("neighborhood",neighborhoods.size() );
+		Log.d(TAG, selection);
+		List<String> selections = new ArrayList<String>();
+		for(Cuisine c : cuisines){
+			selections.add(c.getLabel());
+		}
+		for(Neighborhood n : neighborhoods){
+			selections.add(n.getLabel());
+		}
+		
+		Log.d(TAG,selections.toString());
+		try {
+			final Cursor cursor = database.query("vw_restaurant", null, selection,
+					selections.toArray(new String[selections.size()]), null, null, null);
+
+			while (cursor.moveToNext()) {
+
+				final Restaurant restaurant = cursorToRestaurant(cursor);
+				if (restaurant != null) {
+					result.add(restaurant);
+				}
+			}
+		} finally {
+			if (database != null) {
+				database.close();
+			}
+		}
+		return result;
+	}
+	
 
 	public int getStoredRestaurantCount() {
 		

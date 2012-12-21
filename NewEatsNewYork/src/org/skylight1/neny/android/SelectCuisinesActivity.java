@@ -7,12 +7,9 @@ import java.util.List;
 import org.skylight1.neny.android.database.dao.CuisinePreferences;
 import org.skylight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.database.model.Cuisine;
-import org.skylight1.neny.android.database.model.Neighborhood;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -107,6 +104,7 @@ public class SelectCuisinesActivity extends Activity {
 		// load preferences
 		listOfSelectedCuisines = new ArrayList<Boolean>();
 		for (int i = 0; i < cuisinesActiveImageResources.size(); i++) {
+			//Log.d("temp-cus", (mapImagePositionsToEnums(i).getLabel()));
 			listOfSelectedCuisines.add(preferencesDao.getPreference(mapImagePositionsToEnums(i).getLabel(), true));
 		}
 
