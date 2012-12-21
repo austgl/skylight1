@@ -3,21 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" >
-    
-	<CheckBox
-         android:id="@+id/lunchCheckBox"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         />
 
-     <TextView
-         style="@style/DiningDay"
-         android:id="@+id/mealDay"
-          />
+    <TextView
+        android:id="@+id/mealDay"
+        style="@style/DiningDay" />
 
-     <CheckBox
-         android:id="@+id/dinnerCheckBox"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-          />
+    <CheckBox
+        android:id="@+id/lunchCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/dinnerCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
