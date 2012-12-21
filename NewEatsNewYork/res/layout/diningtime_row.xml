@@ -6,16 +6,21 @@
 
     <TextView
         android:id="@+id/mealDay"
-        style="@style/DiningDay" />
+        style="@style/DiningDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monday" />
 
     <CheckBox
         android:id="@+id/lunchCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_lunch" />
 
     <CheckBox
         android:id="@+id/dinnerCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:button="@drawable/checkbox_dinner" />
 
 </LinearLayout>

@@ -45,7 +45,6 @@ public class MealtimeAdapter extends ArrayAdapter<MealDayTime> {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				preferences.setPreferences(mapPositionToMealTime(position,true).name(), isChecked);
-				
 			}
 			 
 		 });
