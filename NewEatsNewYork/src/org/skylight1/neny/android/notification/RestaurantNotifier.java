@@ -2,7 +2,7 @@ package org.skylight1.neny.android.notification;
 
 import java.util.Calendar;
 
-import org.skylight1.neny.android.NewEatsNewYorkApplication;
+import org.skylight1.neny.android.AlarmUtils;
 import org.skylight1.neny.android.R;
 import org.skylight1.neny.android.ShowRestaurantListActivity;
 import org.skylight1.neny.android.database.dao.MealTimePreferences;
@@ -33,7 +33,7 @@ public class RestaurantNotifier extends BroadcastReceiver {
 		int day = calendar.get(Calendar.DAY_OF_WEEK);
 		
 		
-		final int mealTime = anIntent.getIntExtra(NewEatsNewYorkApplication.MEAL_TIME_EXTRA_NAME, 0);
+		final int mealTime = anIntent.getIntExtra(AlarmUtils.MEAL_TIME_EXTRA_NAME, 0);
 		final int dayAndTimeCode = Integer.valueOf(String.valueOf(day)+String.valueOf(mealTime));
 		if(mealTimePreferences.getPreference(DayAndTime.findByCode(dayAndTimeCode).name(), false)){
 			notification.setLatestEventInfo(aContext, "Feed me", "Feed me", broadcast);
