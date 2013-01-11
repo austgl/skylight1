@@ -313,6 +313,7 @@ public class RestaurantDatabase {
 					result.add(restaurant);
 				}
 			}
+			cursor.close();
 		} finally {
 			if (database != null) {
 				database.close();

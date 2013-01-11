@@ -148,7 +148,7 @@
                             android:layout_height="fill_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="Diner"
+                            android:text="Dinner"
                             android:textColor="#fff"
                             android:textSize="20sp" />
                     </LinearLayout>
