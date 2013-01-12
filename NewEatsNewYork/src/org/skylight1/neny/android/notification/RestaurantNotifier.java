@@ -35,7 +35,7 @@ public class RestaurantNotifier extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context aContext, final Intent anIntent) {
 		final PowerManager powerManager = (PowerManager) aContext.getSystemService(POWER_SERVICE);
-		final WakeLock wakeLock = powerManager.newWakeLock(SCREEN_BRIGHT_WAKE_LOCK, "yourprojectname");
+		final WakeLock wakeLock = powerManager.newWakeLock(SCREEN_BRIGHT_WAKE_LOCK, "NewEatsNewYork");
 		wakeLock.acquire();
 
 		new Thread(new Runnable() {
@@ -54,7 +54,7 @@ public class RestaurantNotifier extends BroadcastReceiver {
 		final PreferencesDao mealTimePreferences = new MealTimePreferences(aContext);
 		final int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 		final MealTime mealTime = MealTime.valueOf(anIntent.getAction());
-		final String preferenceName = DayAndTime.findByCode(day, mealTime).name();
+		final String preferenceName = DayAndTime.findByDayOfWeekAndMealTime(day, mealTime).name();
 		if (mealTimePreferences.getPreference(preferenceName, false)) {
 			// find the restaurants that match the user's preferences
 			final List<Neighborhood> neighborhoods = new NeighborhoodPreferences(aContext).getAllUserSelectedNeighborhoods();

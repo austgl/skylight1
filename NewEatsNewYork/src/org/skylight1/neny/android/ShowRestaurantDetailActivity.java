@@ -9,69 +9,50 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ShowRestaurantDetailActivity extends Activity {
-	
-	private String camis = null;
-	private String phoneNumber = null;
-	
+
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
-		
 		super.onCreate(aSavedInstanceState);
-		
+
 		setContentView(R.layout.restaurant_detail);
-		
-		Bundle extras = getIntent().getExtras();
-		
+
+		final Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			
-			camis = extras.getString("camis");
-			
+			String camis = extras.getString("camis");
 			if (camis != null) {
-				
-				Restaurant restaurant = new RestaurantDatabase(this).getRestaurantByCamis(camis);
-				
+				final Restaurant restaurant = new RestaurantDatabase(this).getRestaurantByCamis(camis);
 				if (restaurant != null) {
 					showRestaurantDetail(restaurant);
 				}
-				
 			}
-			
 		}
+	}
 
-	}
-	
 	private void showRestaurantDetail(Restaurant restaurant) {
-		
-		TextView tvRestaurantName = (TextView) findViewById(R.id.tv_detail_restaurant_name);
-		
+		final TextView tvRestaurantName = (TextView) findViewById(R.id.tv_detail_restaurant_name);
 		tvRestaurantName.setText(restaurant.getDoingBusinessAs());
-		
-		TextView tvRestaurantPhone = (TextView) findViewById(R.id.tv_detail_restaurant_phone);
-		
-		phoneNumber = restaurant.getPhone();
-		
-		tvRestaurantPhone.setText(phoneNumber);
-		
-		Address address = restaurant.getAddress();
-		
-		TextView tvStreet = (TextView) findViewById(R.id.tv_detail_restaurant_street);
-		TextView tvZipCode = (TextView) findViewById(R.id.tv_detail_restaurant_zipcode);
-		
-		String street = address.getBuilding() + " " + address.getStreet();
-		
+
+		final TextView tvRestaurantPhone = (TextView) findViewById(R.id.tv_detail_restaurant_phone);
+		tvRestaurantPhone.setText(restaurant.getPhone());
+
+		final Button callButton = (Button) findViewById(R.id.bn_call);
+		callButton.setTag(restaurant.getPhone());
+
+		final Address address = restaurant.getAddress();
+		final TextView tvStreet = (TextView) findViewById(R.id.tv_detail_restaurant_street);
+		final TextView tvZipCode = (TextView) findViewById(R.id.tv_detail_restaurant_zipcode);
+		final String street = address.getBuilding() + " " + address.getStreet();
 		tvStreet.setText(street);
-		tvZipCode.setText(address.getZipCode());		
+		tvZipCode.setText(address.getZipCode());
 	}
-	
+
 	public void callRestaurant(View v) {
-		
-		Intent callIntent = new Intent(Intent.ACTION_CALL);
-		callIntent.setData(Uri.parse("tel:" + phoneNumber));
+		final Intent callIntent = new Intent(Intent.ACTION_CALL);
+		callIntent.setData(Uri.parse("tel:" + v.getTag()));
 		startActivity(callIntent);
-		
 	}
-		
 }

@@ -15,7 +15,7 @@ import java.util.Calendar;
 public enum DayAndTime {
 	
 	SUNDAY_LUNCH(SUNDAY, LUNCH),
-	SUNDAY_DINNER(Calendar.SUNDAY, DINNER),
+	SUNDAY_DINNER(SUNDAY, DINNER),
 	MONDAY_LUNCH(MONDAY, LUNCH),
 	MONDAY_DINNER(MONDAY, DINNER),
 	TUESDAY_LUNCH(TUESDAY, LUNCH),
@@ -37,7 +37,7 @@ public enum DayAndTime {
 		mealTime = aMealTime;
 	}
 	
-	public static DayAndTime findByCode(final int aDayOfWeek, final MealTime aMealTime){
+	public static DayAndTime findByDayOfWeekAndMealTime(final int aDayOfWeek, final MealTime aMealTime){
 		for (final DayAndTime dayAndtime : values()) {
 			if (dayAndtime.dayOfWeek == aDayOfWeek &  dayAndtime.mealTime == aMealTime) {
 				return dayAndtime;
