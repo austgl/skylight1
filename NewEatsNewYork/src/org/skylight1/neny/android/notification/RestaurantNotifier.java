@@ -2,6 +2,7 @@ package org.skylight1.neny.android.notification;
 
 import static android.content.Context.POWER_SERVICE;
 import static android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
+import static java.util.Calendar.DAY_OF_WEEK;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,12 +51,12 @@ public class RestaurantNotifier extends BroadcastReceiver {
 	}
 
 	private void notifyUserIfPreferredAndMatching(Context aContext, Intent anIntent) {
-		// check to see if the user wants a recommendation now
+		// check to see if the user wants a recommendation now 
 		final PreferencesDao mealTimePreferences = new MealTimePreferences(aContext);
-		final int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		final int day = Calendar.getInstance().get(DAY_OF_WEEK);
 		final MealTime mealTime = MealTime.valueOf(anIntent.getAction());
 		final String preferenceName = DayAndTime.findByDayOfWeekAndMealTime(day, mealTime).name();
-		if (mealTimePreferences.getPreference(preferenceName, false)) {
+		if (mealTimePreferences.getPreference(preferenceName, true)) {
 			// find the restaurants that match the user's preferences
 			final List<Neighborhood> neighborhoods = new NeighborhoodPreferences(aContext).getAllUserSelectedNeighborhoods();
 			final List<Cuisine> cuisines = new CuisinePreferences(aContext).getAllUserSelectedCuisines();
