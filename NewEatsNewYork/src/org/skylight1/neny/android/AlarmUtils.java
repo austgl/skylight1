@@ -32,17 +32,15 @@ public class AlarmUtils {
 		setAlarmForHour(alarmManager, 17, DINNER, aContext);
 	}
 
-	private void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aLunch, Context aContext) {
+	private void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aMealTime, Context aContext) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, anHour);
 		if (calendar.before(Calendar.getInstance())) {
 			calendar.add(Calendar.DATE, 1);
 		}
-		final long msToTime = calendar.getTime().getTime() - System.currentTimeMillis();
-
 		final Intent intent = new Intent(aContext, RestaurantNotifier.class);
-		intent.setAction(aLunch.name());
+		intent.setAction(aMealTime.name());
 		final PendingIntent broadcast = PendingIntent.getBroadcast(aContext, 0, intent, 0);
-		anAlarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msToTime, AlarmManager.INTERVAL_DAY, broadcast);
+		anAlarmManager.setRepeating(RTC_WAKEUP, calendar.getTime().getTime(), INTERVAL_DAY, broadcast);
 	}
 }
