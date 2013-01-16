@@ -1,5 +1,7 @@
 package org.skylight1.neny.android.notification;
 
+import static android.app.Notification.FLAG_AUTO_CANCEL;
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 import static android.content.Context.POWER_SERVICE;
 import static android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK;
 import static java.util.Calendar.DAY_OF_WEEK;
@@ -70,9 +72,10 @@ public class RestaurantNotifier extends BroadcastReceiver {
 				// notify the user
 				final NotificationManager notificationManager = (NotificationManager) aContext.getSystemService(Context.NOTIFICATION_SERVICE);
 				final Notification notification = new Notification(R.drawable.nyne_logo2, restaurant.getDoingBusinessAs(), System.currentTimeMillis());
+				notification.flags = FLAG_AUTO_CANCEL;
 				final Intent showRestaurantDetailIntent = new Intent(aContext, ShowRestaurantDetailActivity.class);
 				showRestaurantDetailIntent.putExtra("camis", restaurant.getCamis());
-				final PendingIntent pendingIntent = PendingIntent.getActivity(aContext, 0, showRestaurantDetailIntent, 0);
+				final PendingIntent pendingIntent = PendingIntent.getActivity(aContext, 0, showRestaurantDetailIntent, FLAG_UPDATE_CURRENT);
 				notification.setLatestEventInfo(aContext, restaurant.getDoingBusinessAs(), restaurant.getDoingBusinessAs(), pendingIntent);
 				notificationManager.notify(1, notification);
 			}
