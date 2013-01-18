@@ -22,72 +22,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 public class SelectCuisinesActivity extends Activity {
-	public class ImageAdapter extends BaseAdapter {
-
-		private final Context context;
-
-		private final List<Integer> listOfActiveResourceIds;
-
-		private List<Integer> listOfInactiveResourceIds;
-
-		private final List<Boolean> listOfSelectedCuisines;
-
-		public ImageAdapter(final Context aContext, final List<Integer> aListOfActiveResourceIds, final List<Boolean> aListOfSelectedCuisines,
-				List<Integer> aListOfInactiveResiourceIds) {
-			context = aContext;
-			listOfActiveResourceIds = aListOfActiveResourceIds;
-			listOfInactiveResourceIds = aListOfInactiveResiourceIds;
-			listOfSelectedCuisines = aListOfSelectedCuisines;
-		}
-
-		@Override
-		public int getCount() {
-			return listOfActiveResourceIds.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return listOfActiveResourceIds.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(final int position, final View convertView, final ViewGroup parent) {
-			final ImageView imageView;
-			if (convertView == null) {
-				imageView = new ImageView(context);
-				imageView.setAdjustViewBounds(true);
-			} else {
-				imageView = (ImageView) convertView;
-			}
-			imageView.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View aV) {
-					ImageView clickedView = (ImageView) aV;
-					final boolean newState = !listOfSelectedCuisines.get(position);
-					listOfSelectedCuisines.set(position, newState);
-					preferencesDao.setPreferences(SelectCuisinesActivity.mapImagePositionsToEnums(position).getLabel(), newState);
-					final Boolean active = listOfSelectedCuisines.get(position);
-					clickedView.setBackgroundResource(active ? R.drawable.active_button : R.drawable.inactive_button);
-					clickedView.setImageResource(active ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
-							.get(position));
-				}
-			});
-			final Boolean active = listOfSelectedCuisines.get(position);
-			imageView.setBackgroundResource(active ? R.drawable.active_button : R.drawable.inactive_button);
-			imageView.setImageResource(active ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds.get(position));
-			return imageView;
-		}
-	}
 
 	private List<Boolean> listOfSelectedCuisines = new ArrayList<Boolean>();
 
 	// private SharedPreferences preferences;
 	private PreferencesDao preferencesDao;
+	
+	
 
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
@@ -112,8 +53,8 @@ public class SelectCuisinesActivity extends Activity {
 			// Log.d("temp-cus", (mapImagePositionsToEnums(i).getLabel()));
 			listOfSelectedCuisines.add(preferencesDao.getPreference(mapImagePositionsToEnums(i).getLabel(), true));
 		}
-
-		grid.setAdapter(new ImageAdapter(this, cuisinesActiveImageResources, listOfSelectedCuisines, cuisinesInactiveImageResources));
+		
+		grid.setAdapter(new CuisineAdapter(this, cuisinesActiveImageResources, listOfSelectedCuisines, cuisinesInactiveImageResources));
 	}
 
 	public static Cuisine mapImagePositionsToEnums(int position) {
