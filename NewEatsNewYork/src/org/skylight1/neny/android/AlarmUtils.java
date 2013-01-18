@@ -21,24 +21,33 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlarmUtils {
 	public static final String MEAL_TIME_EXTRA_NAME = "mealTime";
 
-	public void setAlarms(Context aContext) {
+	public static void setAlarms(Context aContext) {
 		final AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(ALARM_SERVICE);
 
 		final Intent alarmIntent = new Intent(aContext, RestaurantDataDownloadReceiver.class);
 		final PendingIntent pendingIntent = PendingIntent.getBroadcast(aContext, 0, alarmIntent, FLAG_UPDATE_CURRENT);
 
+		long testVal = Calendar.getInstance().getTime().getTime();
 		// TODO make this at midnight, and if no network then, then register for network state change
-		alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_DAY, pendingIntent);
+		Log.i("AlarmUtils", String.valueOf(testVal));
+		/**
+		 * This has been changed by Sajit for testing the network state change receiver.. This needs to go back to INTERVAL_DAY and inexactRepeating
+		 */
+		//Converting to exact for testing purposes.. Need to revert
+		
+		alarmManager.setRepeating(RTC_WAKEUP, testVal, 120000, pendingIntent);
+		//alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_DAY, pendingIntent);
 
 		setAlarmForHour(alarmManager, 11, LUNCH, aContext);
 		setAlarmForHour(alarmManager, 17, DINNER, aContext);
 	}
 
-	private void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aMealTime, Context aContext) {
+	private static void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aMealTime, Context aContext) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.clear(HOUR_OF_DAY);
 		calendar.clear(MINUTE);

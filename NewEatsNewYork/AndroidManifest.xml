@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+   
 
     <application
         android:name=".NewEatsNewYorkApplication"
@@ -47,6 +48,11 @@
                 </action>
             </intent-filter>
         </receiver>
+         <receiver android:name=".NetworkUpReceiver">
+		   <intent-filter>
+		      <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+		   </intent-filter>
+		</receiver>
     </application>
 
 </manifest>

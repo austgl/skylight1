@@ -8,6 +8,6 @@ public class NewEatsNewYorkApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 
-		new AlarmUtils().setAlarms(this);		
+		AlarmUtils.setAlarms(this);		
 	}		
 }
