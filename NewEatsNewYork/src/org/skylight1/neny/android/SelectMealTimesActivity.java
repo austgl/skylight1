@@ -7,7 +7,9 @@ import org.skylight1.neny.android.database.model.DayAndTime;
 import org.skylight1.neny.android.database.model.MealDayTime;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 public class SelectMealTimesActivity extends ListActivity{
@@ -42,6 +44,11 @@ public class SelectMealTimesActivity extends ListActivity{
 	  }
 	  
 	  return times;
+  }
+  
+  public void gotoDashboard(final View aView){
+	  Intent intent = new Intent(this,NewEatsNewYorkActivity.class);
+	  startActivity(intent);
   }
   
 }
