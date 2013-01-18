@@ -17,12 +17,28 @@
     <GridView
         android:id="@+id/neighbourhoodGrid"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:columnWidth="150dp"
+        android:layout_height="wrap_content"
+        android:columnWidth="75dp"
         android:numColumns="auto_fit"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
         android:orientation="horizontal" >
     </GridView>
+    
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:onClick="chooseTimes"
+        android:text="Next" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="2/3"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

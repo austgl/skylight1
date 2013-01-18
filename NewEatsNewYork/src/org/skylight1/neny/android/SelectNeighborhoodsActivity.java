@@ -10,6 +10,7 @@ import org.skylight1.neny.android.database.model.Neighborhood;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -130,6 +131,11 @@ public class SelectNeighborhoodsActivity extends Activity {
 		case 10:{ neighborhood = Neighborhood.WALL_ST;break;}
 		}
 		return neighborhood;
+	}
+	
+	public void chooseTimes(final View aView){
+		Intent chooseTimesIntent = new Intent(this,SelectMealTimesActivity.class);
+		startActivity(chooseTimesIntent);
 	}
 }
      

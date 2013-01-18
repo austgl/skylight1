@@ -12,6 +12,7 @@ import org.skylight1.neny.android.database.model.Cuisine;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -168,5 +169,10 @@ public class SelectCuisinesActivity extends Activity {
 			}
 		}
 		return cuisine;
+	}
+	
+	public void goNeighborhoods(final View aView){
+		Intent go2Neighborhoods = new Intent(this,SelectNeighborhoodsActivity.class);
+		startActivity(go2Neighborhoods);
 	}
 }
