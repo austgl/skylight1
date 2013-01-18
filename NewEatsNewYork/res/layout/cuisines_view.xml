@@ -18,7 +18,7 @@
         android:id="@+id/cuisinesGrid"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:columnWidth="150dp"
+        android:columnWidth="75dp"
         android:numColumns="auto_fit"
         android:horizontalSpacing="10dp"
         android:verticalSpacing="10dp"
