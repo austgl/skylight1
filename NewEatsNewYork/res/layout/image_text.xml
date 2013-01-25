@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
     <ImageView 
-		android:scaleType="fitCenter"
+		android:scaleType="fitCenter" 
 		android:layout_height="fill_parent"
 		android:id="@+id/cuisine_image"
 		android:layout_width="fill_parent"/>
@@ -13,6 +13,7 @@
 		android:layout_height="fill_parent"
 		android:layout_width="fill_parent"
 		android:id="@+id/cuisine_image_text"
-		android:gravity="bottom"/>
+		android:layout_below="@+id/cuisine_image"
+		android:gravity="bottom|center"/>
 
 </RelativeLayout>

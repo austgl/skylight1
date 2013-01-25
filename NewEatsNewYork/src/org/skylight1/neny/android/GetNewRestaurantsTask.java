@@ -37,9 +37,7 @@ class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 	protected void onPreExecute() {
 		// super.onPreExecute();
 
-		Toast.makeText(context, "Starting restaurant list retrieve...",
-				Toast.LENGTH_SHORT).show();
-
+		//TODO: Show notif. for sync
 	}
 
 	protected String doInBackground(final String... urls) {
@@ -179,7 +177,7 @@ class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 
 	protected void onPostExecute(String result) {
 
-		Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+		//TODO: Show notif. for sync
 
 	}
 
