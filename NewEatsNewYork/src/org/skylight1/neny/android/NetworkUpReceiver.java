@@ -10,6 +10,7 @@ import android.util.Log;
 public class NetworkUpReceiver extends BroadcastReceiver {
 
 	private static final String TAG = "NetworkUpReceiver";
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
@@ -26,7 +27,5 @@ public class NetworkUpReceiver extends BroadcastReceiver {
 		else{
 			Log.i(TAG,"Looks like we got the restaurants previously.. So not firing the task");
 		}
-		
 	}
-
 }
