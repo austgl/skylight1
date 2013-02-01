@@ -14,13 +14,11 @@
     <CheckBox
         android:id="@+id/lunchCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/checkbox_lunch" />
+        android:layout_height="wrap_content"/>
 
     <CheckBox
         android:id="@+id/dinnerCheckBox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/checkbox_dinner" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
