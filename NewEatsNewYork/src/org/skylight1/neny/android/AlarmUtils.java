@@ -32,16 +32,8 @@ public class AlarmUtils {
 		final Intent alarmIntent = new Intent(aContext, RestaurantDataDownloadReceiver.class);
 		final PendingIntent pendingIntent = PendingIntent.getBroadcast(aContext, 0, alarmIntent, FLAG_UPDATE_CURRENT);
 
-		long testVal = Calendar.getInstance().getTime().getTime();
 		// TODO make this at midnight, and if no network then, then register for network state change
-		Log.i("AlarmUtils", String.valueOf(testVal));
-		/**
-		 * This has been changed by Sajit for testing the network state change receiver.. This needs to go back to INTERVAL_DAY and inexactRepeating
-		 */
-		//Converting to exact for testing purposes.. Need to revert
-		
-		alarmManager.setRepeating(RTC_WAKEUP, testVal, 120000, pendingIntent);
-		//alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_DAY, pendingIntent);
+		alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_DAY, pendingIntent);
 
 		setAlarmForHour(alarmManager, 11, LUNCH, aContext);
 		setAlarmForHour(alarmManager, 17, DINNER, aContext);
