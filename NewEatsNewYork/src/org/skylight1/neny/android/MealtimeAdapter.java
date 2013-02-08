@@ -36,8 +36,13 @@ public class MealtimeAdapter extends ArrayAdapter<MealDayTime> {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		LayoutInflater inflater = (LayoutInflater) aContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View rowView = inflater.inflate(R.layout.diningtime_row, parent, false);
+		final View rowView;
+		if (convertView != null) {
+			rowView = convertView;
+		} else {
+			final LayoutInflater inflater = (LayoutInflater) aContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			rowView = inflater.inflate(R.layout.diningtime_row, parent, false);
+		}
 		CheckBox lunchBox = (CheckBox) rowView.findViewById(R.id.lunchCheckBox);
 		TextView mealDay = (TextView) rowView.findViewById(R.id.mealDay);
 		CheckBox dinnerBox = (CheckBox) rowView.findViewById(R.id.dinnerCheckBox);
