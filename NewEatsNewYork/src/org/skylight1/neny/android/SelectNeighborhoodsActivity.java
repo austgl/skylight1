@@ -97,10 +97,15 @@ public class SelectNeighborhoodsActivity extends Activity {
 		setContentView(R.layout.neighborhoods_view);
 		preferencesDao = new NeighborhoodPreferences(this);
 		final GridView grid = (GridView) findViewById(R.id.neighbourhoodGrid);
+		/**
+		 * Arrays.asList(R.drawable.n_inwood_active, R.drawable.n_harlem_active, R.drawable.n_east_harlem_active, R.drawable.n_uws_active, R.drawable.n_ues_active, R.drawable.n_chelsea_active, R.drawable.n_gramercy_active, R.drawable.n_greenwich_soho_active, R.drawable.n_les_active, R.drawable.n_east_village_active, R.drawable.n_wall_st_active);
+		
+		 */
 		final List<Integer> neighborhoodActiveImageResources =
-				Arrays.asList(R.drawable.n_inwood_active, R.drawable.n_harlem_active, R.drawable.n_east_harlem_active, R.drawable.n_uws_active, R.drawable.n_ues_active, R.drawable.n_chelsea_active, R.drawable.n_gramercy_active, R.drawable.n_greenwich_soho_active, R.drawable.n_les_active, R.drawable.n_east_village_active, R.drawable.n_wall_st_active);
-		final List<Integer> neighborhoodInactiveImageResources =
 				Arrays.asList(R.drawable.n_inwood_inactive, R.drawable.n_harlem_inactive, R.drawable.n_east_harlem_inactive, R.drawable.n_uws_inactive, R.drawable.n_ues_inactive, R.drawable.n_chelsea_inactive, R.drawable.n_gramercy_inactive, R.drawable.n_greenwich_soho_inactive, R.drawable.n_les_inactive, R.drawable.n_east_village_inactive, R.drawable.n_wall_st_inactive);
+		
+		final List<Integer> neighborhoodInactiveImageResources =
+				Arrays.asList(R.drawable.n_inwood_active, R.drawable.n_harlem_active, R.drawable.n_east_harlem_active, R.drawable.n_uws_active, R.drawable.n_ues_active, R.drawable.n_chelsea_active, R.drawable.n_gramercy_active, R.drawable.n_greenwich_soho_active, R.drawable.n_les_active, R.drawable.n_east_village_active, R.drawable.n_wall_st_active);
 		for (final int dummy : neighborhoodActiveImageResources) {
 			listOfSelectedNeighborhoods.add(false);
 		}
