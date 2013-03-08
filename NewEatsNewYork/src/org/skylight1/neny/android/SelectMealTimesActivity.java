@@ -47,8 +47,9 @@ public class SelectMealTimesActivity extends ListActivity{
   }
   
   public void gotoDashboard(final View aView){
-	  Intent intent = new Intent(this,NewEatsNewYorkActivity.class);
-	  startActivity(intent);
+		final Intent showRestaurantsIntent = new Intent(this, ShowRestaurantListActivity.class);
+
+		startActivity(showRestaurantsIntent);
   }
   
 }

@@ -58,6 +58,8 @@ public class ShowRestaurantListActivity extends ListActivity {
 
 		// We don't need to pass this array around
 		protected void onPostExecute(String result) {
+			final View progressBar = findViewById(R.id.progressBar1);
+			progressBar.setVisibility(View.GONE);
 			ListView restaurantsListView = (ListView) findViewById(android.R.id.list);
 			restaurantsListView.setAdapter(new RestaurantArrayAdapter(ShowRestaurantListActivity.this, restaurants));
 		}

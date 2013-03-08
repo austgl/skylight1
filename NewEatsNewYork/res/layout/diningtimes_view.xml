@@ -7,54 +7,62 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_weight="0"
+        android:background="#646464"
+        android:gravity="center"
         android:text="Select Dining Times"
-        android:textColor="#000000"
+        android:textColor="#FFF"
         android:textSize="18dp" />
-    
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_weight="0"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="horizontal" >
 
-        <View 
-            android:layout_weight="1"
+        <View
             style="@style/CodeFont"
-            />
-        
-        <TextView
-            style="@style/CodeFont"
-            android:layout_weight="1"
-            android:text="@string/lunch" />
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_weight="1" />
 
-        <TextView
-            style="@style/CodeFont"
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:text="@string/dinner" />
+            android:scaleType="fitXY"
+            android:src="@drawable/breakfast_active" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:src="@drawable/dinner_active" />
     </LinearLayout>
 
     <ListView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@android:id/list"
-        android:layout_weight="2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="2"
         android:background="#FFFFFF" >
     </ListView>
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="40dp"
+        android:background="#646464" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="2 of 3"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="3 of 3"
+            android:textColor="#fff" />
 
         <Button
             android:id="@+id/button1"
@@ -64,4 +72,5 @@
             android:onClick="gotoDashboard"
             android:text="Next" />
     </RelativeLayout>
+
 </LinearLayout>
