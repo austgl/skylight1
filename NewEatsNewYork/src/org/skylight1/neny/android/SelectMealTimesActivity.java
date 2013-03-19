@@ -7,7 +7,10 @@ import org.skylight1.neny.android.database.model.DayAndTime;
 import org.skylight1.neny.android.database.model.MealDayTime;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -48,7 +51,11 @@ public class SelectMealTimesActivity extends ListActivity{
   
   public void gotoDashboard(final View aView){
 		final Intent showRestaurantsIntent = new Intent(this, ShowRestaurantListActivity.class);
-
+		String wizardString = getResources().getString(R.string.wizard_complete);
+		SharedPreferences preferences = this.getSharedPreferences(wizardString, Context.MODE_PRIVATE);
+		Editor edit = preferences.edit();
+		edit.putBoolean(wizardString, true);
+		edit.commit();
 		startActivity(showRestaurantsIntent);
   }
   

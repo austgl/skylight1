@@ -42,5 +42,6 @@
     <string name="saturday">Saturday</string>
     <string name="checkbox">CheckBox</string>
     <string name="day">Day</string>
+    <string name="wizard_complete">wizard_complete</string>
 
 </resources>

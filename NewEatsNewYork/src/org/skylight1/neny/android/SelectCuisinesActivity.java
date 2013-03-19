@@ -10,6 +10,7 @@ import org.skylight1.neny.android.database.dao.PreferencesDao;
 import org.skylight1.neny.android.database.model.Cuisine;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,11 @@ public class SelectCuisinesActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
-
+		String wizardString = getResources().getString(R.string.wizard_complete);
+		if(getSharedPreferences(wizardString, Context.MODE_PRIVATE).getBoolean(wizardString, false)){
+			final Intent showRestaurantsIntent = new Intent(this, ShowRestaurantListActivity.class);
+			startActivity(showRestaurantsIntent);
+		}
 		preferencesDao = new CuisinePreferences(this);
 
 		setContentView(R.layout.cuisines_view);
