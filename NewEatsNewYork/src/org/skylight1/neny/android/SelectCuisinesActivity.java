@@ -25,7 +25,8 @@ public class SelectCuisinesActivity extends Activity {
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
 		String wizardString = getResources().getString(R.string.wizard_complete);
-		if(getSharedPreferences(wizardString, Context.MODE_PRIVATE).getBoolean(wizardString, false)){
+		Intent callingIntent = getIntent();
+		if(getSharedPreferences(wizardString, Context.MODE_PRIVATE).getBoolean(wizardString, false) && !callingIntent.getBooleanExtra("from_restaurants_list", false)){
 			final Intent showRestaurantsIntent = new Intent(this, ShowRestaurantListActivity.class);
 			startActivity(showRestaurantsIntent);
 		}
