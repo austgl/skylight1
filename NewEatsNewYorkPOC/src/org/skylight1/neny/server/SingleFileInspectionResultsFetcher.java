@@ -29,6 +29,8 @@ import org.skylight1.neny.model.Borough;
 import org.skylight1.neny.model.Grade;
 import org.skylight1.neny.model.Restaurant;
 
+import com.sun.org.apache.bcel.internal.generic.INEG;
+
 public class SingleFileInspectionResultsFetcher {
 	private static final Logger LOGGER = Logger.getLogger(SingleFileInspectionResultsFetcher.class.getName());
 
@@ -40,13 +42,14 @@ public class SingleFileInspectionResultsFetcher {
 
 	private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+	@SuppressWarnings("resource")
 	public Collection<Restaurant> processFile(String aURLString, Date aCutoffDate) throws MalformedURLException, IOException {
 		LOGGER.info(format("Starting to process URL %s", aURLString));
 
 		final long startTime = System.currentTimeMillis();
 
 		final Set<String> oldRestaurants = new HashSet<String>();
-		final Map<String, Restaurant> result = new HashMap<>();
+		final Map<String, Restaurant> result = new HashMap<String, Restaurant>();
 
 		final URL url = new URL(aURLString);
 		final URLConnection connection = url.openConnection();
@@ -55,12 +58,13 @@ public class SingleFileInspectionResultsFetcher {
 			final ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 			ZipEntry zipEntry;
 			while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-				if (zipEntry.getName().equals("WebExtract.txt")) {
+				if (zipEntry.getName().endsWith("WebExtract.txt")) {
 					final BufferedReader br = new BufferedReader(new InputStreamReader(zipInputStream));
 
 					// skip over the header
 					final String header = br.readLine();
 					if (!header.equals(EXPECTED_HEADER_FOR_WEB_EXTRACT)) {
+						
 						throw new RuntimeException(format("Received unexpected header for WebExtract.txt: %s", header));
 					}
 
@@ -96,10 +100,9 @@ public class SingleFileInspectionResultsFetcher {
 									final Grade currentGrade = Grade.findByCode(matcher.group(13));
 									final Restaurant restaurant =
 											new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, gradeDate, inspectionDate);
-
 									final Restaurant existingRestaurant = result.get(camis);
-									if (existingRestaurant == null || existingRestaurant.getGradeDate() == null
-											|| (gradeDate == null || existingRestaurant.getGradeDate().before(gradeDate))) {
+									if (existingRestaurant == null || existingRestaurant.getInpectionDate() == null
+											|| (inspectionDate != null && existingRestaurant.getInpectionDate().before(inspectionDate))) {
 										result.put(camis, restaurant);
 									}
 								}
