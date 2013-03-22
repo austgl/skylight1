@@ -12,7 +12,7 @@ public class RestaurantDAO {
 		final EntityManager em = EMF.get().createEntityManager();
 		try {
 			@SuppressWarnings("unchecked")
-			final List<Restaurant> result = (List<Restaurant>) em.createQuery("SELECT r FROM Restaurant r").getResultList();
+			final List<Restaurant> result = (List<Restaurant>) em.createQuery("SELECT r FROM Restaurant r").getResultList();//TODO Order by camis descending limit to 100
 			// TODO fix this later to do an eager fetch
 			for (final Restaurant doh : result) {
 				System.out.println(doh);
