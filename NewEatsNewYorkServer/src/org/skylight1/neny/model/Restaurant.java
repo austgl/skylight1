@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Restaurant {
-	
+
 	@Id
 	private String camis;
 
@@ -27,8 +27,11 @@ public class Restaurant {
 
 	private Date gradeDate;
 
-	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough, Address aAddress, String aPhone, String aCuisineCode, Grade aCurrentGrade,
-			Date aGradeDate) {
+	private Date inspectionDate;
+
+	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough,
+			Address aAddress, String aPhone, String aCuisineCode,
+			Grade aCurrentGrade, Date aGradeDate, Date anInspectionDate) {
 		camis = aCamis;
 		doingBusinessAs = aDoingBusinessAs;
 		borough = aBorough;
@@ -37,8 +40,17 @@ public class Restaurant {
 		cuisineCode = aCuisineCode;
 		currentGrade = aCurrentGrade;
 		gradeDate = aGradeDate;
+		inspectionDate = anInspectionDate;
 	}
-	
+
+	public Date getInspectionDate() {
+		return inspectionDate;
+	}
+
+	public void setInspectionDate(Date inspectionDate) {
+		this.inspectionDate = inspectionDate;
+	}
+
 	public String getCamis() {
 		return camis;
 	}
@@ -105,7 +117,11 @@ public class Restaurant {
 
 	@Override
 	public String toString() {
-		return format("%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF]", getClass().getSimpleName(), camis, doingBusinessAs, borough, address, phone, cuisineCode, currentGrade, gradeDate);
+		return format(
+				"%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF,inspectionDate=%tF]",
+				getClass().getSimpleName(), camis, doingBusinessAs, borough,
+				address, phone, cuisineCode, currentGrade, gradeDate,
+				inspectionDate);
 	}
 
 	@Override
@@ -115,10 +131,16 @@ public class Restaurant {
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((borough == null) ? 0 : borough.hashCode());
 		result = prime * result + ((camis == null) ? 0 : camis.hashCode());
-		result = prime * result + ((cuisineCode == null) ? 0 : cuisineCode.hashCode());
-		result = prime * result + ((currentGrade == null) ? 0 : currentGrade.hashCode());
-		result = prime * result + ((doingBusinessAs == null) ? 0 : doingBusinessAs.hashCode());
-		result = prime * result + ((gradeDate == null) ? 0 : gradeDate.hashCode());
+		result = prime * result
+				+ ((cuisineCode == null) ? 0 : cuisineCode.hashCode());
+		result = prime * result
+				+ ((currentGrade == null) ? 0 : currentGrade.hashCode());
+		result = prime * result
+				+ ((doingBusinessAs == null) ? 0 : doingBusinessAs.hashCode());
+		result = prime * result
+				+ ((gradeDate == null) ? 0 : gradeDate.hashCode());
+		result = prime * result
+				+ ((inspectionDate == null) ? 0 : inspectionDate.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		return result;
 	}
@@ -137,10 +159,7 @@ public class Restaurant {
 				return false;
 		} else if (!address.equals(other.address))
 			return false;
-		if (borough == null) {
-			if (other.borough != null)
-				return false;
-		} else if (!borough.equals(other.borough))
+		if (borough != other.borough)
 			return false;
 		if (camis == null) {
 			if (other.camis != null)
@@ -152,10 +171,7 @@ public class Restaurant {
 				return false;
 		} else if (!cuisineCode.equals(other.cuisineCode))
 			return false;
-		if (currentGrade == null) {
-			if (other.currentGrade != null)
-				return false;
-		} else if (!currentGrade.equals(other.currentGrade))
+		if (currentGrade != other.currentGrade)
 			return false;
 		if (doingBusinessAs == null) {
 			if (other.doingBusinessAs != null)
@@ -166,6 +182,11 @@ public class Restaurant {
 			if (other.gradeDate != null)
 				return false;
 		} else if (!gradeDate.equals(other.gradeDate))
+			return false;
+		if (inspectionDate == null) {
+			if (other.inspectionDate != null)
+				return false;
+		} else if (!inspectionDate.equals(other.inspectionDate))
 			return false;
 		if (phone == null) {
 			if (other.phone != null)

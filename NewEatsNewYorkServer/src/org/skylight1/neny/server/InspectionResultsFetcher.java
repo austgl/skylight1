@@ -100,9 +100,9 @@ public class InspectionResultsFetcher {
 
 				// If it's "WebExtract.txt", we'll open a new BufferedReader to
 				// read that file.
-				
+
 				if (zipEntry.getName().contains("WebExtract.txt")) {
-				// if (zipEntry.getName().equals("WebExtract.txt")) {
+					// if (zipEntry.getName().equals("WebExtract.txt")) {
 					final BufferedReader br = new BufferedReader(
 							new InputStreamReader(zipInputStream));
 
@@ -135,14 +135,17 @@ public class InspectionResultsFetcher {
 
 							final String camis = matcher.group(GRP_CAMIS);
 
-							// if the camis value is in our "oldRestaurants" list, it means that 
-							// it's been around for a while - at least around since before our "aCutoffDate"
+							// if the camis value is in our "oldRestaurants"
+							// list, it means that
+							// it's been around for a while - at least around
+							// since before our "aCutoffDate"
 							// value.
-							
+
 							if (!oldRestaurants.contains(camis)) {
 
-								final String inspectionDateString = matcher.group(GRP_INSPDATE);
-								
+								final String inspectionDateString = matcher
+										.group(GRP_INSPDATE);
+
 								final Date inspectionDate = convertStringToDate(inspectionDateString);
 
 								if (inspectionDate.before(aCutoffDate)) {
@@ -179,23 +182,23 @@ public class InspectionResultsFetcher {
 									final Grade currentGrade = Grade
 											.findByCode(matcher
 													.group(GRP_CURRENTGRADE));
-									
+
 									final Restaurant restaurant = new Restaurant(
 											camis, doingBusinessAs, borough,
 											new Address(building, street,
 													zipCode), phoneNumber,
 											cuisine, currentGrade,
-											currentGradeDate);
+											currentGradeDate, inspectionDate);
 
 									final Restaurant existingRestaurant = result
 											.get(camis);
 
 									if (existingRestaurant == null
 											|| existingRestaurant
-													.getGradeDate() == null
-											|| (currentGradeDate == null || existingRestaurant
-													.getGradeDate().before(
-															currentGradeDate))) {
+													.getInspectionDate() == null
+											|| (inspectionDate != null && existingRestaurant
+													.getInspectionDate().before(
+															inspectionDate))) {
 										result.put(camis, restaurant);
 									}
 
