@@ -1,7 +1,8 @@
 package org.skylight1.neny;
 
 import java.io.IOException;
-import java.util.logging.Level;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -20,13 +21,15 @@ public class NewRestaurantsServlet extends HttpServlet {
 		try {
 			LOGGER.info("starting");
 
-			// TODO should use a date or duration from the client to limit the newness of restaurants returned
 			resp.setContentType("application/json");
-			new Gson().toJson(new RestaurantDAO().getListOfRestaurants(), resp.getWriter());
+			final Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.MONTH, -3);
+			final Date cutoffDate = calendar.getTime();
+			new Gson().toJson(new RestaurantDAO().getListOfRestaurants(cutoffDate), resp.getWriter());
 
 			LOGGER.info("done");
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, "failed", e);
+			throw new IOException(e);
 		}
 	}
 
