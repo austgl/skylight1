@@ -8,5 +8,5 @@ while(<>) {
     } else {
         $a =~ s/active/inactive/g;
     }
-    print "mv hires-art-assets/$old drawable-hdpi/$a\n";
+    print "cp hires-art-assets/$old res/drawable-hdpi/$a\n";
 }
