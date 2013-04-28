@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.skylight1.neny.android.database.RestaurantDatabase;
@@ -20,11 +21,13 @@ import org.skylight1.neny.android.database.model.Restaurant;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 
 	private final Context context;
+	
 	private List<Restaurant> aRestaurants = new ArrayList<Restaurant>();
 
 	/**
@@ -69,8 +72,6 @@ class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 					stringBuilder.append(line);
 				}
 
-				final String testString = stringBuilder.toString();
-
 				final JSONTokener tokener = new JSONTokener(
 						stringBuilder.toString());
 				final JSONArray arrayOfRestaurants = (JSONArray) tokener
@@ -93,66 +94,73 @@ class GetNewRestaurantsTask extends AsyncTask<String, Integer, String> {
 					// cuisineCode
 					// currentGrade
 					// gradeDate
+					try{
+						camis = restaurant.getString("camis");
+						final String restaurantName = restaurant
+								.getString("doingBusinessAs");
+						final String sBorough = restaurant.getString("borough");
+						// NOT findByCode
+						final Borough borough = Borough.findByName(sBorough);
+						// The address is an embedded JSON object
+						final String address = restaurant.getString("address");
 
-					camis = restaurant.getString("camis");
-					final String restaurantName = restaurant
-							.getString("doingBusinessAs");
+						final JSONTokener addrTokener = new JSONTokener(address);
+						final JSONObject oAddress = (JSONObject) addrTokener
+								.nextValue();
 
-					final String sBorough = restaurant.getString("borough");
+						final String building = oAddress.getString("building");
+						final String street = oAddress.getString("street");
+						final String zipCode = oAddress.getString("zipCode");
+						
+						// back to our restaurants
+						final String phone = restaurant.getString("phone");
+						
+						final String cuisineCode = restaurant
+								.getString("cuisineCode");
+						
+						String gradeName = "NOT_YET_GRADED";
+						
+						if(restaurant.has("currentGrade")) {
+							gradeName = restaurant.getString("currentGrade");
+						}
+						
+						// NOT findByCode
+						final Grade currentGrade = Grade.findByName(gradeName);
 
-					// NOT findByCode
-					final Borough borough = Borough.findByName(sBorough);
+						final Date gradeDate;
+						String dateString = "";
 
-					// The address is an embedded JSON object
-					final String address = restaurant.getString("address");
+						if (restaurant.has("gradeDate")) {
+							dateString = restaurant.getString("gradeDate");
+						}
+						if (dateString == null || dateString == "") {
+							gradeDate = null;
+						} else {
 
-					final JSONTokener addrTokener = new JSONTokener(address);
-					final JSONObject oAddress = (JSONObject) addrTokener
-							.nextValue();
+							// Sample date format:
+							// Aug 30, 2012 9:12:15 AM
+							gradeDate = simpleDateFormat.parse(dateString);
 
-					final String building = oAddress.getString("building");
-					final String street = oAddress.getString("street");
-					final String zipCode = oAddress.getString("zipCode");
+						}
 
-					// back to our restaurants
-					final String phone = restaurant.getString("phone");
-					
-					final String cuisineCode = restaurant
-							.getString("cuisineCode");
-					
-					String gradeName = "NOT_YET_GRADED";
-					
-					if(restaurant.has("currentGrade")) {
-						gradeName = restaurant.getString("currentGrade");
+						aRestaurants.add(new Restaurant(camis, restaurantName,
+								borough, new Address(building, street, zipCode),
+								phone, cuisineCode, currentGrade, gradeDate, "", ""));
+
+						result.add(restaurantName);
+						
+					}catch(JSONException jse){
+						//just continue with rest of the restaurants...we got a bad record...
+						//so what. not end of the world
+						Log.e("NENY", jse.getMessage());
+						jse.printStackTrace();
 					}
 					
-					// NOT findByCode
-					final Grade currentGrade = Grade.findByName(gradeName);
-
-					final Date gradeDate;
-					String dateString = "";
-
-					if (restaurant.has("gradeDate")) {
-						dateString = restaurant.getString("gradeDate");
-					}
-
-					if (dateString == null || dateString == "") {
-						gradeDate = null;
-					} else {
-
-						// Sample date format:
-						// Aug 30, 2012 9:12:15 AM
-						gradeDate = simpleDateFormat.parse(dateString);
-
-					}
-
-					aRestaurants.add(new Restaurant(camis, restaurantName,
-							borough, new Address(building, street, zipCode),
-							phone, cuisineCode, currentGrade, gradeDate, "", ""));
-
-					result.add(restaurantName);
+					
 				}
-			} finally {
+			}
+			
+			finally {
 
 				urlConnection.disconnect();
 
