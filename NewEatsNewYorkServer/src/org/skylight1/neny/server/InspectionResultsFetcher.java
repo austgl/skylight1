@@ -81,7 +81,7 @@ public class InspectionResultsFetcher {
 		final URL url = new URL(aURLString);
 		final URLConnection connection = url.openConnection();
 
-		// optionally set our timeouts, if this is a URL.
+		// optionally set our timeouts, if this is a URL
 		if (connection instanceof HttpURLConnection) {
 			LOGGER.info("setting timeout to zero");
 			((HttpURLConnection) connection).setConnectTimeout(0);
@@ -91,10 +91,8 @@ public class InspectionResultsFetcher {
 		// Start reading from our source
 		final InputStream inputStream = connection.getInputStream();
 		try {
-
 			// our input file is in ZIP format, so we'll be looking for a file
-			// called
-			// "WebExtract.txt" in this zip.
+			// called "WebExtract.txt" in this zip
 			final ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
 			ZipEntry zipEntry;
@@ -104,88 +102,81 @@ public class InspectionResultsFetcher {
 				LOGGER.info(format("processing zip entry %s", zipEntry.getName()));
 
 				// If it's "WebExtract.txt", we'll open a new BufferedReader to
-				// read that file.
+				// read that file
 
 				if (zipEntry.getName().contains("WebExtract.txt")) {
 					// if (zipEntry.getName().equals("WebExtract.txt")) {
 					final BufferedReader br = new BufferedReader(new InputStreamReader(zipInputStream));
+					try {
 
-					// Check to make sure the header looks familiar.
-					final String header = br.readLine();
-					if (!header.equals(EXPECTED_HEADER_FOR_WEB_EXTRACT)) {
-						throw new RuntimeException(format("Received unexpected header for WebExtract.txt: %s", header));
-					}
+						// Check to make sure the header looks familiar
+						final String header = br.readLine();
+						if (!header.equals(EXPECTED_HEADER_FOR_WEB_EXTRACT)) {
+							throw new RuntimeException(format("Received unexpected header for WebExtract.txt: %s", header));
+						}
 
-					String line;
+						String line;
 
-					// Iterate through the remaining lines in our WebExtract.txt
-					// file
-					while ((line = br.readLine()) != null) {
+						// Iterate through the remaining lines in our WebExtract.txt
+						// file
+						while ((line = br.readLine()) != null) {
 
-						// get outta here if our input line does not match our
-						// expected pattern.
-						try {
-							final Matcher matcher = PATTERN.matcher(line);
-							if (!matcher.matches()) {
-								throw new RuntimeException(format("Couldn't match WebExtract.txt record to pattern: %s", line));
-							}
-
-							// Now we extract the inspectionDate and camis from
-							// our input file:
-
-							final String camis = matcher.group(GRP_CAMIS);
-
-							// if the camis value is in our "oldRestaurants"
-							// list, it means that
-							// it's been around for a while - at least around
-							// since before our "aCutoffDate"
-							// value.
-
-							if (!oldRestaurants.contains(camis)) {
-
-								final String inspectionDateString = matcher.group(GRP_INSPDATE);
-
-								final Date inspectionDate = convertStringToDate(inspectionDateString);
-
-								if (inspectionDate.before(aCutoffDate)) {
-									oldRestaurants.add(camis);
-									result.keySet().remove(camis);
-								} else {
-
-									Date currentGradeDate = null;
-
-									final String gradeDateAtString = matcher.group(GRP_GRADEDATE);
-									if (gradeDateAtString.isEmpty()) {
-										currentGradeDate = null;
-									} else {
-										currentGradeDate = simpleDateFormat.parse(gradeDateAtString);
-									}
-
-									final String doingBusinessAs = matcher.group(GRP_BUSINESS_NAME).trim();
-									final Borough borough = Borough.findByCode(Integer.parseInt(matcher.group(GRP_BOROUGH)));
-									final String building = matcher.group(GRP_BUILDING).trim();
-									final String street = matcher.group(GRP_STREET).trim();
-									final String zipCode = matcher.group(GRP_ZIPCODE);
-									final String phoneNumber = matcher.group(GRP_PHONE);
-									final String cuisine = matcher.group(GRP_CUISINE);
-									final Grade currentGrade = Grade.findByCode(matcher.group(GRP_CURRENTGRADE));
-
-									final Restaurant restaurant =
-											new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, currentGradeDate, inspectionDate);
-
-									final Restaurant existingRestaurant = result.get(camis);
-
-									if (existingRestaurant == null || existingRestaurant.getInspectionDate() == null
-											|| (inspectionDate != null && existingRestaurant.getInspectionDate().before(inspectionDate))) {
-										result.put(camis, restaurant);
-									}
-
+							// get out of here if our input line does not match our
+							// expected pattern.
+							try {
+								final Matcher matcher = PATTERN.matcher(line);
+								if (!matcher.matches()) {
+									throw new RuntimeException(format("Couldn't match WebExtract.txt record to pattern: %s", line));
 								}
 
+								// Now we extract the inspectionDate and camis from
+								// our input file:
+
+								final String camis = matcher.group(GRP_CAMIS);
+
+								// if the camis value is in our "oldRestaurants"
+								// list, it means that
+								// it's been around for a while - at least around
+								// since before our "aCutoffDate"
+								// value.
+
+								if (!oldRestaurants.contains(camis)) {
+
+									final Date inspectionDate = convertStringToDate(matcher.group(GRP_INSPDATE));
+
+									if (inspectionDate.before(aCutoffDate)) {
+										oldRestaurants.add(camis);
+										result.keySet().remove(camis);
+									} else {
+
+										final Date currentRecordGradeDate = convertStringToDate(matcher.group(GRP_GRADEDATE));
+
+										final String doingBusinessAs = matcher.group(GRP_BUSINESS_NAME).trim();
+										final Borough borough = Borough.findByCode(Integer.parseInt(matcher.group(GRP_BOROUGH)));
+										final String building = matcher.group(GRP_BUILDING).trim();
+										final String street = matcher.group(GRP_STREET).trim();
+										final String zipCode = matcher.group(GRP_ZIPCODE);
+										final String phoneNumber = matcher.group(GRP_PHONE);
+										final String cuisine = matcher.group(GRP_CUISINE);
+										final Grade currentGrade = Grade.findByCode(matcher.group(GRP_CURRENTGRADE));
+
+										final Restaurant restaurant =
+												new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, currentRecordGradeDate, inspectionDate);
+
+										final Restaurant existingRestaurant = result.get(camis);
+
+										if (existingRestaurant == null || existingRestaurant.getInspectionDate() == null
+												|| (inspectionDate != null && existingRestaurant.getInspectionDate().before(inspectionDate))) {
+											result.put(camis, restaurant);
+										}
+									}
+								}
+							} catch (Exception e) {
+								LOGGER.log(WARNING, format("Unable to process record %s", line), e);
 							}
-						} catch (Exception e) {
-							LOGGER.log(WARNING, format("Unable to process record %s", line), e);
 						}
+					} finally {
+						br.close();
 					}
 				}
 			}
