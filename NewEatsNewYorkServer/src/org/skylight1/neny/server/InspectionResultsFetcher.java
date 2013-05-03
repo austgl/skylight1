@@ -16,9 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,13 +64,11 @@ public class InspectionResultsFetcher {
 	// This SimpleDateFormat instance is used to interpret the Grade Date string
 	final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public Collection<Restaurant> processFile(String aURLString, Date aCutoffDate) throws MalformedURLException, IOException {
+	public Collection<Restaurant> processFile(String aURLString) throws MalformedURLException, IOException {
 
 		LOGGER.info(format("Starting to process URL %s", aURLString));
 
 		final long startTime = System.currentTimeMillis();
-
-		final Set<String> oldRestaurants = new HashSet<String>();
 
 		// This is the HashMap that will be returned from this method
 		final Map<String, Restaurant> result = new HashMap<String, Restaurant>();
@@ -131,45 +127,28 @@ public class InspectionResultsFetcher {
 
 								// Now we extract the inspectionDate and camis from
 								// our input file:
-
 								final String camis = matcher.group(GRP_CAMIS);
 
-								// if the camis value is in our "oldRestaurants"
-								// list, it means that
-								// it's been around for a while - at least around
-								// since before our "aCutoffDate"
-								// value.
+								final Date inspectionDate = convertStringToDate(matcher.group(GRP_INSPDATE));
+								final Date currentRecordGradeDate = convertStringToDate(matcher.group(GRP_GRADEDATE));
+								final String doingBusinessAs = matcher.group(GRP_BUSINESS_NAME).trim();
+								final Borough borough = Borough.findByCode(Integer.parseInt(matcher.group(GRP_BOROUGH)));
+								final String building = matcher.group(GRP_BUILDING).trim();
+								final String street = matcher.group(GRP_STREET).trim();
+								final String zipCode = matcher.group(GRP_ZIPCODE);
+								final String phoneNumber = matcher.group(GRP_PHONE);
+								final String cuisine = matcher.group(GRP_CUISINE);
+								final Grade currentGrade = Grade.findByCode(matcher.group(GRP_CURRENTGRADE));
+								final Date discoveredDate = new Date();
 
-								if (!oldRestaurants.contains(camis)) {
+								final Restaurant restaurant =
+										new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, currentRecordGradeDate, inspectionDate, discoveredDate);
 
-									final Date inspectionDate = convertStringToDate(matcher.group(GRP_INSPDATE));
+								final Restaurant existingRestaurant = result.get(camis);
 
-									if (inspectionDate.before(aCutoffDate)) {
-										oldRestaurants.add(camis);
-										result.keySet().remove(camis);
-									} else {
-
-										final Date currentRecordGradeDate = convertStringToDate(matcher.group(GRP_GRADEDATE));
-
-										final String doingBusinessAs = matcher.group(GRP_BUSINESS_NAME).trim();
-										final Borough borough = Borough.findByCode(Integer.parseInt(matcher.group(GRP_BOROUGH)));
-										final String building = matcher.group(GRP_BUILDING).trim();
-										final String street = matcher.group(GRP_STREET).trim();
-										final String zipCode = matcher.group(GRP_ZIPCODE);
-										final String phoneNumber = matcher.group(GRP_PHONE);
-										final String cuisine = matcher.group(GRP_CUISINE);
-										final Grade currentGrade = Grade.findByCode(matcher.group(GRP_CURRENTGRADE));
-
-										final Restaurant restaurant =
-												new Restaurant(camis, doingBusinessAs, borough, new Address(building, street, zipCode), phoneNumber, cuisine, currentGrade, currentRecordGradeDate, inspectionDate);
-
-										final Restaurant existingRestaurant = result.get(camis);
-
-										if (existingRestaurant == null || existingRestaurant.getInspectionDate() == null
-												|| (inspectionDate != null && existingRestaurant.getInspectionDate().before(inspectionDate))) {
-											result.put(camis, restaurant);
-										}
-									}
+								if (existingRestaurant == null || existingRestaurant.getInspectionDate() == null
+										|| (inspectionDate != null && existingRestaurant.getInspectionDate().before(inspectionDate))) {
+									result.put(camis, restaurant);
 								}
 							} catch (Exception e) {
 								LOGGER.log(WARNING, format("Unable to process record %s", line), e);
@@ -199,5 +178,4 @@ public class InspectionResultsFetcher {
 		}
 		return resultDate;
 	}
-
 }

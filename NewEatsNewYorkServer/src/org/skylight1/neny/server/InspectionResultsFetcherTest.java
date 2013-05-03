@@ -27,7 +27,7 @@ public class InspectionResultsFetcherTest {
 		// use the fetcher to retrieve the restaurants according to the old and new files
 		// ideally the old would be from the database, and the new from the internet
 		
-		final Collection<Restaurant> restaurants = fetcher.processFile("file:///C:\\DevTools\\java\\NewEatsNewYork\\restaurant_data_20121009.zip", cal.getTime());
+		final Collection<Restaurant> restaurants = fetcher.processFile("file:///C:\\DevTools\\java\\NewEatsNewYork\\restaurant_data_20121009.zip");
 		
 		System.out.println("Restaurant count=" + restaurants.size());
 		

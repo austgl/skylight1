@@ -29,9 +29,10 @@ public class Restaurant {
 
 	private Date inspectionDate;
 
-	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough,
-			Address aAddress, String aPhone, String aCuisineCode,
-			Grade aCurrentGrade, Date aGradeDate, Date anInspectionDate) {
+	private Date discoveredDate;
+
+	public Restaurant(String aCamis, String aDoingBusinessAs, Borough aBorough, Address aAddress, String aPhone, String aCuisineCode, Grade aCurrentGrade,
+			Date aGradeDate, Date anInspectionDate, Date aDiscoveredDate) {
 		camis = aCamis;
 		doingBusinessAs = aDoingBusinessAs;
 		borough = aBorough;
@@ -41,6 +42,7 @@ public class Restaurant {
 		currentGrade = aCurrentGrade;
 		gradeDate = aGradeDate;
 		inspectionDate = anInspectionDate;
+		discoveredDate = aDiscoveredDate;
 	}
 
 	public Date getInspectionDate() {
@@ -115,13 +117,18 @@ public class Restaurant {
 		gradeDate = aGradeDate;
 	}
 
+	public void setDiscoveredDate(Date aDiscoveredDate) {
+		discoveredDate = aDiscoveredDate;
+	}
+
+	public Date getDiscoveredDate() {
+		return discoveredDate;
+	}
+
 	@Override
 	public String toString() {
-		return format(
-				"%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF,inspectionDate=%tF]",
-				getClass().getSimpleName(), camis, doingBusinessAs, borough,
-				address, phone, cuisineCode, currentGrade, gradeDate,
-				inspectionDate);
+		return format("%s[camis=%s,doingBusinessAs=%s,borough=%s,address=%s,phone=%s,cuisineCode=%s,currentGrade=%s,gradeDate=%tF,inspectionDate=%tF,discoveredDate=%tF]", getClass()
+				.getSimpleName(), camis, doingBusinessAs, borough, address, phone, cuisineCode, currentGrade, gradeDate, inspectionDate, discoveredDate);
 	}
 
 	@Override
@@ -131,16 +138,12 @@ public class Restaurant {
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((borough == null) ? 0 : borough.hashCode());
 		result = prime * result + ((camis == null) ? 0 : camis.hashCode());
-		result = prime * result
-				+ ((cuisineCode == null) ? 0 : cuisineCode.hashCode());
-		result = prime * result
-				+ ((currentGrade == null) ? 0 : currentGrade.hashCode());
-		result = prime * result
-				+ ((doingBusinessAs == null) ? 0 : doingBusinessAs.hashCode());
-		result = prime * result
-				+ ((gradeDate == null) ? 0 : gradeDate.hashCode());
-		result = prime * result
-				+ ((inspectionDate == null) ? 0 : inspectionDate.hashCode());
+		result = prime * result + ((cuisineCode == null) ? 0 : cuisineCode.hashCode());
+		result = prime * result + ((currentGrade == null) ? 0 : currentGrade.hashCode());
+		result = prime * result + ((discoveredDate == null) ? 0 : discoveredDate.hashCode());
+		result = prime * result + ((doingBusinessAs == null) ? 0 : doingBusinessAs.hashCode());
+		result = prime * result + ((gradeDate == null) ? 0 : gradeDate.hashCode());
+		result = prime * result + ((inspectionDate == null) ? 0 : inspectionDate.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		return result;
 	}
@@ -172,6 +175,11 @@ public class Restaurant {
 		} else if (!cuisineCode.equals(other.cuisineCode))
 			return false;
 		if (currentGrade != other.currentGrade)
+			return false;
+		if (discoveredDate == null) {
+			if (other.discoveredDate != null)
+				return false;
+		} else if (!discoveredDate.equals(other.discoveredDate))
 			return false;
 		if (doingBusinessAs == null) {
 			if (other.doingBusinessAs != null)
