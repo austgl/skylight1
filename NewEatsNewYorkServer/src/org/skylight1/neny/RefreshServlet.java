@@ -70,7 +70,7 @@ public class RefreshServlet extends HttpServlet {
 					em.getTransaction().commit();
 				}
 
-				LOGGER.info("just saved " + restaurants.size());
+				LOGGER.info("just saved " + recentRestaurants.size());
 
 			} finally {
 				em.close();

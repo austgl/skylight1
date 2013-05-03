@@ -15,15 +15,15 @@ public class RestaurantDAO {
 		try {
 			@SuppressWarnings("unchecked")
 			final List<Restaurant> unfilteredListOfRestaurants =
-					(List<Restaurant>) em.createQuery("SELECT r FROM Restaurant r JOIN FETCH r.borough JOIN FETCH " + "r.address ORDER BY r.camis DESC")
+					(List<Restaurant>) em.createQuery("SELECT r FROM Restaurant r JOIN FETCH r.borough JOIN FETCH " + "r.address ORDER BY r.discoveredDate DESC")
 							.setMaxResults(1000).getResultList();
 
 			final List<Restaurant> result = new ArrayList<Restaurant>();
-			for (Restaurant r : unfilteredListOfRestaurants) {
-				if (r.getInspectionDate().before(cutoffDate)) {
+			for (Restaurant restaurant : unfilteredListOfRestaurants) {
+				if (restaurant.getDiscoveredDate().before(cutoffDate)) {
 					break;
 				}
-				result.add(r);
+				result.add(restaurant);
 			}
 			return result;
 		} finally {

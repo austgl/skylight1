@@ -155,7 +155,7 @@ public class InspectionResultsFetcher {
 							}
 						}
 					} finally {
-						br.close();
+						zipInputStream.closeEntry();
 					}
 				}
 			}
@@ -171,7 +171,7 @@ public class InspectionResultsFetcher {
 
 	private Date convertStringToDate(final String aDateString) throws ParseException {
 		final Date resultDate;
-		if (aDateString.isEmpty()) {
+		if (aDateString.isEmpty() || aDateString.equals("1900-01-01 00:00:00")) {
 			resultDate = null;
 		} else {
 			resultDate = simpleDateFormat.parse(aDateString);
