@@ -4,8 +4,10 @@ import static java.lang.String.format;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Restaurant {
@@ -17,6 +19,7 @@ public class Restaurant {
 
 	private Borough borough;
 
+	@OneToOne(cascade = CascadeType.ALL)
 	private Address address;
 
 	private String phone;

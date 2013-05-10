@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.skylight1.neny.server.RestaurantDAO;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 @SuppressWarnings("serial")
 public class NewRestaurantsServlet extends HttpServlet {
