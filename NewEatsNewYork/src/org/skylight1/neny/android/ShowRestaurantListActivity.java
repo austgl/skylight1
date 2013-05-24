@@ -74,11 +74,15 @@ public class ShowRestaurantListActivity extends ListActivity {
 		super.onCreate(aSavedInstanceState);
 
 		setContentView(R.layout.restaurant_list_view);
-
-		new LoadLocalRestaurantsTask(this).execute((String[]) null);
-
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		new LoadLocalRestaurantsTask(this).execute((String[]) null);
+	}
+	
 	@Override
 	protected void onListItemClick(ListView lv, View v, int position, long id) {
 

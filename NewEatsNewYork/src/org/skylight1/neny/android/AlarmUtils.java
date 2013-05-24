@@ -33,12 +33,14 @@ public class AlarmUtils {
 		final PendingIntent pendingIntent = PendingIntent.getBroadcast(aContext, 0, alarmIntent, FLAG_UPDATE_CURRENT);
 
 		// TODO make this at midnight, and if no network then, then register for network state change
-		alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis(), INTERVAL_DAY, pendingIntent);
+		alarmManager.setInexactRepeating(RTC_WAKEUP, System.currentTimeMillis() + INTERVAL_DAY, INTERVAL_DAY, pendingIntent);
 
+		aContext.sendBroadcast(alarmIntent);
+		
 		setAlarmForHour(alarmManager, 11, LUNCH, aContext);
 		setAlarmForHour(alarmManager, 17, DINNER, aContext);
 	}
- 
+
 	private static void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aMealTime, Context aContext) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.clear(HOUR_OF_DAY);
