@@ -38,7 +38,7 @@ public class AlarmUtils {
 		setAlarmForHour(alarmManager, 11, LUNCH, aContext);
 		setAlarmForHour(alarmManager, 17, DINNER, aContext);
 	}
-
+ 
 	private static void setAlarmForHour(final AlarmManager anAlarmManager, int anHour, MealTime aMealTime, Context aContext) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.clear(HOUR_OF_DAY);
