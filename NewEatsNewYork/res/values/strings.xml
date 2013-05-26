@@ -29,6 +29,18 @@
         <item>Lower East Side</item>
         <item>East Village</item>
         <item>Wall Street</item>
+        <item>Forest Hills</item>
+        <item>Astoria</item>
+        <item>Woodside</item>
+        <item>Other Queens</item>
+        <item>Staten Island</item>
+        <item>The Bronx</item>
+        <item>Park Slope</item>
+        <item>Williamsburg</item>
+        <item>Brooklyn Heights</item>
+        <item>Dumbo</item>
+        <item>Bushwick</item>
+        <item>Other Brooklyn</item>
     </string-array>
 
     <string name="lunch">Lunch</string>
