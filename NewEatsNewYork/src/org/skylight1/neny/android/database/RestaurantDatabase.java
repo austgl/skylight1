@@ -155,17 +155,61 @@ public class RestaurantDatabase {
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10128', 'Upper East Side');");
 				
 				// Greenwich / Soho
-				// 10012, 10013, 10014
+				// 10012, 10013, 10014, 10278, 10282
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10012','Greenwich/Soho');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10013','Greenwich/Soho');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10014', 'Greenwich/Soho');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10278', 'Greenwich/Soho');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10282', 'Greenwich/Soho');");
 				
-				// Harlem -- 10026, 10027, 10030, 10037, 10039
+				// Harlem -- 10026, 10027, 10030, 10037, 10039 East Harlem - 10029, 10035
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10026', 'Harlem');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10027', 'Harlem');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10030', 'Harlem');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10037', 'Harlem');");
-				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10038', 'Harlem');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10039', 'Harlem');");
+				
+				// East Harlem - 10029, 10035
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10029', 'East Harlem');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10035', 'East Harlem');");
+				
+				// Chelsea -- 10001, 10011, 10018, 10019, 10020, 10036
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10001', 'Chelsea');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10011', 'Chelsea');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10018', 'Chelsea');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10019', 'Chelsea');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10020', 'Chelsea');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10036', 'Chelsea');");
+				
+				// Inwood -- 10031, 10032, 10033, 10034, 10040
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10031', 'Inwood');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10032', 'Inwood');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10033', 'Inwood');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10034', 'Inwood');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10040', 'Inwood');");
+				
+				// Gramercy -- 10010, 10016, 10017, 10022
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10010', 'Gramercy');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10016', 'Gramercy');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10017', 'Gramercy');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10022', 'Gramercy');");
+				
+				// Lower East Side -- 10002
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10002', 'Lower East Side');");
+				
+				// East Village - 10009, 10003
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10009', 'East Village');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10003', 'East Village');");
+				
+				
+				// Wall Street -- 10004, 10005, 10006, 10007, 10038, 10280, 10279
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10004', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10005', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10006', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10007', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('100038', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10280', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10279', 'Wall Street');");
 				
 				// da view
 				aDb.execSQL("create view vw_restaurant as select r.*, c.major_cuisine_name, z.neighborhood from restaurant r, cuisine_map c, zipcode_neighborhood_map z where r.cuisineCode=c.cuisineCode and r.zipCode=z.zipCode");
