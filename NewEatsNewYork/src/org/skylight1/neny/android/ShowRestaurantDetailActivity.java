@@ -9,13 +9,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ShowRestaurantDetailActivity extends Activity {
+public class ShowRestaurantDetailActivity extends Activity implements View.OnTouchListener{
 
+	public final static String CITY = "New York,NY";
+	private Restaurant selectedRestaurant = null;
+	private final String TAG = ShowRestaurantDetailActivity.class.getSimpleName();
 	@Override
 	protected void onCreate(Bundle aSavedInstanceState) {
 		super.onCreate(aSavedInstanceState);
@@ -28,6 +33,7 @@ public class ShowRestaurantDetailActivity extends Activity {
 			if (camis != null) {
 				final Restaurant restaurant = new RestaurantDatabase(this).getRestaurantByCamis(camis);
 				if (restaurant != null) {
+					selectedRestaurant = restaurant;
 					showRestaurantDetail(restaurant);
 				}
 			}
@@ -49,6 +55,7 @@ public class ShowRestaurantDetailActivity extends Activity {
 		final TextView tvZipCode = (TextView) findViewById(R.id.tv_detail_restaurant_zipcode);
 		final String street = address.getBuilding() + " " + address.getStreet();
 		tvStreet.setText(street);
+		tvStreet.setOnTouchListener(this);
 		tvZipCode.setText(address.getZipCode());
 		final ImageView cuisineImageView = (ImageView) findViewById(R.id.cuisine_image);
 		final Cuisine cuisine = Cuisine.findCuisineByMajorCuisineLabel(restaurant.getMajorCuisine());
@@ -61,5 +68,23 @@ public class ShowRestaurantDetailActivity extends Activity {
 		final Intent callIntent = new Intent(Intent.ACTION_CALL);
 		callIntent.setData(Uri.parse("tel:" + v.getTag()));
 		startActivity(callIntent);
+	}
+	
+
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		if(selectedRestaurant !=null){
+			Address addRess = selectedRestaurant.getAddress();
+			final String queryString = addRess.getBuilding()+" "+addRess.getStreet()+" "+CITY+" "+addRess.getZipCode();
+			Log.d(TAG, queryString);
+			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+				    Uri.parse("http://maps.google.com/maps?q="+queryString));
+			startActivity(intent);
+			return true;
+		}
+		
+			
+		return false;
 	}
 }
