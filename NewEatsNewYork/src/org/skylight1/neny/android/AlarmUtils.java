@@ -24,8 +24,6 @@ import android.content.Intent;
 import android.util.Log;
 
 public class AlarmUtils {
-	public static final String MEAL_TIME_EXTRA_NAME = "mealTime";
-
 	public static void setAlarms(Context aContext) {
 		final AlarmManager alarmManager = (AlarmManager) aContext.getSystemService(ALARM_SERVICE);
 

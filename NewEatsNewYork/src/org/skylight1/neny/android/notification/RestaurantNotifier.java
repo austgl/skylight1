@@ -76,7 +76,7 @@ public class RestaurantNotifier extends BroadcastReceiver {
 				final Intent showRestaurantDetailIntent = new Intent(aContext, ShowRestaurantDetailActivity.class);
 				showRestaurantDetailIntent.putExtra("camis", restaurant.getCamis());
 				final PendingIntent pendingIntent = PendingIntent.getActivity(aContext, 0, showRestaurantDetailIntent, FLAG_UPDATE_CURRENT);
-				notification.setLatestEventInfo(aContext, restaurant.getDoingBusinessAs(), restaurant.getDoingBusinessAs(), pendingIntent);
+				notification.setLatestEventInfo(aContext, "New restaurant!", restaurant.getDoingBusinessAs(), pendingIntent);
 				notificationManager.notify(1, notification);
 			}
 		}

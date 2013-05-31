@@ -52,6 +52,8 @@ public class ShowRestaurantListActivity extends ListActivity {
 				restaurants = new RestaurantDatabase(ShowRestaurantListActivity.this).getRestaurantsByUserPrefs(neighborhoods, cuisines);
 
 				status = restaurants.size() + " restaurants retrieved";
+				
+				Log.d(TAG, "found " + restaurants.size() + " restaurants");
 			} catch (Exception e) {
 				status = e.getMessage();
 				e.printStackTrace();

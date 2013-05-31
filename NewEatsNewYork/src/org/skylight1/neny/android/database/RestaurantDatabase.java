@@ -279,7 +279,7 @@ public class RestaurantDatabase {
 			Date gradeDate;
 			final String gradeDateAsString = cursor.getString(COL_GRADE_DATE);
 
-			if (gradeDateAsString == "") {
+			if (gradeDateAsString.equals("")) {
 				gradeDate = null;
 			} else {
 
