@@ -71,7 +71,7 @@ public class CuisineAdapter extends BaseAdapter {
 			}
 		});
 		final Boolean active = listOfSelectedCuisines.get(position);
-		imageView.setBackgroundResource(active ? R.drawable.inactive_button : R.drawable.active_button);
+		imageView.setBackgroundResource(active ? R.drawable.active_button : R.drawable.inactive_button);
 		imageView.setImageResource(active ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds.get(position));
 		
 		return cellView;
