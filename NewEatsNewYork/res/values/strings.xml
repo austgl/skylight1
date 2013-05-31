@@ -14,8 +14,8 @@
     <string name="call">Call</string>
     <string name="phone">Phone:</string>
     <string name="building">Building:</string>
-    <string name="street">Street:</string>
-    <string name="zipcode">Zip Code:</string>
+    <string name="address">Address:</string>
+    <string name="cuisine">Cuisine:</string>
 
     <string-array name="neighborhoods">
         <item>Inwood</item>

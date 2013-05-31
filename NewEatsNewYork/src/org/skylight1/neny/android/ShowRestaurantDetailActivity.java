@@ -2,6 +2,7 @@ package org.skylight1.neny.android;
 
 import org.skylight1.neny.android.database.RestaurantDatabase;
 import org.skylight1.neny.android.database.model.Address;
+import org.skylight1.neny.android.database.model.Cuisine;
 import org.skylight1.neny.android.database.model.Restaurant;
 
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ShowRestaurantDetailActivity extends Activity {
@@ -48,6 +50,11 @@ public class ShowRestaurantDetailActivity extends Activity {
 		final String street = address.getBuilding() + " " + address.getStreet();
 		tvStreet.setText(street);
 		tvZipCode.setText(address.getZipCode());
+		final ImageView cuisineImageView = (ImageView) findViewById(R.id.cuisine_image);
+		final Cuisine cuisine = Cuisine.findCuisineByMajorCuisineLabel(restaurant.getMajorCuisine());
+		cuisineImageView.setImageResource(cuisine.getActiveImageResourceId());
+		final TextView cuisineNameView = (TextView) findViewById(R.id.cuisine_image_text);
+		cuisineNameView.setText(cuisine.getLabel());
 	}
 
 	public void callRestaurant(View v) {
