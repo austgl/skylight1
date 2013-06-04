@@ -2,6 +2,7 @@ package org.skylight1.neny.model;
 
 import static java.lang.String.format;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -10,7 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Restaurant {
+public class Restaurant implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	private String camis;
