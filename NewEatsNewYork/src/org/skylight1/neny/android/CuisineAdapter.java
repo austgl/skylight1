@@ -65,7 +65,7 @@ public class CuisineAdapter extends BaseAdapter {
 				listOfSelectedCuisines.set(position, newState);
 				preferencesDao.setPreferences(SelectCuisinesActivity.mapImagePositionsToEnums(position).getLabel(), newState);
 				final Boolean active = listOfSelectedCuisines.get(position);
-				clickedView.setBackgroundResource(active ? R.drawable.inactive_button : R.drawable.active_button);
+				clickedView.setBackgroundResource(active ? R.drawable.active_button : R.drawable.inactive_button);
 				clickedView.setImageResource(active ? listOfActiveResourceIds.get(position) : listOfInactiveResourceIds
 						.get(position));
 			}
