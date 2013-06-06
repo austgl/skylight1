@@ -104,6 +104,7 @@ public class ShowRestaurantListActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+    	super.onCreateOptionsMenu(menu);
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.layout.menu, menu);
         return true;
