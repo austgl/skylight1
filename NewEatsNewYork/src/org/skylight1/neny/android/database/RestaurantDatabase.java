@@ -143,16 +143,20 @@ public class RestaurantDatabase {
 
 				aDb.execSQL("create table zipcode_neighborhood_map(zipCode TEXT, neighborhood TEXT)");
 
-				// Upper West Side
+				// Upper West Side 10023, 10024, 10025, 10069
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10023','Upper West Side');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10024','Upper West Side');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10025', 'Upper West Side');");
-
-				// Upper East Side 10021, 10028, 10044, 10128
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10069', 'Upper West Side');");
+				
+				// Upper East Side 10021, 10028, 10044, 10128, 10055, 10065, 10075
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10021', 'Upper East Side');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10028', 'Upper East Side');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10044', 'Upper East Side');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10128', 'Upper East Side');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10055', 'Upper East Side');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10065', 'Upper East Side');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10075', 'Upper East Side');");
 				
 				// Greenwich / Soho
 				// 10012, 10013, 10014, 10278, 10282
@@ -202,7 +206,7 @@ public class RestaurantDatabase {
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10003', 'East Village');");
 				
 				
-				// Wall Street -- 10004, 10005, 10006, 10007, 10038, 10280, 10279
+				// Wall Street -- 10004, 10005, 10006, 10007, 10038, 10280, 10279, 10041, 10043, 10045, 10080, 10081
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10004', 'Wall Street');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10005', 'Wall Street');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10006', 'Wall Street');");
@@ -210,6 +214,11 @@ public class RestaurantDatabase {
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('100038', 'Wall Street');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10280', 'Wall Street');");
 				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10279', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10041', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10043', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10045', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10080', 'Wall Street');");
+				aDb.execSQL("insert into zipcode_neighborhood_map(zipCode, neighborhood) values('10081', 'Wall Street');");
 				
 				// da view
 				aDb.execSQL("create view vw_restaurant as select r.*, c.major_cuisine_name, z.neighborhood from restaurant r, cuisine_map c, zipcode_neighborhood_map z where r.cuisineCode=c.cuisineCode and r.zipCode=z.zipCode");
