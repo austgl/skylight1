@@ -56,7 +56,7 @@ public class RestaurantDatabase {
 				aDb.execSQL("create table restaurant (camis TEXT, doingBusinessAs TEXT, borough TEXT, building TEXT, street TEXT, zipCode TEXT, phone TEXT, cuisineCode TEXT, currentGrade TEXT, gradeDate TEXT)");
 				aDb.execSQL("create table cuisine_map(cuisineCode TEXT, major_cuisine_name TEXT);");
 				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('00','Eclectic');");
-				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('84','Eclectic');");
+				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('84','Vegetarian');");
 				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('02','African');");
 				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('31','African');");
 				aDb.execSQL("insert into cuisine_map (cuisineCode, major_cuisine_name) values ('33','African');");
