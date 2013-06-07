@@ -38,7 +38,7 @@ public class NewRestaurantsServlet extends HttpServlet {
 			resp.setContentType("application/json");
 			final Calendar calendar = Calendar.getInstance();
 			calendar.add(Calendar.MONTH, -3);
-			calendar.clear(Calendar.HOUR_OF_DAY);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
 			calendar.clear(Calendar.MINUTE);
 			calendar.clear(Calendar.SECOND);
 			calendar.clear(Calendar.MILLISECOND);
@@ -51,6 +51,7 @@ public class NewRestaurantsServlet extends HttpServlet {
 			properties.put(EXPIRATION_DELTA, ONE_DAY);
 			final Cache cache = cacheFactory.createCache(properties);
 
+			LOGGER.info("cache key is " + cutoffDate);
 			if (cache.containsKey(cutoffDate)) {
 				listOfRestaurants = (List<Restaurant>) cache.get(cutoffDate);
 				LOGGER.info("found in cache; list length = " + listOfRestaurants.size());
